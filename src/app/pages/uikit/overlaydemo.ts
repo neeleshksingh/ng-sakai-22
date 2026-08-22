@@ -1,16 +1,16 @@
-import {Component, OnInit} from '@angular/core';
-import {ConfirmationService, MessageService} from 'primeng/api';
-import {ButtonModule} from 'primeng/button';
-import {DialogModule} from 'primeng/dialog';
-import {ToastModule} from 'primeng/toast';
-import {DrawerModule} from 'primeng/drawer';
-import {Popover, PopoverModule} from 'primeng/popover';
-import {ConfirmPopupModule} from 'primeng/confirmpopup';
-import {InputTextModule} from 'primeng/inputtext';
-import {FormsModule} from '@angular/forms';
-import {TooltipModule} from 'primeng/tooltip';
-import {TableModule} from 'primeng/table';
-import {Product, ProductService} from '@/app/pages/service/product.service';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { ConfirmationService, MessageService } from 'primeng/api';
+import { ButtonModule } from 'primeng/button';
+import { DialogModule } from 'primeng/dialog';
+import { ToastModule } from 'primeng/toast';
+import { DrawerModule } from 'primeng/drawer';
+import { Popover, PopoverModule } from 'primeng/popover';
+import { ConfirmPopupModule } from 'primeng/confirmpopup';
+import { InputTextModule } from 'primeng/inputtext';
+import { FormsModule } from '@angular/forms';
+import { TooltipModule } from 'primeng/tooltip';
+import { TableModule } from 'primeng/table';
+import { Product, ProductService } from '@/app/pages/service/product.service';
 
 @Component({
     selector: 'app-overlay-demo',
@@ -26,28 +26,28 @@ import {Product, ProductService} from '@/app/pages/service/product.service';
                         consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
                     </p>
                     <ng-template #footer>
-                        <p-button label="Save" (click)="close()" />
+                        <button pButton  label="Save" (click)="close()"> </button>
                     </ng-template>
                 </p-dialog>
-                <p-button label="Show" [style]="{ width: 'auto' }" (click)="open()" />
+                <button pButton  label="Show" [style]="{ width: 'auto' }" (click)="open()"> </button>
             </div>
 
             <div class="card">
                 <div class="font-semibold text-xl mb-4">Popover</div>
                 <div class="flex flex-wrap gap-2">
-                    <p-button type="button" label="Show" (click)="toggleDataTable(op2, $event)" />
+                    <button pButton  label="Show" (click)="toggleDataTable(op2, $event)"> </button>
                     <p-popover #op2 id="overlay_panel" [style]="{ width: '450px' }">
                         <p-table [value]="products" selectionMode="single" [(selection)]="selectedProduct" dataKey="id" [rows]="5" [paginator]="true" (onRowSelect)="onProductSelect(op2, $event)">
                             <ng-template #header>
                                 <tr>
                                     <th pSortableColumn="name" style="width: 33%;">
                                         Name
-                                        <p-sortIcon field="name" />
+                                        <p-sort-icon field="name" />
                                     </th>
                                     <th style="width: 33%;">Image</th>
                                     <th pSortableColumn="price" style="width: 33%;">
                                         Price
-                                        <p-sortIcon field="price" />
+                                        <p-sort-icon field="price" />
                                     </th>
                                 </tr>
                             </ng-template>
@@ -70,7 +70,7 @@ import {Product, ProductService} from '@/app/pages/service/product.service';
                 <div class="font-semibold text-xl mb-4">Tooltip</div>
                 <div class="inline-flex gap-4">
                     <input pInputText type="text" placeholder="Username" pTooltip="Your username" />
-                    <p-button type="button" label="Save" pTooltip="Click to proceed" />
+                    <button pButton  label="Save" pTooltip="Click to proceed"> </button>
                 </div>
             </div>
         </div>
@@ -112,35 +112,36 @@ import {Product, ProductService} from '@/app/pages/service/product.service';
                     </p>
                 </p-drawer>
 
-                <p-button icon="pi pi-arrow-right" (click)="visibleLeft = true" [style]="{ marginRight: '0.25em' }" />
-                <p-button icon="pi pi-arrow-left" (click)="visibleRight = true" [style]="{ marginRight: '0.25em' }" />
-                <p-button icon="pi pi-arrow-down" (click)="visibleTop = true" [style]="{ marginRight: '0.25em' }" />
-                <p-button icon="pi pi-arrow-up" (click)="visibleBottom = true" [style]="{ marginRight: '0.25em' }" />
-                <p-button icon="pi pi-external-link" (click)="visibleFull = true" />
+                <button pButton  icon="pi pi-arrow-right" (click)="visibleLeft = true" [style]="{ marginRight: '0.25em' }"> </button>
+                <button pButton  icon="pi pi-arrow-left" (click)="visibleRight = true" [style]="{ marginRight: '0.25em' }"> </button>
+                <button pButton  icon="pi pi-arrow-down" (click)="visibleTop = true" [style]="{ marginRight: '0.25em' }"> </button>
+                <button pButton  icon="pi pi-arrow-up" (click)="visibleBottom = true" [style]="{ marginRight: '0.25em' }"> </button>
+                <button pButton  icon="pi pi-external-link" (click)="visibleFull = true"> </button>
             </div>
 
             <div class="card">
                 <div class="font-semibold text-xl mb-4">ConfirmPopup</div>
                 <p-confirmpopup key="confirm2"></p-confirmpopup>
-                <p-button #popup (click)="confirm($event)" icon="pi pi-check" label="Confirm" class="mr-2"></p-button>
+                <button pButton  #popup (click)="confirm($event)" icon="pi pi-check" label="Confirm" class="mr-2"></button>
             </div>
 
             <div class="card">
                 <div class="font-semibold text-xl mb-4">ConfirmDialog</div>
-                <p-button label="Delete" icon="pi pi-trash" severity="danger" [style]="{ width: 'auto' }" (click)="openConfirmation()" />
+                <button pButton  label="Delete" icon="pi pi-trash" severity="danger" [style]="{ width: 'auto' }" (click)="openConfirmation()"> </button>
                 <p-dialog header="Confirmation" [(visible)]="displayConfirmation" [style]="{ width: '350px' }" [modal]="true">
                     <div class="flex items-center justify-center">
                         <i class="pi pi-exclamation-triangle mr-6" style="font-size: 2rem"> </i>
                         <span>Are you sure you want to proceed?</span>
                     </div>
                     <ng-template #footer>
-                        <p-button label="No" icon="pi pi-times" (click)="closeConfirmation()" text severity="secondary" />
-                        <p-button label="Yes" icon="pi pi-check" (click)="closeConfirmation()" severity="danger" outlined autofocus />
+                        <button pButton  label="No" icon="pi pi-times" (click)="closeConfirmation()" text severity="secondary"> </button>
+                        <button pButton  label="Yes" icon="pi pi-check" (click)="closeConfirmation()" severity="danger" outlined autofocus> </button>
                     </ng-template>
                 </p-dialog>
             </div>
         </div>
     </div>`,
+    changeDetection: ChangeDetectionStrategy.OnPush,
     providers: [ConfirmationService, MessageService, ProductService]
 })
 export class OverlayDemo implements OnInit {
@@ -166,7 +167,7 @@ export class OverlayDemo implements OnInit {
         private productService: ProductService,
         private confirmationService: ConfirmationService,
         private messageService: MessageService
-    ) {}
+    ) { }
 
     ngOnInit() {
         this.productService.getProductsSmall().then((products) => (this.products = products));

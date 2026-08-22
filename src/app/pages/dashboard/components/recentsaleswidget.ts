@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, signal, ChangeDetectionStrategy } from '@angular/core';
 import { RippleModule } from 'primeng/ripple';
 import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
@@ -15,8 +15,8 @@ import { Product, ProductService } from '@/app/pages/service/product.service';
             <ng-template #header>
                 <tr>
                     <th>Image</th>
-                    <th pSortableColumn="name">Name <p-sortIcon field="name"></p-sortIcon></th>
-                    <th pSortableColumn="price">Price <p-sortIcon field="price"></p-sortIcon></th>
+                    <th pSortableColumn="name">Name <p-sort-icon field="name"></p-sort-icon></th>
+                    <th pSortableColumn="price">Price <p-sort-icon field="price"></p-sort-icon></th>
                     <th>View</th>
                 </tr>
             </ng-template>
@@ -28,12 +28,13 @@ import { Product, ProductService } from '@/app/pages/service/product.service';
                     <td style="width: 35%; min-width: 7rem;">{{ product.name }}</td>
                     <td style="width: 35%; min-width: 8rem;">{{ product.price | currency: 'USD' }}</td>
                     <td style="width: 15%;">
-                        <button pButton pRipple type="button" icon="pi pi-search" class="p-button p-component p-button-text p-button-icon-only"></button>
+                        <button pButton pRipple type="button" icon="pi pi-search" class="button pButton  p-component button pButton -text button pButton -icon-only"></button>
                     </td>
                 </tr>
             </ng-template>
         </p-table>
     </div>`,
+    changeDetection: ChangeDetectionStrategy.OnPush,
     providers: [ProductService]
 })
 export class RecentSalesWidget {
@@ -42,6 +43,6 @@ export class RecentSalesWidget {
     productService = inject(ProductService);
 
     ngOnInit() {
-        this.productService.getProductsSmall().then((data) => (this.products.set(data)));
+        this.productService.getProductsSmall().then((data) => this.products.set(data));
     }
 }

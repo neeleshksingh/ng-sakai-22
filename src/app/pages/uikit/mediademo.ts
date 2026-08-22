@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, inject, OnInit, signal, ChangeDetectionStrategy } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import { CarouselModule } from 'primeng/carousel';
 import { GalleriaModule } from 'primeng/galleria';
@@ -29,8 +29,8 @@ import { Product, ProductService } from '@/app/pages/service/product.service';
                         <div class="flex justify-between items-center">
                             <div class="mt-0 font-semibold text-xl">{{ '$' + product.price }}</div>
                             <span>
-                                <p-button icon="pi pi-heart" severity="secondary" [outlined]="true" />
-                                <p-button icon="pi pi-shopping-cart" styleClass="ml-2" />
+                                <button pButton  icon="pi pi-heart" severity="secondary" [outlined]="true"> </button>
+                                <button pButton  icon="pi pi-shopping-cart" styleClass="ml-2"> </button>
                             </span>
                         </div>
                     </div>
@@ -54,6 +54,7 @@ import { Product, ProductService } from '@/app/pages/service/product.service';
                 </ng-template>
             </p-galleria>
         </div>`,
+    changeDetection: ChangeDetectionStrategy.OnPush,
     providers: [ProductService, PhotoService]
 })
 export class MediaDemo implements OnInit {

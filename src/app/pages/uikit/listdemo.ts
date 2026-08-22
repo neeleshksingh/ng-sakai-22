@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
 import { DataViewModule } from 'primeng/dataview';
@@ -61,8 +61,8 @@ import { Product, ProductService } from '@/app/pages/service/product.service';
                                     <div class="flex flex-col md:items-end gap-8">
                                         <span class="text-xl font-semibold">$ {{ item.price }}</span>
                                         <div class="flex flex-row-reverse md:flex-row gap-2">
-                                            <p-button icon="pi pi-heart" styleClass="h-full" [outlined]="true"></p-button>
-                                            <p-button icon="pi pi-shopping-cart" label="Buy Now" [disabled]="item.inventoryStatus === 'OUTOFSTOCK'" styleClass="flex-auto md:flex-initial whitespace-nowrap"></p-button>
+                                            <button pButton  icon="pi pi-heart" styleClass="h-full" [outlined]="true"></button>
+                                            <button pButton  icon="pi pi-shopping-cart" label="Buy Now" [disabled]="item.inventoryStatus === 'OUTOFSTOCK'" styleClass="flex-auto md:flex-initial whitespace-nowrap"></button>
                                         </div>
                                     </div>
                                 </div>
@@ -113,8 +113,8 @@ import { Product, ProductService } from '@/app/pages/service/product.service';
                                     <div class="flex flex-col gap-6 mt-6">
                                         <span class="text-2xl font-semibold">$ {{ item.price }}</span>
                                         <div class="flex gap-2">
-                                            <p-button icon="pi pi-shopping-cart" label="Buy Now" [disabled]="item.inventoryStatus === 'OUTOFSTOCK'" class="flex-auto whitespace-nowrap" styleClass="w-full"></p-button>
-                                            <p-button icon="pi pi-heart" styleClass="h-full" [outlined]="true"></p-button>
+                                            <button pButton  icon="pi pi-shopping-cart" label="Buy Now" [disabled]="item.inventoryStatus === 'OUTOFSTOCK'" class="flex-auto whitespace-nowrap" styleClass="w-full"></button>
+                                            <button pButton  icon="pi pi-heart" styleClass="h-full" [outlined]="true"></button>
                                         </div>
                                     </div>
                                 </div>
@@ -156,6 +156,7 @@ import { Product, ProductService } from '@/app/pages/service/product.service';
             }
         }
     `,
+    changeDetection: ChangeDetectionStrategy.OnPush,
     providers: [ProductService]
 })
 export class ListDemo {
@@ -171,7 +172,7 @@ export class ListDemo {
 
     orderCities: any[] = [];
 
-    constructor(private productService: ProductService) {}
+    constructor(private productService: ProductService) { }
 
     ngOnInit() {
         this.productService.getProductsSmall().then((data) => (this.products = data.slice(0, 6)));

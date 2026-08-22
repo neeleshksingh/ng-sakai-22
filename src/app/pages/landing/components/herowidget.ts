@@ -1,10 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import { RippleModule } from 'primeng/ripple';
 
 @Component({
     selector: 'hero-widget',
     imports: [ButtonModule, RippleModule],
+    changeDetection: ChangeDetectionStrategy.OnPush,
     template: `
         <div
             id="hero"
@@ -22,4 +23,4 @@ import { RippleModule } from 'primeng/ripple';
         </div>
     `
 })
-export class HeroWidget {}
+export class HeroWidget { }

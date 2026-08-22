@@ -1,6 +1,11 @@
-import { Component, OnInit, signal, ViewChild } from '@angular/core';
+import { Component, OnInit, signal, ViewChild, ChangeDetectionStrategy } from '@angular/core';
 import { ConfirmationService, MessageService } from 'primeng/api';
-import { Table, TableModule } from 'primeng/table';
+import {
+    Table, TableModule,
+    SortIcon,
+    TableCheckbox,
+    TableHeaderCheckbox
+} from 'primeng/table';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
@@ -52,17 +57,20 @@ interface ExportColumn {
         TagModule,
         InputIconModule,
         IconFieldModule,
-        ConfirmDialogModule
+        ConfirmDialogModule,
+        SortIcon,
+        TableCheckbox,
+        TableHeaderCheckbox
     ],
     template: `
         <p-toolbar styleClass="mb-6">
             <ng-template #start>
-                <p-button label="New" icon="pi pi-plus" severity="secondary" class="mr-2" (onClick)="openNew()" />
-                <p-button severity="secondary" label="Delete" icon="pi pi-trash" outlined (onClick)="deleteSelectedProducts()" [disabled]="!selectedProducts || !selectedProducts.length" />
+                <button pButton  label="New" icon="pi pi-plus" severity="secondary" class="mr-2" (click)="openNew()"> </button>
+                <button pButton  severity="secondary" label="Delete" icon="pi pi-trash" outlined (click)="deleteSelectedProducts()" [disabled]="!selectedProducts || !selectedProducts.length"> </button>
             </ng-template>
 
             <ng-template #end>
-                <p-button label="Export" icon="pi pi-upload" severity="secondary" (onClick)="exportCSV()" />
+                <button pButton  label="Export" icon="pi pi-upload" severity="secondary" (click)="exportCSV()"> </button>
             </ng-template>
         </p-toolbar>
 
@@ -93,29 +101,29 @@ interface ExportColumn {
             <ng-template #header>
                 <tr>
                     <th style="width: 3rem">
-                        <p-tableHeaderCheckbox />
+                        <p-table-header-checkbox />
                     </th>
                     <th style="min-width: 16rem">Code</th>
                     <th pSortableColumn="name" style="min-width:16rem">
                         Name
-                        <p-sortIcon field="name" />
+                        <p-sort-icon field="name" />
                     </th>
                     <th>Image</th>
                     <th pSortableColumn="price" style="min-width: 8rem">
                         Price
-                        <p-sortIcon field="price" />
+                        <p-sort-icon field="price" />
                     </th>
                     <th pSortableColumn="category" style="min-width:10rem">
                         Category
-                        <p-sortIcon field="category" />
+                        <p-sort-icon field="category" />
                     </th>
                     <th pSortableColumn="rating" style="min-width: 12rem">
                         Reviews
-                        <p-sortIcon field="rating" />
+                        <p-sort-icon field="rating" />
                     </th>
                     <th pSortableColumn="inventoryStatus" style="min-width: 12rem">
                         Status
-                        <p-sortIcon field="inventoryStatus" />
+                        <p-sort-icon field="inventoryStatus" />
                     </th>
                     <th style="min-width: 12rem"></th>
                 </tr>
@@ -123,7 +131,7 @@ interface ExportColumn {
             <ng-template #body let-product>
                 <tr>
                     <td style="width: 3rem">
-                        <p-tableCheckbox [value]="product" />
+                        <p-table-checkbox [value]="product" />
                     </td>
                     <td style="min-width: 12rem">{{ product.code }}</td>
                     <td style="min-width: 16rem">{{ product.name }}</td>
@@ -139,8 +147,8 @@ interface ExportColumn {
                         <p-tag [value]="product.inventoryStatus" [severity]="getSeverity(product.inventoryStatus)" />
                     </td>
                     <td>
-                        <p-button icon="pi pi-pencil" class="mr-2" [rounded]="true" [outlined]="true" (click)="editProduct(product)" />
-                        <p-button icon="pi pi-trash" severity="danger" [rounded]="true" [outlined]="true" (click)="deleteProduct(product)" />
+                        <button pButton  icon="pi pi-pencil" class="mr-2" [rounded]="true" [outlined]="true" (click)="editProduct(product)"> </button>
+                        <button pButton  icon="pi pi-trash" severity="danger" [rounded]="true" [outlined]="true" (click)="deleteProduct(product)"> </button>
                     </td>
                 </tr>
             </ng-template>
@@ -194,20 +202,21 @@ interface ExportColumn {
                         </div>
                         <div class="col-span-6">
                             <label for="quantity" class="block font-bold mb-3">Quantity</label>
-                            <p-inputnumber id="quantity" [(ngModel)]="product.quantity" fluid />
+                            <p-inputnumber id="quantity" [(ngModel)]="product.quantity" />
                         </div>
                     </div>
                 </div>
             </ng-template>
 
             <ng-template #footer>
-                <p-button label="Cancel" icon="pi pi-times" text (click)="hideDialog()" />
-                <p-button label="Save" icon="pi pi-check" (click)="saveProduct()" />
+                <button pButton  label="Cancel" icon="pi pi-times" text (click)="hideDialog()"> </button>
+                <button pButton  label="Save" icon="pi pi-check" (click)="saveProduct()"> </button>
             </ng-template>
         </p-dialog>
 
         <p-confirmdialog [style]="{ width: '450px' }" />
     `,
+    changeDetection: ChangeDetectionStrategy.OnPush,
     providers: [MessageService, ProductService, ConfirmationService]
 })
 export class Crud implements OnInit {
@@ -233,7 +242,7 @@ export class Crud implements OnInit {
         private productService: ProductService,
         private messageService: MessageService,
         private confirmationService: ConfirmationService
-    ) {}
+    ) { }
 
     exportCSV() {
         this.dt.exportCSV();

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { FluidModule } from 'primeng/fluid';
 import { InputTextModule } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';
@@ -10,6 +10,7 @@ import { TextareaModule } from 'primeng/textarea';
     selector: 'app-formlayout-demo',
     standalone: true,
     imports: [InputTextModule, FluidModule, ButtonModule, SelectModule, FormsModule, TextareaModule],
+    changeDetection: ChangeDetectionStrategy.OnPush,
     template: `<p-fluid>
         <div class="flex flex-col md:flex-row gap-8">
             <div class="md:w-1/2">
@@ -71,7 +72,7 @@ import { TextareaModule } from 'primeng/textarea';
                             <label for="lastname1" class="sr-only">Lastname</label>
                             <input pInputText id="lastname1" type="text" placeholder="Lastname" />
                         </div>
-                        <p-button label="Submit" [fluid]="false"></p-button>
+                        <button pButton  label="Submit" [fluid]="false"></button>
                     </div>
                 </div>
                 <div class="card flex flex-col gap-4">

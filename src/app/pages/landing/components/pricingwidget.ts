@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import { DividerModule } from 'primeng/divider';
 import { RippleModule } from 'primeng/ripple';
@@ -6,6 +6,7 @@ import { RippleModule } from 'primeng/ripple';
 @Component({
     selector: 'pricing-widget',
     imports: [DividerModule, ButtonModule, RippleModule],
+    changeDetection: ChangeDetectionStrategy.OnPush,
     template: `
         <div id="pricing" class="py-6 px-6 lg:px-20 my-2 md:my-6">
             <div class="text-center mb-6">
@@ -23,7 +24,7 @@ import { RippleModule } from 'primeng/ripple';
                                 <span class="text-5xl font-bold mr-2 text-surface-900 dark:text-surface-0">$0</span>
                                 <span class="text-surface-600 dark:text-surface-200">per month</span>
                             </div>
-                            <button pButton pRipple label="Get Started" class="p-button-rounded border-0 ml-4 font-light leading-tight bg-blue-500 text-white"></button>
+                            <button pButton pRipple label="Get Started" class="button pButton -rounded border-0 ml-4 font-light leading-tight bg-blue-500 text-white"></button>
                         </div>
                         <p-divider class="w-full bg-surface-200"></p-divider>
                         <ul class="my-8 list-none p-0 flex text-surface-900 dark:text-surface-0 flex-col px-8">
@@ -56,7 +57,7 @@ import { RippleModule } from 'primeng/ripple';
                                 <span class="text-5xl font-bold mr-2 text-surface-900 dark:text-surface-0">$1</span>
                                 <span class="text-surface-600 dark:text-surface-200">per month</span>
                             </div>
-                            <button pButton pRipple label="Get Started" class="p-button-rounded border-0 ml-4 font-light leading-tight bg-blue-500 text-white"></button>
+                            <button pButton pRipple label="Get Started" class="button pButton -rounded border-0 ml-4 font-light leading-tight bg-blue-500 text-white"></button>
                         </div>
                         <p-divider class="w-full bg-surface-200"></p-divider>
                         <ul class="my-8 list-none p-0 flex text-surface-900 dark:text-surface-0 flex-col px-8">
@@ -89,7 +90,7 @@ import { RippleModule } from 'primeng/ripple';
                                 <span class="text-5xl font-bold mr-2 text-surface-900 dark:text-surface-0">$5</span>
                                 <span class="text-surface-600 dark:text-surface-200">per month</span>
                             </div>
-                            <button pButton pRipple label="Try Free" class="p-button-rounded border-0 ml-4 font-light leading-tight bg-blue-500 text-white"></button>
+                            <button pButton pRipple label="Try Free" class="button pButton -rounded border-0 ml-4 font-light leading-tight bg-blue-500 text-white"></button>
                         </div>
                         <p-divider class="w-full bg-surface-200"></p-divider>
                         <ul class="my-8 list-none p-0 flex text-surface-900 dark:text-surface-0 flex-col px-8">
@@ -116,4 +117,4 @@ import { RippleModule } from 'primeng/ripple';
         </div>
     `
 })
-export class PricingWidget {}
+export class PricingWidget { }

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { AppFloatingConfigurator } from '../../layout/component/app.floatingconfigurator';
@@ -7,6 +7,7 @@ import { AppFloatingConfigurator } from '../../layout/component/app.floatingconf
     selector: 'app-notfound',
     standalone: true,
     imports: [RouterModule, AppFloatingConfigurator, ButtonModule],
+    changeDetection: ChangeDetectionStrategy.OnPush,
     template: ` <app-floating-configurator />
         <div class="flex items-center justify-center min-h-screen overflow-hidden">
             <div class="flex flex-col items-center justify-center">
@@ -59,10 +60,10 @@ import { AppFloatingConfigurator } from '../../layout/component/app.floatingconf
                                 <span class="text-surface-600 dark:text-surface-200 lg:text-xl">Accumsan in nisl nisi scelerisque</span>
                             </span>
                         </a>
-                        <p-button label="Go to Dashboard" routerLink="/" />
+                        <button pButton  label="Go to Dashboard" routerLink="/"> </button>
                     </div>
                 </div>
             </div>
         </div>`
 })
-export class Notfound {}
+export class Notfound { }

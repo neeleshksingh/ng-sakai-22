@@ -1,13 +1,14 @@
-import {Component} from '@angular/core';
-import {TimelineModule} from 'primeng/timeline';
-import {CardModule} from 'primeng/card';
-import {CommonModule} from '@angular/common';
-import {ButtonModule} from 'primeng/button';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
+import { TimelineModule } from 'primeng/timeline';
+import { CardModule } from 'primeng/card';
+import { CommonModule } from '@angular/common';
+import { ButtonModule } from 'primeng/button';
 
 @Component({
     selector: 'app-timeline-demo',
     standalone: true,
     imports: [CommonModule, TimelineModule, ButtonModule, CardModule],
+    changeDetection: ChangeDetectionStrategy.OnPush,
     template: `<div class="grid grid-cols-12 gap-8">
         <div class="col-span-12 sm:col-span-6">
             <div class="card">
@@ -68,7 +69,7 @@ import {ButtonModule} from 'primeng/button';
                                 Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore sed consequuntur error repudiandae numquam deserunt quisquam repellat libero asperiores earum nam nobis, culpa ratione quam perferendis esse,
                                 cupiditate neque quas!
                             </p>
-                            <p-button label="Read more" [text]="true" />
+                            <button pButton  label="Read more" [text]="true"> </button>
                         </p-card>
                     </ng-template>
                 </p-timeline>

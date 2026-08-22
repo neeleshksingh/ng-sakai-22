@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { FileUploadModule } from 'primeng/fileupload';
@@ -26,17 +26,18 @@ import { ToastModule } from 'primeng/toast';
                     <div class="font-semibold text-xl mb-4">Basic</div>
                     <div class="flex flex-col gap-4 items-center justify-center">
                         <p-fileupload #fu mode="basic" chooseLabel="Choose" chooseIcon="pi pi-upload" name="demo[]" url="https://www.primefaces.org/cdn/api/upload.php" accept="image/*" maxFileSize="1000000" (onUpload)="onUpload($event)" />
-                        <p-button label="Upload" (onClick)="fu.upload()" severity="secondary" />
+                        <button pButton  label="Upload" (click)="fu.upload()" severity="secondary"> </button>
                     </div>
                 </div>
             </div>
         </div>`,
+    changeDetection: ChangeDetectionStrategy.OnPush,
     providers: [MessageService]
 })
 export class FileDemo {
     uploadedFiles: any[] = [];
 
-    constructor(private messageService: MessageService) {}
+    constructor(private messageService: MessageService) { }
 
     onUpload(event: any) {
         for (const file of event.files) {

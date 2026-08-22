@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { InputTextModule } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';
 import { CommonModule } from '@angular/common';
@@ -223,7 +223,7 @@ import { Country } from '@/app/pages/service/customer.service';
                 </div>
                 <div class="flex flex-col md:flex-row gap-6">
                     <p-inputgroup>
-                        <p-button label="Search" />
+                        <button pButton  label="Search"> </button>
                         <input pInputText placeholder="Keyword" />
                     </p-inputgroup>
                     <p-inputgroup>
@@ -235,6 +235,7 @@ import { Country } from '@/app/pages/service/customer.service';
                 </div>
             </div>
         </p-fluid>`,
+    changeDetection: ChangeDetectionStrategy.OnPush,
     providers: [CountryService, NodeService]
 })
 export class InputDemo implements OnInit {

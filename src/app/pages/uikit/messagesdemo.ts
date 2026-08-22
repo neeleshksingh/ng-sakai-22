@@ -1,11 +1,11 @@
-import {CommonModule} from '@angular/common';
-import {Component} from '@angular/core';
-import {FormsModule} from '@angular/forms';
-import {MessageService, ToastMessageOptions} from 'primeng/api';
-import {ButtonModule} from 'primeng/button';
-import {InputTextModule} from 'primeng/inputtext';
-import {MessageModule} from 'primeng/message';
-import {ToastModule} from 'primeng/toast';
+import { CommonModule } from '@angular/common';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { MessageService, ToastMessageOptions } from 'primeng/api';
+import { ButtonModule } from 'primeng/button';
+import { InputTextModule } from 'primeng/inputtext';
+import { MessageModule } from 'primeng/message';
+import { ToastModule } from 'primeng/toast';
 
 @Component({
     selector: 'app-messages-demo',
@@ -17,10 +17,10 @@ import {ToastModule} from 'primeng/toast';
                 <div class="card">
                     <div class="font-semibold text-xl mb-4">Toast</div>
                     <div class="flex flex-wrap gap-2">
-                        <p-button (click)="showSuccessViaToast()" label="Success" severity="success" />
-                        <p-button (click)="showInfoViaToast()" label="Info" severity="info" />
-                        <p-button (click)="showWarnViaToast()" label="Warn" severity="warn" />
-                        <p-button (click)="showErrorViaToast()" label="Error" severity="danger" />
+                        <button pButton  (click)="showSuccessViaToast()" label="Success" severity="success"> </button>
+                        <button pButton  (click)="showInfoViaToast()" label="Info" severity="info"> </button>
+                        <button pButton  (click)="showWarnViaToast()" label="Warn" severity="warn"> </button>
+                        <button pButton  (click)="showErrorViaToast()" label="Error" severity="danger"> </button>
                         <p-toast />
                     </div>
 
@@ -52,6 +52,7 @@ import {ToastModule} from 'primeng/toast';
             </div>
         </div>
     `,
+    changeDetection: ChangeDetectionStrategy.OnPush,
     providers: [MessageService]
 })
 export class MessagesDemo {
@@ -61,7 +62,7 @@ export class MessagesDemo {
 
     email: string | undefined;
 
-    constructor(private service: MessageService) {}
+    constructor(private service: MessageService) { }
 
     pt: any = {
         contentWrapper: 'flex items-center'

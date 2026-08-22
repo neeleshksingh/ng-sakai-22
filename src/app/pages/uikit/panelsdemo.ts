@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { AccordionModule } from 'primeng/accordion';
 import { MenuItem } from 'primeng/api';
@@ -38,15 +38,16 @@ import { ToolbarModule } from 'primeng/toolbar';
         IconFieldModule,
         InputIconModule
     ],
+    changeDetection: ChangeDetectionStrategy.OnPush,
     template: `
         <div class="flex flex-col">
             <div class="card">
                 <div class="font-semibold text-xl mb-4">Toolbar</div>
                 <p-toolbar>
                     <ng-template #start>
-                        <p-button icon="pi pi-plus" class="mr-2" severity="secondary" text />
-                        <p-button icon="pi pi-print" class="mr-2" severity="secondary" text />
-                        <p-button icon="pi pi-upload" severity="secondary" text />
+                        <button pButton  icon="pi pi-plus" class="mr-2" severity="secondary" text> </button>
+                        <button pButton  icon="pi pi-print" class="mr-2" severity="secondary" text> </button>
+                        <button pButton  icon="pi pi-upload" severity="secondary" text> </button>
                     </ng-template>
 
                     <ng-template #center>
@@ -172,7 +173,7 @@ import { ToolbarModule } from 'primeng/toolbar';
                             <input pInputText id="password" type="password" />
                         </div>
                         <div class="flex">
-                            <p-button label="Login" icon="pi pi-user" class="w-full max-w-[17.35rem] mx-auto"></p-button>
+                            <button pButton  label="Login" icon="pi pi-user" class="w-full max-w-[17.35rem] mx-auto"></button>
                         </div>
                     </div>
                     <div class="w-full md:w-2/12">
@@ -180,7 +181,7 @@ import { ToolbarModule } from 'primeng/toolbar';
                         <p-divider layout="horizontal" class="flex! md:hidden!" align="center"><b>OR</b></p-divider>
                     </div>
                     <div class="w-full md:w-5/12 flex items-center justify-center py-5">
-                        <p-button label="Sign Up" icon="pi pi-user-plus" severity="success" class="w-full" styleClass="w-full max-w-[17.35rem] mx-auto"></p-button>
+                        <button pButton  label="Sign Up" icon="pi pi-user-plus" severity="success" class="w-full" styleClass="w-full max-w-[17.35rem] mx-auto"></button>
                     </div>
                 </div>
             </div>

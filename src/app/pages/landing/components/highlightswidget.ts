@@ -1,7 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
     selector: 'highlights-widget',
+    changeDetection: ChangeDetectionStrategy.OnPush,
     template: `
         <div id="highlights" class="py-6 px-6 lg:px-20 mx-0 my-12 lg:mx-20">
             <div class="text-center">
@@ -43,4 +44,4 @@ import { Component } from '@angular/core';
         </div>
     `
 })
-export class HighlightsWidget {}
+export class HighlightsWidget { }

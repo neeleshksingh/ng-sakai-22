@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { AvatarModule } from 'primeng/avatar';
 import { AvatarGroupModule } from 'primeng/avatargroup';
 import { BadgeModule } from 'primeng/badge';
@@ -16,6 +16,7 @@ import { TagModule } from 'primeng/tag';
     selector: 'app-misc-demo',
     standalone: true,
     imports: [CommonModule, ProgressBarModule, BadgeModule, AvatarModule, ScrollPanelModule, TagModule, ChipModule, ButtonModule, SkeletonModule, AvatarGroupModule, ScrollTopModule, OverlayBadgeModule],
+    changeDetection: ChangeDetectionStrategy.OnPush,
     template: `
         <div class="card">
             <div class="font-semibold text-xl mb-4">ProgressBar</div>
@@ -56,8 +57,8 @@ import { TagModule } from 'primeng/tag';
 
                     <div class="font-semibold my-4">Button</div>
                     <div class="flex gap-2">
-                        <p-button label="Emails" badge="8"></p-button>
-                        <p-button label="Messages" icon="pi pi-users" severity="warn" badge="8" badgeSeverity="danger"></p-button>
+                        <button pButton  label="Emails" badge="8"></button>
+                        <button pButton  label="Messages" icon="pi pi-users" severity="warn" badge="8" badgeSeverity="danger"></button>
                     </div>
 
                     <div class="font-semibold my-4">Sizes</div>
