@@ -43,9 +43,13 @@ export class AppLayout {
         return {
             'layout-overlay': config.menuMode === 'overlay',
             'layout-static': config.menuMode === 'static',
+            'layout-slim': config.menuMode === 'slim',
+            'layout-slim-plus': config.menuMode === 'slim-plus',
             'layout-static-inactive': state.staticMenuDesktopInactive && config.menuMode === 'static',
             'layout-overlay-active': state.overlayMenuActive,
-            'layout-mobile-active': state.mobileMenuActive
+            'layout-mobile-active': state.mobileMenuActive,
+            'p-input-filled': config.inputStyle === 'filled',
+            'p-ripple-disabled': !config.ripple
         };
     });
 }

@@ -8,7 +8,7 @@ import Lara from '@primeuix/themes/lara';
 import Nora from '@primeuix/themes/nora';
 import { PrimeNG } from 'primeng/config';
 import { SelectButtonModule } from 'primeng/selectbutton';
-import { LayoutService } from '@/app/layout/service/layout.service';
+import { InputStyle, LayoutService, MenuMode } from '@/app/layout/service/layout.service';
 
 const presets = {
     Aura,
@@ -88,11 +88,23 @@ declare type SurfacesType = {
                 <span class="text-sm text-muted-color font-semibold">Menu Mode</span>
                 <p-selectbutton [ngModel]="menuMode()" (ngModelChange)="onMenuModeChange($event)" [options]="menuModeOptions" [allowEmpty]="false" size="small" />
             </div>
+            <div class="flex flex-col gap-2">
+                <span class="text-sm text-muted-color font-semibold">Scale</span>
+                <p-selectbutton [ngModel]="scale()" (ngModelChange)="onScaleChange($event)" [options]="scaleOptions" [allowEmpty]="false" size="small" />
+            </div>
+            <div class="flex flex-col gap-2">
+                <span class="text-sm text-muted-color font-semibold">Input Style</span>
+                <p-selectbutton [ngModel]="inputStyle()" (ngModelChange)="onInputStyleChange($event)" [options]="inputStyleOptions" [allowEmpty]="false" size="small" />
+            </div>
+            <div class="flex flex-col gap-2">
+                <span class="text-sm text-muted-color font-semibold">Ripple</span>
+                <p-selectbutton [ngModel]="ripple()" (ngModelChange)="onRippleChange($event)" [options]="rippleOptions" [allowEmpty]="false" size="small" />
+            </div>
         </div>
     `,
     changeDetection: ChangeDetectionStrategy.OnPush,
     host: {
-        class: 'hidden absolute top-13 right-0 w-72 p-4 bg-surface-0 dark:bg-surface-900 border border-surface rounded-border origin-top shadow-[0px_3px_5px_rgba(0,0,0,0.02),0px_0px_2px_rgba(0,0,0,0.05),0px_1px_4px_rgba(0,0,0,0.08)]'
+        class: 'hidden absolute top-13 right-0 w-80 max-h-[calc(100vh-5rem)] overflow-y-auto p-4 bg-surface-0 dark:bg-surface-900 border border-surface rounded-border origin-top shadow-[0px_3px_5px_rgba(0,0,0,0.02),0px_0px_2px_rgba(0,0,0,0.05),0px_1px_4px_rgba(0,0,0,0.08)]'
     }
 })
 export class AppConfigurator {
@@ -112,7 +124,21 @@ export class AppConfigurator {
 
     menuModeOptions = [
         { label: 'Static', value: 'static' },
-        { label: 'Overlay', value: 'overlay' }
+        { label: 'Overlay', value: 'overlay' },
+        { label: 'Slim', value: 'slim' },
+        { label: 'Slim +', value: 'slim-plus' }
+    ];
+
+    scaleOptions = [12, 13, 14, 15, 16];
+
+    inputStyleOptions = [
+        { label: 'Outlined', value: 'outlined' },
+        { label: 'Filled', value: 'filled' }
+    ];
+
+    rippleOptions = [
+        { label: 'On', value: true },
+        { label: 'Off', value: false }
     ];
 
     ngOnInit() {
@@ -269,6 +295,12 @@ export class AppConfigurator {
     selectedPreset = computed(() => this.layoutService.layoutConfig().preset);
 
     menuMode = computed(() => this.layoutService.layoutConfig().menuMode);
+
+    scale = computed(() => this.layoutService.layoutConfig().scale);
+
+    inputStyle = computed(() => this.layoutService.layoutConfig().inputStyle);
+
+    ripple = computed(() => this.layoutService.layoutConfig().ripple);
 
     primaryColors = computed<SurfacesType[]>(() => {
         const presetPalette = presets[this.layoutService.layoutConfig().preset as KeyOfType<typeof presets>].primitive;
@@ -444,7 +476,26 @@ export class AppConfigurator {
         }
     }
 
-    onMenuModeChange(event: string) {
+    onMenuModeChange(event: MenuMode) {
         this.layoutService.layoutConfig.update((prev) => ({ ...prev, menuMode: event }));
+        this.layoutService.layoutState.update((prev) => ({
+            ...prev,
+            staticMenuDesktopInactive: false,
+            overlayMenuActive: false,
+            mobileMenuActive: false,
+            menuHoverActive: false
+        }));
+    }
+
+    onScaleChange(event: number) {
+        this.layoutService.layoutConfig.update((prev) => ({ ...prev, scale: event }));
+    }
+
+    onInputStyleChange(event: InputStyle) {
+        this.layoutService.layoutConfig.update((prev) => ({ ...prev, inputStyle: event }));
+    }
+
+    onRippleChange(event: boolean) {
+        this.layoutService.layoutConfig.update((prev) => ({ ...prev, ripple: event }));
     }
 }

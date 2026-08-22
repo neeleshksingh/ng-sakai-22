@@ -1,11 +1,18 @@
-import { Injectable, effect, signal, computed } from '@angular/core';
+import { Injectable, effect, signal, computed, inject } from '@angular/core';
+import { PrimeNG } from 'primeng/config';
+
+export type MenuMode = 'static' | 'overlay' | 'slim' | 'slim-plus';
+export type InputStyle = 'outlined' | 'filled';
 
 export interface LayoutConfig {
     preset: string;
     primary: string;
     surface: string | undefined | null;
     darkTheme: boolean;
-    menuMode: string;
+    menuMode: MenuMode;
+    scale: number;
+    inputStyle: InputStyle;
+    ripple: boolean;
 }
 
 interface LayoutState {
@@ -21,13 +28,22 @@ interface LayoutState {
     providedIn: 'root'
 })
 export class LayoutService {
-    layoutConfig = signal<LayoutConfig>({
+    private readonly configStorageKey = 'sakai-layout-config';
+
+    private readonly defaultConfig: LayoutConfig = {
         preset: 'Aura',
         primary: 'emerald',
         surface: null,
         darkTheme: false,
-        menuMode: 'static'
-    });
+        menuMode: 'static',
+        scale: 14,
+        inputStyle: 'outlined',
+        ripple: true
+    };
+
+    private readonly primeng = inject(PrimeNG);
+
+    layoutConfig = signal<LayoutConfig>(this.loadConfig());
 
     layoutState = signal<LayoutState>({
         staticMenuDesktopInactive: false,
@@ -50,6 +66,12 @@ export class LayoutService {
 
     isOverlay = computed(() => this.layoutConfig().menuMode === 'overlay');
 
+    isSlim = computed(() => this.layoutConfig().menuMode === 'slim');
+
+    isSlimPlus = computed(() => this.layoutConfig().menuMode === 'slim-plus');
+
+    isCompact = computed(() => this.isSlim() || this.isSlimPlus());
+
     transitionComplete = signal<boolean>(false);
 
     private initialized = false;
@@ -58,8 +80,12 @@ export class LayoutService {
         effect(() => {
             const config = this.layoutConfig();
 
+            this.applyLayoutPreferences(config);
+            this.saveConfig(config);
+
             if (!this.initialized || !config) {
                 this.initialized = true;
+                this.toggleDarkMode(config);
                 return;
             }
 
@@ -89,6 +115,41 @@ export class LayoutService {
             document.documentElement.classList.add('app-dark');
         } else {
             document.documentElement.classList.remove('app-dark');
+        }
+    }
+
+    private applyLayoutPreferences(config: LayoutConfig): void {
+        if (typeof document === 'undefined') {
+            return;
+        }
+
+        document.documentElement.style.fontSize = `${config.scale}px`;
+        this.primeng.inputVariant.set(config.inputStyle);
+        this.primeng.ripple.set(config.ripple);
+    }
+
+    private loadConfig(): LayoutConfig {
+        if (typeof window === 'undefined') {
+            return this.defaultConfig;
+        }
+
+        try {
+            const savedConfig = window.localStorage.getItem(this.configStorageKey);
+            return savedConfig ? { ...this.defaultConfig, ...JSON.parse(savedConfig) } : this.defaultConfig;
+        } catch {
+            return this.defaultConfig;
+        }
+    }
+
+    private saveConfig(config: LayoutConfig): void {
+        if (typeof window === 'undefined') {
+            return;
+        }
+
+        try {
+            window.localStorage.setItem(this.configStorageKey, JSON.stringify(config));
+        } catch {
+            // Storage can be unavailable in restricted browsing contexts.
         }
     }
 

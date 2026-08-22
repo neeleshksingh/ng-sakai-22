@@ -26,10 +26,14 @@ export class AppMenu {
         this.model = [
             {
                 label: 'Home',
+                icon: 'pi pi-fw pi-home',
+                path: '/menu/home',
                 items: [{ label: 'Dashboard', icon: 'pi pi-fw pi-home', routerLink: ['/'] }]
             },
             {
                 label: 'UI Components',
+                icon: 'pi pi-fw pi-th-large',
+                path: '/menu/ui-components',
                 items: [
                     { label: 'Form Layout', icon: 'pi pi-fw pi-id-card', routerLink: ['/uikit/formlayout'] },
                     { label: 'Input', icon: 'pi pi-fw pi-check-square', routerLink: ['/uikit/input'] },
@@ -51,7 +55,7 @@ export class AppMenu {
             {
                 label: 'Pages',
                 icon: 'pi pi-fw pi-briefcase',
-                path: '/pages',
+                path: '/menu/pages',
                 items: [
                     {
                         label: 'Landing',
@@ -99,7 +103,8 @@ export class AppMenu {
             },
             {
                 label: 'Hierarchy',
-                path: '/hierarchy',
+                icon: 'pi pi-fw pi-sitemap',
+                path: '/menu/hierarchy',
                 items: [
                     {
                         label: 'Submenu 1',
@@ -150,6 +155,8 @@ export class AppMenu {
             },
             {
                 label: 'Get Started',
+                icon: 'pi pi-fw pi-compass',
+                path: '/menu/get-started',
                 items: [
                     {
                         label: 'Documentation',
