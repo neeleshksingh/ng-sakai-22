@@ -1,0 +1,24 @@
+<main class="login-page">
+    <section class="login-story">
+        <a routerLink="/welcome" class="login-brand"><span>NC</span><strong>NCorePro</strong></a>
+        <div>
+            <p>Unified university workspace</p>
+            <h1>Everything your campus needs, in one thoughtful experience.</h1>
+            <span>Academics, admissions, finance, people, examinations, and student services—connected.</span>
+        </div>
+        <footer>Designed for modern higher education.</footer>
+    </section>
+    <section class="login-form-panel">
+        <form class="login-card" (ngSubmit)="login()">
+            <p class="eyebrow">Welcome back</p>
+            <h2>Sign in to your workspace</h2>
+            <span class="intro">Use the prefilled demonstration account to continue.</span> <label for="username">Email address</label><input id="username" name="username" pInputText [(ngModel)]="userName" autocomplete="username" />
+            <label for="password">Password</label><p-password inputId="password" name="password" [(ngModel)]="password" [feedback]="false" [toggleMask]="true" styleClass="w-full" inputStyleClass="w-full" />
+            <div class="login-options">
+                <label><p-checkbox name="remember" [(ngModel)]="rememberMe" [binary]="true" /> Remember me</label><a href="#">Forgot password?</a>
+            </div>
+            <button pButton type="submit" label="Sign in" icon="pi pi-arrow-right" iconPos="right"></button>
+            <small>This is a UI demonstration. No credentials are sent to a server.</small>
+        </form>
+    </section>
+</main>

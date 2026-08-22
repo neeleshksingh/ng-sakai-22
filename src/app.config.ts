@@ -1,15 +1,27 @@
-import { provideHttpClient, withFetch } from '@angular/common/http';
+import { provideHttpClient, withFetch, withInterceptors } from '@angular/common/http';
 import { ApplicationConfig, provideZonelessChangeDetection } from '@angular/core';
-import { provideRouter, withEnabledBlockingInitialNavigation, withInMemoryScrolling } from '@angular/router';
+import { provideRouter, withEnabledBlockingInitialNavigation, withHashLocation, withInMemoryScrolling } from '@angular/router';
 import Aura from '@primeuix/themes/aura';
 import { providePrimeNG } from 'primeng/config';
+import { ConfirmationService, MessageService } from 'primeng/api';
 import { appRoutes } from './app.routes';
+import { authInterceptor } from './app/shared/interceptors/auth.interceptor';
+import { errorInterceptor } from './app/shared/interceptors/error.interceptor';
+import { progressBarInterceptor } from './app/shared/interceptors/progress-bar.interceptor';
+import { NCoreStore } from './app/store/provider';
+import { environment } from './environments/environment';
 
 export const appConfig: ApplicationConfig = {
     providers: [
-        provideRouter(appRoutes, withInMemoryScrolling({ anchorScrolling: 'enabled', scrollPositionRestoration: 'enabled' }), withEnabledBlockingInitialNavigation()),
-        provideHttpClient(withFetch()),
+        provideRouter(appRoutes, withHashLocation(), withInMemoryScrolling({ anchorScrolling: 'enabled', scrollPositionRestoration: 'enabled' }), withEnabledBlockingInitialNavigation()),
+        provideHttpClient(withFetch(), withInterceptors([authInterceptor, progressBarInterceptor, errorInterceptor])),
         provideZonelessChangeDetection(),
-        providePrimeNG({ theme: { preset: Aura, options: { darkModeSelector: '.app-dark' } } })
+        providePrimeNG({
+            license: environment.primeUiLicense,
+            theme: { preset: Aura, options: { darkModeSelector: '.app-dark' } }
+        }),
+        MessageService,
+        ConfirmationService,
+        NCoreStore
     ]
 };

@@ -1,0 +1,4 @@
+<label class="range-field">
+    <span>{{ label() }}</span>
+    <p-datepicker [(ngModel)]="range" selectionMode="range" [readonlyInput]="true" (ngModelChange)="rangeChange.emit($event)" />
+</label>

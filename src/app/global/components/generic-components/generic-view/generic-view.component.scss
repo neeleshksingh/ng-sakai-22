@@ -1,0 +1,18 @@
+.generic-view dl {
+    display: grid;
+    gap: 0.75rem;
+}
+.generic-view dl > div {
+    display: grid;
+    grid-template-columns: minmax(8rem, 0.4fr) 1fr;
+    gap: 1rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid var(--surface-border);
+}
+dt {
+    color: var(--text-color-secondary);
+    font-weight: 600;
+}
+dd {
+    margin: 0;
+}

@@ -1,0 +1,63 @@
+<header class="layout-topbar">
+    <div class="layout-topbar-logo-container topbar-start">
+        <button class="layout-menu-button layout-topbar-action" type="button" aria-label="Toggle navigation" (click)="layoutService.onMenuToggle()">
+            <i class="pi pi-bars"></i>
+        </button>
+        <a class="layout-topbar-logo" routerLink="/home/dashboard" aria-label="NCorePro dashboard">
+            <span class="brand-mark">NC</span>
+            <span class="brand-name">NCorePro</span>
+        </a>
+    </div>
+
+    <app-breadcrumb class="topbar-breadcrumb" />
+
+    <div class="topbar-search">
+        <i class="pi pi-search"></i>
+        <input pInputText [(ngModel)]="searchQuery" placeholder="Search modules" aria-label="Search modules" />
+        <kbd>⌘ K</kbd>
+    </div>
+
+    <div class="layout-topbar-actions">
+        <div class="layout-config-menu">
+            <button type="button" class="layout-topbar-action" aria-label="Toggle dark mode" (click)="toggleDarkMode()">
+                <i [class]="layoutService.isDarkTheme() ? 'pi pi-sun' : 'pi pi-moon'"></i>
+            </button>
+            <div class="relative">
+                <button
+                    class="layout-topbar-action layout-topbar-action-highlight"
+                    type="button"
+                    aria-label="Open appearance settings"
+                    pStyleClass="@next"
+                    enterFromClass="hidden"
+                    enterActiveClass="animate-scalein"
+                    leaveToClass="hidden"
+                    leaveActiveClass="animate-fadeout"
+                    [hideOnOutsideClick]="true"
+                >
+                    <i class="pi pi-palette"></i>
+                </button>
+                <app-configurator />
+            </div>
+        </div>
+
+        <button class="layout-topbar-menu-button layout-topbar-action" type="button" pStyleClass="@next" enterFromClass="hidden" enterActiveClass="animate-scalein" leaveToClass="hidden" leaveActiveClass="animate-fadeout" [hideOnOutsideClick]="true">
+            <i class="pi pi-ellipsis-v"></i>
+        </button>
+
+        <div class="layout-topbar-menu hidden lg:block">
+            <div class="layout-topbar-menu-content">
+                <button type="button" class="layout-topbar-action" aria-label="Notifications"><i class="pi pi-bell"></i><span>Notifications</span><b class="notification-dot"></b></button>
+                <button type="button" class="profile-button" pStyleClass="@next" enterFromClass="hidden" enterActiveClass="animate-scalein" leaveToClass="hidden" leaveActiveClass="animate-fadeout" [hideOnOutsideClick]="true">
+                    <span class="profile-avatar">JD</span>
+                    <span class="profile-details"><strong>John Doe</strong><small>Admin · Faculty</small></span>
+                    <i class="pi pi-angle-down"></i>
+                </button>
+                <div class="profile-menu hidden">
+                    <a routerLink="/home/settings"><i class="pi pi-user"></i><span>Profile</span></a>
+                    <a routerLink="/home/settings"><i class="pi pi-cog"></i><span>Settings</span></a>
+                    <a routerLink="/login"><i class="pi pi-sign-out"></i><span>Log out</span></a>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>

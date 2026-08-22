@@ -1,12 +1,12 @@
-import { Component, ChangeDetectionStrategy } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { RouterLink } from '@angular/router';
 
 @Component({
-    standalone: true,
     selector: 'app-footer',
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    template: `<div class="layout-footer">
-        SAKAI by
-        <a href="https://primeng.org" target="_blank" rel="noopener noreferrer" class="text-primary font-bold hover:underline">PrimeNG</a>
-    </div>`
+    standalone: true,
+    imports: [RouterLink],
+    templateUrl: './app.footer.html',
+    styleUrl: './app.footer.scss',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class AppFooter { }
+export class AppFooter {}

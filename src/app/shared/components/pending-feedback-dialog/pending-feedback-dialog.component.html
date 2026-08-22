@@ -1,0 +1,7 @@
+<p-dialog header="Pending Feedback" [(visible)]="visible" [modal]="true" [style]="{ width: '32rem', maxWidth: '95vw' }">
+    <div class="feedback-form">
+        <p class="text-color-secondary">Share your feedback to continue. This demo does not send data to a server.</p>
+        <textarea pTextarea [(ngModel)]="feedback" rows="6" placeholder="Enter feedback"></textarea>
+        <p-button label="Submit" icon="pi pi-check" (onClick)="submit()" />
+    </div>
+</p-dialog>

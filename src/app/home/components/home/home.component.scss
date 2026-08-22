@@ -1,0 +1,55 @@
+.public-home {
+    min-height: 100vh;
+    padding: clamp(1.25rem, 4vw, 4rem);
+    background: radial-gradient(circle at 80% 15%, color-mix(in srgb, var(--primary-color) 20%, transparent), transparent 30%), var(--surface-ground);
+}
+nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    color: var(--text-color);
+    font-size: 1.25rem;
+    font-weight: 800;
+}
+.brand span {
+    width: 2.7rem;
+    height: 2.7rem;
+    display: grid;
+    place-items: center;
+    color: var(--primary-contrast-color);
+    background: var(--primary-color);
+    border-radius: 50%;
+    font-size: 0.72rem;
+}
+section {
+    min-height: calc(100vh - 10rem);
+    display: grid;
+    align-content: center;
+    justify-items: start;
+    max-width: 62rem;
+}
+section p {
+    color: var(--primary-color);
+    font-size: 0.78rem;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+}
+section h1 {
+    margin: 0.5rem 0 1.25rem;
+    font-size: clamp(3rem, 8vw, 7rem);
+    line-height: 0.94;
+    letter-spacing: -0.065em;
+}
+section div {
+    max-width: 46rem;
+    margin-bottom: 2rem;
+    color: var(--text-color-secondary);
+    font-size: clamp(1rem, 2vw, 1.3rem);
+    line-height: 1.7;
+}

@@ -1,0 +1,11 @@
+<div class="card generic-view">
+    <h2>{{ title() }}</h2>
+    <dl>
+        @for (entry of data() | keyvalue; track entry.key) {
+            <div>
+                <dt>{{ entry.key }}</dt>
+                <dd>{{ entry.value }}</dd>
+            </div>
+        }
+    </dl>
+</div>

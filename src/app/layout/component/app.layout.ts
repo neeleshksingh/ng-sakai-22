@@ -11,12 +11,14 @@ import { LayoutService } from '@/app/layout/service/layout.service';
     standalone: true,
     imports: [CommonModule, AppTopbar, AppSidebar, RouterModule, AppFooter],
     changeDetection: ChangeDetectionStrategy.OnPush,
-    template: `<div class="layout-wrapper" [ngClass]="containerClass()">
+    template: `<div class="layout-wrapper layout-container" [ngClass]="containerClass()">
         <app-topbar></app-topbar>
         <app-sidebar></app-sidebar>
-        <div class="layout-main-container">
-            <div class="layout-main">
-                <router-outlet></router-outlet>
+        <div class="layout-main-container layout-content-wrapper">
+            <div class="layout-main layout-content">
+                <div class="layout-content-inner">
+                    <router-outlet></router-outlet>
+                </div>
             </div>
             <app-footer></app-footer>
         </div>
@@ -41,6 +43,8 @@ export class AppLayout {
         const config = this.layoutService.layoutConfig();
         const state = this.layoutService.layoutState();
         return {
+            'layout-light': !config.darkTheme,
+            'layout-dark': config.darkTheme,
             'layout-overlay': config.menuMode === 'overlay',
             'layout-static': config.menuMode === 'static',
             'layout-slim': config.menuMode === 'slim',

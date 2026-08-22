@@ -1,0 +1,11 @@
+<div class="dashboard-list-skeleton" aria-label="Loading list">
+    @for (row of [1, 2, 3, 4, 5]; track row) {
+        <div class="row">
+            <p-skeleton shape="circle" size="2.5rem" />
+            <div class="flex-1">
+                <p-skeleton width="45%" styleClass="mb-2" />
+                <p-skeleton width="80%" height="0.65rem" />
+            </div>
+        </div>
+    }
+</div>

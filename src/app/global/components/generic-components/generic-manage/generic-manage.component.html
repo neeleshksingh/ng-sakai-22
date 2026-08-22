@@ -1,0 +1,5 @@
+<p-dialog [header]="title()" [(visible)]="visible" [modal]="true" [style]="{ width: '32rem' }">
+    <label for="generic-name">Name</label>
+    <input id="generic-name" pInputText [(ngModel)]="name" class="w-full mt-2" />
+    <ng-template #footer><button pButton type="button" label="Cancel" severity="secondary" text (click)="visible.set(false)"></button><button pButton type="button" label="Save" (click)="visible.set(false)"></button></ng-template>
+</p-dialog>

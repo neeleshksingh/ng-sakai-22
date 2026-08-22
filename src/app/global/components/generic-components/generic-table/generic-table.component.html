@@ -1,0 +1,19 @@
+<div class="card">
+    <h2>{{ title() }}</h2>
+    <p-table [value]="rows()" [paginator]="true" [rows]="10" responsiveLayout="scroll">
+        <ng-template #header
+            ><tr>
+                @for (column of columns(); track column.field) {
+                    <th>{{ column.header }}</th>
+                }
+            </tr></ng-template
+        >
+        <ng-template #body let-row
+            ><tr>
+                @for (column of columns(); track column.field) {
+                    <td>{{ row[column.field] }}</td>
+                }
+            </tr></ng-template
+        >
+    </p-table>
+</div>

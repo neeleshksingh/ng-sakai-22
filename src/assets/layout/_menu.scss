@@ -32,7 +32,42 @@
         }
 
         > a {
-            display: none;
+            display: flex;
+            align-items: center;
+            position: relative;
+            color: var(--text-color);
+            cursor: pointer;
+            padding: 0.6rem 0.5rem;
+            margin-bottom: 0.25rem;
+            border-radius: var(--content-border-radius);
+            transition:
+                color var(--element-transition-duration),
+                background-color var(--element-transition-duration);
+
+            .layout-menuitem-icon {
+                margin-right: 0.5rem;
+            }
+
+            .layout-submenu-toggler {
+                margin-left: auto;
+                font-size: 75%;
+                transition: transform var(--element-transition-duration);
+            }
+
+            &.active-route {
+                color: var(--primary-contrast-color);
+                background: var(--primary-color);
+                font-weight: 700;
+            }
+
+            &:not(.active-route):hover {
+                color: var(--primary-color);
+                background: color-mix(in srgb, var(--primary-color) 12%, transparent);
+            }
+
+            &:focus-visible {
+                @include focused-inset();
+            }
         }
     }
 

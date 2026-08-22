@@ -1,5 +1,4 @@
-import { Component, ChangeDetectionStrategy } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { MenuItem } from 'primeng/api';
 import { AppMenuitem } from './app.menuitem';
@@ -7,170 +6,79 @@ import { AppMenuitem } from './app.menuitem';
 @Component({
     selector: 'app-menu',
     standalone: true,
-    imports: [CommonModule, AppMenuitem, RouterModule],
+    imports: [AppMenuitem, RouterModule],
     changeDetection: ChangeDetectionStrategy.OnPush,
-    template: `<ul class="layout-menu">
-        @for (item of model; track item.label) {
-            @if (!item.separator) {
-                <li app-menuitem [item]="item" [root]="true"></li>
-            } @else {
-                <li class="menu-separator"></li>
-            }
+    template: `<ul class="layout-menu" aria-label="Application modules">
+        @for (item of model(); track item.label; let index = $index) {
+            <li app-menuitem [item]="item" [root]="true" draggable="true" (dragstart)="startDrag(index)" (dragover)="allowDrop($event)" (drop)="dropAt(index)" (dragend)="endDrag()"></li>
         }
-    </ul> `
+    </ul>`
 })
 export class AppMenu {
-    model: MenuItem[] = [];
+    private readonly storageKey = 'ncorepro-staff-menu-order';
+    private draggedIndex: number | null = null;
 
-    ngOnInit() {
-        this.model = [
-            {
-                label: 'Home',
-                icon: 'pi pi-fw pi-home',
-                path: '/menu/home',
-                items: [{ label: 'Dashboard', icon: 'pi pi-fw pi-home', routerLink: ['/'] }]
-            },
-            {
-                label: 'UI Components',
-                icon: 'pi pi-fw pi-th-large',
-                path: '/menu/ui-components',
-                items: [
-                    { label: 'Form Layout', icon: 'pi pi-fw pi-id-card', routerLink: ['/uikit/formlayout'] },
-                    { label: 'Input', icon: 'pi pi-fw pi-check-square', routerLink: ['/uikit/input'] },
-                    { label: 'Button', icon: 'pi pi-fw pi-mobile', class: 'rotated-icon', routerLink: ['/uikit/button'] },
-                    { label: 'Table', icon: 'pi pi-fw pi-table', routerLink: ['/uikit/table'] },
-                    { label: 'List', icon: 'pi pi-fw pi-list', routerLink: ['/uikit/list'] },
-                    { label: 'Tree', icon: 'pi pi-fw pi-share-alt', routerLink: ['/uikit/tree'] },
-                    { label: 'Panel', icon: 'pi pi-fw pi-tablet', routerLink: ['/uikit/panel'] },
-                    { label: 'Overlay', icon: 'pi pi-fw pi-clone', routerLink: ['/uikit/overlay'] },
-                    { label: 'Media', icon: 'pi pi-fw pi-image', routerLink: ['/uikit/media'] },
-                    { label: 'Menu', icon: 'pi pi-fw pi-bars', routerLink: ['/uikit/menu'] },
-                    { label: 'Message', icon: 'pi pi-fw pi-comment', routerLink: ['/uikit/message'] },
-                    { label: 'File', icon: 'pi pi-fw pi-file', routerLink: ['/uikit/file'] },
-                    { label: 'Chart', icon: 'pi pi-fw pi-chart-bar', routerLink: ['/uikit/charts'] },
-                    { label: 'Timeline', icon: 'pi pi-fw pi-calendar', routerLink: ['/uikit/timeline'] },
-                    { label: 'Misc', icon: 'pi pi-fw pi-circle', routerLink: ['/uikit/misc'] }
-                ]
-            },
-            {
-                label: 'Pages',
-                icon: 'pi pi-fw pi-briefcase',
-                path: '/menu/pages',
-                items: [
-                    {
-                        label: 'Landing',
-                        icon: 'pi pi-fw pi-globe',
-                        routerLink: ['/landing']
-                    },
-                    {
-                        label: 'Auth',
-                        icon: 'pi pi-fw pi-user',
-                        path: '/auth',
-                        items: [
-                            {
-                                label: 'Login',
-                                icon: 'pi pi-fw pi-sign-in',
-                                routerLink: ['/auth/login']
-                            },
-                            {
-                                label: 'Error',
-                                icon: 'pi pi-fw pi-times-circle',
-                                routerLink: ['/auth/error']
-                            },
-                            {
-                                label: 'Access Denied',
-                                icon: 'pi pi-fw pi-lock',
-                                routerLink: ['/auth/access']
-                            }
-                        ]
-                    },
-                    {
-                        label: 'Crud',
-                        icon: 'pi pi-fw pi-pencil',
-                        routerLink: ['/pages/crud']
-                    },
-                    {
-                        label: 'Not Found',
-                        icon: 'pi pi-fw pi-exclamation-circle',
-                        routerLink: ['/pages/notfound']
-                    },
-                    {
-                        label: 'Empty',
-                        icon: 'pi pi-fw pi-circle-off',
-                        routerLink: ['/pages/empty']
-                    }
-                ]
-            },
-            {
-                label: 'Hierarchy',
-                icon: 'pi pi-fw pi-sitemap',
-                path: '/menu/hierarchy',
-                items: [
-                    {
-                        label: 'Submenu 1',
-                        icon: 'pi pi-fw pi-bookmark',
-                        path: '/hierarchy/submenu_1',
-                        items: [
-                            {
-                                label: 'Submenu 1.1',
-                                icon: 'pi pi-fw pi-bookmark',
-                                path: '/hierarchy/submenu_1/submenu_1_1',
-                                items: [
-                                    { label: 'Submenu 1.1.1', icon: 'pi pi-fw pi-bookmark' },
-                                    { label: 'Submenu 1.1.2', icon: 'pi pi-fw pi-bookmark' },
-                                    { label: 'Submenu 1.1.3', icon: 'pi pi-fw pi-bookmark' }
-                                ]
-                            },
-                            {
-                                label: 'Submenu 1.2',
-                                icon: 'pi pi-fw pi-bookmark',
-                                path: '/hierarchy/submenu_1/submenu_1_2',
-                                items: [{ label: 'Submenu 1.2.1', icon: 'pi pi-fw pi-bookmark' }]
-                            }
-                        ]
-                    },
-                    {
-                        label: 'Submenu 2',
-                        icon: 'pi pi-fw pi-bookmark',
-                        path: '/hierarchy/submenu_2',
-                        items: [
-                            {
-                                label: 'Submenu 2.1',
-                                icon: 'pi pi-fw pi-bookmark',
-                                path: '/hierarchy/submenu_2/submenu_2_1',
-                                items: [
-                                    { label: 'Submenu 2.1.1', icon: 'pi pi-fw pi-bookmark' },
-                                    { label: 'Submenu 2.1.2', icon: 'pi pi-fw pi-bookmark' }
-                                ]
-                            },
-                            {
-                                label: 'Submenu 2.2',
-                                icon: 'pi pi-fw pi-bookmark',
-                                path: '/hierarchy/submenu_2/submenu_2_2',
-                                items: [{ label: 'Submenu 2.2.1', icon: 'pi pi-fw pi-bookmark' }]
-                            }
-                        ]
-                    }
-                ]
-            },
-            {
-                label: 'Get Started',
-                icon: 'pi pi-fw pi-compass',
-                path: '/menu/get-started',
-                items: [
-                    {
-                        label: 'Documentation',
-                        icon: 'pi pi-fw pi-book',
-                        routerLink: ['/documentation']
-                    },
-                    {
-                        label: 'View Source',
-                        icon: 'pi pi-fw pi-github',
-                        url: 'https://github.com/primefaces/sakai-ng',
-                        target: '_blank'
-                    }
-                ]
-            }
-        ];
+    private readonly defaultModel: MenuItem[] = [
+        { label: 'Dashboard', icon: 'fa-solid fa-home', routerLink: ['/home/dashboard'] },
+        { label: 'Big Leads', icon: 'fa-solid fa-briefcase', routerLink: ['/home/bigleads'] },
+        { label: 'Mind Spark', icon: 'fa-solid fa-brain', routerLink: ['/home/mindspark'] },
+        { label: 'Knowledge Stand', icon: 'fa-solid fa-book-open', routerLink: ['/home/knowledgestand'] },
+        { label: 'Fin Pro', icon: 'fa-solid fa-indian-rupee-sign', routerLink: ['/home/finpro'] },
+        { label: 'SmallBiz Gurus', icon: 'fa-solid fa-handshake', routerLink: ['/home/smallbizgurus'] },
+        { label: 'Cloud Bytes', icon: 'fa-solid fa-cloud', routerLink: ['/home/cloudbytes'] },
+        { label: 'Executive Edge', icon: 'fa-solid fa-user-tie', routerLink: ['/home/executiveedge'] },
+        {
+            label: 'More',
+            icon: 'fa-solid fa-align-left',
+            path: '/menu/more',
+            items: [
+                { label: 'Digital Fingers', icon: 'fa-solid fa-user-gear', routerLink: ['/home/digitalfingers'] },
+                { label: 'TimeClock Plus', icon: 'fa-solid fa-calendar-days', routerLink: ['/home/timeclockplus'] },
+                { label: 'Virtual Learn', icon: 'fa-solid fa-atlas', routerLink: ['/home/virtuallearn'] },
+                { label: 'Developers', icon: 'fa-solid fa-code', routerLink: ['/home/developers'] },
+                { label: 'Settings', icon: 'fa-solid fa-gear', routerLink: ['/home/settings'] }
+            ]
+        }
+    ];
+
+    readonly model = signal<MenuItem[]>(this.restoreOrder());
+
+    startDrag(index: number): void {
+        this.draggedIndex = index;
+    }
+
+    allowDrop(event: DragEvent): void {
+        event.preventDefault();
+    }
+
+    dropAt(targetIndex: number): void {
+        if (this.draggedIndex === null || this.draggedIndex === targetIndex) return;
+
+        const reordered = [...this.model()];
+        const [draggedItem] = reordered.splice(this.draggedIndex, 1);
+        reordered.splice(targetIndex, 0, draggedItem);
+        this.model.set(reordered);
+        this.draggedIndex = null;
+
+        try {
+            localStorage.setItem(this.storageKey, JSON.stringify(reordered.map((item) => item.label)));
+        } catch {
+            // Reordering still works when browser storage is unavailable.
+        }
+    }
+
+    endDrag(): void {
+        this.draggedIndex = null;
+    }
+
+    private restoreOrder(): MenuItem[] {
+        try {
+            const labels = JSON.parse(localStorage.getItem(this.storageKey) ?? '[]') as string[];
+            const ordered = labels.map((label) => this.defaultModel.find((item) => item.label === label)).filter((item): item is MenuItem => !!item);
+            const missing = this.defaultModel.filter((item) => !labels.includes(item.label ?? ''));
+            return [...ordered, ...missing];
+        } catch {
+            return this.defaultModel;
+        }
     }
 }
