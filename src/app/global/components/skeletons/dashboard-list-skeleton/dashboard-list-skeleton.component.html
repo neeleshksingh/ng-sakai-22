@@ -1,40 +1,15 @@
-<div class="surface-card">
-    <ul class="m-0 p-0 list-none">
-        <li class="mb-3">
-            <div class="flex">
-                <p-skeleton shape="circle" size="4rem" styleClass="mr-2" />
-                <div style="flex: 1">
-                    <p-skeleton width="100%" styleClass="mb-2" />
-                    <p-skeleton width="75%" />
-                </div>
-            </div>
-        </li>
-        <li class="mb-3">
-            <div class="flex">
-                <p-skeleton shape="circle" size="4rem" styleClass="mr-2" />
-                <div style="flex: 1">
-                    <p-skeleton width="100%" styleClass="mb-2" />
-                    <p-skeleton width="75%" />
-                </div>
-            </div>
-        </li>
-        <li class="mb-3">
-            <div class="flex">
-                <p-skeleton shape="circle" size="4rem" styleClass="mr-2" />
-                <div style="flex: 1">
-                    <p-skeleton width="100%" styleClass="mb-2" />
-                    <p-skeleton width="75%" />
-                </div>
-            </div>
-        </li>
+<div class="card p-4">
+    <ul class="m-0 p-0 list-none flex flex-col gap-4">
+        @for (item of [1, 2, 3, 4]; track $index) {
         <li>
-            <div class="flex">
-                <p-skeleton shape="circle" size="4rem" styleClass="mr-2" />
-                <div style="flex: 1">
-                    <p-skeleton width="100%" styleClass="mb-2" />
-                    <p-skeleton width="75%" />
+            <div class="flex items-start gap-4">
+                <p-skeleton shape="circle" size="4rem" class="shrink-0"></p-skeleton>
+                <div class="flex-1 w-full mt-1">
+                    <p-skeleton width="100%" styleClass="mb-2"></p-skeleton>
+                    <p-skeleton width="75%"></p-skeleton>
                 </div>
             </div>
         </li>
+        }
     </ul>
 </div>
