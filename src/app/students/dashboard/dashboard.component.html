@@ -1,5 +1,4 @@
-<div pAnimateOnScroll enterClass="fadeinleft" leaveClass="fadeoutleft"
-    class="animation-duration-1000 animation-ease-in-out">
+<div>
     <p-toast></p-toast>
     <app-alert-dialog [alerts]="dashboardPriorityAlerts"
         (allAlertsHandled)="onPriorityAlertsHandled()"></app-alert-dialog>
@@ -283,6 +282,6 @@
     </ng-template>
 </p-dialog>
 
-<p-speedDial [model]="speedDialActions" direction="up" showIcon="pi pi-plus" hideIcon="pi pi-times" raised="true"
+<p-speed-dial [model]="speedDialActions" direction="up" showIcon="pi pi-plus" hideIcon="pi pi-times" raised="true"
     styleClass="global-speed-dial shadow-8" pTooltip="Quick actions" tooltipPosition="left">
-</p-speedDial>
+</p-speed-dial>

@@ -16,6 +16,7 @@ import { EmployeeCalenderComponent } from '@/app/time-clock-plus/components/comm
 import { Table } from 'primeng/table';
 import { PublishNoticeService } from '@/app/executive-edge/services/publish-notice/publish-notice.service';
 import { LayoutService } from '@/app/layout/service/layout.service';
+import { User } from '@primeicons/angular/user';
 
 export interface WorkAssignmentNotification {
     id: number;
