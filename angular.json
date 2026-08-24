@@ -3,7 +3,7 @@
     "version": 1,
     "newProjectRoot": "projects",
     "projects": {
-        "sakai-ng": {
+        "NCorePro.UI.Client": {
             "projectType": "application",
             "schematics": {
                 "@schematics/angular:component": {
@@ -17,11 +17,27 @@
                 "build": {
                     "builder": "@angular/build:application",
                     "options": {
-                        "outputPath": "dist/sakai-ng",
+                        "outputPath": "dist",
                         "index": "src/index.html",
-                        "browser": "src/main.ts",
                         "tsConfig": "tsconfig.app.json",
                         "inlineStyleLanguage": "scss",
+                        "allowedCommonJsDependencies": [
+                            "primeng",
+                            "quill",
+                            "core-js",
+                            "raf",
+                            "rgbcolor",
+                            "jspdf",
+                            "html2canvas",
+                            "crypto-js",
+                            "jspdf-autotable",
+                            "dompurify",
+                            "file-saver",
+                            "lz-string",
+                            "xlsx-js-style",
+                            "lottie-web",
+                            "quill-delta"
+                        ],
                         "assets": [
                             {
                                 "glob": "**/*",
@@ -40,67 +56,120 @@
                         "scripts": []
                     },
                     "configurations": {
-          "production": {
-            "fileReplacements": [
-              {
-                "replace": "src/environments/environment.ts",
-                "with": "src/environments/environment.production.ts"
-              }
-            ],
-            "budgets": [
+                        "p10002": {
+                            "budgets": [
                                 {
                                     "type": "initial",
-                                    "maximumWarning": "2MB",
-                                    "maximumError": "5MB"
+                                    "maximumWarning": "30mb",
+                                    "maximumError": "50mb"
                                 },
                                 {
                                     "type": "anyComponentStyle",
-                                    "maximumWarning": "100kB",
-                                    "maximumError": "200kB"
+                                    "maximumWarning": "30mb",
+                                    "maximumError": "30mb"
                                 }
                             ],
-            "outputHashing": "all"
-          },
-          "p10001": {
-            "fileReplacements": [
-              {
-                "replace": "src/environments/environment.ts",
-                "with": "src/environments/environment.p10001.ts"
-              }
-            ],
-            "outputHashing": "all"
-          },
-          "p10002": {
-            "fileReplacements": [
-              {
-                "replace": "src/environments/environment.ts",
-                "with": "src/environments/environment.p10002.ts"
-              }
-            ],
-            "outputHashing": "all"
-          },
-                        "development": {
-                            "optimization": false,
-                            "extractLicenses": false,
-                            "sourceMap": true
+                            "fileReplacements": [
+                                {
+                                    "replace": "src/environments/environment.ts",
+                                    "with": "src/environments/environment.p10002.ts"
+                                }
+                            ],
+                            "optimization": true,
+                            "outputHashing": "all",
+                            "sourceMap": false,
+                            "namedChunks": false,
+                            "aot": true,
+                            "extractLicenses": true
+                        },
+                        "production": {
+                            "budgets": [
+                                {
+                                    "type": "initial",
+                                    "maximumWarning": "30mb",
+                                    "maximumError": "50mb"
+                                },
+                                {
+                                    "type": "anyComponentStyle",
+                                    "maximumWarning": "30mb",
+                                    "maximumError": "30mb"
+                                }
+                            ],
+                            "fileReplacements": [
+                                {
+                                    "replace": "src/environments/environment.ts",
+                                    "with": "src/environments/environment.production.ts"
+                                }
+                            ],
+                            "optimization": true,
+                            "outputHashing": "all",
+                            "sourceMap": false,
+                            "namedChunks": false,
+                            "aot": true,
+                            "extractLicenses": true
+                        },
+                        "p10001": {
+                            "optimization": true,
+                            "outputHashing": "all",
+                            "sourceMap": false,
+                            "namedChunks": false,
+                            "aot": true,
+                            "extractLicenses": true,
+                            "budgets": [
+                                {
+                                    "type": "initial",
+                                    "maximumWarning": "30mb",
+                                    "maximumError": "50mb"
+                                },
+                                {
+                                    "type": "anyComponentStyle",
+                                    "maximumWarning": "5mb",
+                                    "maximumError": "5mb"
+                                }
+                            ],
+                            "fileReplacements": [
+                                {
+                                    "replace": "src/environments/environment.ts",
+                                    "with": "src/environments/environment.p10001.ts"
+                                }
+                            ]
+                        },
+                        "localhost": {
+                            "optimization": true,
+                            "outputHashing": "all",
+                            "sourceMap": false,
+                            "namedChunks": false,
+                            "aot": true,
+                            "extractLicenses": true
                         }
                     },
-                    "defaultConfiguration": "production"
+                    "defaultConfiguration": "localhost"
                 },
                 "serve": {
                     "builder": "@angular/build:dev-server",
                     "configurations": {
-                        "production": {
-                            "buildTarget": "sakai-ng:build:production"
+                        "p10002": {
+                            "buildTarget": "NCorePro.UI.Client:build:p10002"
                         },
-                        "development": {
-                            "buildTarget": "sakai-ng:build:development"
+                        "production": {
+                            "buildTarget": "NCorePro.UI.Client:build:production"
+                        },
+                        "p10001": {
+                            "buildTarget": "NCorePro.UI.Client:build:p10001",
+                            "hmr": true
+                        },
+                        "localhost": {
+                            "buildTarget": "NCorePro.UI.Client:build:localhost",
+                            "hmr": true
                         }
                     },
-                    "defaultConfiguration": "development"
+                    "defaultConfiguration": "localhost"
                 },
                 "extract-i18n": {
-                    "builder": "@angular/build:extract-i18n"
+                    "builder": "@angular/build:extract-i18n",
+                    "options": {
+                        "buildTarget": "NCorePro.UI.Client:build"
+                    }
                 },
                 "test": {
                     "builder": "@angular/build:karma",
@@ -121,6 +190,10 @@
         }
     },
     "cli": {
-        "analytics": false
+        "analytics": false,
+        "cache": {
+            "enabled": true,
+            "path": ".angular/cache"
+        }
     }
 }

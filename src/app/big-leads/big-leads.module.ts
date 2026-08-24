@@ -8,8 +8,6 @@ import { BigLeadsRoutingModule } from './big-leads-routing.module';
 @NgModule({
   declarations: [],
   imports: [
-    SharedModule,
-    CommonModule,
     BigLeadsRoutingModule
   ]
 })
