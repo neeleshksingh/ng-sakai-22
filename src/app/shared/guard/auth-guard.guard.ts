@@ -15,18 +15,20 @@ export class AuthGuard implements CanActivate, CanActivateChild, CanDeactivate<u
     state: RouterStateSnapshot
   ): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
     const currentUserJsonString = localStorage.getItem('currentUser');
-    const currentUrl = state.url;
 
     if (currentUserJsonString) {
-      const loginResponse: LoginResponse = JSON.parse(currentUserJsonString);
-      const currentDateTime = new Date();
+      try {
+        const loginResponse: LoginResponse = JSON.parse(currentUserJsonString);
+        const currentDateTime = new Date();
 
-      if (
-        loginResponse &&
-        loginResponse.applicationUser?.userName &&
-        new Date(loginResponse.tokenInfo.expiresIn ?? 0) > currentDateTime
-      ) {
-        return true;
+        if (
+          loginResponse?.applicationUser?.userName &&
+          new Date(loginResponse.tokenInfo?.expiresIn ?? 0) > currentDateTime
+        ) {
+          return true;
+        }
+      } catch {
+        // Treat malformed persisted data as an expired session.
       }
     }
 
@@ -35,7 +37,7 @@ export class AuthGuard implements CanActivate, CanActivateChild, CanDeactivate<u
     localStorage.removeItem('userMenuPreferences');
     localStorage.removeItem('employeeDetails');
 
-    return this.router.createUrlTree(['/'], { queryParams: { returnUrl: state.url } });
+    return this.router.createUrlTree(['/login'], { queryParams: { returnUrl: state.url } });
   }
 
   canActivateChild(
@@ -60,14 +62,17 @@ export class AuthGuard implements CanActivate, CanActivateChild, CanDeactivate<u
   ): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
     const currentUserJsonString = localStorage.getItem('currentUser');
     if (currentUserJsonString) {
-      const loginResponse: LoginResponse = JSON.parse(currentUserJsonString);
-      const currentDateTime = new Date();
-      if (
-        loginResponse &&
-        loginResponse.applicationUser?.userName &&
-        new Date(loginResponse.tokenInfo.expiresIn ?? 0) > currentDateTime
-      ) {
-        return true;
+      try {
+        const loginResponse: LoginResponse = JSON.parse(currentUserJsonString);
+        const currentDateTime = new Date();
+        if (
+          loginResponse?.applicationUser?.userName &&
+          new Date(loginResponse.tokenInfo?.expiresIn ?? 0) > currentDateTime
+        ) {
+          return true;
+        }
+      } catch {
+        // Treat malformed persisted data as an expired session.
       }
     }
 

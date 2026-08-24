@@ -40,7 +40,7 @@ export class AppComponent implements OnInit, OnDestroy {
         this.signalRService.startConnection();
         this.primeng.ripple.set(true);
         const applicationUserStr = localStorage.getItem('currentUser');
-        const applicationUser = applicationUserStr ? JSON.parse(applicationUserStr) : null;
+        const applicationUser = this.parseStoredUser(applicationUserStr);
         const roles: string[] = applicationUser?.applicationUser?.roles || [];
 
         if (roles.length > 0 && !roles.some(role => role.toLowerCase() === 'student')) {
@@ -62,7 +62,7 @@ export class AppComponent implements OnInit, OnDestroy {
             if (url.startsWith('/home/') && !this.feedbackInitialized) {
                 this.feedbackInitialized = true;
                 const userStr: any = localStorage.getItem('currentUser');
-                const currentUser = userStr ? JSON.parse(userStr) : null;
+                const currentUser = this.parseStoredUser(userStr);
                 const userRole = currentUser?.applicationUser?.roles?.[0];
                 const feedbackToken = this.feedbackSurveyPendingService.reset();
                 if (userRole?.toUpperCase() === 'STUDENT') {
@@ -122,5 +122,16 @@ export class AppComponent implements OnInit, OnDestroy {
 
     ngOnDestroy(): void {
         this.feedbackApiSub?.unsubscribe();
+    }
+
+    private parseStoredUser(value: string | null): any {
+        if (!value) return null;
+
+        try {
+            return JSON.parse(value);
+        } catch {
+            localStorage.removeItem('currentUser');
+            return null;
+        }
     }
 }

@@ -1,3 +1,25 @@
-:host {
-    display: block;
+.dashboard-cards {
+	transition: transform 0.2s;
 }
+
+.dashboard-cards:hover {
+	transform: scale(1.01);
+}
+
+.kpi-banner-img {
+	flex: 1;
+	min-height: 0;
+	object-fit: cover;
+	object-position: center;
+	display: block;
+}
+
+.chart-card {
+	border: 1px solid var(--surface-border);
+}
+
+.chart-shell {
+	min-height: 320px;
+}
+
+

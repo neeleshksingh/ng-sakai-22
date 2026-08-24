@@ -23,13 +23,18 @@ export class AuthenticationService {
   constructor(private httpClient: HttpClient) {
     this.loginResponse = new LoginResponse();
 
-    var data = localStorage.getItem('currentUser');
+    const data = localStorage.getItem('currentUser');
+    let currentUser: LoginResponse | null = null;
+
     if (data) {
-      this.currentUserSubject = new BehaviorSubject<LoginResponse | null>(JSON.parse(data));
+      try {
+        currentUser = JSON.parse(data);
+      } catch {
+        localStorage.removeItem('currentUser');
+      }
     }
-    else {
-      this.currentUserSubject = new BehaviorSubject<LoginResponse | null>(new LoginResponse());
-    }
+
+    this.currentUserSubject = new BehaviorSubject<LoginResponse | null>(currentUser);
 
     this.currentUser = this.currentUserSubject.asObservable();
 

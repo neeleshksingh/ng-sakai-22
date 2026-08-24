@@ -2,11 +2,12 @@ import { Routes } from '@angular/router';
 import { AppLayout } from './app/layout/component/app.layout';
 import { AuthGuard } from './app/shared/guard/auth-guard.guard';
 import { SurveyPendingGuard } from './app/shared/guard/survey-pending.guard';
+import { Roles } from './app/shared/models/commons/user-roles';
 
 export const appRoutes: Routes = [
-    { path: '', pathMatch: 'full', redirectTo: 'home/dashboard' },
+    { path: '', pathMatch: 'full', redirectTo: 'login' },
     // { path: 'welcome', loadComponent: () => import('./app/home/components/home/home.component').then((m) => m.HomeComponent), title: 'NCorePro' },
-    // { path: 'login', loadComponent: () => import('./app/idp/components/login/login.component').then((m) => m.LoginComponent), title: 'Login' },
+    { path: 'login', loadComponent: () => import('./app/idp/components/login/login.component').then((m) => m.LoginComponent), title: 'Login' },
     // { path: 'career', loadComponent: () => import('./app/shared/components/placeholder-page/placeholder-page.component').then((m) => m.PlaceholderPageComponent), data: { title: 'Career Portal' } },
     // { path: 'admissions/student-onboarding', loadComponent: () => import('./app/shared/components/placeholder-page/placeholder-page.component').then((m) => m.PlaceholderPageComponent), data: { title: 'Student Onboarding' } },
     {
@@ -18,7 +19,14 @@ export const appRoutes: Routes = [
             { path: '', pathMatch: 'full', redirectTo: 'dashboard' },
             { path: 'dashboard', loadComponent: () => import('./app/dashboard/components/dashboard/dashboard.component').then((m) => m.DashboardComponent), title: 'Dashboard' },
             // { path: 'cloudbytes', loadChildren: () => import('./app/cloud-bytes/cloud-bytes.routes').then((m) => m.CLOUD_BYTES_ROUTES) },
-            // { path: 'bigleads', loadChildren: () => import('./app/big-leads/big-leads.routes').then((m) => m.BIG_LEADS_ROUTES) },
+            {
+                path: 'bigleads',
+                loadChildren: () => import('./app/big-leads/big-leads.module').then((m) => m.BigLeadsModule),
+                data: {
+                    breadcrumb: 'BigLeads',
+                    userRoles: [Roles.LEADS, Roles.LEADSADMIN, Roles.FACULTY, Roles.HR, Roles.ACADEMICS, Roles.ACADEMICSADMIN, Roles.ITSUPPORTS, Roles.SUPERADMIN, Roles.ADMINISTRATION],
+                }
+            },
             // { path: 'mindspark', loadChildren: () => import('./app/mind-spark/mind-spark.routes').then((m) => m.MIND_SPARK_ROUTES) },
             // { path: 'knowledgestand', loadChildren: () => import('./app/knowledge-stand/knowledge-stand.routes').then((m) => m.KNOWLEDGE_STAND_ROUTES) },
             // { path: 'finpro', loadChildren: () => import('./app/finance-Pro/finance-pro.routes').then((m) => m.FINANCE_PRO_ROUTES) },

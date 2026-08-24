@@ -411,13 +411,11 @@
                             <h5 class="m-0 font-semibold text-xl text-white">My To Do List</h5>
                         </div>
                         <div class="flex items-center gap-2">
-                            <button pButton severity="info" size="small"
-                                class="shadow-sm" (click)="addTask()">
+                            <button pButton severity="info" size="small" class="shadow-sm" (click)="addTask()">
                                 <i class="pi pi-plus"></i>
                                 Add Task
                             </button>
-                            <button pButton severity="success" size="small"
-                                class="shadow-sm" (click)="saveTasks()">
+                            <button pButton severity="success" size="small" class="shadow-sm" (click)="saveTasks()">
                                 <i class="pi pi-check"></i>
                                 Save Task
                             </button>
@@ -492,7 +490,7 @@
                                 </td>
 
                                 <td class="text-center">
-                                    
+
                                     <button pButton severity="danger" text [iconOnly]="true" size="small"
                                         (click)="deleteTask(task.id)">
                                         <i class="pi pi-trash"></i>

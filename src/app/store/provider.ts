@@ -23,7 +23,7 @@ export function provideAppStore(): EnvironmentProviders {
             studentPrograms: studentProgramReducer,
         }),
         provideEffects([
-            // PermissionsEffects,
+            PermissionsEffects,
             AcademicSessionEffects,
             ProgramEffects,
             StudentProfileEffects,

@@ -1,24 +1,280 @@
-<main class="login-page">
-    <section class="login-story">
-        <a routerLink="/welcome" class="login-brand"><span>NC</span><strong>NCorePro</strong></a>
-        <div>
-            <p>Unified university workspace</p>
-            <h1>Everything your campus needs, in one thoughtful experience.</h1>
-            <span>Academics, admissions, finance, people, examinations, and student services—connected.</span>
-        </div>
-        <footer>Designed for modern higher education.</footer>
-    </section>
-    <section class="login-form-panel">
-        <form class="login-card" (ngSubmit)="login()">
-            <p class="eyebrow">Welcome back</p>
-            <h2>Sign in to your workspace</h2>
-            <span class="intro">Use the prefilled demonstration account to continue.</span> <label for="username">Email address</label><input id="username" name="username" pInputText [(ngModel)]="userName" autocomplete="username" />
-            <label for="password">Password</label><p-password inputId="password" name="password" [(ngModel)]="password" [feedback]="false" [toggleMask]="true" styleClass="w-full" inputStyleClass="w-full" />
-            <div class="login-options">
-                <label><p-checkbox name="remember" [(ngModel)]="rememberMe" [binary]="true" /> Remember me</label><a href="#">Forgot password?</a>
+<div class="login-page">
+    <div class="background-overlay"></div>
+    <div class="login-card animate-landing">
+        <div class="left-section">
+            <div class="logo-container animate-logo">
+                <img [src]="currentLogo" class="university-logo" alt="University Logo" [ngClass]="{'flip': isFlipped}">
             </div>
-            <button pButton type="submit" label="Sign in" icon="pi pi-arrow-right" iconPos="right"></button>
-            <small>This is a UI demonstration. No credentials are sent to a server.</small>
-        </form>
-    </section>
-</main>
+        </div>
+        <div class="right-section">
+            <div class="glass-container">
+                <div class="card-inner animate-form">
+                    <!-- Logo, Title, and Slogan Section -->
+                    <div class="logo-section">
+                        <div class="profile-image-container">
+                            <img [src]="lastLoggedInUser?.displayImageUrl || rightDefaultLogo"
+                                (error)="onImageError($event)" class="profile-image" alt="Profile" />
+                        </div>
+                        <h3 class="app-title">{{ title }}</h3>
+                        <p class="app-slogan">{{ slogan }}</p>
+                        <div *ngIf="foundationDay" class="greeting-text m-0">
+                            <p>Happy Foundation Day!</p>
+                        </div>
+                    </div>
+
+                    <!-- Form Section -->
+                    <div class="form-section">
+                        <div [ngSwitch]="case">
+                            <!-- Case 1: Login Form -->
+                            <form [formGroup]="loginFormGroup" (ngSubmit)="onSubmit()" *ngSwitchCase="'case1'">
+                                <div class="field input-group">
+                                    <div class="input-container">
+                                        <i class="pi pi-user input-icon"></i>
+                                        <input pInputText type="text" id="userName" formControlName="userName"
+                                            placeholder="User Name" required="true" class="glass-input" />
+                                    </div>
+                                </div>
+
+                                <div class="field input-group">
+                                    <div class="input-container">
+                                        <i class="pi pi-lock input-icon"></i>
+                                        <input pInputText [type]="showPassword ? 'text' : 'password'" id="password"
+                                            formControlName="password" placeholder="Password" required="true"
+                                            class="glass-input" />
+                                        <i [class]="showPassword ? 'pi pi-eye-slash' : 'pi pi-eye'"
+                                            class="toggle-password-icon" (click)="togglePassword()"></i>
+                                    </div>
+                                </div>
+
+                                <div *ngIf="loginMessage" class="message-container">
+                                    <div class="error-message">
+                                        <i class="pi pi-exclamation-triangle"></i>
+                                        <span>{{ loginMessage }}</span>
+                                    </div>
+                                </div>
+
+                                <div class="field button-group">
+                                    <button pButton type="submit"
+                                        class="glass-button primary-button flex align-items-center justify-content-center"
+                                        [disabled]="!loginFormGroup.valid || loading"
+                                        /* [icon]="loading ? 'pi pi-spin pi-spinner' : 'pi pi-sign-in'" */
+                                        >
+                                        <span *ngIf="!loading" class="ml-2">Sign In</span>
+                                    </button>
+                                </div>
+
+                                <div class="forget-credentials">
+                                    <span (click)="loginWithOTP()" class="glass-link" style="cursor: pointer;">
+                                        <i class="pi pi-envelope"></i>
+                                        Login with OTP
+                                    </span>
+                                    <span (click)="Forgot_Password()" class="glass-link" style="cursor: pointer;">
+                                        <i class="pi pi-key"></i>
+                                        Forgot Password
+                                    </span>
+                                </div>
+                            </form>
+
+                            <!-- Case 2: Username for OTP -->
+                            <div *ngSwitchCase="'case2'" class="case-content">
+                                <form [formGroup]="loginFormGroup">
+                                    <div class="field input-group">
+                                        <div class="input-container">
+                                            <i class="pi pi-user input-icon"></i>
+                                            <input #username pInputText type="text" id="userName"
+                                                placeholder="User Name" required="true" class="glass-input"
+                                                formControlName="userName" />
+                                        </div>
+                                    </div>
+                                    <div *ngIf="loginMessage" class="message-container">
+                                        <div class="error-message">
+                                            <i class="pi pi-exclamation-triangle"></i>
+                                            <span>{{ loginMessage }}</span>
+                                        </div>
+                                    </div>
+                                    <!-- [disabled]="!loginFormGroup.value.userName" -->
+                                    <div class="field button-group">
+                                        <button pButton class="glass-button primary-button full-width"
+                                            (click)="GetOtp(loginFormGroup.value.userName)"
+                                            /* [icon]="loading ? 'pi pi-spin pi-spinner' : 'pi pi-send'" */
+                                            >
+                                            <span *ngIf="!loading" class="ml-2">Send OTP</span>
+                                        </button>
+                                        <div class="back-link mt-4" style="cursor: pointer;">
+                                            <span (click)="goback()" class="glass-link">
+                                                <i class="pi pi-arrow-left"></i>
+                                                Go back
+                                            </span>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+
+                            <!-- Case 3: Phone Number for OTP -->
+                            <div *ngSwitchCase="'case3'" class="case-content">
+                                <div class="field input-group">
+                                    <div class="input-container">
+                                        <i class="pi pi-envelope input-icon"></i>
+                                        <input pInputText #phoneNumber type="text"
+                                            placeholder="Email/PhoneNumber/UserName" required class="glass-input" />
+                                    </div>
+                                </div>
+                                <div *ngIf="loginMessage" class="message-container">
+                                    <div class="error-message">
+                                        <i class="pi pi-exclamation-triangle"></i>
+                                        <span>{{ loginMessage }}</span>
+                                    </div>
+                                </div>
+                                <div class="field button-group">
+                                    <!-- [disabled]="disable" -->
+                                    <button pButton class="glass-button primary-button full-width"
+                                        (click)="requestOTP(phoneNumber.value)"
+                                        /* [icon]="loading ? 'pi pi-spin pi-spinner' : 'pi pi-send'" */
+                                        >
+                                        <span *ngIf="!loading" class="ml-2">Send OTP</span>
+                                    </button>
+                                    <div class="back-link mt-4" style="cursor: pointer;">
+                                        <span (click)="goback()" class="glass-link">
+                                            <i class="pi pi-arrow-left"></i>
+                                            Go back
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Case 4: OTP Verification -->
+                            <div *ngSwitchCase="'case4'" class="case-content">
+                                <div class="field input-group">
+                                    <div class="input-container">
+                                        <i class="pi pi-shield input-icon"></i>
+                                        <input pInputText #userOTP type="text" placeholder="Enter OTP" required
+                                            class="glass-input otp-input" />
+                                    </div>
+                                </div>
+                                <div *ngIf="loginMessage" class="message-container">
+                                    <div class="error-message">
+                                        <i class="pi pi-exclamation-triangle"></i>
+                                        <span>{{ loginMessage }}</span>
+                                    </div>
+                                </div>
+                                <div class="field button-group">
+                                    <button pButton class="glass-button primary-button full-width"
+                                        (click)="confirmOTP(userOTP.value)"
+                                        /* [icon]="loading ? 'pi pi-spin pi-spinner' : 'pi pi-check'" */
+                                        >
+                                        <span *ngIf="!loading" class="ml-2">Verify & Login</span>
+                                    </button>
+                                    <div class="back-link mt-4" style="cursor: pointer;">
+                                        <span (click)="timer === 0 && gobacktoOTP()" class="glass-link"
+                                            [style.opacity]="timer > 0 ? '0.5' : '1'"
+                                            [style.cursor]="timer > 0 ? 'not-allowed' : 'pointer'">
+                                            <i class="pi pi-arrow-left"></i>
+                                            <ng-container *ngIf="timer > 0">
+                                                Go back in {{ timer }}s
+                                            </ng-container>
+                                            <ng-container *ngIf="timer === 0">
+                                                Go back
+                                            </ng-container>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Case 5: Change Password -->
+                            <div *ngSwitchCase="'case5'" class="case-content">
+                                <div class="field input-group">
+                                    <div class="input-container">
+                                        <i class="pi pi-shield input-icon"></i>
+                                        <input pInputText #userOTP type="text" id="otp" placeholder="Enter OTP" required
+                                            class="glass-input" />
+                                    </div>
+                                </div>
+                                <div class="field input-group">
+                                    <div class="input-container">
+                                        <i class="pi pi-lock input-icon"></i>
+                                        <input pInputText [type]="showPassword ? 'text' : 'password'" #userPassword
+                                            placeholder="Enter Password" required class="glass-input" />
+                                        <i [class]="showPassword ? 'pi pi-eye-slash' : 'pi pi-eye'"
+                                            class="toggle-password-icon" (click)="togglePassword()"></i>
+                                    </div>
+                                </div>
+                                <div class="field input-group">
+                                    <div class="input-container">
+                                        <i class="pi pi-lock input-icon"></i>
+                                        <input pInputText [type]="showConfirmPassword ? 'text' : 'password'"
+                                            #userConfirmPassword placeholder="Confirm Password" required
+                                            class="glass-input" />
+                                        <i [class]="showConfirmPassword ? 'pi pi-eye-slash' : 'pi pi-eye'"
+                                            class="toggle-password-icon" (click)="toggleConfirmPassword()"></i>
+                                    </div>
+                                </div>
+                                <div *ngIf="loginMessage" class="message-container">
+                                    <div class="error-message">
+                                        <i class="pi pi-exclamation-triangle"></i>
+                                        <span>{{ loginMessage }}</span>
+                                    </div>
+                                </div>
+                                <div class="field button-group" [ngSwitch]="newPasswordCreated">
+                                    <button pButton class="glass-button primary-button full-width"
+                                        (click)="changePassword(userOTP.value, userPassword.value, userConfirmPassword.value)"
+                                        /* [icon]="loading ? 'pi pi-spin pi-spinner' : 'pi pi-check'" */
+                                        >
+                                        <span *ngIf="!loading" class="ml-2">Change Password</span>
+                                    </button>
+                                    <div class="back-link mt-4" style="cursor: pointer;">
+                                        <span (click)="gobackToForgotPassword()" class="glass-link">
+                                            <i class="pi pi-arrow-left"></i>
+                                            Go back
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Case 6: Success Message -->
+                            <div *ngSwitchCase="'case6'" class="case-content success-case">
+                                <div class="success-animation">
+                                    <div class="container">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="svg-success" viewBox="0 0 24 24">
+                                            <g stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10">
+                                                <circle class="success-circle-outline" cx="12" cy="12" r="11.5" />
+                                                <circle class="success-circle-fill" cx="12" cy="12" r="11.5" />
+                                                <polyline class="success-tick" points="17,8.5 9.5,15.5 7,13" />
+                                            </g>
+                                        </svg>
+                                    </div>
+                                </div>
+                                <div class="field message-container">
+                                    <div class="success-message">
+                                        <span>{{ loginMessage }}</span>
+                                    </div>
+                                </div>
+                                <button pButton class="glass-button primary-button full-width"
+                                    (click)="Completed_Go_To_Login()"
+                                    /* [icon]="loading ? 'pi pi-spin pi-spinner' : 'pi pi-arrow-right'" */
+                                    >
+                                    <span *ngIf="!loading" class="ml-2">Continue</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Support Section -->
+                    <div class="support-section">
+                        <div class="support-message">
+                            <i class="pi pi-info-circle"></i>
+                            <span>Please reach out to </span>
+                            <a href="mailto:{{supportEmailId}}" class="support-email">{{ supportEmailId }}</a>
+                            <span> for any technical issues.</span>
+                        </div>
+                        <div class="alert-banner" *ngIf="alertMessage">
+                            <div class="alert-content">
+                                <i class="pi pi-exclamation-triangle"></i>
+                                <span>{{ alertMessage }}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -20,23 +20,23 @@ export class AppMenu {
 
     private readonly defaultModel: MenuItem[] = [
         { label: 'Dashboard', icon: 'fa-solid fa-home', routerLink: ['/home/dashboard'] },
-        { label: 'Big Leads', icon: 'fa-solid fa-briefcase', routerLink: ['/home/bigleads'] },
-        { label: 'Mind Spark', icon: 'fa-solid fa-brain', routerLink: ['/home/mindspark'] },
-        { label: 'Knowledge Stand', icon: 'fa-solid fa-book-open', routerLink: ['/home/knowledgestand'] },
-        { label: 'Fin Pro', icon: 'fa-solid fa-indian-rupee-sign', routerLink: ['/home/finpro'] },
-        { label: 'SmallBiz Gurus', icon: 'fa-solid fa-handshake', routerLink: ['/home/smallbizgurus'] },
-        { label: 'Cloud Bytes', icon: 'fa-solid fa-cloud', routerLink: ['/home/cloudbytes'] },
-        { label: 'Executive Edge', icon: 'fa-solid fa-user-tie', routerLink: ['/home/executiveedge'] },
+        { label: 'Big Leads', icon: 'fa-solid fa-briefcase', routerLink: ['/home/bigleads/dashboard'] },
+        { label: 'Mind Spark', icon: 'fa-solid fa-brain', routerLink: ['/home/mindspark/dashboard'] },
+        { label: 'Knowledge Stand', icon: 'fa-solid fa-book-open', routerLink: ['/home/knowledgestand/dashboard'] },
+        { label: 'Fin Pro', icon: 'fa-solid fa-indian-rupee-sign', routerLink: ['/home/finpro/dashboard'] },
+        { label: 'SmallBiz Gurus', icon: 'fa-solid fa-handshake', routerLink: ['/home/smallbizgurus/dashboard'] },
+        { label: 'Cloud Bytes', icon: 'fa-solid fa-cloud', routerLink: ['/home/cloudbytes/dashboard'] },
+        { label: 'Executive Edge', icon: 'fa-solid fa-user-tie', routerLink: ['/home/executiveedge/dashboard'] },
         {
             label: 'More',
             icon: 'fa-solid fa-align-left',
             path: '/menu/more',
             items: [
-                { label: 'Digital Fingers', icon: 'fa-solid fa-user-gear', routerLink: ['/home/digitalfingers'] },
-                { label: 'TimeClock Plus', icon: 'fa-solid fa-calendar-days', routerLink: ['/home/timeclockplus'] },
-                { label: 'Virtual Learn', icon: 'fa-solid fa-atlas', routerLink: ['/home/virtuallearn'] },
-                { label: 'Developers', icon: 'fa-solid fa-code', routerLink: ['/home/developers'] },
-                { label: 'Settings', icon: 'fa-solid fa-gear', routerLink: ['/home/settings'] }
+                { label: 'Digital Fingers', icon: 'fa-solid fa-user-gear', routerLink: ['/home/digitalfingers/dashboard'] },
+                { label: 'TimeClock Plus', icon: 'fa-solid fa-calendar-days', routerLink: ['/home/timeclockplus/dashboard'] },
+                { label: 'Virtual Learn', icon: 'fa-solid fa-atlas', routerLink: ['/home/virtuallearn/dashboard'] },
+                { label: 'Developers', icon: 'fa-solid fa-code', routerLink: ['/home/developers/dashboard'] },
+                { label: 'Settings', icon: 'fa-solid fa-gear', routerLink: ['/home/settings/dashboard'] }
             ]
         }
     ];

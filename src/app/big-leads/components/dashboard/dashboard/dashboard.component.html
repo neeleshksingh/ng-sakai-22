@@ -1,1 +1,210 @@
-<app-module-dashboard title="Big Leads" subtitle="Admissions and student intake overview" [kpis]="kpis" />
+<div class="grid grid-cols-12 gap-4 pb-6">
+    <!-- KPI Cards -->
+    <div class="col-span-12 sm:col-span-6 xl:col-span-3 cursor-pointer scalein animation-duration-300 dashboard-cards">
+        <div class="card p-0 overflow-hidden flex flex-col h-full">
+            <div class="flex items-center p-3 flex-1">
+                <i class="pi pi-users text-6xl text-blue-500 shrink-0"></i>
+                <div class="ml-3 flex-1 min-w-0">
+                    <span class="text-blue-500 dark:text-blue-400 block whitespace-nowrap truncate font-semibold"
+                        title="Total Provisional Admissions">
+                        Total Provisional Admissions
+                    </span>
+                    <span class="text-blue-500 dark:text-blue-400 block text-4xl font-bold">
+                        @if (loading) {
+                        <p-skeleton width="4rem" height="2.5rem"></p-skeleton>
+                        } @else {
+                        {{ totalAdmissionsCount | number: "1.0-0" }}
+                        }
+                    </span>
+                    <span class="text-blue-400 dark:text-blue-300 text-xs mt-1 block truncate"
+                        title="Total number of provisional admissions in current year.">
+                        <i class="pi pi-users mr-1"></i>Total number of provisional admissions in current year.
+                    </span>
+                </div>
+            </div>
+            <img [src]="'assets/demo/images/dashboard/users' + (colorScheme === 'light' ? '' : '-dark') + '.svg'"
+                class="w-full mt-auto kpi-banner-img" alt="students" />
+        </div>
+    </div>
+
+    <div class="col-span-12 sm:col-span-6 xl:col-span-3 cursor-pointer scalein animation-duration-400 dashboard-cards">
+        <div class="card p-0 overflow-hidden flex flex-col h-full">
+            <div class="flex items-center p-3 flex-1">
+                <i class="pi pi-user-plus text-6xl text-emerald-500 shrink-0"></i>
+                <div class="ml-3 flex-1 min-w-0">
+                    <span class="text-emerald-500 dark:text-emerald-400 block whitespace-nowrap truncate font-semibold"
+                        title="New Provisional Admissions">
+                        New Provisional Admissions
+                    </span>
+                    <span class="text-emerald-500 dark:text-emerald-400 block text-4xl font-bold">
+                        @if (loading) {
+                        <p-skeleton width="4rem" height="2.5rem"></p-skeleton>
+                        } @else {
+                        {{ newAdmissionsCount | number: "1.0-0" }}
+                        }
+                    </span>
+                    <span class="text-emerald-400 dark:text-emerald-300 text-xs mt-1 block truncate"
+                        [title]="'Total provisional admissions in ' + currentMonth">
+                        <i class="pi pi-user-plus mr-1"></i>Total provisional admissions in {{ currentMonth }}
+                    </span>
+                </div>
+            </div>
+            <img [src]="'assets/demo/images/dashboard/rate' + (colorScheme === 'light' ? '' : '-dark') + '.svg'"
+                class="w-full mt-auto kpi-banner-img" alt="admissions" />
+        </div>
+    </div>
+
+    <!-- Fee Paid -->
+    <div class="col-span-12 sm:col-span-6 xl:col-span-3 cursor-pointer scalein animation-duration-300 dashboard-cards">
+        <div class="card p-0 overflow-hidden flex flex-col h-full">
+            <div class="flex items-center p-3 flex-1">
+                <i class="pi pi-check-circle text-6xl text-emerald-500 shrink-0"></i>
+                <div class="ml-3 flex-1 min-w-0">
+                    <span class="text-emerald-500 dark:text-emerald-400 block whitespace-nowrap truncate font-semibold"
+                        title="Total No. of Students Onboarded">
+                        Total No. of Students Onboarded
+                    </span>
+                    <span class="text-emerald-500 dark:text-emerald-400 block text-4xl font-bold">
+                        @if (loading) {
+                        <p-skeleton width="4rem" height="2.5rem"></p-skeleton>
+                        } @else {
+                        {{ studentIdAssignedCount | number: "1.0-0" }}
+                        }
+                    </span>
+                    <span class="text-emerald-400 dark:text-emerald-300 text-xs mt-1 block truncate"
+                        title="Students who have paid their semester fee and got their STUDENT ID">
+                        <i class="pi pi-id-card mr-1"></i>Students who have paid their semester fee and got their
+                        STUDENT ID
+                    </span>
+                </div>
+            </div>
+            <img [src]="'assets/demo/images/dashboard/rate' + (colorScheme === 'light' ? '' : '-dark') + '.svg'"
+                class="w-full mt-auto kpi-banner-img" alt="fee paid" />
+        </div>
+    </div>
+
+    <!-- Student ID Assigned -->
+    <div class="col-span-12 sm:col-span-6 xl:col-span-3 cursor-pointer scalein animation-duration-400 dashboard-cards">
+        <div class="card p-0 overflow-hidden flex flex-col h-full">
+            <div class="flex items-center p-3 flex-1">
+                <i class="pi pi-percentage text-6xl text-pink-500 shrink-0"></i>
+                <div class="ml-3 flex-1 min-w-0">
+                    <span class="text-pink-500 dark:text-pink-400 block whitespace-nowrap truncate font-semibold"
+                        title="Number of Scholarships">
+                        Number of Scholarships
+                    </span>
+                    <span class="text-pink-500 dark:text-pink-400 block text-4xl font-bold">
+                        @if (loading) {
+                        <p-skeleton width="4rem" height="2.5rem"></p-skeleton>
+                        } @else {
+                        {{ concessionStudentsCount | number: "1.0-0" }}
+                        }
+                    </span>
+                    <span class="text-pink-400 dark:text-pink-300 text-xs mt-1 block truncate"
+                        title="No. of Students with fee concession">
+                        <i class="pi pi-tag mr-1"></i>No. of Students with fee concession
+                    </span>
+                </div>
+            </div>
+            <img [src]="'assets/demo/images/dashboard/locations' + (colorScheme === 'light' ? '' : '-dark') + '.svg'"
+                class="w-full mt-auto kpi-banner-img" alt="concession" />
+        </div>
+    </div>
+
+    <!-- Charts Section -->
+    <div class="col-span-12 xl:col-span-8">
+        <div class="card chart-card h-full">
+            <div class="chart-shell w-full">
+                @if (loading) {
+                <p-skeleton width="100%" height="320px"></p-skeleton>
+                } @else {
+                <p-chart type="line" [data]="monthlyAdmissionsChartData" [options]="monthlyAdmissionsChartOptions"
+                    height="320px"></p-chart>
+                }
+            </div>
+        </div>
+    </div>
+
+    <div class="col-span-12 xl:col-span-4">
+        <div class="card chart-card h-full">
+            <div class="chart-shell w-full">
+                @if (loading) {
+                <p-skeleton shape="circle" width="280px" height="280px" styleClass="m-auto"></p-skeleton>
+                } @else {
+                <p-chart type="doughnut" [data]="genderChartData" [options]="genderChartOptions"
+                    height="320px"></p-chart>
+                }
+            </div>
+        </div>
+    </div>
+
+    <div class="col-span-12 xl:col-span-6">
+        <div class="card chart-card h-full">
+            <div class="chart-shell w-full">
+                @if (loading) {
+                <p-skeleton width="100%" height="340px"></p-skeleton>
+                } @else {
+                <p-chart type="bar" [data]="programChartData" [options]="programChartOptions" height="340px"></p-chart>
+                }
+            </div>
+        </div>
+    </div>
+
+    <!-- Concessions by Category -->
+    <div class="col-span-12 xl:col-span-6">
+        <div class="card chart-card h-full">
+            <div class="chart-shell w-full">
+                @if (loading) {
+                <p-skeleton width="100%" height="320px"></p-skeleton>
+                } @else {
+                @if (concessionChartData) {
+                <p-chart type="bar" [data]="concessionChartData" [options]="concessionChartOptions"
+                    height="320px"></p-chart>
+                } @else {
+                <div class="flex flex-col items-center justify-center h-[280px]">
+                    <i class="pi pi-info-circle text-3xl text-slate-500 dark:text-slate-400 mb-2"></i>
+                    <span class="text-slate-500 dark:text-slate-400">No concession data available</span>
+                </div>
+                }
+                }
+            </div>
+        </div>
+    </div>
+
+    <div class="col-span-12 xl:col-span-7">
+        <div class="card chart-card h-full">
+            <div class="chart-shell w-full">
+                @if (loading) {
+                <p-skeleton width="100%" height="320px"></p-skeleton>
+                } @else {
+                <p-chart type="bar" [data]="sessionChartData" [options]="sessionChartOptions" height="320px"></p-chart>
+                }
+            </div>
+        </div>
+    </div>
+
+    <div class="col-span-12 xl:col-span-5">
+        <div class="card chart-card h-full">
+            <div class="chart-shell w-full">
+                @if (loading) {
+                <p-skeleton shape="circle" width="280px" height="280px" styleClass="m-auto"></p-skeleton>
+                } @else {
+                <p-chart type="doughnut" [data]="categoryChartData" [options]="categoryChartOptions"
+                    height="320px"></p-chart>
+                }
+            </div>
+        </div>
+    </div>
+
+    <div class="col-span-12 xl:col-span-6">
+        <div class="card chart-card h-full">
+            <div class="chart-shell w-full">
+                @if (loading) {
+                <p-skeleton width="100%" height="340px"></p-skeleton>
+                } @else {
+                <p-chart type="bar" [data]="stateChartData" [options]="stateChartOptions" height="340px"></p-chart>
+                }
+            </div>
+        </div>
+    </div>
+</div>
