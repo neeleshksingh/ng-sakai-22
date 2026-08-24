@@ -1,177 +1,505 @@
-<section class="main-dashboard">
-    <!-- <header class="dashboard-heading">
-        <div>
-            <p class="eyebrow">Saturday, 22 August 2026</p>
-            <h1>Good evening, John</h1>
-            <p>Here is what is happening across your workspace today.</p>
-        </div>
-        <button pButton type="button" icon="pi pi-refresh" label="Refresh" severity="secondary" outlined></button>
-    </header> -->
-
-    @if (loading()) {
-        <app-dashboard-cards-skeleton />
-    } @else {
-        <div class="kpi-grid dashboard-cards">
-            <article class="card kpi-card tone-blue scalein animation-duration-300">
-                <p-avatar label="JD" size="xlarge" shape="circle" />
-                <div><span>Employee</span><strong>EMP001</strong><small>Mr. John Doe</small></div>
-                <div class="kpi-wave"></div>
-            </article>
-            <article class="card kpi-card tone-orange scalein animation-duration-400">
-                <span class="kpi-icon"><i class="pi pi-id-card"></i></span>
-                <div>
-                    <span>System roles</span><strong>2 active roles</strong>
-                    <div class="tag-row"><p-tag value="Admin" severity="warn" /><p-tag value="Faculty" severity="info" /></div>
-                </div>
-                <div class="kpi-wave"></div>
-            </article>
-            <article class="card kpi-card tone-green scalein animation-duration-500">
-                <span class="kpi-icon"><i class="pi pi-calendar-plus"></i></span>
-                <div><span>Upcoming holiday</span><strong>Republic Day</strong><small>In 5 days · 26 January</small></div>
-                <div class="kpi-wave"></div>
-            </article>
-            <article class="card kpi-card tone-purple scalein animation-duration-1000 quick-links-card">
-                <span class="kpi-icon"><i class="pi pi-link"></i></span>
-                <div><span>Quick links</span><a href="#/home/mindspark">Academic workspace</a><a href="#/home/timeclockplus">Leave request</a><a href="#/home/settings">Account settings</a></div>
-                <div class="kpi-wave"></div>
-            </article>
-        </div>
-    }
-
-    <div class="primary-widgets">
-        <article class="card notifications-card">
-            <div class="widget-title">
-                <div>
-                    <span>Inbox</span>
-                    <h2>Latest notifications</h2>
-                </div>
-                <p-tag value="2 pending" severity="warn" />
-            </div>
-            <p-scrollpanel [style]="{ width: '100%', height: '22rem' }">
-                <div class="notification-list">
-                    @for (notification of notifications; track notification.title) {
-                        <div class="notification-item">
-                            <p-avatar [icon]="notification.icon" shape="circle" [class]="'avatar-' + notification.tone" />
-                            <div>
-                                <strong>{{ notification.title }}</strong
-                                ><span>{{ notification.detail }}</span>
+@if (!loading) {
+<div pAnimateOnScroll enterClass="fadeinleft" leaveClass="fadeoutleft"
+    class="animation-duration-1000 animation-ease-in-out">
+    <!-- 4 Top Metric Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 pb-6">
+        <!-- Employee Details Card -->
+        <div class="col-span-1 cursor-pointer scalein animation-duration-300 dashboard-cards">
+            <div class="card p-0 overflow-hidden flex flex-col h-full">
+                <div class="flex flex-wrap p-4 items-center flex-1">
+                    <div class="flex flex-row w-full sm:w-auto items-center min-w-0">
+                        <div class="relative mr-3 shrink-0">
+                            <p-avatar [image]="displayImage || undefined"
+                                [label]="!displayImage ? ((employeeDetails?.firstName?.charAt(0) || '') + (employeeDetails?.lastName?.charAt(0) || ''))?.toUpperCase() || '?' : undefined"
+                                size="xlarge" shape="circle" styleClass="employee-avatar" [style]="{
+                                        border: '2px solid #60A5FA',
+                                        backgroundColor: 'rgba(96, 165, 250, 0.1)',
+                                        cursor: 'pointer',
+                                        fontSize: '1.5rem',
+                                        fontWeight: 'bold',
+                                        color: '#60A5FA'
+                                    }"></p-avatar>
+                        </div>
+                        <div class="min-w-0 flex-1">
+                            <span
+                                class="text-blue-500 dark:text-blue-400 block text-2xl font-bold whitespace-nowrap truncate"
+                                [title]="(employeeDetails?.employeeCode || '') + ' - ' + (employeeDetails?.title || '') + ' ' + (employeeDetails?.firstName || '') + ' ' + (employeeDetails?.lastName || '')">
+                                {{ employeeDetails?.employeeCode }} -
+                                {{ employeeDetails?.title }} {{ employeeDetails?.firstName }} {{
+                                employeeDetails?.lastName }}
+                            </span>
+                            <span class="text-slate-500 dark:text-slate-400 text-xs whitespace-nowrap truncate block"
+                                [title]="employeeDetails?.emailId">
+                                {{ employeeDetails?.emailId }}
+                            </span>
+                            <div class="mt-2">
+                                <p-tag
+                                    [value]="employeeDetails?.lastDesignationName || employeeDetails?.title || 'Employee'"
+                                    severity="info" [rounded]="true" styleClass="px-2 py-0 text-xs"></p-tag>
                             </div>
                         </div>
-                    }
+                    </div>
                 </div>
-            </p-scrollpanel>
-            <div class="widget-actions"><button pButton type="button" label="View assignments" text></button><a href="#/home/dashboard">Read more…</a></div>
-        </article>
-
-        <article class="card holidays-card">
-            <div class="widget-title">
-                <div>
-                    <span>Calendar</span>
-                    <h2>Upcoming holidays</h2>
-                </div>
-                <p-tag value="6 total" severity="info" />
+                <img [src]="'assets/demo/images/dashboard/users' + (colorScheme === 'light' ? '' : '-dark') + '.svg'"
+                    class="w-full mt-auto" alt="users">
             </div>
-            <p-tabs value="0">
-                <p-tablist><p-tab value="0">Student</p-tab><p-tab value="1">Organisation</p-tab></p-tablist>
-                <p-tabpanels>
-                    <p-tabpanel value="0"><ng-container *ngTemplateOutlet="holidayTable; context: { $implicit: studentHolidays }" /></p-tabpanel>
-                    <p-tabpanel value="1"><ng-container *ngTemplateOutlet="holidayTable; context: { $implicit: organisationHolidays }" /></p-tabpanel>
-                </p-tabpanels>
-            </p-tabs>
-            <ng-template #holidayTable let-holidays>
-                <p-table [value]="holidays" responsiveLayout="scroll">
-                    <ng-template #header
-                        ><tr>
-                            <th>Holiday</th>
-                            <th>Date</th>
-                            <th>Type</th>
-                        </tr></ng-template
-                    >
-                    <ng-template #body let-holiday
-                        ><tr>
-                            <td>
-                                <strong>{{ holiday.name }}</strong
-                                ><small>{{ holiday.description }}</small>
-                            </td>
-                            <td>{{ holiday.date }}</td>
-                            <td><p-tag [value]="holiday.type" [severity]="holidaySeverity(holiday.type)" /></td></tr
-                    ></ng-template>
-                </p-table>
-            </ng-template>
-        </article>
+        </div>
 
-        <article class="card calendar-card">
-            <div class="widget-title">
-                <div>
-                    <span>Schedule</span>
-                    <h2>Employee calendar</h2>
+        <!-- System Roles Card -->
+        <div class="col-span-1 cursor-pointer scalein animation-duration-400 dashboard-cards">
+            <div class="card h-full p-0 overflow-hidden flex flex-col">
+                <div class="flex items-center p-3 flex-1">
+                    <i class="pi pi-id-card text-6xl text-amber-500 shrink-0"></i>
+                    <div class="ml-3 flex flex-col min-w-0 w-full">
+                        <span class="text-amber-500 dark:text-amber-400 block whitespace-nowrap font-bold mb-2">System
+                            Roles</span>
+
+                        <!-- Scrollable container to prevent height stretching -->
+                        <div class="flex flex-wrap gap-1 overflow-y-auto pr-1 max-h-16">
+                            @for (role of (currentUserSubject?.value?.applicationUser?.roles || []); track role) {
+                            <p-tag [value]="role" [severity]="getSeverity(role)" [rounded]="true"
+                                styleClass="px-2 py-0 text-xs">
+                            </p-tag>
+                            }
+                        </div>
+                    </div>
                 </div>
-                <button pButton type="button" icon="pi pi-calendar" rounded text></button>
+                <img [src]="'assets/demo/images/dashboard/locations' + (colorScheme === 'light' ? '' : '-dark') + '.svg'"
+                    class="w-full mt-auto" alt="roles">
             </div>
-            <app-employee-calender mode="all" />
-        </article>
+        </div>
+
+        <!-- Upcoming Holiday Card -->
+        <div class="col-span-1 cursor-pointer scalein animation-duration-500 dashboard-cards">
+            <div class="card h-full p-0 overflow-hidden flex flex-col">
+                <div class="flex items-center p-3 flex-1 z-1">
+                    <i class="pi pi-calendar-plus text-6xl text-emerald-500 shrink-0"></i>
+
+                    <div class="ml-3 flex flex-col min-w-0 w-full">
+                        <span
+                            class="text-emerald-500 dark:text-emerald-400 block whitespace-nowrap font-bold mb-2">Upcoming
+                            Holiday</span>
+
+                        @if (upcomingHoliday) {
+                        <div class="flex flex-col gap-1">
+                            <!-- Holiday Name -->
+                            <span
+                                class="text-slate-900 dark:text-slate-100 font-bold text-base whitespace-nowrap truncate"
+                                [title]="upcomingHoliday.name">
+                                {{ upcomingHoliday.name }}
+                            </span>
+
+                            <!-- Days Away & Date Calculation -->
+                            <span
+                                class="text-slate-700 dark:text-slate-300 text-sm flex items-center gap-2 whitespace-nowrap truncate">
+                                <i class="pi pi-clock text-xs text-slate-500"></i>
+
+                                @if (upcomingHoliday.isToday) {
+                                <span class="font-bold text-emerald-500">Today!</span>
+                                } @else {
+                                <span>In {{ upcomingHoliday.daysAway }} Days ({{ upcomingHoliday.date | date:'dd MMM'
+                                    }})</span>
+                                }
+                            </span>
+                        </div>
+                        } @else {
+                        <div class="flex flex-col gap-2">
+                            <span class="text-slate-500 text-sm">No upcoming holidays</span>
+                        </div>
+                        }
+                    </div>
+                </div>
+                <img [src]="'assets/demo/images/dashboard/rate' + (colorScheme === 'light' ? '' : '-dark') + '.svg'"
+                    class="w-full mt-auto" alt="holiday">
+            </div>
+        </div>
+
+        <!-- Quick Links Card -->
+        <div class="col-span-1 cursor-pointer scalein animation-duration-1000 dashboard-cards">
+            <div class="card h-full p-0 overflow-hidden flex flex-col">
+                <div class="flex items-center p-3 flex-1 z-1">
+                    <i class="pi pi-link text-6xl text-purple-500 shrink-0"></i>
+                    <div class="ml-3 flex flex-col min-w-0 w-full">
+                        <span class="text-purple-500 dark:text-purple-400 block whitespace-nowrap font-bold mb-2">Quick
+                            Links</span>
+
+                        <!-- Scrollable container to prevent height stretching -->
+                        <div class="flex flex-col gap-1 overflow-y-auto pr-1 max-h-20">
+                            @for (link of quickLinks; track link.label) {
+                            <div class="flex items-center gap-2 w-full p-1 rounded cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors duration-200"
+                                (click)="navigateQuickLink(link)">
+                                <i [class]="link.icon + ' text-purple-400'" style="font-size: 0.8rem;"></i>
+                                <span
+                                    class="font-medium text-slate-700 dark:text-slate-200 text-sm md:text-base whitespace-nowrap truncate">
+                                    {{ link.label }}
+                                </span>
+                            </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+                <img [src]="'assets/demo/images/dashboard/interactions' + (colorScheme === 'light' ? '' : '-dark') + '.svg'"
+                    class="w-full mt-auto" alt="links">
+            </div>
+        </div>
     </div>
 
-    <article class="card marks-card">
-        <div class="widget-title">
-            <div>
-                <span>Academics</span>
-                <h2>Pending marks entry</h2>
-            </div>
-            <p-tag value="3 pending" severity="warn" />
-        </div>
-        <p-table [value]="marks" [paginator]="true" [rows]="5" responsiveLayout="scroll">
-            <ng-template #header
-                ><tr>
-                    <th>S.No.</th>
-                    <th>Academic session</th>
-                    <th>Program</th>
-                    <th>Semester</th>
-                    <th>Subject</th>
-                    <th>Subject code</th>
-                    <th>Action</th>
-                </tr></ng-template
-            >
-            <ng-template #body let-row let-index="rowIndex"
-                ><tr>
-                    <td>{{ index + 1 }}</td>
-                    <td>{{ row.session }}</td>
-                    <td>{{ row.program }}</td>
-                    <td>{{ row.semester }}</td>
-                    <td>{{ row.subject }}</td>
-                    <td>{{ row.code }}</td>
-                    <td><button pButton type="button" icon="pi pi-pencil" rounded text></button></td></tr
-            ></ng-template>
-        </p-table>
-    </article>
+    <!-- Pending Marks Entry List (Conditional) -->
+    @if (isMarksEntryPendingInfoVisible) {
+    <div class="w-full mb-6">
+        <div class="card h-full">
+            <div class="flex flex-col">
+                <h5 class="text-xl font-bold mb-1">Pending Marks Entry List</h5>
+                <h6 class="text-slate-500 text-sm mb-4">
+                    {{ employeeDetails?.employeeCode }} - {{ employeeDetails?.firstName }} {{ employeeDetails?.lastName
+                    }}
+                </h6>
+                <p-table #dt [value]="pendingMarksEntryReportList" [rows]="10" [paginator]="true" [globalFilterFields]="[
+                                'AcademicSessionName',
+                                'ProgramName',
+                                'Semester',
+                                'Subject',
+                                'SubjectCode'
+                            ]" [rowHover]="true" dataKey="id" [resizableColumns]="true"
+                    [rowsPerPageOptions]="[10, 20, 50, 100, {showAll : 'All'}]"
+                    styleClass="p-datatable-gridlines p-datatable-striped p-datatable-sm"
+                    currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+                    [showCurrentPageReport]="true">
+                    <ng-template #header>
+                        <tr class="bg-slate-100 dark:bg-slate-800">
+                            <th>S.No.</th>
+                            @for (headers of pendingMarksEntryReportHeaders; track headers) {
+                            @if (!(headers === 'OperationalVerticalId' || headers === 'ExaminationId' || headers ===
+                            'ProgramId' || headers === 'AcademicSessionId' || headers === 'SubjectPapercodeId' ||
+                            headers === 'SubjectId')) {
+                            <th [pSortableColumn]="headers">
+                                {{ headers }}
+                                <p-sort-icon [field]="headers"></p-sort-icon>
+                                <p-column-filter [type]="headers" [field]="headers" display="menu"></p-column-filter>
+                            </th>
+                            }
+                            }
+                            <th>Action</th>
+                        </tr>
+                    </ng-template>
 
-    <article class="card todo-card">
-        <div class="todo-header">
-            <div>
-                <span>Personal workspace</span>
-                <h2>My To Do List</h2>
+                    <ng-template #body let-pendingReport let-rowIndex="rowIndex">
+                        <tr>
+                            <td>{{ rowIndex + 1 }}</td>
+                            @for (header of pendingMarksEntryReportHeaders; track header) {
+                            @if (!(header === 'OperationalVerticalId' || header === 'ExaminationId' || header ===
+                            'ProgramId' || header === 'AcademicSessionId' || header === 'SubjectPapercodeId' || header
+                            === 'SubjectId')) {
+                            <td>{{ pendingReport[header] }}</td>
+                            }
+                            }
+                            <td>
+                                <button pButton type="button" label="Marks Entry" class="p-button-primary"
+                                    (click)="navigateToMarksEntry(pendingReport)"></button>
+                            </td>
+                        </tr>
+                    </ng-template>
+                </p-table>
             </div>
-            <div><button pButton type="button" icon="pi pi-plus" label="Add" (click)="addTodo()"></button><button pButton type="button" icon="pi pi-save" label="Save" severity="secondary"></button></div>
         </div>
-        <p-table [value]="todos" responsiveLayout="scroll">
-            <ng-template #header
-                ><tr>
-                    <th>Task description</th>
-                    <th>Status</th>
-                    <th>Created date</th>
-                    <th>Action</th>
-                </tr></ng-template
-            >
-            <ng-template #body let-todo
-                ><tr>
-                    <td><input class="todo-input" [(ngModel)]="todo.description" /></td>
-                    <td><p-select [options]="statusOptions" [(ngModel)]="todo.status" appendTo="body" /><p-tag class="status-preview" [value]="todo.status" [severity]="todoSeverity(todo.status)" /></td>
-                    <td>{{ todo.created }}</td>
-                    <td><button pButton type="button" icon="pi pi-trash" severity="danger" rounded text (click)="removeTodo(todo.id)"></button></td></tr
-            ></ng-template>
-        </p-table>
-        <footer>
-            <span><i class="pi pi-lightbulb"></i> Tip: click a task description to edit it.</span><strong>{{ todos.length }} tasks</strong>
-        </footer>
-    </article>
-</section>
+    </div>
+    }
+
+    <!-- Main Dashboard 3-Column Section -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
+        <!-- Latest Notifications Widget -->
+        <div class="col-span-1">
+            <div class="card h-full p-4 flex flex-col overflow-hidden">
+                <div
+                    class="flex items-center justify-between p-3 border-b border-slate-200 dark:border-slate-700 shrink-0">
+                    <h5 class="m-0 text-xl font-bold">Latest Notifications</h5>
+                    @if (workAssignmentNotifications.length > 0) {
+                    <p-tag [value]="'Work Pending: ' + getPendingAssignmentsCount()" severity="warn"
+                        [rounded]="true"></p-tag>
+                    }
+                </div>
+                <p-scrollpanel [style]="{ width: '100%', height: '22rem' }" styleClass="custombar1 p-0 mt-4">
+                    <ul class="list-none p-0 m-0 w-full">
+                        <!-- Work Assignment Notifications -->
+                        @for (notification of workAssignmentNotifications; track notification.id) {
+                        <li class="mb-2 flex items-start gap-2 p-2 rounded hover:bg-slate-100 dark:hover:bg-slate-800 cursor-pointer border border-amber-500"
+                            (click)="viewWorkAssignment(notification)">
+                            <div class="flex items-start gap-2 w-full">
+                                <p-avatar [icon]="notification.type === 'Teaching' ? 'pi pi-book' : 'pi pi-briefcase'"
+                                    size="large" shape="circle" styleClass="text-base font-bold"
+                                    [style]="{'background-color': 'rgba(255, 171, 64, 0.1)', 'color': '#FF6F00', 'border': '1px solid #FFAB40'}">
+                                </p-avatar>
+                                <div class="ml-3 flex-1">
+                                    <div class="flex items-center justify-between">
+                                        <span class="block font-semibold text-amber-700 dark:text-amber-400">Work
+                                            Assignment</span>
+                                        <p-tag [value]="notification.status"
+                                            [severity]="getNotificationSeverity(notification.status)"
+                                            styleClass="text-xs">
+                                        </p-tag>
+                                    </div>
+                                    <span class="text-slate-500 dark:text-slate-400 block text-sm">
+                                        <strong>{{ notification.assignedBy }}</strong> assigned
+                                        {{ notification.assignmentCount }}
+                                        {{ notification.type === 'Teaching' ? 'teaching' : 'non-teaching' }} task(s)
+                                        ({{ formatDateRange(notification.startDate, notification.endDate) }})
+                                    </span>
+                                </div>
+                            </div>
+                        </li>
+                        }
+
+                        <!-- Regular Notices -->
+                        @for (item of notices; track item.id || $index) {
+                        <li (click)="navigateToNotice(item)"
+                            class="mb-2 flex items-start gap-2 p-2 rounded hover:bg-slate-100 dark:hover:bg-slate-800 cursor-pointer">
+                            <p-avatar icon="pi pi-bell" size="large" shape="circle" styleClass="text-base font-bold"
+                                [style]="{'background-color':'rgba(94, 208, 250, 0.1)', 'color': '#1992D4', 'border': '1px solid #5ED0FA'}"></p-avatar>
+                            <div class="flex-1">
+                                <span class="block font-medium text-slate-800 dark:text-slate-200">{{ item.source
+                                    }}</span>
+                                <span class="text-sm text-slate-500 dark:text-slate-400">{{ item.title }}</span>
+                            </div>
+                        </li>
+                        }
+                    </ul>
+                </p-scrollpanel>
+            </div>
+        </div>
+
+        <!-- Student / Organisational Holiday Tabs Widget -->
+        <div class="col-span-1">
+            <div class="card h-full p-0 overflow-hidden">
+                <p-tabs value="0" styleClass="h-full flex flex-col">
+                    <p-tablist>
+                        <p-tab value="0">Student Holiday</p-tab>
+                        <p-tab value="1">Organisational Holiday</p-tab>
+                    </p-tablist>
+                    <p-tabpanels styleClass="flex-1 overflow-auto">
+                        <p-tabpanel value="0">
+                            <div class="p-4">
+                                <div class="flex items-center justify-between mb-4">
+                                    <div class="flex items-center">
+                                        <i class="pi pi-calendar mr-2 text-primary"></i>
+                                        <span class="text-xl font-bold text-slate-900 dark:text-slate-100">Student
+                                            Holiday List</span>
+                                    </div>
+                                    <p-tag severity="info" [value]="'Total: ' + academic_Total_No_of_Holidays"
+                                        [rounded]="true"></p-tag>
+                                </div>
+
+                                <div class="holiday-table-container">
+                                    <p-table #studentHolidayTable [value]="holiday" [paginator]="holiday.length > 5"
+                                        [rows]="5" responsiveLayout="scroll"
+                                        styleClass="p-datatable-sm p-datatable-striped">
+                                        <ng-template #header>
+                                            <tr>
+                                                <th
+                                                    class="bg-slate-50 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-bold">
+                                                    Holiday Name</th>
+                                                <th
+                                                    class="bg-slate-50 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-bold">
+                                                    Date</th>
+                                                <th
+                                                    class="bg-slate-50 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-bold">
+                                                    Type</th>
+                                                <th
+                                                    class="bg-slate-50 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-bold">
+                                                    Description</th>
+                                            </tr>
+                                        </ng-template>
+                                        <ng-template #body let-item>
+                                            <tr class="text-sm">
+                                                <td class="font-semibold text-primary">{{ item.name }}</td>
+                                                <td class="text-slate-700 dark:text-slate-300 font-medium">
+                                                    {{ item.date | date: 'dd MMM, yyyy' }}
+                                                </td>
+                                                <td>
+                                                    <p-tag
+                                                        [severity]="item.type === 'Gazetted Holiday' ? 'success' : 'warn'"
+                                                        [value]="item.type"></p-tag>
+                                                </td>
+                                                <td class="text-slate-500 leading-relaxed">{{ item.description }}</td>
+                                            </tr>
+                                        </ng-template>
+                                        <ng-template #emptymessage>
+                                            <tr>
+                                                <td colspan="4" class="text-center p-5 text-slate-500">No holidays found
+                                                    for this year.</td>
+                                            </tr>
+                                        </ng-template>
+                                    </p-table>
+                                </div>
+                            </div>
+                        </p-tabpanel>
+
+                        <p-tabpanel value="1">
+                            <div class="p-4">
+                                <div class="flex items-center justify-between mb-4">
+                                    <div class="flex items-center">
+                                        <i class="pi pi-building mr-2 text-primary"></i>
+                                        <span
+                                            class="text-xl font-bold text-slate-900 dark:text-slate-100">Organisational
+                                            Holiday List</span>
+                                    </div>
+                                    <p-tag severity="info" [value]="'Total: ' + student_Total_No_of_Holidays"
+                                        [rounded]="true"></p-tag>
+                                </div>
+
+                                <div class="holiday-table-container">
+                                    <p-table [value]="studentHoliday" #orgHolidayTable
+                                        [paginator]="studentHoliday.length > 5" [rows]="5" responsiveLayout="scroll"
+                                        styleClass="p-datatable-sm p-datatable-striped">
+                                        <ng-template #header>
+                                            <tr>
+                                                <th
+                                                    class="bg-slate-50 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-bold">
+                                                    Holiday Name</th>
+                                                <th
+                                                    class="bg-slate-50 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-bold">
+                                                    Date</th>
+                                                <th
+                                                    class="bg-slate-50 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-bold">
+                                                    Type</th>
+                                                <th
+                                                    class="bg-slate-50 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-bold">
+                                                    Description</th>
+                                            </tr>
+                                        </ng-template>
+                                        <ng-template #body let-item>
+                                            <tr class="text-sm">
+                                                <td class="font-semibold text-primary">{{ item.name }}</td>
+                                                <td class="text-slate-700 dark:text-slate-300 font-medium">
+                                                    {{ item.date | date: 'dd MMM, yyyy' }}
+                                                </td>
+                                                <td>
+                                                    <p-tag
+                                                        [severity]="item.type === 'Gazetted Holiday' ? 'success' : 'warn'"
+                                                        [value]="item.type"></p-tag>
+                                                </td>
+                                                <td class="text-slate-500 leading-relaxed">{{ item.description }}</td>
+                                            </tr>
+                                        </ng-template>
+                                        <ng-template #emptymessage>
+                                            <tr>
+                                                <td colspan="4" class="text-center p-5 text-slate-500">No holidays found
+                                                    for this year.</td>
+                                            </tr>
+                                        </ng-template>
+                                    </p-table>
+                                </div>
+                            </div>
+                        </p-tabpanel>
+                    </p-tabpanels>
+                </p-tabs>
+            </div>
+        </div>
+
+        <!-- Employee Calendar Widget -->
+        <div class="col-span-1">
+            <app-employee-calender mode="all" />
+        </div>
+
+        <!-- My To Do List Widget -->
+        <div class="col-span-1">
+            <div class="card h-full p-0 overflow-hidden rounded-lg shadow-md">
+                <div class="bg-gradient-to-r from-slate-700 to-slate-900 p-4 text-white">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center">
+                            <h5 class="m-0 font-semibold text-xl text-white">My To Do List</h5>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <button pButton label="Add Task" icon="pi pi-plus"
+                                class="p-button-info p-button-sm shadow-sm" (click)="addTask()"></button>
+                            <button pButton label="Save Task" class="p-button-success p-button-sm shadow-sm"
+                                (click)="saveTasks()"></button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="p-0">
+                    <p-table [value]="tasks" dataKey="id" responsiveLayout="scroll"
+                        styleClass="p-datatable-gridlines p-datatable-sm custom-task-table">
+                        <ng-template #header>
+                            <tr>
+                                <th style="width: 50%">Task Description</th>
+                                <th style="width: 15%">Status</th>
+                                <th style="width: 20%">Created Date</th>
+                                <th style="width: 15%" class="text-center">Action</th>
+                            </tr>
+                        </ng-template>
+                        <ng-template #body let-task>
+                            <tr class="hover:bg-slate-50 dark:hover:bg-slate-800">
+                                <td [pEditableColumn]="task" pEditableColumnField="description">
+                                    <p-cell-editor>
+                                        <ng-template #input>
+                                            <input pInputText type="text" [(ngModel)]="task.description"
+                                                class="w-full p-2 rounded border border-primary">
+                                        </ng-template>
+                                        <ng-template #output>
+                                            <div class="flex items-center">
+                                                <i class="pi pi-pencil text-slate-400 mr-2 text-xs"></i>
+                                                <span [ngClass]="{'text-slate-400': task.status === 'COMPLETED'}">
+                                                    @if (task.status === 'COMPLETED') {
+                                                    <del>{{ task.description }}</del>
+                                                    } @else {
+                                                    <span>{{ task.description }}</span>
+                                                    }
+                                                </span>
+                                            </div>
+                                        </ng-template>
+                                    </p-cell-editor>
+                                </td>
+
+                                <td [pEditableColumn]="task" pEditableColumnField="status">
+                                    <p-cell-editor>
+                                        <ng-template #input>
+                                            <select [(ngModel)]="task.status"
+                                                class="p-2 rounded border border-slate-300 dark:border-slate-700 bg-transparent w-full cursor-pointer">
+                                                <option value="NEW">NEW</option>
+                                                <option value="In Progress">In Progress</option>
+                                                <option value="COMPLETED">COMPLETED</option>
+                                            </select>
+                                        </ng-template>
+                                        <ng-template #output>
+                                            <div class="flex justify-center">
+                                                <span [ngClass]="{
+                                                        'bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300': task.status === 'NEW',
+                                                        'bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-300': task.status === 'In Progress',
+                                                        'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300': task.status === 'COMPLETED'
+                                                    }"
+                                                    class="rounded px-3 py-1 text-xs font-bold uppercase w-full text-center">
+                                                    {{ task.status }}
+                                                </span>
+                                            </div>
+                                        </ng-template>
+                                    </p-cell-editor>
+                                </td>
+
+                                <td class="text-slate-500 font-medium bg-slate-50 dark:bg-slate-900/20">
+                                    <div class="flex items-center justify-center">
+                                        <i class="pi pi-calendar mr-2 text-xs"></i>
+                                        {{ task.createdDate }}
+                                    </div>
+                                </td>
+
+                                <td class="text-center">
+                                    <button pButton icon="pi pi-trash" class="p-button-text p-button-danger p-button-sm"
+                                        (click)="deleteTask(task.id)"></button>
+                                </td>
+                            </tr>
+                        </ng-template>
+                    </p-table>
+                </div>
+
+                <div
+                    class="p-3 bg-slate-50 dark:bg-slate-800 border-t border-slate-200 dark:border-slate-700 flex justify-between">
+                    <span class="text-sm text-slate-500 italic">Tip: Changes are saved to the list automatically.</span>
+                    <span class="text-sm font-semibold text-slate-700 dark:text-slate-300">Total: {{ tasks.length
+                        }}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+}

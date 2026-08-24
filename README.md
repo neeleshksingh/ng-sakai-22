@@ -717,7 +717,7 @@ Each card follows this pattern:
 
 **Widget 5**: To Do List (col-12 lg:col-6 xl:col-4)
 - Gradient header with "My To Do List" title + Add/Save buttons
-- p-table with inline editing (p-cellEditor)
+- p-table with inline editing (p-cell-editor)
 - Columns: Task Description (editable), Status (editable dropdown: NEW/In Progress/COMPLETED), Created Date, Action (delete)
 - Status badges: blue (NEW), orange (In Progress), green (COMPLETED)
 - Footer: tip text + total count

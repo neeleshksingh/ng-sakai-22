@@ -1,82 +1,742 @@
-import { NgTemplateOutlet } from '@angular/common';
-import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { AvatarModule } from 'primeng/avatar';
-import { ButtonModule } from 'primeng/button';
-import { ScrollPanelModule } from 'primeng/scrollpanel';
-import { SelectModule } from 'primeng/select';
-import { TableModule } from 'primeng/table';
-import { TabsModule } from 'primeng/tabs';
-import { TagModule } from 'primeng/tag';
-import { DashboardCardsSkeletonComponent } from '@/app/global/components/skeletons/dashboard-cards-skeleton/dashboard-cards-skeleton.component';
+import { Component, OnDestroy, OnInit, ViewChild, effect } from '@angular/core';
+import { Router } from '@angular/router';
+import { ConfirmationService, MessageService } from 'primeng/api';
+import { BehaviorSubject, Subscription } from 'rxjs';
+import { AcademicHolidayService } from '@/app/cloud-bytes/services/academic-holiday.service';
+import { OrganizationalHolidayService } from '@/app/cloud-bytes/services/organizational-holiday.service';
+import { EmployeeDetailsService } from '@/app/global/services/smallbiz-gurus/employee-details.service';
+import { ExaminationMarksEntryService } from '@/app/knowledge-stand/services/examination-marks-entry.service';
+import { SharedModule } from '@/shared.module';
+import { LoginResponse } from '@/app/shared/models/idp/login';
+import { ExaminationMarksEntryPendingReport } from '@/app/shared/models/knowledge-stand/examination-marks-entry-pending';
+import { EmployeeLeaveRequest, LeaveRequestTeachingWorkAssignment, LeaveRequestNonTeachingWorkAssignment } from '@/app/shared/models/TimeClockPlus/employee-leave-request';
+import { LocalstorageService } from '@/app/shared/services/local-storage.service';
+import { EmployeeLeaveRequestService } from '@/app/time-clock-plus/services/employee-leave-request.service';
 import { EmployeeCalenderComponent } from '@/app/time-clock-plus/components/common-components/employee-calender/employee-calender.component';
+import { Table } from 'primeng/table';
+import { PublishNoticeService } from '@/app/executive-edge/services/publish-notice/publish-notice.service';
+import { LayoutService } from '@/app/layout/service/layout.service';
 
-interface TodoItem {
+export interface WorkAssignmentNotification {
     id: number;
-    description: string;
+    assignedBy: string;
+    type: 'Teaching' | 'NonTeaching';
+    startDate: Date;
+    endDate: Date;
+    assignmentCount: number;
+    leaveRequestId: number;
     status: string;
-    created: string;
 }
 
 @Component({
     selector: 'app-dashboard',
     standalone: true,
-    imports: [NgTemplateOutlet, FormsModule, AvatarModule, ButtonModule, ScrollPanelModule, SelectModule, TableModule, TabsModule, TagModule, DashboardCardsSkeletonComponent, EmployeeCalenderComponent],
     templateUrl: './dashboard.component.html',
     styleUrl: './dashboard.component.scss',
-    changeDetection: ChangeDetectionStrategy.OnPush
+    imports: [SharedModule, EmployeeCalenderComponent]
 })
-export class DashboardComponent {
-    readonly loading = signal(false);
-    readonly statusOptions = ['NEW', 'In Progress', 'COMPLETED'];
+export class DashboardComponent implements OnInit, OnDestroy {
+    @ViewChild('studentHolidayTable') studentHolidayTable!: Table;
+    @ViewChild('orgHolidayTable') orgHolidayTable!: Table;
 
-    readonly notifications = [
-        { title: 'Marks entry awaiting review', detail: 'B.Tech Semester VI · 2 hours ago', icon: 'pi pi-pencil', tone: 'orange' },
-        { title: 'Academic calendar published', detail: 'Session 2026–27 · Yesterday', icon: 'pi pi-calendar', tone: 'blue' },
-        { title: 'New work assignment', detail: 'Department verification · Yesterday', icon: 'pi pi-briefcase', tone: 'orange' },
-        { title: 'Library notice updated', detail: 'Circulation policy · 18 Aug', icon: 'pi pi-book', tone: 'blue' }
+    overviewChartData: any;
+    overviewChartOptions: any;
+    overviewWeeks: any;
+    selectedOverviewWeek: any;
+    revenueChartData: any;
+    revenueChartOptions: any;
+
+    subscription?: Subscription;
+    loading: boolean = false;
+    currentUserSubject: BehaviorSubject<LoginResponse | null> = new BehaviorSubject<LoginResponse | null>(null);
+    lastLoginTime: Date = new Date();
+    employeeDetails: any;
+    isMarksEntryPendingInfoVisible: boolean = false;
+    userRoleList: any[] = [];
+    pendingMarksEntryReportList: ExaminationMarksEntryPendingReport[] = [];
+    pendingMarksEntryReportHeaders: any[] = [];
+    isStudentRole: boolean = false;
+    holidayDates: Map<string, string> = new Map();
+    tasks: any[] = [];
+    workAssignments: any[] = [];
+    teachingWorkAssignments: LeaveRequestTeachingWorkAssignment[] = [];
+    nonTeachingWorkAssignments: LeaveRequestNonTeachingWorkAssignment[] = [];
+    isWorkAssignmentsLoading: boolean = false;
+    upcomingHoliday: { name: string, date: Date, daysAway: number, isToday: boolean } | null = null;
+    workAssignmentNotifications: WorkAssignmentNotification[] = [];
+    leaveRequestsWithWorkAssigned: EmployeeLeaveRequest[] = [];
+    displayImage: string = '';
+
+    quickLinks: any[] = [
+        {
+            label: 'Faculty Feedback',
+            icon: 'pi pi-star-fill',
+            description: 'Share your experience and insights',
+            route: '/home/executiveedge/transactions/faculty-feedback',
+            highlight: true,
+            badge: 'HOT',
+            color: '#8b5cf6',
+            bgColor: 'linear-gradient(135deg, #f5f3ff 0%, #ede9fe 100%)',
+            iconBg: 'linear-gradient(135deg, #a78bfa 0%, #8b5cf6 100%)',
+            borderColor: '#a78bfa'
+        }
     ];
 
-    readonly studentHolidays = [
-        { name: 'Republic Day', date: '26 Jan 2027', type: 'National', description: 'University closed' },
-        { name: 'Holi', date: '22 Mar 2027', type: 'Festival', description: 'Student holiday' },
-        { name: 'Summer Break', date: '15 May 2027', type: 'Academic', description: 'Semester break begins' }
-    ];
+    notices: any[] = [];
+    holiday: any[] = [];
+    studentHoliday: any[] = [];
+    academic_Total_No_of_Holidays: number = 0;
+    student_Total_No_of_Holidays: number = 0;
 
-    readonly organisationHolidays = [
-        { name: 'Republic Day', date: '26 Jan 2027', type: 'National', description: 'Office closed' },
-        { name: 'Independence Day', date: '15 Aug 2027', type: 'National', description: 'Flag hoisting ceremony' },
-        { name: 'Foundation Day', date: '18 Dec 2027', type: 'Event', description: 'University celebration' }
-    ];
+    constructor(
+        public layoutService: LayoutService,
+        private publishNoticeService: PublishNoticeService,
+        private router: Router,
+        private messageService: MessageService,
+        private confirmationService: ConfirmationService,
+        private localstorageService: LocalstorageService,
+        private employeeDetailsService: EmployeeDetailsService,
+        private academicHolidayService: AcademicHolidayService,
+        private organizationalHolidaysService: OrganizationalHolidayService,
+        private examinationMarksEntryService: ExaminationMarksEntryService,
+        private employeeLeaveRequestService: EmployeeLeaveRequestService
+    ) {
+        effect(() => {
+            this.layoutService.layoutConfig().darkTheme;
+            this.initCharts();
+        });
 
-    readonly marks = [
-        { session: '2026–27', program: 'B.Tech CSE', semester: 'VI', subject: 'Artificial Intelligence', code: 'CSE-601' },
-        { session: '2026–27', program: 'MBA', semester: 'II', subject: 'Financial Management', code: 'MBA-204' },
-        { session: '2026–27', program: 'BCA', semester: 'IV', subject: 'Web Technologies', code: 'BCA-405' }
-    ];
-
-    todos: TodoItem[] = [
-        { id: 1, description: 'Review faculty workload', status: 'In Progress', created: '22 Aug 2026' },
-        { id: 2, description: 'Approve academic calendar', status: 'NEW', created: '21 Aug 2026' },
-        { id: 3, description: 'Publish department notice', status: 'COMPLETED', created: '20 Aug 2026' }
-    ];
-
-    addTodo(): void {
-        const nextId = Math.max(0, ...this.todos.map((todo) => todo.id)) + 1;
-        this.todos = [{ id: nextId, description: 'New task', status: 'NEW', created: '22 Aug 2026' }, ...this.todos];
+        this.lastLoginTime = new Date();
     }
 
-    removeTodo(id: number): void {
-        this.todos = this.todos.filter((todo) => todo.id !== id);
+    ngOnInit(): void {
+        this.initCharts();
+        this.processHolidays();
+        this.loadNotices();
+
+        const data = localStorage.getItem('currentUser');
+        const storedData = sessionStorage.getItem('toDoList');
+
+        try {
+            this.tasks = storedData ? JSON.parse(storedData) : [];
+        } catch (error) {
+            console.error('Error parsing session storage data', error);
+            this.tasks = [];
+        }
+
+        try {
+            if (data) {
+                this.currentUserSubject.next(JSON.parse(data));
+            }
+        } catch (error) {
+            console.error('Error parsing user storage data', error);
+        }
+
+        const employeeCode = this.currentUserSubject?.value?.applicationUser?.uniqueUserCode;
+        const UserRole = this.currentUserSubject?.value?.applicationUser?.roles || [];
+        this.isStudentRole = UserRole.some((role: any) => role.toUpperCase() === 'STUDENT');
+        this.userRoleList = UserRole;
+
+        if (this.isStudentRole) {
+            this.router.navigateByUrl('/home/students/forbidden-access');
+        }
+
+        this.overviewWeeks = [
+            { name: 'Last Week', code: '0' },
+            { name: 'This Week', code: '1' }
+        ];
+        this.selectedOverviewWeek = this.overviewWeeks[0];
+
+        this.lastLoginTime = this.localstorageService.getItem("lastLoginTime") || new Date();
+        if (!this.isStudentRole && employeeCode != null && employeeCode !== undefined && employeeCode.trim().length > 0) {
+            this.employeeDetailsService.getByEmployeeCode(employeeCode).subscribe({
+                next: (data) => {
+                    if (data) {
+                        this.employeeDetails = Array.isArray(data) ? data[0] : data;
+                        this.displayImage = this.employeeDetails?.employeePhotoUrl || '';
+                    } else {
+                        this.employeeDetails = null;
+                    }
+                },
+                error: (err) => {
+                    this.messageService.add({ severity: 'error', summary: 'Error', detail: err?.error?.message || 'Error fetching employee details', life: 3000 });
+                    this.employeeDetails = null;
+                }
+            });
+            this.loadWorkAssignments(employeeCode);
+        }
+
+        if (this.userRoleList.includes('Faculty') && employeeCode != null && employeeCode !== undefined && employeeCode.trim().length > 0) {
+            this.employeeDetailsService.getByEmployeeCode(employeeCode).subscribe({
+                next: (data) => {
+                    if (data) {
+                        this.employeeDetails = Array.isArray(data) ? data[0] : data;
+                        this.examinationMarksEntryService.getExaminationMarksEntryPendingByFacultyCode(this.employeeDetails?.employeeCode).subscribe({
+                            next: (res) => {
+                                if (res && res.length > 0) {
+                                    this.isMarksEntryPendingInfoVisible = true;
+                                    this.pendingMarksEntryReportList = res.map(({ EmployeeId, EmployeeCode, EmployeeName, ...rest }: any) => rest);
+                                    this.pendingMarksEntryReportHeaders = Object.keys(this.pendingMarksEntryReportList[0]);
+                                } else {
+                                    this.messageService.add({ severity: 'info', summary: 'Info', detail: 'No pending marks entry found.', life: 3000 });
+                                }
+                            },
+                            error: (err) => {
+                                this.messageService.add({ severity: 'error', summary: 'Error', detail: err?.error?.message || 'Error fetching marks entry pending', life: 3000 });
+                            }
+                        });
+                    } else {
+                        this.employeeDetails = null;
+                    }
+                },
+                error: (err) => {
+                    console.error('Error fetching employee details:', err);
+                    this.employeeDetails = null;
+                }
+            });
+        }
     }
 
-    todoSeverity(status: string): 'success' | 'warn' | 'info' {
-        if (status === 'COMPLETED') return 'success';
-        if (status === 'In Progress') return 'warn';
-        return 'info';
+    navigateToMarksEntry(data: any): void {
+        this.router.navigate(['/home/knowledgestand/transactions/marks-entry/section-wise'], {
+            state: { data: data }
+        });
     }
 
-    holidaySeverity(type: string): 'success' | 'warn' | 'info' {
-        return type === 'National' ? 'success' : type === 'Festival' || type === 'Event' ? 'warn' : 'info';
+    initCharts(): void {
+        const documentStyle = getComputedStyle(document.documentElement);
+        const textColorSecondary = documentStyle.getPropertyValue('--text-color-secondary');
+        const primaryColor = documentStyle.getPropertyValue('--primary-color');
+        const primaryColor300 = documentStyle.getPropertyValue('--primary-200');
+        const borderColor = documentStyle.getPropertyValue('--surface-border');
+
+        this.overviewChartData = {
+            labels: ['M', 'T', 'W', 'T', 'F', 'S', 'S'],
+            datasets: [
+                {
+                    label: 'Organic',
+                    data: [2, 1, 0.5, 0.6, 0.5, 1.3, 1],
+                    borderColor: [primaryColor],
+                    pointBorderColor: 'transparent',
+                    pointBackgroundColor: 'transparent',
+                    type: 'line',
+                    fill: false
+                },
+                {
+                    label: 'Referral',
+                    data: [4.88, 3, 6.2, 4.5, 2.1, 5.1, 4.1],
+                    backgroundColor: [this.layoutService.isDarkTheme() ? '#879AAF' : '#E4E7EB'],
+                    hoverBackgroundColor: [primaryColor300],
+                    fill: true,
+                    borderRadius: 10,
+                    borderSkipped: 'top bottom',
+                    barPercentage: 0.3
+                }
+            ]
+        };
+
+        this.overviewChartOptions = {
+            plugins: {
+                legend: {
+                    position: 'bottom',
+                    align: 'end',
+                    labels: {
+                        color: textColorSecondary
+                    }
+                }
+            },
+            responsive: true,
+            hover: {
+                mode: 'index'
+            },
+            scales: {
+                y: {
+                    max: 7,
+                    min: 0,
+                    ticks: {
+                        stepSize: 0,
+                        callback: function (value: number, index: number) {
+                            if (index === 0) {
+                                return value;
+                            } else {
+                                return value + 'k';
+                            }
+                        },
+                        color: textColorSecondary
+                    },
+                    grid: {
+                        borderDash: [2, 2],
+                        color: borderColor,
+                        drawBorder: false
+                    }
+                },
+                x: {
+                    grid: {
+                        display: false
+                    },
+                    ticks: {
+                        beginAtZero: true,
+                        color: textColorSecondary
+                    }
+                }
+            }
+        };
+
+        this.revenueChartData = {
+            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+            datasets: [
+                {
+                    data: [11, 17, 30, 60, 88, 92],
+                    borderColor: 'rgba(25, 146, 212, 0.5)',
+                    pointBorderColor: 'transparent',
+                    pointBackgroundColor: 'transparent',
+                    fill: false,
+                    tension: 0.4
+                },
+                {
+                    data: [11, 19, 39, 59, 69, 71],
+                    borderColor: 'rgba(25, 146, 212, 0.5)',
+                    pointBorderColor: 'transparent',
+                    pointBackgroundColor: 'transparent',
+                    fill: false,
+                    tension: 0.4
+                },
+                {
+                    data: [11, 17, 21, 30, 47, 83],
+                    backgroundColor: 'rgba(25, 146, 212, 0.2)',
+                    borderColor: 'rgba(25, 146, 212, 0.5)',
+                    pointBorderColor: 'transparent',
+                    pointBackgroundColor: 'transparent',
+                    fill: true,
+                    tension: 0.4
+                }
+            ]
+        };
+
+        this.revenueChartOptions = {
+            plugins: {
+                legend: {
+                    display: false
+                }
+            },
+            scales: {
+                y: {
+                    grid: {
+                        color: borderColor
+                    },
+                    max: 100,
+                    min: 0,
+                    ticks: {
+                        color: textColorSecondary
+                    }
+                },
+                x: {
+                    grid: {
+                        color: borderColor
+                    },
+                    ticks: {
+                        color: textColorSecondary,
+                        beginAtZero: true
+                    }
+                }
+            }
+        };
+    }
+
+    changeOverviewWeek(): void {
+        const dataSet1 = [
+            [2, 1, 0.5, 0.6, 0.5, 1.3, 1],
+            [4.88, 3, 6.2, 4.5, 2.1, 5.1, 4.1]
+        ];
+        const dataSet2 = [
+            [3, 2.4, 1.5, 0.6, 4.5, 3.3, 2],
+            [3.2, 4.1, 2.2, 5.5, 4.1, 3.6, 3.5]
+        ];
+
+        if (this.selectedOverviewWeek.code === '1') {
+            this.overviewChartData.datasets[0].data = dataSet2[0];
+            this.overviewChartData.datasets[1].data = dataSet2[1];
+        } else {
+            this.overviewChartData.datasets[0].data = dataSet1[0];
+            this.overviewChartData.datasets[1].data = dataSet1[1];
+        }
+
+        this.overviewChartData = { ...this.overviewChartData };
+    }
+
+    get colorScheme(): string {
+        return this.layoutService.isDarkTheme() ? 'dark' : 'light';
+    }
+
+    getSeverity(role: any): any {
+        switch (role?.toLowerCase()) {
+            case 'developers':
+                return 'success';
+            case 'administration':
+                return 'warn';
+            case 'academics':
+                return 'info';
+            case 'timeclockplus':
+                return 'danger';
+            default:
+                return 'info';
+        }
+    }
+
+    ngOnDestroy(): void {
+        if (this.subscription) {
+            this.subscription.unsubscribe();
+        }
+    }
+
+    saveTasks(): void {
+        sessionStorage.setItem('toDoList', JSON.stringify(this.tasks));
+    }
+
+    addTask(): void {
+        const newId = this.tasks.length > 0
+            ? Math.max(...this.tasks.map((t) => t.id)) + 1
+            : 1;
+
+        const newTask = {
+            id: newId,
+            description: 'New task...',
+            status: 'NEW',
+            createdDate: new Date().toLocaleDateString('en-GB')
+        };
+
+        this.tasks = [...this.tasks, newTask];
+    }
+
+    deleteTask(id: number): void {
+        this.tasks = this.tasks.filter((t) => t.id !== id);
+        this.saveTasks();
+    }
+
+    loadWorkAssignments(employeeCode: string): void {
+        this.isWorkAssignmentsLoading = true;
+        this.employeeLeaveRequestService.getByWorkAssignedEmployeeCode(employeeCode).subscribe({
+            next: (res: EmployeeLeaveRequest[]) => {
+                this.isWorkAssignmentsLoading = false;
+                if (res && res.length > 0) {
+                    this.leaveRequestsWithWorkAssigned = res;
+                    this.processWorkAssignmentNotifications(res);
+                } else {
+                    this.workAssignmentNotifications = [];
+                    this.leaveRequestsWithWorkAssigned = [];
+                }
+            },
+            error: (err) => {
+                this.isWorkAssignmentsLoading = false;
+                console.error('Error loading work assignments:', err);
+                this.workAssignmentNotifications = [];
+                this.leaveRequestsWithWorkAssigned = [];
+            }
+        });
+    }
+
+    private processWorkAssignmentNotifications(leaveRequests: EmployeeLeaveRequest[]): void {
+        this.workAssignmentNotifications = [];
+
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+
+        const currentUserCode = this.currentUserSubject?.value?.applicationUser?.uniqueUserCode?.toLowerCase() || '';
+        const currentUsername = this.currentUserSubject?.value?.applicationUser?.userName?.toLowerCase() || '';
+
+        let pendingTeachingCount = 0;
+        let pendingNonTeachingCount = 0;
+        const assignerNames: Set<string> = new Set();
+
+        let teachingMinDate: Date | null = null;
+        let teachingMaxDate: Date | null = null;
+        let nonTeachingMinDate: Date | null = null;
+        let nonTeachingMaxDate: Date | null = null;
+
+        leaveRequests.forEach((leaveRequest) => {
+            if (leaveRequest.leaveStatus?.toUpperCase() === 'CANCELLEDBYEMPLOYEE') {
+                return;
+            }
+
+            const teachingAssignments = leaveRequest.leaveRequestTeachingWorkAssignments || [];
+            const nonTeachingAssignments = leaveRequest.leaveRequestNonTeachingWorkAssignments || [];
+
+            teachingAssignments.forEach((assignment) => {
+                const scheduleDate = assignment.scheduleDate ? new Date(assignment.scheduleDate) : null;
+                if (scheduleDate) {
+                    scheduleDate.setHours(0, 0, 0, 0);
+
+                    if (scheduleDate >= today) {
+                        const modifiedBy = assignment.modifiedBy?.toLowerCase() || '';
+                        const userHasActed = modifiedBy === currentUserCode || modifiedBy === currentUsername;
+
+                        if (!userHasActed) {
+                            pendingTeachingCount++;
+                            if (assignment.createdBy) {
+                                assignerNames.add(assignment.createdBy);
+                            }
+                            if (!teachingMinDate || scheduleDate < teachingMinDate) {
+                                teachingMinDate = new Date(scheduleDate);
+                            }
+                            if (!teachingMaxDate || scheduleDate > teachingMaxDate) {
+                                teachingMaxDate = new Date(scheduleDate);
+                            }
+                        }
+                    }
+                }
+            });
+
+            nonTeachingAssignments.forEach((assignment) => {
+                const scheduleDate = assignment.scheduleDate ? new Date(assignment.scheduleDate) : null;
+                if (scheduleDate) {
+                    scheduleDate.setHours(0, 0, 0, 0);
+
+                    if (scheduleDate >= today) {
+                        const modifiedBy = assignment.modifiedBy?.toLowerCase() || '';
+                        const userHasActed = modifiedBy === currentUserCode || modifiedBy === currentUsername;
+
+                        if (!userHasActed) {
+                            pendingNonTeachingCount++;
+                            if (assignment.createdBy) {
+                                assignerNames.add(assignment.createdBy);
+                            }
+                            if (!nonTeachingMinDate || scheduleDate < nonTeachingMinDate) {
+                                nonTeachingMinDate = new Date(scheduleDate);
+                            }
+                            if (!nonTeachingMaxDate || scheduleDate > nonTeachingMaxDate) {
+                                nonTeachingMaxDate = new Date(scheduleDate);
+                            }
+                        }
+                    }
+                }
+            });
+        });
+
+        const assignerList = Array.from(assignerNames).slice(0, 3).join(', ');
+        const assignerDisplay = assignerNames.size > 3 ? `${assignerList} +${assignerNames.size - 3} more` : assignerList || 'Colleagues';
+
+        if (pendingTeachingCount > 0) {
+            this.workAssignmentNotifications.push({
+                id: 1,
+                assignedBy: assignerDisplay,
+                type: 'Teaching',
+                startDate: teachingMinDate || new Date(),
+                endDate: teachingMaxDate || new Date(),
+                assignmentCount: pendingTeachingCount,
+                leaveRequestId: 0,
+                status: 'PENDING'
+            });
+        }
+
+        if (pendingNonTeachingCount > 0) {
+            this.workAssignmentNotifications.push({
+                id: 2,
+                assignedBy: assignerDisplay,
+                type: 'NonTeaching',
+                startDate: nonTeachingMinDate || new Date(),
+                endDate: nonTeachingMaxDate || new Date(),
+                assignmentCount: pendingNonTeachingCount,
+                leaveRequestId: 0,
+                status: 'PENDING'
+            });
+        }
+    }
+
+    navigateToWorkAssignments(): void {
+        this.router.navigateByUrl('/home/timeclockplus/transactions/work-assignment-list');
+    }
+
+    navigateQuickLink(link: any): void {
+        if (link?.route) {
+            this.router.navigateByUrl(link.route);
+        }
+    }
+
+    getPendingAssignmentsCount(): number {
+        return this.workAssignmentNotifications.length;
+    }
+
+    formatDateRange(startDate: Date, endDate: Date): string {
+        const formatDate = (date: Date) => {
+            return date.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+        };
+
+        if (startDate.getTime() === endDate.getTime()) {
+            return formatDate(startDate);
+        }
+        return `${formatDate(startDate)} to ${formatDate(endDate)}`;
+    }
+
+    getNotificationSeverity(status: string): 'success' | 'info' | 'warn' | 'danger' | 'secondary' | 'contrast' | undefined {
+        switch (status?.toUpperCase()) {
+            case 'PENDING':
+                return 'warn';
+            case 'ACCEPTED':
+                return 'success';
+            case 'REJECTED':
+                return 'danger';
+            default:
+                return 'info';
+        }
+    }
+
+    viewWorkAssignment(notification: WorkAssignmentNotification): void {
+        this.router.navigateByUrl('/home/timeclockplus/transactions/work-assignment-list');
+    }
+
+    getDateData(date: any): { cssClass: string; tooltip: string } {
+        const dateStr = `${date.year}-${(date.month + 1).toString().padStart(2, '0')}-${date.day.toString().padStart(2, '0')}`;
+
+        if (this.holidayDates.has(dateStr)) {
+            return {
+                cssClass: 'holiday-festival-mark',
+                tooltip: this.holidayDates.get(dateStr) || ''
+            };
+        }
+
+        const jsDate = new Date(date.year, date.month, date.day);
+        const dayOfWeek = jsDate.getDay();
+
+        if (dayOfWeek === 0) {
+            return { cssClass: 'holiday-weekend-mark', tooltip: 'Sunday' };
+        }
+
+        if (dayOfWeek === 6) {
+            const dayOfMonth = date.day;
+            const weekNum = Math.ceil(dayOfMonth / 7);
+            if (weekNum === 2 || weekNum === 4) {
+                return { cssClass: 'holiday-weekend-mark', tooltip: `${weekNum === 2 ? '2nd' : '4th'} Saturday` };
+            }
+        }
+
+        return { cssClass: '', tooltip: '' };
+    }
+
+    processHolidays(): void {
+        const year = new Date().getFullYear();
+        this.academicHolidayService.getAcademicHolidayByYear(year.toString()).subscribe((res) => {
+            this.holiday = res || [];
+            this.academic_Total_No_of_Holidays = this.holiday.length;
+            this.holiday.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+            setTimeout(() => this.paginateTableToDate(this.studentHolidayTable, this.holiday, 5), 100);
+        });
+
+        this.organizationalHolidaysService.getAll().subscribe((res) => {
+            const holidays2026 = (res || []).filter((holiday: any) => {
+                if (!holiday.date) return false;
+                const dateObj = new Date(holiday.date);
+                return dateObj.getFullYear() === 2026;
+            });
+            this.studentHoliday = holidays2026;
+            this.student_Total_No_of_Holidays = holidays2026.length;
+            this.studentHoliday.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+            setTimeout(() => this.paginateTableToDate(this.orgHolidayTable, this.studentHoliday, 5), 100);
+
+            this.calculateUpcomingHoliday(this.studentHoliday);
+        });
+    }
+
+    calculateUpcomingHoliday(holidays: any[]): void {
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+
+        const upcomingHolidays = holidays.filter((h) => {
+            const hDate = new Date(h.date);
+            hDate.setHours(0, 0, 0, 0);
+            return hDate >= today && h.status === 'PUBLISHED';
+        });
+
+        if (upcomingHolidays.length > 0) {
+            const nextHoliday = upcomingHolidays[0];
+            const hDate = new Date(nextHoliday.date);
+            hDate.setHours(0, 0, 0, 0);
+
+            const diffTime = hDate.getTime() - today.getTime();
+            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+            this.upcomingHoliday = {
+                name: nextHoliday.name,
+                date: hDate,
+                daysAway: diffDays,
+                isToday: diffDays === 0
+            };
+        }
+    }
+
+    private paginateTableToDate(table: Table, holidays: any[], rowsPerPage: number): void {
+        if (!table || !holidays || holidays.length === 0) return;
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        let targetIndex = holidays.findIndex((holiday) => {
+            const holidayDate = new Date(holiday.date);
+            holidayDate.setHours(0, 0, 0, 0);
+            return holidayDate >= today;
+        });
+
+        if (targetIndex === -1) {
+            targetIndex = holidays.length - 1;
+        }
+
+        const targetPage = Math.floor(targetIndex / rowsPerPage);
+        const firstRowIndex = targetPage * rowsPerPage;
+
+        if (table.first && typeof (table.first as any).set === 'function') {
+            (table.first as any).set(firstRowIndex);
+        } else {
+            (table as any).first = firstRowIndex;
+        }
+    }
+
+    private paginateToCurrentDate(): void {
+        if (this.holiday && this.holiday.length > 0) {
+            this.paginateTableToDate(this.studentHolidayTable, this.holiday, 5);
+        }
+        if (this.studentHoliday && this.studentHoliday.length > 0) {
+            this.paginateTableToDate(this.orgHolidayTable, this.studentHoliday, 5);
+        }
+    }
+
+    isUpcomingHoliday(holidayDate: string): boolean {
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        const hDate = new Date(holidayDate);
+        hDate.setHours(0, 0, 0, 0);
+
+        const diffDays = Math.ceil((hDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
+        return diffDays >= 0 && diffDays <= 7;
+    }
+
+    navigateToNotice(notice: any): void {
+        if (notice && notice.id) {
+            this.router.navigate([`/home/executiveedge/transactions/publish-notice-view/${notice.id}`]);
+        }
+    }
+
+    loadNotices(): void {
+        this.publishNoticeService.getAll().subscribe({
+            next: (response: any[]) => {
+                this.notices = (response || [])
+                    .filter((notice) => notice.noticeType?.toUpperCase() !== 'STUDENT' && notice.status?.toUpperCase() === 'PUBLISHED')
+                    .map((notice) => ({
+                        id: notice.id,
+                        title: notice.title || notice.name,
+                        refNumber: notice.refNumber,
+                        source: notice.source,
+                        noticeDate: notice.noticeDate ? new Date(notice.noticeDate).toISOString().split('T')[0] : '',
+                        attachmentUrl: notice.attachmentUrl || ''
+                    }));
+            },
+            error: (err: any) => {
+                console.error('Error loading notices:', err);
+                this.messageService.add({
+                    severity: 'error',
+                    summary: 'Error',
+                    detail: 'Failed to load notices. Please try again later.',
+                    life: 3000
+                });
+                this.notices = [];
+            }
+        });
     }
 }
+
