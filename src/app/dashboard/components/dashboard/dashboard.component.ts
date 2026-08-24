@@ -1,7 +1,8 @@
-import { Component, OnDestroy, OnInit, ViewChild, effect } from '@angular/core';
+import { ChangeDetectorRef, Component, DestroyRef, OnInit, ViewChild, effect, inject } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Router } from '@angular/router';
 import { ConfirmationService, MessageService } from 'primeng/api';
-import { BehaviorSubject, Subscription } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 import { AcademicHolidayService } from '@/app/cloud-bytes/services/academic-holiday.service';
 import { OrganizationalHolidayService } from '@/app/cloud-bytes/services/organizational-holiday.service';
 import { EmployeeDetailsService } from '@/app/global/services/smallbiz-gurus/employee-details.service';
@@ -16,7 +17,6 @@ import { EmployeeCalenderComponent } from '@/app/time-clock-plus/components/comm
 import { Table } from 'primeng/table';
 import { PublishNoticeService } from '@/app/executive-edge/services/publish-notice/publish-notice.service';
 import { LayoutService } from '@/app/layout/service/layout.service';
-import { User } from '@primeicons/angular/user';
 
 export interface WorkAssignmentNotification {
     id: number;
@@ -36,7 +36,10 @@ export interface WorkAssignmentNotification {
     styleUrl: './dashboard.component.scss',
     imports: [SharedModule, EmployeeCalenderComponent]
 })
-export class DashboardComponent implements OnInit, OnDestroy {
+export class DashboardComponent implements OnInit {
+    private readonly cdr = inject(ChangeDetectorRef);
+    private readonly destroyRef = inject(DestroyRef);
+
     @ViewChild('studentHolidayTable') studentHolidayTable!: Table;
     @ViewChild('orgHolidayTable') orgHolidayTable!: Table;
 
@@ -47,7 +50,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
     revenueChartData: any;
     revenueChartOptions: any;
 
-    subscription?: Subscription;
     loading: boolean = false;
     currentUserSubject: BehaviorSubject<LoginResponse | null> = new BehaviorSubject<LoginResponse | null>(null);
     lastLoginTime: Date = new Date();
@@ -150,7 +152,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
         this.lastLoginTime = this.localstorageService.getItem("lastLoginTime") || new Date();
         if (!this.isStudentRole && employeeCode != null && employeeCode !== undefined && employeeCode.trim().length > 0) {
-            this.employeeDetailsService.getByEmployeeCode(employeeCode).subscribe({
+            this.employeeDetailsService.getByEmployeeCode(employeeCode).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
                 next: (data) => {
                     if (data) {
                         this.employeeDetails = Array.isArray(data) ? data[0] : data;
@@ -158,41 +160,51 @@ export class DashboardComponent implements OnInit, OnDestroy {
                     } else {
                         this.employeeDetails = null;
                     }
+                    this.cdr.markForCheck();
                 },
                 error: (err) => {
                     this.messageService.add({ severity: 'error', summary: 'Error', detail: err?.error?.message || 'Error fetching employee details', life: 3000 });
                     this.employeeDetails = null;
+                    this.cdr.markForCheck();
                 }
             });
             this.loadWorkAssignments(employeeCode);
         }
 
         if (this.userRoleList.includes('Faculty') && employeeCode != null && employeeCode !== undefined && employeeCode.trim().length > 0) {
-            this.employeeDetailsService.getByEmployeeCode(employeeCode).subscribe({
+            this.employeeDetailsService.getByEmployeeCode(employeeCode).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
                 next: (data) => {
                     if (data) {
                         this.employeeDetails = Array.isArray(data) ? data[0] : data;
-                        this.examinationMarksEntryService.getExaminationMarksEntryPendingByFacultyCode(this.employeeDetails?.employeeCode).subscribe({
+                        this.cdr.markForCheck();
+                        this.examinationMarksEntryService.getExaminationMarksEntryPendingByFacultyCode(this.employeeDetails?.employeeCode).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
                             next: (res) => {
                                 if (res && res.length > 0) {
                                     this.isMarksEntryPendingInfoVisible = true;
                                     this.pendingMarksEntryReportList = res.map(({ EmployeeId, EmployeeCode, EmployeeName, ...rest }: any) => rest);
                                     this.pendingMarksEntryReportHeaders = Object.keys(this.pendingMarksEntryReportList[0]);
                                 } else {
+                                    this.isMarksEntryPendingInfoVisible = false;
+                                    this.pendingMarksEntryReportList = [];
+                                    this.pendingMarksEntryReportHeaders = [];
                                     this.messageService.add({ severity: 'info', summary: 'Info', detail: 'No pending marks entry found.', life: 3000 });
                                 }
+                                this.cdr.markForCheck();
                             },
                             error: (err) => {
                                 this.messageService.add({ severity: 'error', summary: 'Error', detail: err?.error?.message || 'Error fetching marks entry pending', life: 3000 });
+                                this.cdr.markForCheck();
                             }
                         });
                     } else {
                         this.employeeDetails = null;
+                        this.cdr.markForCheck();
                     }
                 },
                 error: (err) => {
                     console.error('Error fetching employee details:', err);
                     this.employeeDetails = null;
+                    this.cdr.markForCheck();
                 }
             });
         }
@@ -384,12 +396,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
         }
     }
 
-    ngOnDestroy(): void {
-        if (this.subscription) {
-            this.subscription.unsubscribe();
-        }
-    }
-
     saveTasks(): void {
         sessionStorage.setItem('toDoList', JSON.stringify(this.tasks));
     }
@@ -416,7 +422,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
     loadWorkAssignments(employeeCode: string): void {
         this.isWorkAssignmentsLoading = true;
-        this.employeeLeaveRequestService.getByWorkAssignedEmployeeCode(employeeCode).subscribe({
+        this.employeeLeaveRequestService.getByWorkAssignedEmployeeCode(employeeCode).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
             next: (res: EmployeeLeaveRequest[]) => {
                 this.isWorkAssignmentsLoading = false;
                 if (res && res.length > 0) {
@@ -426,12 +432,14 @@ export class DashboardComponent implements OnInit, OnDestroy {
                     this.workAssignmentNotifications = [];
                     this.leaveRequestsWithWorkAssigned = [];
                 }
+                this.cdr.markForCheck();
             },
             error: (err) => {
                 this.isWorkAssignmentsLoading = false;
                 console.error('Error loading work assignments:', err);
                 this.workAssignmentNotifications = [];
                 this.leaveRequestsWithWorkAssigned = [];
+                this.cdr.markForCheck();
             }
         });
     }
@@ -615,25 +623,34 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
     processHolidays(): void {
         const year = new Date().getFullYear();
-        this.academicHolidayService.getAcademicHolidayByYear(year.toString()).subscribe((res) => {
+        this.academicHolidayService.getAcademicHolidayByYear(year.toString()).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((res) => {
             this.holiday = res || [];
             this.academic_Total_No_of_Holidays = this.holiday.length;
             this.holiday.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
-            setTimeout(() => this.paginateTableToDate(this.studentHolidayTable, this.holiday, 5), 100);
+            this.cdr.markForCheck();
+            setTimeout(() => {
+                if (this.destroyRef.destroyed) return;
+                this.paginateTableToDate(this.studentHolidayTable, this.holiday, 5);
+                this.cdr.markForCheck();
+            }, 100);
         });
 
-        this.organizationalHolidaysService.getAll().subscribe((res) => {
-            const holidays2026 = (res || []).filter((holiday: any) => {
+        this.organizationalHolidaysService.getAll().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((res) => {
+            const organizationalHolidays = (res || []).filter((holiday: any) => {
                 if (!holiday.date) return false;
                 const dateObj = new Date(holiday.date);
-                return dateObj.getFullYear() === 2026;
+                return dateObj.getFullYear() === year;
             });
-            this.studentHoliday = holidays2026;
-            this.student_Total_No_of_Holidays = holidays2026.length;
+            this.studentHoliday = organizationalHolidays;
+            this.student_Total_No_of_Holidays = organizationalHolidays.length;
             this.studentHoliday.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
-            setTimeout(() => this.paginateTableToDate(this.orgHolidayTable, this.studentHoliday, 5), 100);
-
             this.calculateUpcomingHoliday(this.studentHoliday);
+            this.cdr.markForCheck();
+            setTimeout(() => {
+                if (this.destroyRef.destroyed) return;
+                this.paginateTableToDate(this.orgHolidayTable, this.studentHoliday, 5);
+                this.cdr.markForCheck();
+            }, 100);
         });
     }
 
@@ -714,7 +731,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     }
 
     loadNotices(): void {
-        this.publishNoticeService.getAll().subscribe({
+        this.publishNoticeService.getAll().pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
             next: (response: any[]) => {
                 this.notices = (response || [])
                     .filter((notice) => notice.noticeType?.toUpperCase() !== 'STUDENT' && notice.status?.toUpperCase() === 'PUBLISHED')
@@ -726,6 +743,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
                         noticeDate: notice.noticeDate ? new Date(notice.noticeDate).toISOString().split('T')[0] : '',
                         attachmentUrl: notice.attachmentUrl || ''
                     }));
+                this.cdr.markForCheck();
             },
             error: (err: any) => {
                 console.error('Error loading notices:', err);
@@ -736,8 +754,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
                     life: 3000
                 });
                 this.notices = [];
+                this.cdr.markForCheck();
             }
         });
     }
 }
-
