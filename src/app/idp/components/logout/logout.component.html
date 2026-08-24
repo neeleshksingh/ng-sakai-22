@@ -1,0 +1,30 @@
+<p-dialog [(visible)]="logoutDialog" (onHide)="onClickNo()" [modal]="true" [closable]="false" [draggable]="false"
+  [styleClass]="'futuristic'">
+  <div class="dialog-container flex flex-col items-center gap-4 p-5">
+
+    <div class="icon-wrapper">
+      <svg class="progress-ring" width="80" height="80">
+        <circle class="progress-ring__circle" cx="40" cy="40" r="36" stroke-width="4" />
+      </svg>
+      <i class="pi pi-sign-out icon"></i>
+    </div>
+
+    <div class="text-container flex flex-col items-center gap-2 text-center">
+      <p class="logout-title m-0 text-lg font-bold text-slate-900 dark:text-slate-100">Confirm Sign Out</p>
+      <p class="logout-subtitle m-0 text-slate-500 dark:text-slate-400">You'll be logged out of all active sessions.
+        Proceed?</p>
+    </div>
+
+    <div class="action-buttons flex flex-row justify-center gap-4 w-full mt-2">
+      <button pButton class="yes-button" (click)="onClickYes()">
+        <i class="pi pi-check"></i>
+        Logout
+      </button>
+      <button pButton class="no-button" (click)="onClickNo()">
+        <i class="pi pi-times"></i>
+        Cancel
+      </button>
+    </div>
+
+  </div>
+</p-dialog>

@@ -1,0 +1,125 @@
+<!-- header.component.html -->
+<nav class="navbar" [class.scrolled]="isScrolled">
+  <div class="navbar-inner">
+    <!-- Brand -->
+    <a class="navbar-brand" routerLink="/home">
+      <div class="brand-logo">
+        <img [src]="image_Url" alt="university-logo" />
+      </div>
+      <div class="brand-text">
+        <span class="brand-name">{{title}}</span>
+        <span class="brand-sub">{{city}}</span>
+      </div>
+    </a>
+
+    <!-- Desktop Navigation -->
+    <ul class="nav-links" #navLinks
+        (mousemove)="onNavMouseMove($event)"
+        (mouseleave)="onNavMouseLeave()">
+      <li *ngFor="let item of menuItems" class="nav-item"
+          [class.has-dropdown]="item.items && item.items.length"
+          [class.active]="item.id === activeMenuId">
+
+        <!-- Simple link (no children) -->
+        <a *ngIf="!item.items || !item.items.length"
+           [routerLink]="item.routerLink"
+           class="nav-link">
+          <i [class]="item.icon" class="nav-icon"></i>
+          <span>{{item.label}}</span>
+        </a>
+
+        <!-- Dropdown trigger -->
+        <button *ngIf="item.items && item.items.length"
+                class="nav-link dropdown-trigger"
+                (click)="toggleDropdown(item.id)">
+          <i [class]="item.icon" class="nav-icon"></i>
+          <span>{{item.label}}</span>
+          <i class="pi pi-chevron-down dropdown-arrow"
+             [class.rotated]="openDropdownId === item.id"></i>
+        </button>
+
+        <!-- Dropdown menu -->
+        <div class="dropdown-menu" *ngIf="item.items && item.items.length"
+             [class.open]="openDropdownId === item.id">
+          <a *ngFor="let sub of item.items"
+             [routerLink]="sub.routerLink"
+             class="dropdown-item"
+             (click)="closeDropdown()">
+            <i [class]="sub.icon" class="dropdown-item-icon"></i>
+            <span>{{sub.label}}</span>
+          </a>
+        </div>
+      </li>
+    </ul>
+
+    <!-- Mobile Toggle -->
+    <button class="mobile-toggle" (click)="toggleMobileMenu()"
+            [class.is-active]="mobileMenuVisible"
+            aria-label="Toggle navigation">
+      <span class="toggle-bar"></span>
+      <span class="toggle-bar"></span>
+      <span class="toggle-bar"></span>
+    </button>
+  </div>
+</nav>
+
+<!-- Mobile Overlay -->
+<div class="mobile-backdrop" [class.visible]="mobileMenuVisible"
+     (click)="closeMobileMenu()"></div>
+
+<!-- Mobile Drawer -->
+<aside class="mobile-drawer" [class.open]="mobileMenuVisible">
+  <div class="drawer-header">
+    <div class="drawer-brand">
+      <div class="drawer-logo">
+        <img [src]="image_Url" alt="university-logo" />
+      </div>
+      <span class="drawer-title">{{shortName || title}}</span>
+    </div>
+    <button class="drawer-close" (click)="closeMobileMenu()" aria-label="Close menu">
+      <i class="pi pi-times"></i>
+    </button>
+  </div>
+
+  <ul class="drawer-nav">
+    <li *ngFor="let item of menuItems" class="drawer-item"
+        [class.active]="item.id === activeMenuId">
+
+      <!-- Simple link -->
+      <a *ngIf="!item.items || !item.items.length"
+         [routerLink]="item.routerLink"
+         class="drawer-link"
+         (click)="closeMobileMenu()">
+        <i [class]="item.icon" class="drawer-icon"></i>
+        <span>{{item.label}}</span>
+      </a>
+
+      <!-- Collapsible section -->
+      <ng-container *ngIf="item.items && item.items.length">
+        <button class="drawer-link drawer-collapse-trigger"
+                (click)="toggleMobileDropdown(item.id)">
+          <span class="drawer-link-left">
+            <i [class]="item.icon" class="drawer-icon"></i>
+            <span>{{item.label}}</span>
+          </span>
+          <i class="pi pi-chevron-down drawer-arrow"
+             [class.rotated]="mobileOpenId === item.id"></i>
+        </button>
+        <ul class="drawer-sub" [class.expanded]="mobileOpenId === item.id">
+          <li *ngFor="let sub of item.items">
+            <a [routerLink]="sub.routerLink"
+               class="drawer-sub-link"
+               (click)="closeMobileMenu()">
+              <i [class]="sub.icon" class="drawer-sub-icon"></i>
+              <span>{{sub.label}}</span>
+            </a>
+          </li>
+        </ul>
+      </ng-container>
+    </li>
+  </ul>
+</aside>
+
+<div>
+  <router-outlet></router-outlet>
+</div>

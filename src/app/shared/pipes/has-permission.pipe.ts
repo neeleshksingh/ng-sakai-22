@@ -1,4 +1,4 @@
-import { Inject, Pipe, PipeTransform } from '@angular/core';
+import { Pipe, PipeTransform } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable, of } from 'rxjs';
 import { distinctUntilChanged, map, shareReplay } from 'rxjs/operators';
@@ -18,7 +18,7 @@ export class HasPermissionPipe implements PipeTransform {
 
     private cache = new Map<string, Observable<boolean>>();
 
-    constructor(@Inject('Store') private store: Store) { }
+    constructor(private store: Store) { }
 
     /**
      * Usage Examples (a.k.a. the docs we wish existed):

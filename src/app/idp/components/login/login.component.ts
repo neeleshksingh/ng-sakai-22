@@ -1,4 +1,3 @@
-import { Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -63,7 +62,8 @@ export class LoginComponent implements OnInit {
         private route: ActivatedRoute,
         private authenticationService: AuthenticationService,
         private eventLogoService: EventLogoService,
-        private router: Router, private routes: ActivatedRoute, location: Location,
+        private router: Router,
+        private routes: ActivatedRoute,
         private store: Store
     ) {
     }

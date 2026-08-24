@@ -1,11 +1,109 @@
-<main class="public-home">
-    <nav>
-        <a class="brand" routerLink="/welcome"><span>NC</span>NCorePro</a><a pButton routerLink="/login" label="Sign in" icon="pi pi-arrow-right" iconPos="right"></a>
-    </nav>
-    <section>
-        <p>University operations, beautifully connected</p>
-        <h1>A calmer way to run a complex campus.</h1>
-        <div>NCorePro brings admissions, academics, finance, people, examinations, and student services into a single responsive workspace.</div>
-        <a pButton routerLink="/login" label="Explore the demo" size="large"></a>
-    </section>
-</main>
+<div class="page-container">
+
+  <section class="hero-section">
+    <div class="hero-content">
+      <div class="hero-text">
+        <h1 class="hero-title">Welcome to University CRM</h1>
+        <p class="hero-subtitle">Creating Global Leaders for Social & Economic Change.</p>
+        <div class="hero-actions">
+          <p-button label="Virtual Tour" icon="pi pi-video" [text]="true" severity="primary" size="large">
+          </p-button>
+          <p-button label="Apply Now" icon="pi pi-arrow-right" severity="primary" size="large">
+          </p-button>
+        </div>
+      </div>
+      <!-- <div class="hero-image">
+        <div class="image-wrapper">
+          <img [src]="heroImage" alt="University Campus" />
+          <div class="image-overlay"></div>
+        </div>
+      </div> -->
+    </div>
+  </section>
+
+  <section class="leadership-section">
+    <div class="section-header">
+      <h2 class="section-title">University Leadership</h2>
+      <p class="section-subtitle">Meet our dedicated leadership team</p>
+    </div>
+
+    <div class="leadership-container">
+      <p-carousel [value]="messagesFromTheDesks" [numVisible]="1" [numScroll]="1" [circular]="true"
+        [showNavigators]="true" [showIndicators]="true" styleClass="leadership-carousel">
+        <ng-template let-message pTemplate="item">
+          <div class="leadership-card">
+            <div class="leadership-content-wrapper">
+              <div class="leadership-image-section">
+                <div class="image-container">
+                  <img [src]="message.image" [alt]="message.name" />
+                </div>
+              </div>
+
+              <div class="leadership-info-section">
+                <div class="leadership-header-text">
+                  <span class="header-badge">{{message.headerTitle}}</span>
+                </div>
+
+                <div class="leadership-details">
+                  <h3 class="leader-name">{{message.name}}</h3>
+                  <p class="leader-title">{{message.title}}</p>
+
+                  <blockquote class="leader-quote">
+                    <i class="pi pi-quote-left"></i>
+                    <div [innerHTML]="message.quote"></div>
+                  </blockquote>
+                </div>
+              </div>
+            </div>
+
+            <!-- Accordion for Leadership Message -->
+            <div class="leadership-message-accordion">
+              <p-accordion>
+                <p-accordion-panel>
+                  <p-accordion-header>Read Full Message</p-accordion-header>
+                  <p-accordion-content>
+                    <div class="leadership-message" [innerHTML]="message.content"></div>
+                  </p-accordion-content>
+                </p-accordion-panel>
+              </p-accordion>
+            </div>
+          </div>
+        </ng-template>
+      </p-carousel>
+    </div>
+  </section>
+
+  <section class="values-section">
+    <div class="section-header">
+      <h2 class="section-title">Our Core Values</h2>
+      <p class="section-subtitle">The principles that guide our mission</p>
+    </div>
+
+    <div class="values-grid">
+      <div *ngFor="let value of universityValues" class="value-card">
+        <div class="value-icon">
+          <i class="pi pi-check-circle"></i>
+        </div>
+        <h3 class="value-title">{{value.title}}</h3>
+        <p class="value-description">{{value.description}}</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="quotes-section">
+    <div class="quotes-container">
+      <p-carousel [value]="quotes" [numVisible]="1" [numScroll]="1" [circular]="true" [autoplayInterval]="6000"
+        [showNavigators]="false" [showIndicators]="true" styleClass="quotes-carousel">
+        <ng-template let-quote pTemplate="item">
+          <div class="quote-slide">
+            <div class="quote-content">
+              <i class="pi pi-quote-left quote-icon"></i>
+              <p class="quote-text">"{{quote.text}}"</p>
+              <cite class="quote-author">— {{quote.author}}</cite>
+            </div>
+          </div>
+        </ng-template>
+      </p-carousel>
+    </div>
+  </section>
+</div>

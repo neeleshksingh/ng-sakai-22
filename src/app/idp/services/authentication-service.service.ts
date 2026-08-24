@@ -49,13 +49,24 @@ export class AuthenticationService {
   }
 
   logout() {
-    var lastLoggedInUserStr = localStorage.getItem("lastLoggedInUser");
-    var lastLoggedInUser = lastLoggedInUserStr ? JSON.parse(lastLoggedInUserStr) : null;
+    const lastLoggedInUserStr = localStorage.getItem('lastLoggedInUser');
+    let lastLoggedInUser: { displayImageUrl?: string; userName?: string } = {};
+
+    if (lastLoggedInUserStr) {
+      try {
+        lastLoggedInUser = JSON.parse(lastLoggedInUserStr) ?? {};
+      } catch {
+        // Ignore malformed cached login details while signing out.
+      }
+    }
 
     // localStorage.clear();
     // sessionStorage.clear();
     localStorage.removeItem('currentUser');
-    localStorage.setItem('lastLoggedInUser', JSON.stringify({ displayImageUrl: lastLoggedInUser.displayImageUrl, userName: lastLoggedInUser.userName, }));
+    localStorage.setItem('lastLoggedInUser', JSON.stringify({
+      displayImageUrl: lastLoggedInUser.displayImageUrl ?? '',
+      userName: lastLoggedInUser.userName ?? '',
+    }));
     this.currentUserSubject.next(null);
   }
 

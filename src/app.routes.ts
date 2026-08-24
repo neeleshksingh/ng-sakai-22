@@ -5,14 +5,21 @@ import { SurveyPendingGuard } from './app/shared/guard/survey-pending.guard';
 import { Roles } from './app/shared/models/commons/user-roles';
 
 export const appsRoutes: Routes = [
-    { path: '', pathMatch: 'full', redirectTo: 'login' },
-    { path: 'login', loadComponent: () => import('./app/idp/components/login/login.component').then(m => m.LoginComponent), title: 'Login' },
+    {
+        path: '', loadComponent: () => import('./app/home/components/header/header.component').then(m => m.HeaderComponent), title: 'Home',
+        children: [
+            { path: '', loadChildren: () => import('./app/idp/idp.module').then(m => m.IdpModule) },
+            { path: 'login', loadComponent: () => import('./app/idp/components/login/login.component').then(m => m.LoginComponent), title: 'Login' },
+            // { path: 'home', loadComponent: () => import('./home/components/home/home.component').then(m => m.HomeComponent), title: 'Home' },
+            // { path: 'career', loadChildren: () => import('./career/career.module').then(mod => mod.CareerModule) },
+            // { path: 'admissions/student-onboarding', loadChildren: () => import('./student-onboarding/student-onboarding.module').then(mod => mod.StudentOnboardingModule) },
+        ]
+    },
     {
         path: 'home', component: AppLayout,
         canActivate: [AuthGuard],
         canActivateChild: [SurveyPendingGuard],
         children: [
-            { path: '', pathMatch: 'full', redirectTo: 'dashboard' },
             {
                 path: 'dashboard',
                 loadComponent: () => import('./app/dashboard/components/dashboard/dashboard.component').then(m => m.DashboardComponent),
