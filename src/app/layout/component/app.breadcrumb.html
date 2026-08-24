@@ -1,0 +1,15 @@
+<nav class="layout-breadcrumb" aria-label="Breadcrumb">
+    <ol>
+        <li>
+            <a [routerLink]="['/home/dashboard']">
+                <!-- <i class="pi pi-home"></i> -->
+                <span class="app-name">{{ partnerName }}</span>
+            </a>
+        </li>
+        <li class="layout-breadcrumb-chevron" aria-hidden="true">/</li>
+        <ng-template ngFor let-item let-last="last" [ngForOf]="breadcrumbs$ | async">
+            <li>{{ item.label }}</li>
+            <li *ngIf="!last" class="layout-breadcrumb-chevron" aria-hidden="true">/</li>
+        </ng-template>
+    </ol>
+</nav>

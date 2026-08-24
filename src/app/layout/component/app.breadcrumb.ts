@@ -1,56 +1,92 @@
-import { ChangeDetectionStrategy, Component, DestroyRef, inject, signal } from '@angular/core';
+import { environment } from '@/environments/environment';
+import { AsyncPipe, NgForOf, NgIf } from '@angular/common';
+import { ChangeDetectionStrategy, Component, DestroyRef, inject } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
-import { filter } from 'rxjs';
+import { ActivatedRouteSnapshot, NavigationEnd, Router, RouterLink } from '@angular/router';
+import { BehaviorSubject, filter } from 'rxjs';
 
 @Component({
     selector: 'app-breadcrumb',
     standalone: true,
-    template: `<nav class="ncore-breadcrumb" aria-label="Breadcrumb">
-        <strong>Sarala Birla University</strong>
-        <i class="pi pi-angle-right"></i>
-        <span>{{ pageTitle() }}</span>
-    </nav>`,
+    imports: [AsyncPipe, NgForOf, NgIf, RouterLink],
+    templateUrl: './app.breadcrumb.html',
     styles: [
         `
-            .ncore-breadcrumb {
-                display: flex;
-                align-items: center;
-                gap: 0.45rem;
-                min-width: 0;
-                white-space: nowrap;
-            }
-            .ncore-breadcrumb strong {
-                color: var(--text-color);
-            }
-            .ncore-breadcrumb span {
-                overflow: hidden;
-                text-overflow: ellipsis;
+            .layout-breadcrumb {
+                margin-left: 1rem;
+
+                ol {
+                    display: flex;
+                    align-items: center;
+                    margin: 0;
+                    padding: 0;
+                    list-style: none;
+                    gap: 1rem;
+                    flex-wrap: wrap;
+                    color: var(--text-color-secondary);
+
+                    a {
+                        color: var(--text-color-secondary);
+                    }
+                }
+
+                .app-name {
+                    font-weight: 700;
+                    text-transform: uppercase;
+                }
             }
         `
     ],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AppBreadcrumb {
-    private readonly router = inject(Router);
-    private readonly activatedRoute = inject(ActivatedRoute);
+    private readonly _breadcrumbs$ = new BehaviorSubject<Breadcrumb[]>([]);
     private readonly destroyRef = inject(DestroyRef);
 
-    readonly pageTitle = signal('Dashboard');
+    readonly breadcrumbs$ = this._breadcrumbs$.asObservable();
 
-    constructor() {
-        this.updateTitle();
+    constructor(private readonly router: Router) {
+        this.updateBreadcrumbs();
+
         this.router.events
             .pipe(
                 filter((event) => event instanceof NavigationEnd),
                 takeUntilDestroyed(this.destroyRef)
             )
-            .subscribe(() => this.updateTitle());
+            .subscribe(() => this.updateBreadcrumbs());
     }
 
-    private updateTitle(): void {
-        let route = this.activatedRoute;
-        while (route.firstChild) route = route.firstChild;
-        this.pageTitle.set(route?.snapshot?.title ?? route?.snapshot?.data?.['title'] ?? 'Dashboard');
+    private updateBreadcrumbs(): void {
+        const breadcrumbs: Breadcrumb[] = [];
+        this.addBreadcrumb(this.router.routerState.snapshot.root, [], breadcrumbs);
+        this._breadcrumbs$.next(breadcrumbs);
     }
+
+    private addBreadcrumb(route: ActivatedRouteSnapshot, parentUrl: string[], breadcrumbs: Breadcrumb[]): void {
+        const routeUrl = parentUrl.concat(route.url.map(url => url.path));
+        const breadcrumb = route.data['breadcrumb'] ?? route.title ?? route.data['title'];
+        const parentBreadcrumb = route.parent
+            ? route.parent.data['breadcrumb'] ?? route.parent.title ?? route.parent.data['title']
+            : null;
+
+        if (breadcrumb && breadcrumb !== parentBreadcrumb) {
+            breadcrumbs.push({
+                label: breadcrumb,
+                url: '/' + routeUrl.join('/')
+            });
+        }
+
+        if (route.firstChild) {
+            this.addBreadcrumb(route.firstChild, routeUrl, breadcrumbs);
+        }
+    }
+
+    get partnerName(): string {
+        return environment.partner.name;
+    }
+}
+
+interface Breadcrumb {
+    label: string;
+    url?: string;
 }
