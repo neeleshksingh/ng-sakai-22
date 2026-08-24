@@ -1,0 +1,1464 @@
+<div class="pb-6">
+    <div class="grid">
+        <p-toast></p-toast>
+        <div class="col-12">
+            <div class="toolbar-demo card">
+                <p-toolbar>
+                    <div class="p-toolbar-group-left">
+                        <div class="header-left-div">
+                            <div class="header-div1">
+                                <i class="fa-brands fa-docker" style="font-size: 40px;"></i>
+                            </div>
+                            <div class="header-div2">
+                                <h5>{{componentName}}</h5>
+                            </div>
+                        </div>
+                    </div>
+                    <ng-template pTemplate="right">
+                        <div class="d-flex">
+                            <button pButton type="button" label="StudentProfileUpdate" pTooltip="Update General Info"
+                                tooltipPosition="bottom" routerLink="/home/students/student-profile-update"></button>
+                        </div>
+                    </ng-template>
+                </p-toolbar>
+            </div>
+        </div>
+
+        <div class="col-12  ">
+
+            <!-- <div class="card"> -->
+            <form [formGroup]="studentDetailsUpdateRequestGroup">
+                <div class="card">
+                    <div class="formgrid grid align-items-end">
+                        <div class="field col-12 sm:col-12 md:col-12 lg:col-12 pl-4 pr-4">
+                            <h3><u> General Details Update Request </u></h3>
+                        </div>
+                        <div class="field col-12 sm:col-6 md:col-6 lg:col-3 pl-4 pr-4">
+                            <label>First Name <span>*</span></label>
+                            <input pInputText type="text" id="firstName" [disabled]="disableProperty(value1)"
+                                [style]="{'width':'100%'}"
+                                [(ngModel)]="studentDetailsUpdateRequestGroup.value.firstName"
+                                formControlName="firstName" #value1
+                                (blur)="onDataChange(value1, documentType1, student.firstName)" />
+                        </div>
+                        <div class="field col-12 sm:col-6 md:col-6 lg:col-3 pl-4 pr-4">
+                            <label>Middle Name</label>
+                            <input pInputText type="text" id="middleName" [disabled]="disableProperty(value2)"
+                                [style]="{'width':'100%'}"
+                                [(ngModel)]="studentDetailsUpdateRequestGroup.value.middleName"
+                                formControlName="middleName" #value2
+                                (blur)="onDataChange(value2, documentType1, student.middleName)" />
+                        </div>
+                        <div class="field col-12 sm:col-6 md:col-6 lg:col-3 pl-4 pr-4">
+                            <label>Last Name</label>
+                            <input pInputText type="text" id="lastName" [disabled]="disableProperty(value3)" #value3
+                                (blur)="onDataChange(value3, documentType1, student.lastName)"
+                                [style]="{'width':'100%'}" [(ngModel)]="studentDetailsUpdateRequestGroup.value.lastName"
+                                formControlName="lastName" />
+                        </div>
+                        <div class="field col-12 sm:col-6 md:col-6 lg:col-3 pl-4 pr-4">
+                            <label>Comment <span>*</span></label>
+                            <input pInputText type="text" id="nameComment" #comment1 (blur)="addComment(comment1)"
+                                [(ngModel)]="studentDetailsUpdateRequestGroup.value.nameComment"
+                                [style]="{'width':'100%'}" formControlName="nameComment" />
+                        </div>
+                        <div class="field col-12 md:col-12 lg:col-3 pl-4 pr-4">
+                            <label> Document Type </label>
+                            <p-select #documentType1 inputId="nameDocumentType" id="nameDocumentType"
+                                [style]="{'width':'100%'}" [disabled]="!comment1.value || !value1.value || (student.firstName == value1.value && student.middleName == value2.value
+                                    && student.lastName == value3.value)" [options]="studentNameUpdateDocumentList"
+                                [(ngModel)]="studentDetailsUpdateRequestGroup.value.nameDocumentType"
+                                formControlName="nameDocumentType" (onChange)="onDocumentTypeChanged($event, submitButton1);
+                                            captureMultipalProperty(value1,value2,value3,null,null,null,null,null)">
+                            </p-select>
+                        </div>
+                        <div class="field col-12 sm:col-6 md:col-6 lg:col-3 pl-4 pr-4" style="text-align: center;">
+                            <label>
+                                <ng-container *ngIf="displayFileNameFor==='nameSubmit'">
+                                    {{studentDetailsUpdateRequestGroup.value.fileName}}
+                                </ng-container>
+                            </label>
+                            <p-fileupload #fileUpload1 [disabled]="isStudentNameFileUploadDisabled" id="fileUpload1"
+                                (onSelect)="documentUpload($event,fileUpload1,1,submitButton1)" mode="basic"
+                                chooseLabel="Upload">
+                            </p-fileupload>
+                        </div>
+                        <div class="field col-12 sm:col-6 md:col-6 lg:col-3 pl-4 pr-4" style="text-align: center;">
+                            <button #submitButton1 [disabled]="true" pButton id="nameSubmit"
+                                (click)="submit(documentType1, submitButton1)" type="button" label="Submit"></button>
+                        </div>
+                        <div class="field col-12">
+                            <hr>
+                        </div>
+
+                        <div class="field col-12 sm:col-6 md:col-6 lg:col-3 pl-4 pr-4">
+                            <label>Date of Birth <span>*</span></label>
+                            <p-datepicker [showIcon]="true" inputId="icon" id="dob" dateFormat="dd-M-yy"
+                                [style]="{'width':'100%'}" [disabled]="disableProperty(value4)" #value4
+                                (onSelect)="onDateChange(value4, documentType2, student.dob, $event)"
+                                [(ngModel)]="studentDetailsUpdateRequestGroup.value.dob"
+                                formControlName="dob"></p-datepicker>
+                        </div>
+                        <div class="field col-12 sm:col-6 md:col-6 lg:col-3 pl-4 pr-4">
+                            <label> Comment <span>*</span></label>
+                            <input #comment2 pInputText type="text" id="dobComment" (blur)="addComment(comment2)"
+                                [(ngModel)]="studentDetailsUpdateRequestGroup.value.dobComment"
+                                [style]="{'width':'100%'}" formControlName="dobComment" />
+                        </div>
+                        <div class="field col-12 md:col-12 lg:col-3 pl-4">
+                            <label>Document Type</label>
+                            <p-select #documentType2 inputId="dobDocumentType" id="dobDocumentType"
+                                [options]="studentDOBUpdateDocumentList" [style]="{'width':'100%'}"
+                                [(ngModel)]="studentDetailsUpdateRequestGroup.value.dobDocumentType"
+                                formControlName="dobDocumentType"
+                                (onChange)="onDocumentTypeChanged($event, submitButton2)"
+                                [disabled]="!comment2.value || !value4.value || (student.dob == value4.value)">
+                            </p-select>
+                        </div>
+                        <div class="field col-12 sm:col-6 md:col-6 lg:col-2" style="text-align: center;">
+                            <label>
+                                <ng-container *ngIf="displayFileNameFor==='dobSubmit'">
+                                    {{studentDetailsUpdateRequestGroup.value.fileName}}
+                                </ng-container>
+                            </label>
+                            <p-fileupload #fileUpload2 (onSelect)="documentUpload($event,fileUpload2,2,submitButton2)"
+                                mode="basic" [disabled]="isStudentDOBFileUploadDisabled" chooseLabel="Upload">
+                            </p-fileupload>
+                        </div>
+                        <div class="field col-12 sm:col-6 md:col-6 lg:col-1" style="text-align: center;">
+                            <label></label>
+                            <button #submitButton2 [disabled]="true" pButton id="dobSubmit"
+                                (click)="submit(documentType2, submitButton2)" type="button" label="Submit"></button>
+                        </div>
+
+                        <div class="field col-12 sm:col-6 md:col-6 lg:col-3 pl-4 pr-4">
+                            <label>Gender <span>*</span></label>
+                            <p-select [filter]="true" inputId="gender" id="gender" [options]="genderList"
+                                [style]="{'width': '100%'}" [disabled]="disableProperty(value5)" #value5
+                                (onChange)="onDropDownSelect(value5, documentType3, student.gender, $event)"
+                                [(ngModel)]="studentDetailsUpdateRequestGroup.value.gender" formControlName="gender">
+                            </p-select>
+                        </div>
+                        <div class="field col-12 sm:col-6 md:col-6 lg:col-3 pl-4 pr-4">
+                            <label>Comment <span>*</span></label>
+                            <input #comment3 pInputText type="text" id="genderComment" [style]="{'width': '100%'}"
+                                [(ngModel)]="studentDetailsUpdateRequestGroup.value.genderComment"
+                                formControlName="genderComment" (blur)="addComment(comment3)" />
+                        </div>
+                        <div class="field col-12 md:col-12 lg:col-3 pl-4 ">
+                            <label> Document Type </label>
+                            <p-select [filter]="true" inputId="genderDocumentType" id="genderDocumentType"
+                                [disabled]="!comment3.value || !value5.value || (student.gender == value5.value)"
+                                [options]="studentGenderUpdateDocumentList" #documentType3 [style]="{'width': '100%'}"
+                                [(ngModel)]="studentDetailsUpdateRequestGroup.value.genderDocumentType"
+                                formControlName="genderDocumentType"
+                                (onChange)="onDocumentTypeChanged($event, submitButton3)">
+                            </p-select>
+                        </div>
+                        <div class="field col-12 sm:col-6 md:col-6 lg:col-2 " style="text-align: center;">
+                            <label>
+                                <ng-container *ngIf="displayFileNameFor==='genderSubmit'">
+                                    {{studentDetailsUpdateRequestGroup.value.fileName}}
+                                </ng-container>
+                            </label>
+                            <p-fileupload #fileUpload3 (onSelect)="documentUpload($event,fileUpload3,3,submitButton3)"
+                                mode="basic" chooseLabel="Upload" [disabled]="isStudentGenderFileUploadDisabled">
+                            </p-fileupload>
+                        </div>
+                        <div class="field col-12 sm:col-6 md:col-6 lg:col-1 " style="text-align: center;">
+                            <label></label>
+                            <button #submitButton3 [disabled]="true" pButton id="genderSubmit"
+                                style="text-align: center;" (click)="submit(documentType3, submitButton3)" type="button"
+                                label="Submit"></button>
+                        </div>
+
+                        <div class="field col-12 sm:col-6 md:col-6 lg:col-3 pl-4 pr-4">
+                            <label>Category <span>*</span></label>
+                            <p-select [filter]="true" inputId="casteCategoryId" id="casteCategoryId" #value7
+                                [disabled]="disableProperty(value7)" [options]="categoryList" [showClear]="true"
+                                (onChange)="onDropDownSelect(value7, documentType5, student.casteCategoryId, $event)"
+                                [(ngModel)]="studentDetailsUpdateRequestGroup.value.casteCategoryId"
+                                [style]="{'width': '100%'}" placeholder="Select Category"
+                                formControlName="casteCategoryId"></p-select>
+                        </div>
+                        <div class="field col-12 sm:col-6 md:col-6 lg:col-3 pl-4 pr-4">
+                            <label> Comment <span>*</span></label>
+                            <input #comment5 pInputText type="text" id="categoryComment" [style]="{'width': '100%'}"
+                                [(ngModel)]="studentDetailsUpdateRequestGroup.value.categoryComment"
+                                formControlName="categoryComment" (blur)="addComment(comment5)" />
+                        </div>
+                        <div class="field col-12 md:col-12 lg:col-3 pl-4">
+                            <label> Document Type </label>
+                            <p-select #documentType5 inputId="categoryDocumentType" id="categoryDocumentType"
+                                [options]="studentCasteUpdateDocumentList" [style]="{'width': '100%'}"
+                                [disabled]="!comment5.value || !value7.value || (student.casteCategoryId == value7.value)"
+                                [(ngModel)]="studentDetailsUpdateRequestGroup.value.categoryDocumentType"
+                                formControlName="categoryDocumentType"
+                                (onChange)="onDocumentTypeChanged($event, submitButton5)">
+                            </p-select>
+                        </div>
+                        <div class="field col-12 sm:col-6 md:col-6 lg:col-2" style="text-align: center;">
+                            <label> </label>
+                            <p-fileupload #fileUpload5 mode="basic" [disabled]="isStudentCategoryFileUploadDisabled"
+                                (onSelect)="documentUpload($event,fileUpload5,5,submitButton5)" chooseLabel="Upload">
+                            </p-fileupload>
+                        </div>
+                        <div class="field col-12 sm:col-6 md:col-6 lg:col-1" style="text-align: center;">
+                            <label></label>
+                            <button #submitButton5 [disabled]="true" pButton id="categorySubmit"
+                                (click)="submit(documentType5, submitButton5)" type="button" label="Submit"></button>
+                        </div>
+
+                        <div class="field col-12 sm:col-6 md:col-6 lg:col-3 pl-4 pr-4">
+                            <label>Religion <span>*</span></label>
+                            <p-select [filter]="true" inputId="maritalStatus" id="religionId" #value8
+                                [disabled]="disableProperty(value8)" [options]="religionList"
+                                placeholder="Select Religion" [style]="{'width': '100%'}"
+                                (onChange)="onDropDownSelect(value8, documentType6, student.religionId, $event)"
+                                [(ngModel)]="studentDetailsUpdateRequestGroup.value.religionId" [showClear]="true"
+                                formControlName="religionId"></p-select>
+                        </div>
+                        <div class="field col-12 sm:col-6 md:col-6 lg:col-3 pl-4 pr-4"><label>
+                                Comment <span>*</span></label>
+                            <input #comment6 pInputText type="text" id="religionComment" [style]="{'width': '100%'}"
+                                [(ngModel)]="studentDetailsUpdateRequestGroup.value.religionComment"
+                                formControlName="religionComment" (blur)="addComment(comment6)" />
+                        </div>
+                        <div class="field col-12 md:col-12 lg:col-3 pl-4 ">
+                            <label> Document Type </label>
+                            <p-select #documentType6 inputId="religionDocumentType" id="religionDocumentType"
+                                [options]="studentCasteUpdateDocumentList" [style]="{'width': '100%'}"
+                                [disabled]="!comment6.value || !value8.value || (student.religionId == value8.value)"
+                                [(ngModel)]="studentDetailsUpdateRequestGroup.value.religionDocumentType"
+                                formControlName="religionDocumentType"
+                                (onChange)="onDocumentTypeChanged($event, submitButton6)">
+                            </p-select>
+                        </div>
+                        <div class="field col-12 sm:col-6 md:col-6 lg:col-2" style="text-align: center;">
+                            <label> </label>
+                            <p-fileupload #fileUpload6 mode="basic" [disabled]="isStudentReligionFileUploadDisabled"
+                                (onSelect)="documentUpload($event,fileUpload6,6,submitButton6)" chooseLabel="Upload">
+                            </p-fileupload>
+                        </div>
+                        <div class="field col-12 sm:col-6 md:col-6 lg:col-1" style="text-align: center;">
+                            <label></label>
+                            <button #submitButton6 [disabled]="true" pButton id="religionSubmit"
+                                (click)="submit(documentType6, submitButton6)" type="button" label="Submit"></button>
+                        </div>
+
+                        <div class="field col-12 sm:col-6 md:col-6 lg:col-3 pl-4 pr-4">
+                            <label>Aadhar Number <span>*</span></label>
+                            <input pInputText type="text" id="aadharNumber" minlength="12"
+                                [(ngModel)]="studentDetailsUpdateRequestGroup.value.aadharNumber"
+                                [style]="{'width': '100%'}" formControlName="aadharNumber" #value9
+                                [disabled]="disableProperty(value9)"
+                                (blur)="onDataChange(value9, documentType7, student.aadharNumber)" />
+                            <ng-container *ngIf="studentDetailsUpdateRequestGroup.controls['aadharNumber'].errors">
+                                <p *ngIf="studentDetailsUpdateRequestGroup.controls['aadharNumber'].hasError('minlength') ||
+                                    studentDetailsUpdateRequestGroup.controls['aadharNumber'].hasError('maxlength')">
+                                    Aadhar number must be 12 digit.
+                                </p>
+                                <p *ngIf="studentDetailsUpdateRequestGroup.controls['aadharNumber'].errors['pattern']">
+                                    Aadhar number must be number.
+                                </p>
+                            </ng-container>
+                        </div>
+                        <div class="field col-12 sm:col-6 md:col-6 lg:col-3 pl-4 pr-4">
+                            <label>Comment <span>*</span></label>
+                            <input #comment7 pInputText type="text" id="aadharComment" [style]="{'width': '100%'}"
+                                [(ngModel)]="studentDetailsUpdateRequestGroup.value.aadharComment"
+                                formControlName="aadharComment" (blur)="addComment(comment7)" />
+                        </div>
+                        <div class="field col-12 md:col-12 lg:col-3 pl-4">
+                            <label> Document Type </label>
+                            <p-select #documentType7 inputId="aadharDocumentType" id="aadharDocumentType"
+                                [options]="aadharUpdateDocumentList" [style]="{'width': '100%'}"
+                                [disabled]="!comment7.value || !value9.value || (student.aadharNumber == value9.value)"
+                                [(ngModel)]="studentDetailsUpdateRequestGroup.value.aadharDocumentType"
+                                formControlName="aadharDocumentType"
+                                (onChange)="onDocumentTypeChanged($event, submitButton7)">
+                            </p-select>
+                        </div>
+                        <div class="field col-12 sm:col-6 md:col-6 lg:col-2" style="text-align: center;">
+                            <label> </label>
+                            <p-fileupload #fileUpload7 mode="basic" [disabled]="isStudentAadharFileUploadDisabled"
+                                (onSelect)="documentUpload($event,fileUpload7,7,submitButton7)" chooseLabel="Upload">
+                            </p-fileupload>
+                        </div>
+                        <div class="field col-12 sm:col-6 md:col-6 lg:col-1"
+                            style="padding-top: 22px; text-align: center;">
+                            <label></label>
+                            <button #submitButton7 [disabled]="true" pButton id="aadharSubmit"
+                                (click)="submit(documentType7, submitButton7)" type="button" label="Submit"></button>
+                        </div>
+
+                        <div class="field col-12 sm:col-6 md:col-6 lg:col-3 pl-4 pr-4">
+                            <label>Voter ID <span>*</span></label>
+                            <input pInputText type="text" id="voterId" minlength="10" #value10
+                                [disabled]="disableProperty(value10)" [style]="{'width': '100%'}"
+                                (blur)="onDataChange(value10, documentType8, student.voterId)"
+                                [(ngModel)]="studentDetailsUpdateRequestGroup.value.voterId"
+                                formControlName="voterId" />
+                            <ng-container *ngIf="studentDetailsUpdateRequestGroup.controls['voterId'].errors">
+                                <p
+                                    *ngIf="studentDetailsUpdateRequestGroup.controls['voterId'].hasError('minlength') ||
+                                                studentDetailsUpdateRequestGroup.controls['voterId'].hasError('maxlength')">
+                                    Voter ID must be 10 digit.
+                                </p>
+                            </ng-container>
+                        </div>
+                        <div class="field col-12 sm:col-6 md:col-6 lg:col-3 pl-4 pr-4">
+                            <label> Comment <span>*</span></label>
+                            <input #comment8 pInputText type="text" id="voterComment" [style]="{'width': '100%'}"
+                                [(ngModel)]="studentDetailsUpdateRequestGroup.value.voterComment"
+                                formControlName="voterComment" (blur)="addComment(comment8)" />
+                        </div>
+                        <div class="field col-12 md:col-12 lg:col-3 pl-4">
+                            <label> Document Type </label>
+                            <p-select #documentType8 inputId="voterDocumentType" id="voterDocumentType"
+                                [options]="studentVoterUpdateDocumentList" [style]="{'width': '100%'}"
+                                [disabled]="!comment8.value || !value10.value || (student.voterId == value10.value)"
+                                [(ngModel)]="studentDetailsUpdateRequestGroup.value.voterDocumentType"
+                                formControlName="voterDocumentType"
+                                (onChange)="onDocumentTypeChanged($event, submitButton8)">
+                            </p-select>
+                        </div>
+                        <div class="field col-12 sm:col-6 md:col-6 lg:col-2" style="text-align: center;">
+                            <label> </label>
+                            <p-fileupload #fileUpload8 mode="basic" [disabled]="isStudentVoterFileUploadDisabled"
+                                (onSelect)="documentUpload($event,fileUpload8,8,submitButton8)" chooseLabel="Upload">
+                            </p-fileupload>
+                        </div>
+                        <div class="field col-12 sm:col-6 md:col-6 lg:col-1"
+                            style="padding-top: 22px; text-align: center;">
+                            <label></label>
+                            <button #submitButton8 [disabled]="true" pButton id="voterSubmit"
+                                (click)="submit(documentType8, submitButton8)" type="button" label="Submit"></button>
+                        </div>
+
+                        <div class="field col-12 sm:col-6 md:col-6 lg:col-3 pl-4 pr-4">
+                            <label>PAN Number <span>*</span></label>
+                            <input pInputText type="text" id="pan" minlength="10" #value11
+                                [disabled]="disableProperty(value11)" [style]="{'width': '100%'}"
+                                (blur)="onDataChange(value11, documentType9, student.pan)"
+                                [(ngModel)]="studentDetailsUpdateRequestGroup.value.pan" formControlName="pan" />
+                            <ng-container *ngIf="studentDetailsUpdateRequestGroup.controls['pan'].errors">
+                                <p *ngIf="studentDetailsUpdateRequestGroup.controls['pan'].hasError('minlength') ||
+                                            studentDetailsUpdateRequestGroup.controls['pan'].hasError('maxlength')">
+                                    PAN number must be 10 digit.
+                                </p>
+                            </ng-container>
+                        </div>
+                        <div class="field col-12 sm:col-6 md:col-6 lg:col-3 pl-4 pr-4">
+                            <label>Comment <span>*</span></label>
+                            <input #comment9 pInputText type="text" id="panComment" [style]="{'width': '100%'}"
+                                [(ngModel)]="studentDetailsUpdateRequestGroup.value.panComment"
+                                formControlName="panComment" (blur)="addComment(comment9)" />
+                        </div>
+                        <div class="field col-12 md:col-12 lg:col-3 pl-4">
+                            <label> Document Type </label>
+                            <p-select #documentType9 inputId="panDocumentType" id="panDocumentType"
+                                [options]="studentPANUpdateDocumentList" [style]="{'width': '100%'}"
+                                [disabled]="!comment9.value || !value11.value || (student.pan == value11.value)"
+                                [(ngModel)]="studentDetailsUpdateRequestGroup.value.panDocumentType"
+                                formControlName="panDocumentType"
+                                (onChange)="onDocumentTypeChanged($event, submitButton9)">
+                            </p-select>
+                        </div>
+                        <div class="field col-12 sm:col-6 md:col-6 lg:col-2" style="text-align: center;">
+                            <label> </label>
+                            <p-fileupload #fileUpload9 mode="basic" [disabled]="isStudentPANFileUploadDisabled"
+                                (onSelect)="documentUpload($event,fileUpload9,9,submitButton9)" chooseLabel="Upload">
+                            </p-fileupload>
+                        </div>
+                        <div class="field col-12 sm:col-6 md:col-6 lg:col-1"
+                            style="padding-top: 22px; text-align: center;">
+                            <label></label>
+                            <button #submitButton9 [disabled]="true" pButton id="panSubmit"
+                                (click)="submit(documentType9, submitButton9)" type="button" label="Submit"></button>
+                        </div>
+
+                        <div class="field col-12 sm:col-6 md:col-6 lg:col-3 pl-4 pr-4">
+                            <label>Physically Handicaped <span>*</span></label>
+                            <p-select [filter]="true" inputId="isPhysicallyHandicaped" id="isPhysicallyHandicaped"
+                                [options]="yesNoList"
+                                [(ngModel)]="studentDetailsUpdateRequestGroup.value.isPhysicallyHandicaped"
+                                [style]="{'width': '100%'}" formControlName="isPhysicallyHandicaped"
+                                [disabled]="disableProperty(value12)" #value12
+                                (onChange)="onDropDownSelect(value12, documentType10, student.isPhysicallyHandicaped, $event)">
+                            </p-select>
+                        </div>
+                        <div class="field col-12 sm:col-6 md:col-6 lg:col-3 pl-4 pr-4">
+                            <label>Comment <span>*</span></label>
+                            <input #comment10 pInputText type="text" id="physicallyHandicapedComment"
+                                [style]="{'width': '100%'}"
+                                [(ngModel)]="studentDetailsUpdateRequestGroup.value.physicallyHandicapedComment"
+                                formControlName="physicallyHandicapedComment" (blur)="addComment(comment10)" />
+                        </div>
+                        <div class="field col-12 md:col-12 lg:col-3 pl-4">
+                            <label> Document Type </label>
+                            <p-select #documentType10 inputId="physicallyHandicapedDocumentType"
+                                id="physicallyHandicapedDocumentType"
+                                [options]="studentPhysicallyHandicapedUpdateDocumentList" [style]="{'width': '100%'}"
+                                [disabled]="!comment10.value || !value12.value || (student.isPhysicallyHandicaped == value12.value)"
+                                [(ngModel)]="studentDetailsUpdateRequestGroup.value.physicallyHandicapedDocumentType"
+                                formControlName="physicallyHandicapedDocumentType"
+                                (onChange)="onDocumentTypeChanged($event, submitButton10)">
+                            </p-select>
+                        </div>
+                        <div class="field col-12 sm:col-6 md:col-6 lg:col-2" style="text-align: center;">
+                            <label> </label>
+                            <p-fileupload #fileUpload10 mode="basic"
+                                [disabled]="isStudentphysicallyHandicapedFileUploadDisabled"
+                                (onSelect)="documentUpload($event,fileUpload10,10,submitButton10)" chooseLabel="Upload">
+                            </p-fileupload>
+                        </div>
+                        <div class="field col-12 sm:col-6 md:col-6 lg:col-1"
+                            style="padding-top: 22px; text-align: center;">
+                            <label></label>
+                            <button #submitButton10 [disabled]="true" pButton id="physicallyHandicapedSubmit"
+                                (click)="submit(documentType10, submitButton10)" type="button" label="Submit"></button>
+                        </div>
+
+                        <div class="field col-12 sm:col-6 md:col-6 lg:col-3 pl-4 pr-4">
+                            <label>Minority <span>*</span></label>
+                            <p-select [filter]="true" inputId="isMinority" id="isMinority" [options]="yesNoList"
+                                [(ngModel)]="studentDetailsUpdateRequestGroup.value.isMinority"
+                                formControlName="isMinority" [disabled]="disableProperty(value13)" #value13
+                                [style]="{'width': '100%'}"
+                                (onChange)="onDropDownSelect(value13, documentType11, student.isMinority, $event)">
+                            </p-select>
+                        </div>
+                        <div class="field col-12 sm:col-6 md:col-6 lg:col-3 pl-4 pr-4">
+                            <label>Comment <span>*</span></label>
+                            <input #comment11 pInputText type="text" id="minorityComment" [style]="{'width': '100%'}"
+                                [(ngModel)]="studentDetailsUpdateRequestGroup.value.minorityComment"
+                                formControlName="minorityComment" (blur)="addComment(comment11)" />
+                        </div>
+                        <div class="field col-12 md:col-12 lg:col-3 pl-4 ">
+                            <label> Document Type </label>
+                            <p-select #documentType11 inputId="minorityDocumentType" id="minorityDocumentType"
+                                [options]="studentMinorityUpdateDocumentList" [style]="{'width': '100%'}"
+                                [disabled]="!comment11.value || !value13.value || (student.isMinority== value13.value)"
+                                [(ngModel)]="studentDetailsUpdateRequestGroup.value.minorityDocumentType"
+                                formControlName="minorityDocumentType"
+                                (onChange)="onDocumentTypeChanged($event, submitButton11)">
+                            </p-select>
+                        </div>
+                        <div class="field col-12 sm:col-6 md:col-6 lg:col-2" style="text-align: center;">
+                            <label> </label>
+                            <p-fileupload #fileUpload11 mode="basic" [disabled]="isStudentMinorityFileUploadDisabled"
+                                (onSelect)="documentUpload($event,fileUpload11,11,submitButton11)" chooseLabel="Upload">
+                            </p-fileupload>
+                        </div>
+                        <div class="field col-12 sm:col-6 md:col-6 lg:col-1"
+                            style="padding-top: 22px; text-align: center;">
+                            <label></label>
+                            <button #submitButton11 [disabled]="true" pButton id="minoritySubmit"
+                                (click)="submit(documentType11, submitButton11)" type="button" label="Submit"></button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="formgrid grid align-items-end">
+                        <div class="field col-12 pl-4 pr-4">
+                            <h3><u> Family Details Update</u></h3>
+                        </div>
+                        <div class="field col-12 sm:col-6 md:col-6 lg:col-3 pl-4 pr-4">
+                            <label>Father's First Name<span>*</span></label>
+                            <input pInputText type="text" id="fathersFirstName" #value14
+                                [disabled]="disableProperty(value14)" [style]="{'width': '100%'}"
+                                (blur)="onDataChange(value14, documentType12, null)"
+                                [(ngModel)]="studentDetailsUpdateRequestGroup.value.fathersFirstName"
+                                formControlName="fathersFirstName" />
+                        </div>
+                        <div class="field col-12 sm:col-6 md:col-6 lg:col-3 pl-4 pr-4">
+                            <label>Father's Middle Name</label>
+                            <input pInputText type="text" id="fathersMiddleName" #value15
+                                [disabled]="disableProperty(value15)" [style]="{'width': '100%'}"
+                                (blur)="onDataChange(value15, documentType12, null)"
+                                [(ngModel)]="studentDetailsUpdateRequestGroup.value.fathersMiddleName"
+                                formControlName="fathersMiddleName" />
+                        </div>
+                        <div class="field col-12 sm:col-6 md:col-6 lg:col-3 pl-4 pr-4">
+                            <label>Father's Last Name</label>
+                            <input pInputText type="text" id="fathersLastName" #value16
+                                [disabled]="disableProperty(value16)" [style]="{'width': '100%'}"
+                                (blur)="onDataChange(value16, documentType12, null)"
+                                [(ngModel)]="studentDetailsUpdateRequestGroup.value.fathersLastName"
+                                formControlName="fathersLastName" />
+                        </div>
+                        <div class="field col-12 sm:col-6 md:col-6 lg:col-3 pl-4 pr-4">
+                            <label>Father's Mobile Number<span>*</span></label>
+                            <input pInputText type="text" id="fathersMobileNumber" #value72
+                                [disabled]="disableProperty(value72)" minlength="10" [style]="{'width': '100%'}"
+                                (blur)="onDataChange(value72, documentType12, null)"
+                                [(ngModel)]="studentDetailsUpdateRequestGroup.value.fathersMobileNumber"
+                                formControlName="fathersMobileNumber" />
+                            <ng-container
+                                *ngIf="studentDetailsUpdateRequestGroup.controls['fathersMobileNumber'].errors">
+                                <p
+                                    *ngIf="studentDetailsUpdateRequestGroup.controls['fathersMobileNumber'].hasError('minlength') ||
+                                        studentDetailsUpdateRequestGroup.controls['fathersMobileNumber'].hasError('maxlength')">
+                                    Mobile number must be 10 digit.
+                                </p>
+                                <p
+                                    *ngIf="studentDetailsUpdateRequestGroup.controls['fathersMobileNumber'].errors['pattern']">
+                                    Mobile number must be number.
+                                </p>
+                            </ng-container>
+                        </div>
+                        <div class="field col-12 sm:col-6 md:col-6 lg:col-3 pl-4 pr-4">
+                            <label>Father's Email Id</label>
+                            <input pInputText type="text" id="fathersEmailId" #value73
+                                [disabled]="disableProperty(value73)" [style]="{'width': '100%'}"
+                                (blur)="onDataChange(value73, documentType12, null)"
+                                [(ngModel)]="studentDetailsUpdateRequestGroup.value.fathersEmailId"
+                                formControlName="fathersEmailId" />
+                            <ng-container *ngIf="studentDetailsUpdateRequestGroup.controls['fathersEmailId'].errors">
+                                <p
+                                    *ngIf="studentDetailsUpdateRequestGroup.controls['fathersEmailId'].errors['pattern']">
+                                    Invalid Email Id.
+                                </p>
+                            </ng-container>
+                        </div>
+                        <div class="field col-12 sm:col-6 md:col-6 lg:col-3 pl-4 pr-4">
+                            <label> Comment<span>*</span></label>
+                            <input #comment12 pInputText type="text" id="fathersNameComment" [style]="{'width': '100%'}"
+                                [(ngModel)]="studentDetailsUpdateRequestGroup.value.fathersNameComment"
+                                formControlName="fathersNameComment" (blur)="addComment(comment12)" />
+                        </div>
+                        <div class="field col-12 sm:col-6 md:col-6 lg:col-3 pl-4 pr-4">
+                            <label> Document Type </label>
+                            <p-select #documentType12 inputId="fathersNameDocumentType" id="fathersNameDocumentType"
+                                [options]="aadharUpdateDocumentList" [style]="{'width': '100%'}"
+                                [disabled]="!comment12.value || !value14.value || !value72.value"
+                                [(ngModel)]="studentDetailsUpdateRequestGroup.value.fathersNameDocumentType"
+                                formControlName="fathersNameDocumentType"
+                                (onChange)="onDocumentTypeChanged($event, submitButton12);
+                                        captureMultipalProperty(value14,value15,value16,value72,value73,null,null,null)">
+                            </p-select>
+                        </div>
+                        <!-- <div class="field col-12 sm:col-6 md:col-6 lg:col-3 pl-4 ">
+            
+                                </div> -->
+                        <div class="field col-12 sm:col-6 md:col-6 lg:col-2" style="text-align: center;">
+                            <label> </label>
+                            <p-fileupload #fileUpload12 mode="basic" [disabled]="isStudentFathersFileUploadDisabled"
+                                (onSelect)="documentUpload($event,fileUpload12,12,submitButton12)" chooseLabel="Upload">
+                            </p-fileupload>
+                        </div>
+                        <div class="field col-12 sm:col-6 md:col-6 lg:col-1" style="text-align: center;">
+                            <label></label>
+                            <button #submitButton12 [disabled]="true" pButton id="fathersSubmit"
+                                (click)="submit(documentType12, submitButton12)" type="button" label="Submit"></button>
+                        </div>
+
+                        <div class="field col-12">
+                            <hr>
+                        </div>
+
+                        <div class="field col-12 sm:col-6 md:col-6 lg:col-3 pl-4 pr-4">
+                            <label>Mother's First Name<span>*</span></label>
+                            <input pInputText type="text" id="mothersFirstName" #value17
+                                [disabled]="disableProperty(value17)" [style]="{'width': '100%'}"
+                                (blur)="onDataChange(value17, documentType13, null)"
+                                [(ngModel)]="studentDetailsUpdateRequestGroup.value.mothersFirstName"
+                                formControlName="mothersFirstName" />
+                        </div>
+                        <div class="field col-12 sm:col-6 md:col-6 lg:col-3 pl-4 pr-4">
+                            <label>Mother's Middle Name</label>
+                            <input pInputText type="text" id="mothersMiddleName" [disabled]="disableProperty(value18)"
+                                #value18 (blur)="onDataChange(value18, documentType13, null)"
+                                [style]="{'width': '100%'}"
+                                [(ngModel)]="studentDetailsUpdateRequestGroup.value.mothersMiddleName"
+                                formControlName="mothersMiddleName" />
+                        </div>
+                        <div class="field col-12 sm:col-6 md:col-6 lg:col-3 pl-4 pr-4">
+                            <label>Mother's Last Name</label>
+                            <input pInputText type="text" id="mothersLastName" #value19
+                                [disabled]="disableProperty(value19)" [style]="{'width': '100%'}"
+                                (blur)="onDataChange(value19, documentType13, null)"
+                                [(ngModel)]="studentDetailsUpdateRequestGroup.value.mothersLastName"
+                                formControlName="mothersLastName" />
+                        </div>
+                        <div class="field col-12 sm:col-6 md:col-6 lg:col-3 pl-4 pr-4">
+                            <label>Mother's Mobile Number</label>
+                            <input pInputText type="text" id="mothersMobileNumber" #value74
+                                [disabled]="disableProperty(value72)" minlength="10" [style]="{'width': '100%'}"
+                                (blur)="onDataChange(value72, documentType12, null)"
+                                [(ngModel)]="studentDetailsUpdateRequestGroup.value.mothersMobileNumber"
+                                formControlName="mothersMobileNumber" />
+                            <ng-container
+                                *ngIf="studentDetailsUpdateRequestGroup.controls['mothersMobileNumber'].errors">
+                                <p
+                                    *ngIf="studentDetailsUpdateRequestGroup.controls['mothersMobileNumber'].hasError('minlength') ||
+                                        studentDetailsUpdateRequestGroup.controls['mothersMobileNumber'].hasError('maxlength')">
+                                    Mobile number must be 10 digit.
+                                </p>
+                                <p
+                                    *ngIf="studentDetailsUpdateRequestGroup.controls['mothersMobileNumber'].errors['pattern']">
+                                    Mobile number must be number.
+                                </p>
+                            </ng-container>
+                        </div>
+                        <div class="field col-12 sm:col-6 md:col-6 lg:col-3 pl-4 pr-4">
+                            <label>Mother's Email Id</label>
+                            <input pInputText type="text" id="mothersEmailId" #value75
+                                [disabled]="disableProperty(value73)" [style]="{'width': '100%'}"
+                                (blur)="onDataChange(value73, documentType12, null)"
+                                [(ngModel)]="studentDetailsUpdateRequestGroup.value.mothersEmailId"
+                                formControlName="mothersEmailId" />
+                            <ng-container *ngIf="studentDetailsUpdateRequestGroup.controls['mothersEmailId'].errors">
+                                <p
+                                    *ngIf="studentDetailsUpdateRequestGroup.controls['mothersEmailId'].errors['pattern']">
+                                    Invalid Email Id.
+                                </p>
+                            </ng-container>
+                        </div>
+                        <div class="field col-12 sm:col-6 md:col-6 lg:col-3 pl-4 pr-4">
+                            <label> Comment<span>*</span></label>
+                            <input #comment13 pInputText type="text" id="mothersNameComment" [style]="{'width': '100%'}"
+                                [(ngModel)]="studentDetailsUpdateRequestGroup.value.mothersNameComment"
+                                formControlName="mothersNameComment" (blur)="addComment(comment13)" />
+                        </div>
+                        <div class="field col-12 sm:col-6 md:col-6 lg:col-3 pl-4 pr-4">
+                            <label> Document Type </label>
+                            <p-select #documentType13 inputId="mothersDocumentUrl" id="mothersDocumentUrl"
+                                [options]="studentNameUpdateDocumentList"
+                                [disabled]="!comment13.value || !value17.value"
+                                [(ngModel)]="studentDetailsUpdateRequestGroup.value.mothersDocumentUrl"
+                                [style]="{'width': '100%'}" formControlName="mothersDocumentUrl"
+                                (onChange)="onDocumentTypeChanged($event, submitButton13);
+                                        captureMultipalProperty(value17,value18,value19,value74,value75,null,null,null)">
+                            </p-select>
+                        </div>
+                        <!-- <div class="field col-12 sm:col-6 md:col-6 lg:col-3 pl-4 pr-4">
+            
+                                </div> -->
+                        <div class="field col-12 sm:col-6 md:col-6 lg:col-2" style="text-align: center;">
+                            <label> </label>
+                            <p-fileupload #fileUpload13 mode="basic" [disabled]="isStudentMothersFileUploadDisabled"
+                                (onSelect)="documentUpload($event,fileUpload13,13,submitButton13)" chooseLabel="Upload">
+                            </p-fileupload>
+                        </div>
+                        <div class="field col-12 sm:col-6 md:col-6 lg:col-1"
+                            style="padding-top: 22px; text-align: center;">
+                            <label></label>
+                            <button #submitButton13 [disabled]="true" pButton id="mothersSubmit"
+                                (click)="submit(documentType13, submitButton13)" type="button" label="Submit"></button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="formgrid grid align-items-start">
+                        <div class="field col-12 pl-4 pr-4">
+                            <h3><u> Address Details Update</u></h3>
+                        </div>
+                        <div class="field col-12 pl-4 pr-4">
+                            <h4>Permanent</h4>
+                        </div>
+                        <div class="field col-12 sm:col-6 md:col-6 lg:col-3 pl-4 pr-4">
+                            <label> Address 1 <span>*</span></label>
+                            <input pInputText type="text" id="permanentAddress1" #value20
+                                [disabled]="disableProperty(value20)" [style]="{'width': '100%'}"
+                                (blur)="onDataChange(value20, documentType14, null)"
+                                [(ngModel)]="studentDetailsUpdateRequestGroup.value.permanentAddress1"
+                                formControlName="permanentAddress1" />
+                        </div>
+                        <div class="field col-12 sm:col-6 md:col-6 lg:col-3 pl-4 pr-4">
+                            <label>Address 2 </label>
+                            <input pInputText type="text" id="permanentAddress2" [disabled]="disableProperty(value21)"
+                                #value21 (blur)="onDataChange(value21, documentType14, null)"
+                                [style]="{'width': '100%'}"
+                                [(ngModel)]="studentDetailsUpdateRequestGroup.value.permanentAddress2"
+                                formControlName="permanentAddress2" />
+                        </div>
+                        <div class="field col-12 sm:col-6 md:col-6 lg:col-3 pl-4 pr-4">
+                            <label> City <span>*</span></label>
+                            <input pInputText type="text" id="permanentCity" [disabled]="disableProperty(value22)"
+                                #value22 (blur)="onDataChange(value22, documentType14, null)"
+                                [style]="{'width': '100%'}"
+                                [(ngModel)]="studentDetailsUpdateRequestGroup.value.permanentCity"
+                                formControlName="permanentCity" />
+                        </div>
+                        <div class="field col-12 sm:col-6 md:col-6 lg:col-3 pl-4 pr-4">
+                            <label>State <span>*</span></label>
+                            <p-select [filter]="true" inputId="permanentState" [options]="stateList" #value23
+                                id="permanentState" [disabled]="disableProperty(value23)" [showClear]="true"
+                                placeholder="Select State"
+                                (onChange)="onDropDownSelect(value23, documentType14, null, $event)"
+                                [style]="{'width': '100%'}"
+                                [(ngModel)]="studentDetailsUpdateRequestGroup.value.permanentState"
+                                formControlName="permanentState">
+                            </p-select>
+                        </div>
+                        <div class="field col-12 sm:col-6 md:col-6 lg:col-3 pl-4 pr-4">
+                            <label>County <span>*</span></label>
+                            <p-select [filter]="true" inputId="permanentCountry" id="permanentCountry"
+                                [options]="countryList" placeholder="Select Country" [style]="{'width': '100%'}"
+                                [(ngModel)]="studentDetailsUpdateRequestGroup.value.permanentCountry" [showClear]="true"
+                                formControlName="permanentCountry" [disabled]="disableProperty(value24)" #value24
+                                (onChange)="onDropDownSelect(value24, documentType14, null, $event)"></p-select>
+                        </div>
+                        <div class="field col-12 sm:col-6 md:col-6 lg:col-3 pl-4 pr-4">
+                            <label>Postal Code <span>*</span></label>
+                            <input pInputText type="text" id="permanentPostalCode" minlength="6" #value25
+                                [disabled]="disableProperty(value25)" [style]="{'width': '100%'}"
+                                (blur)="onDataChange(value25, documentType14, null)"
+                                [(ngModel)]="studentDetailsUpdateRequestGroup.value.permanentPostalCode"
+                                formControlName="permanentPostalCode" />
+                            <ng-container
+                                *ngIf="studentDetailsUpdateRequestGroup.controls['permanentPostalCode'].errors">
+                                <p
+                                    *ngIf="studentDetailsUpdateRequestGroup.controls['permanentPostalCode'].hasError('minlength') ||
+                                        studentDetailsUpdateRequestGroup.controls['permanentPostalCode'].hasError('maxlength')">
+                                    Postal code must be 6 digit.
+                                </p>
+                                <p
+                                    *ngIf="studentDetailsUpdateRequestGroup.controls['permanentPostalCode'].errors['pattern']">
+                                    Postal code must be number.
+                                </p>
+                            </ng-container>
+                        </div>
+                        <div class="field col-12 sm:col-6 md:col-6 lg:col-3 pl-4 pr-4">
+                            <label>Comment<span>*</span></label>
+                            <input #comment14 pInputText type="text" id="permanentComment"
+                                [(ngModel)]="studentDetailsUpdateRequestGroup.value.permanentComment"
+                                [style]="{'width': '100%'}" formControlName="permanentComment"
+                                (blur)="addComment(comment14)" />
+                        </div>
+                        <div class="field col-12 sm:col-6 md:col-6 lg:col-3 pl-4 pr-4">
+                            <label> Document Type </label>
+                            <p-select #documentType14 inputId="permanentDocumentType" id="permanentDocumentType"
+                                [options]="studentAddressUpdateDocumentList" [style]="{'width': '100%'}"
+                                [disabled]="!comment14.value || !value20.value || !value22.value || !value23.value || !value24.value || !value25.value"
+                                [(ngModel)]="studentDetailsUpdateRequestGroup.value.permanentDocumentType"
+                                formControlName="permanentDocumentType"
+                                (onChange)="onDocumentTypeChanged($event, submitButton14);
+                                        captureMultipalProperty(value20,value21,value22,value23,value24,value25,null,null)">
+                            </p-select>
+                        </div>
+                        <div class="field col-12 sm:col-6 md:col-6 lg:col-2" style="text-align: center;">
+                            <label> </label>
+                            <p-fileupload #fileUpload14 mode="basic" [disabled]="isStudentPermanentFileUploadDisabled"
+                                (onSelect)="documentUpload($event,fileUpload14,14,submitButton14)" chooseLabel="Upload">
+                            </p-fileupload>
+                        </div>
+                        <div class="field col-12 sm:col-6 md:col-6 lg:col-1"
+                            style="padding-top: 25px; text-align: center;">
+                            <label></label>
+                            <button #submitButton14 [disabled]="true" pButton id="permanentSubmit"
+                                (click)="submit(documentType14, submitButton14)" type="button" label="Submit"></button>
+                        </div>
+                        <div class="field col-12">
+                            <hr>
+                        </div>
+
+                        <div class="field col-12 pl-4 pr-4">
+                            <h4>Local</h4>
+                            <p-checkbox [binary]="true" (onChange)="sameAsPermanentAddress($event)"></p-checkbox> Local
+                            address same as
+                            permanent address. <br><br>
+                        </div>
+                        <div class="field col-12 sm:col-6 md:col-6 lg:col-3 pl-4 pr-4">
+                            <label>Address 1 <span>*</span></label>
+                            <input pInputText type="text" id="localAddress1" #value26
+                                [disabled]="disableProperty(value26)" [style]="{'width': '100%'}"
+                                (blur)="onDataChange(value26, documentType15, null)"
+                                [(ngModel)]="studentDetailsUpdateRequestGroup.value.localAddress1"
+                                formControlName="localAddress1" />
+                        </div>
+                        <div class="field col-12 sm:col-6 md:col-6 lg:col-3 pl-4 pr-4">
+                            <label>Address 2 </label>
+                            <input pInputText type="text" id="localAddress2" #value27
+                                [disabled]="disableProperty(value27)" [style]="{'width': '100%'}"
+                                (blur)="onDataChange(value27, documentType15, null)"
+                                [(ngModel)]="studentDetailsUpdateRequestGroup.value.localAddress2"
+                                formControlName="localAddress2" />
+                        </div>
+                        <div class="field col-12 sm:col-6 md:col-6 lg:col-3 pl-4 pr-4">
+                            <label>City <span>*</span></label>
+                            <input pInputText type="text" id="localCity" #value28 [disabled]="disableProperty(value28)"
+                                (blur)="onDataChange(value28, documentType15, null)" [style]="{'width': '100%'}"
+                                [(ngModel)]="studentDetailsUpdateRequestGroup.value.localCity"
+                                formControlName="localCity" />
+                        </div>
+                        <div class="field col-12 sm:col-6 md:col-6 lg:col-3 pl-4 pr-4">
+                            <label> State <span>*</span></label>
+                            <p-select [filter]="true" inputId="localState" [options]="stateList" #value29
+                                placeholder="Select State" [disabled]="disableProperty(value29)" [showClear]="true"
+                                id="localState" [style]="{'width': '100%'}"
+                                (onChange)="onDropDownSelect(value29, documentType15, null, $event)"
+                                [(ngModel)]="studentDetailsUpdateRequestGroup.value.localState"
+                                formControlName="localState">
+                            </p-select>
+                        </div>
+                        <div class="field col-12 sm:col-6 md:col-6 lg:col-3 pl-4 pr-4">
+                            <label>County <span>*</span></label>
+                            <p-select [filter]="true" inputId="localCountry" id="localCountry" [options]="countryList"
+                                placeholder="Select Country" [style]="{'width': '100%'}"
+                                [(ngModel)]="studentDetailsUpdateRequestGroup.value.localCountry" [showClear]="true"
+                                [disabled]="disableProperty(value30)" formControlName="localCountry" #value30
+                                (onChange)="onDropDownSelect(value30, documentType15, null, $event)"></p-select>
+                        </div>
+                        <div class="field col-12 sm:col-6 md:col-6 lg:col-3 pl-4 pr-4">
+                            <label>Postal Code <span>*</span></label>
+                            <input pInputText type="text" id="localPostalCode" minlength="6" [style]="{'width': '100%'}"
+                                [(ngModel)]="studentDetailsUpdateRequestGroup.value.localPostalCode"
+                                [disabled]="disableProperty(value31)" formControlName="localPostalCode" #value31
+                                (blur)="onDataChange(value31, documentType15, null)" />
+                            <ng-container *ngIf="studentDetailsUpdateRequestGroup.controls['localPostalCode'].errors">
+                                <p
+                                    *ngIf="studentDetailsUpdateRequestGroup.controls['localPostalCode'].hasError('minlength') ||
+                                        studentDetailsUpdateRequestGroup.controls['localPostalCode'].hasError('maxlength')">
+                                    Postal code must be 6 digit.
+                                </p>
+                                <p
+                                    *ngIf="studentDetailsUpdateRequestGroup.controls['localPostalCode'].errors['pattern']">
+                                    Postal code must be number.
+                                </p>
+                            </ng-container>
+                        </div>
+                        <div class="field col-12 sm:col-6 md:col-6 lg:col-3 pl-4 pr-4">
+                            <label>Comment<span>*</span></label>
+                            <input #comment15 pInputText type="text" id="localComment" [style]="{'width': '100%'}"
+                                [(ngModel)]="studentDetailsUpdateRequestGroup.value.localComment"
+                                formControlName="localComment" (blur)="addComment(comment15)" />
+                        </div>
+                        <div class="field col-12 sm:col-6 md:col-6 lg:col-3 pl-4 pr-4">
+                            <label> Document Type </label>
+                            <p-select #documentType15 inputId="localDocumentType" id="localDocumentType"
+                                [options]="studentAddressUpdateDocumentList" [style]="{'width': '100%'}"
+                                [disabled]="!comment15.value || !value26.value || !value28.value || !value29.value || !value30.value || !value31.value"
+                                [(ngModel)]="studentDetailsUpdateRequestGroup.value.localDocumentType"
+                                formControlName="localDocumentType"
+                                (onChange)="onDocumentTypeChanged($event, submitButton15)">
+                            </p-select>
+                        </div>
+                        <div class="field col-12 sm:col-6 md:col-6 lg:col-2" style="text-align: center;">
+                            <label> </label>
+                            <p-fileupload #fileUpload15 mode="basic" [disabled]="isStudentLocalFileUploadDisabled"
+                                (onSelect)="documentUpload($event,fileUpload15,15,submitButton15)" chooseLabel="Upload">
+                            </p-fileupload>
+                        </div>
+                        <div class="field col-12 sm:col-6 md:col-6 lg:col-1"
+                            style="padding-top: 25px; text-align: center;">
+                            <label></label>
+                            <button #submitButton15 [disabled]="true" pButton id="localSubmit"
+                                (click)="submit(documentType15, submitButton15)" type="button" label="Submit"></button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="formgrid grid align-items-end">
+                        <div class="field col-12 pl-4 pr-4">
+                            <h3><u> Education Details Update</u></h3>
+                        </div>
+                        <div class="field col-12 pl-4 pr-4">
+                            <h4>10th/SSC</h4>
+                        </div>
+                        <div class="field col-12 sm:col-6 md:col-6 lg:col-3 pl-4 pr-4">
+                            <label> Degree Name <span>*</span></label>
+                            <input pInputText type="text" id="sscDegreeName" #value32
+                                [disabled]="disableProperty(value32)" [style]="{'width': '100%'}"
+                                (blur)="onDataChange(value32, documentType16, null)"
+                                [(ngModel)]="studentDetailsUpdateRequestGroup.value.sscDegreeName"
+                                formControlName="sscDegreeName" />
+                        </div>
+                        <div class="field col-12 sm:col-6 md:col-6 lg:col-3 pl-4 pr-4">
+                            <label>Institution Name <span>*</span></label>
+                            <input pInputText type="text" id="sscInstitutionName" #value33
+                                [disabled]="disableProperty(value33)" [style]="{'width': '100%'}"
+                                (blur)="onDataChange(value33, documentType16, null)"
+                                [(ngModel)]="studentDetailsUpdateRequestGroup.value.sscInstitutionName"
+                                formControlName="sscInstitutionName" />
+                        </div>
+                        <div class="field col-12 sm:col-6 md:col-6 lg:col-3 pl-4 pr-4">
+                            <label> Board/University <span>*</span></label>
+                            <input pInputText type="text" id="sscBoardUniversity" #value34
+                                [disabled]="disableProperty(value34)" [style]="{'width': '100%'}"
+                                (blur)="onDataChange(value34, documentType16, null)"
+                                [(ngModel)]="studentDetailsUpdateRequestGroup.value.sscBoardUniversity"
+                                formControlName="sscBoardUniversity" />
+                        </div>
+                        <div class="field col-12 sm:col-6 md:col-6 lg:col-3 pl-4 pr-4">
+                            <label>Passing Year <span>*</span></label>
+                            <input pInputText type="text" id="sscPassingYear" minlength="4" #value35
+                                [disabled]="disableProperty(value35)" [style]="{'width': '100%'}"
+                                (blur)="onDataChange(value35, documentType16, null)"
+                                [(ngModel)]="studentDetailsUpdateRequestGroup.value.sscPassingYear"
+                                formControlName="sscPassingYear" />
+                            <ng-container *ngIf="studentDetailsUpdateRequestGroup.controls['sscPassingYear'].errors">
+                                <p
+                                    *ngIf="studentDetailsUpdateRequestGroup.controls['sscPassingYear'].hasError('minlength') ||
+                                            studentDetailsUpdateRequestGroup.controls['sscPassingYear'].hasError('maxlength')">
+                                    Passing year must be 4 digit number.
+                                </p>
+                                <p
+                                    *ngIf="studentDetailsUpdateRequestGroup.controls['sscPassingYear'].errors['pattern']">
+                                    Passing year must be number.
+                                </p>
+                            </ng-container>
+                        </div>
+                        <div class="field col-12 sm:col-6 md:col-6 lg:col-3 pl-4 pr-4">
+                            <label>Subjects <span>*</span></label>
+                            <input pInputText type="text" id="sscSubject" #value36 [disabled]="disableProperty(value36)"
+                                [style]="{'width': '100%'}" (blur)="onDataChange(value36, documentType16, null)"
+                                [(ngModel)]="studentDetailsUpdateRequestGroup.value.sscSubject"
+                                formControlName="sscSubject" />
+                        </div>
+                        <div class="field col-12 sm:col-6 md:col-6 lg:col-3 pl-4 pr-4">
+                            <label>Total Marks <span>*</span></label>
+                            <input pInputText type="text" id="sscTotalMarks" #value37
+                                [disabled]="disableProperty(value37)" [style]="{'width': '100%'}"
+                                (blur)="onDataChange(value37, documentType16, null)"
+                                [(ngModel)]="studentDetailsUpdateRequestGroup.value.sscTotalMarks"
+                                formControlName="sscTotalMarks" />
+                            <ng-container *ngIf="studentDetailsUpdateRequestGroup.controls['sscTotalMarks'].errors">
+                                <p *ngIf="studentDetailsUpdateRequestGroup.controls['sscTotalMarks'].errors['pattern']">
+                                    Total marks must be in number.
+                                </p>
+                            </ng-container>
+                        </div>
+                        <div class="field col-12 sm:col-6 md:col-6 lg:col-3 pl-4 pr-4">
+                            <label>Obtained Marks<span>*</span></label>
+                            <input pInputText type="text" id="sscObtainedMarks" #value38
+                                [disabled]="disableProperty(value38)" [style]="{'width': '100%'}"
+                                (blur)="onDataChange(value38, documentType16, null)"
+                                [(ngModel)]="studentDetailsUpdateRequestGroup.value.sscObtainedMarks"
+                                formControlName="sscObtainedMarks" />
+                            <ng-container *ngIf="studentDetailsUpdateRequestGroup.controls['sscObtainedMarks'].errors">
+                                <p
+                                    *ngIf="studentDetailsUpdateRequestGroup.controls['sscObtainedMarks'].errors['pattern']">
+                                    Obtained marks must be in number.
+                                </p>
+                            </ng-container>
+                        </div>
+                        <div class="field col-12 sm:col-6 md:col-6 lg:col-3 pl-4 pr-4">
+                            <label>Grade/Division<span>*</span></label>
+                            <input pInputText type="text" id="sscGrade" #value39 [disabled]="disableProperty(value39)"
+                                (blur)="onDataChange(value39, documentType16, null)" [style]="{'width': '100%'}"
+                                [(ngModel)]="studentDetailsUpdateRequestGroup.value.sscGrade"
+                                formControlName="sscGrade" />
+                        </div>
+                        <div class="field col-12 sm:col-6 md:col-6 lg:col-3 pl-4 pr-4">
+                            <label>Comment<span>*</span></label>
+                            <input #comment16 pInputText type="text" id="sscComment" [style]="{'width': '100%'}"
+                                [(ngModel)]="studentDetailsUpdateRequestGroup.value.sscComment"
+                                formControlName="sscComment" (blur)="addComment(comment16)" />
+                        </div>
+                        <div class="field col-12 sm:col-6 md:col-6 lg:col-3 pl-4 pr-4">
+                            <label> Document Type </label>
+                            <p-select #documentType16 inputId="sscDocumentType" id="sscDocumentType"
+                                [options]="studentEducationUpdateDocumentList" [disabled]="!comment16.value || !value32.value || !value33.value || !value34.value || !value35.value || !value36.value
+                                        || !value37.value || !value38.value || !value39.value"
+                                [style]="{'width': '100%'}"
+                                [(ngModel)]="studentDetailsUpdateRequestGroup.value.sscDocumentType"
+                                formControlName="sscDocumentType"
+                                (onChange)="onDocumentTypeChanged($event, submitButton16);
+                                        captureMultipalProperty(value32,value33,value34,value35,value36,value37,value38,value39)">
+                            </p-select>
+                        </div>
+                        <div class="field col-12 sm:col-6 md:col-6 lg:col-3 " style="text-align: center;">
+                            <label> </label>
+                            <p-fileupload #fileUpload16 mode="basic" [disabled]="isStudentSSCFileUploadDisabled"
+                                (onSelect)="documentUpload($event,fileUpload16,16,submitButton16)" chooseLabel="Upload">
+                            </p-fileupload>
+                        </div>
+                        <div class="field col-12 sm:col-6 md:col-6 lg:col-3 " style="text-align: center;">
+                            <label></label>
+                            <button #submitButton16 [disabled]="true" pButton id="sscSubmit"
+                                (click)="submit(documentType16, submitButton16)" type="button" label="Submit"></button>
+                        </div>
+                        <div class="field col-12">
+                            <hr>
+                        </div>
+                        <div class="field col-12 pl-4 pr-4">
+                            <h4>Diploma</h4>
+                        </div>
+                        <div class="field col-12 sm:col-6 md:col-6 lg:col-3 pl-4 pr-4">
+                            <label> Degree Name </label>
+                            <input pInputText type="text" id="diplomaDegreeName" #value40
+                                [disabled]="disableProperty(value40)" [style]="{'width': '100%'}"
+                                (blur)="onDataChange(value40, documentType17, null)"
+                                [(ngModel)]="studentDetailsUpdateRequestGroup.value.diplomaDegreeName"
+                                formControlName="diplomaDegreeName" />
+                        </div>
+                        <div class="field col-12 sm:col-6 md:col-6 lg:col-3 pl-4 pr-4">
+                            <label>Institution Name </label>
+                            <input pInputText type="text" id="diplomaInstitutionName" #value41
+                                [disabled]="disableProperty(value41)" [style]="{'width': '100%'}"
+                                (blur)="onDataChange(value41, documentType17, null)"
+                                [(ngModel)]="studentDetailsUpdateRequestGroup.value.diplomaInstitutionName"
+                                formControlName="diplomaInstitutionName" />
+                        </div>
+                        <div class="field col-12 sm:col-6 md:col-6 lg:col-3 pl-4 pr-4">
+                            <label> Board/University </label>
+                            <input pInputText type="text" id="diplomaBoardUniversity" #value42
+                                [disabled]="disableProperty(value42)" [style]="{'width': '100%'}"
+                                (blur)="onDataChange(value42, documentType17, null)"
+                                [(ngModel)]="studentDetailsUpdateRequestGroup.value.diplomaBoardUniversity"
+                                formControlName="diplomaBoardUniversity" />
+                        </div>
+                        <div class="field col-12 sm:col-6 md:col-6 lg:col-3 pl-4 pr-4">
+                            <label>Passing Year </label>
+                            <input pInputText type="text" id="diplomaPassingYear" minlength="4" #value43
+                                [disabled]="disableProperty(value43)" [style]="{'width': '100%'}"
+                                (blur)="onDataChange(value43, documentType17, null)"
+                                [(ngModel)]="studentDetailsUpdateRequestGroup.value.diplomaPassingYear"
+                                formControlName="diplomaPassingYear" />
+                            <ng-container
+                                *ngIf="studentDetailsUpdateRequestGroup.controls['diplomaPassingYear'].errors">
+                                <p
+                                    *ngIf="studentDetailsUpdateRequestGroup.controls['diplomaPassingYear'].hasError('minlength') ||
+                                            studentDetailsUpdateRequestGroup.controls['diplomaPassingYear'].hasError('maxlength')">
+                                    Passing year must be 4 digit number.
+                                </p>
+                                <p
+                                    *ngIf="studentDetailsUpdateRequestGroup.controls['diplomaPassingYear'].errors['pattern']">
+                                    Passing year must be number.
+                                </p>
+                            </ng-container>
+                        </div>
+                        <div class="field col-12 sm:col-6 md:col-6 lg:col-3 pl-4 pr-4">
+                            <label>Subjects/Specialization </label>
+                            <input pInputText type="text" id="diplomaSubject" #value44
+                                [disabled]="disableProperty(value44)" [style]="{'width': '100%'}"
+                                (blur)="onDataChange(value44, documentType17, null)"
+                                [(ngModel)]="studentDetailsUpdateRequestGroup.value.diplomaSubject"
+                                formControlName="diplomaSubject" />
+                        </div>
+                        <div class="field col-12 sm:col-6 md:col-6 lg:col-3 pl-4 pr-4">
+                            <label>Total Marks </label>
+                            <input pInputText type="text" id="diplomaTotalMarks" #value45
+                                [disabled]="disableProperty(value45)" [style]="{'width': '100%'}"
+                                (blur)="onDataChange(value45, documentType17, null)"
+                                [(ngModel)]="studentDetailsUpdateRequestGroup.value.diplomaTotalMarks"
+                                formControlName="diplomaTotalMarks" />
+                            <ng-container *ngIf="studentDetailsUpdateRequestGroup.controls['diplomaTotalMarks'].errors">
+                                <p
+                                    *ngIf="studentDetailsUpdateRequestGroup.controls['diplomaTotalMarks'].errors['pattern']">
+                                    Total marks must be in number.
+                                </p>
+                            </ng-container>
+                        </div>
+                        <div class="field col-12 sm:col-6 md:col-6 lg:col-3 pl-4 pr-4">
+                            <label>Obtained Marks</label>
+                            <input pInputText type="text" id="diplomaObtainedMarks" #value46
+                                [disabled]="disableProperty(value46)" [style]="{'width': '100%'}"
+                                (blur)="onDataChange(value46, documentType17, null)"
+                                [(ngModel)]="studentDetailsUpdateRequestGroup.value.diplomaObtainedMarks"
+                                formControlName="diplomaObtainedMarks" />
+                            <ng-container
+                                *ngIf="studentDetailsUpdateRequestGroup.controls['diplomaObtainedMarks'].errors">
+                                <p
+                                    *ngIf="studentDetailsUpdateRequestGroup.controls['diplomaObtainedMarks'].errors['pattern']">
+                                    Obtained marks must be in number.
+                                </p>
+                            </ng-container>
+                        </div>
+                        <div class="field col-12 sm:col-6 md:col-6 lg:col-3 pl-4 pr-4">
+                            <label>Grade/Division</label>
+                            <input pInputText type="text" id="diplomaGrade" #value47
+                                [disabled]="disableProperty(value47)" [style]="{'width': '100%'}"
+                                (blur)="onDataChange(value47, documentType17, null)"
+                                [(ngModel)]="studentDetailsUpdateRequestGroup.value.diplomaGrade"
+                                formControlName="diplomaGrade" />
+                        </div>
+                        <div class="field col-12 sm:col-6 md:col-6 lg:col-3 pl-4 pr-4">
+                            <label>Comment</label>
+                            <input #comment17 pInputText type="text" id="diplomaComment" [style]="{'width': '100%'}"
+                                [(ngModel)]="studentDetailsUpdateRequestGroup.value.diplomaComment"
+                                formControlName="diplomaComment" (blur)="addComment(comment17)" />
+                        </div>
+                        <div class="field col-12 sm:col-6 md:col-6 lg:col-3 pl-4 pr-4">
+                            <label> Document Type </label>
+                            <p-select #documentType17 inputId="diplomaDocumentUrl" id="diplomaDocumentUrl"
+                                [options]="studentEducationUpdateDocumentList" [disabled]="!comment17.value"
+                                [(ngModel)]="studentDetailsUpdateRequestGroup.value.diplomaDocumentUrl"
+                                formControlName="diplomaDocumentUrl" [style]="{'width': '100%'}"
+                                (onChange)="onDocumentTypeChanged($event, submitButton17);
+                                        captureMultipalProperty(value40, value41, value42, value43, value44, value45, value46, value47)">
+                            </p-select>
+                        </div>
+                        <div class="field col-12 sm:col-6 md:col-6 lg:col-3" style="text-align: center;">
+                            <label> </label>
+                            <p-fileupload #fileUpload17 mode="basic" [disabled]="isStudentDiplomaFileUploadDisabled"
+                                (onSelect)="documentUpload($event,fileUpload17,17,submitButton17)" chooseLabel="Upload">
+                            </p-fileupload>
+                        </div>
+                        <div class="field col-12 sm:col-6 md:col-6 lg:col-3 " style="text-align: center;">
+                            <label></label>
+                            <button #submitButton17 [disabled]="true" pButton id="diplomaSubmit"
+                                (click)="submit(documentType17, submitButton17)" type="button" label="Submit"></button>
+                        </div>
+
+                        <div class="field col-12">
+                            <hr>
+                        </div>
+
+
+                        <div class="field col-12 pl-4 pr-4">
+                            <h4>12TH/HSC</h4>
+                        </div>
+                        <div class="field col-12 sm:col-6 md:col-6 lg:col-3 pl-4 pr-4">
+                            <label> Degree Name </label>
+                            <input pInputText type="text" id="hscDegreeName" #value48
+                                [disabled]="disableProperty(value48)" [style]="{'width': '100%'}"
+                                (blur)="onDataChange(value48, documentType18, null)"
+                                [(ngModel)]="studentDetailsUpdateRequestGroup.value.hscDegreeName"
+                                formControlName="hscDegreeName" />
+                        </div>
+                        <div class="field col-12 sm:col-6 md:col-6 lg:col-3 pl-4 pr-4">
+                            <label>Institution Name </label>
+                            <input pInputText type="text" id="hscInstitutionName" #value49
+                                [disabled]="disableProperty(value49)" [style]="{'width': '100%'}"
+                                (blur)="onDataChange(value49, documentType18, null)"
+                                [(ngModel)]="studentDetailsUpdateRequestGroup.value.hscInstitutionName"
+                                formControlName="hscInstitutionName" />
+                        </div>
+                        <div class="field col-12 sm:col-6 md:col-6 lg:col-3 pl-4 pr-4">
+                            <label> Board/University </label>
+                            <input pInputText type="text" id="hscBoardUniversity" #value50
+                                [disabled]="disableProperty(value50)" [style]="{'width': '100%'}"
+                                (blur)="onDataChange(value50, documentType18, null)"
+                                [(ngModel)]="studentDetailsUpdateRequestGroup.value.hscBoardUniversity"
+                                formControlName="hscBoardUniversity" />
+                        </div>
+                        <div class="field col-12 sm:col-6 md:col-6 lg:col-3 pl-4 pr-4">
+                            <label>Passing Year </label>
+                            <input pInputText type="text" id="hscPassingYear" minlength="4" #value51
+                                [disabled]="disableProperty(value51)" [style]="{'width': '100%'}"
+                                (blur)="onDataChange(value51, documentType18, null)"
+                                [(ngModel)]="studentDetailsUpdateRequestGroup.value.hscPassingYear"
+                                formControlName="hscPassingYear" />
+                            <ng-container *ngIf="studentDetailsUpdateRequestGroup.controls['hscPassingYear'].errors">
+                                <p
+                                    *ngIf="studentDetailsUpdateRequestGroup.controls['hscPassingYear'].hasError('minlength') ||
+                                            studentDetailsUpdateRequestGroup.controls['hscPassingYear'].hasError('maxlength')">
+                                    Passing year must be 4 digit number.
+                                </p>
+                                <p
+                                    *ngIf="studentDetailsUpdateRequestGroup.controls['hscPassingYear'].errors['pattern']">
+                                    Passing year must be number.
+                                </p>
+                            </ng-container>
+                        </div>
+                        <div class="field col-12 sm:col-6 md:col-6 lg:col-3 pl-4 pr-4">
+                            <label>Subjects/Stream </label>
+                            <input pInputText type="text" id="hscSubject" #value52 [disabled]="disableProperty(value52)"
+                                [style]="{'width': '100%'}" (blur)="onDataChange(value52, documentType18, null)"
+                                [(ngModel)]="studentDetailsUpdateRequestGroup.value.hscSubject"
+                                formControlName="hscSubject" />
+                        </div>
+                        <div class="field col-12 sm:col-6 md:col-6 lg:col-3 pl-4 pr-4">
+                            <label>Total Marks </label>
+                            <input pInputText type="text" id="hscTotalMarks" #value53
+                                [disabled]="disableProperty(value53)" [style]="{'width': '100%'}"
+                                (blur)="onDataChange(value53, documentType18, null)"
+                                [(ngModel)]="studentDetailsUpdateRequestGroup.value.hscTotalMarks"
+                                formControlName="hscTotalMarks" />
+                            <ng-container *ngIf="studentDetailsUpdateRequestGroup.controls['hscTotalMarks'].errors">
+                                <p *ngIf="studentDetailsUpdateRequestGroup.controls['hscTotalMarks'].errors['pattern']">
+                                    Total marks must be in number.
+                                </p>
+                            </ng-container>
+                        </div>
+                        <div class="field col-12 sm:col-6 md:col-6 lg:col-3 pl-4 pr-4">
+                            <label>Obtained Marks</label>
+                            <input pInputText type="text" id="hscObtainedMarks" #value54
+                                [disabled]="disableProperty(value54)" [style]="{'width': '100%'}"
+                                (blur)="onDataChange(value54, documentType18, null)"
+                                [(ngModel)]="studentDetailsUpdateRequestGroup.value.hscObtainedMarks"
+                                formControlName="hscObtainedMarks" />
+                            <ng-container *ngIf="studentDetailsUpdateRequestGroup.controls['hscObtainedMarks'].errors">
+                                <p
+                                    *ngIf="studentDetailsUpdateRequestGroup.controls['hscObtainedMarks'].errors['pattern']">
+                                    Obtained marks must be in number.
+                                </p>
+                            </ng-container>
+                        </div>
+                        <div class="field col-12 sm:col-6 md:col-6 lg:col-3 pl-4 pr-4">
+                            <label>Grade/Division</label>
+                            <input pInputText type="text" id="hscGrade" #value55 [disabled]="disableProperty(value55)"
+                                (blur)="onDataChange(value55, documentType18, null)" [style]="{'width': '100%'}"
+                                [(ngModel)]="studentDetailsUpdateRequestGroup.value.hscGrade"
+                                formControlName="hscGrade" />
+                        </div>
+                        <div class="field col-12 sm:col-6 md:col-6 lg:col-3 pl-4 pr-4">
+                            <label>Comment</label>
+                            <input #comment18 pInputText type="text" id="hscComment" [style]="{'width': '100%'}"
+                                [(ngModel)]="studentDetailsUpdateRequestGroup.value.hscComment"
+                                formControlName="hscComment" (blur)="addComment(comment18)" />
+                        </div>
+                        <div class="field col-12 sm:col-6 md:col-6 lg:col-3 pl-4 pr-4">
+                            <label> Document Type </label>
+                            <p-select #documentType18 inputId="hscDocumentUrl" id="hscDocumentUrl"
+                                [options]="studentEducationUpdateDocumentList" [disabled]="!comment18.value"
+                                [(ngModel)]="studentDetailsUpdateRequestGroup.value.hscDocumentUrl"
+                                formControlName="hscDocumentUrl" [style]="{'width': '100%'}"
+                                (onChange)="onDocumentTypeChanged($event, submitButton18);
+                                        captureMultipalProperty(value48,value49, value50, value51, value52, value53, value54, value55)">
+                            </p-select>
+                        </div>
+                        <div class="field col-12 sm:col-6 md:col-6 lg:col-3 " style="text-align: center;">
+                            <label> </label>
+                            <p-fileupload #fileUpload18 mode="basic" [disabled]="isStudentHSCFileUploadDisabled"
+                                (onSelect)="documentUpload($event,fileUpload18,18,submitButton18)" chooseLabel="Upload">
+                            </p-fileupload>
+                        </div>
+                        <div class="field col-12 sm:col-6 md:col-6 lg:col-3 " style="text-align: center;">
+                            <label></label>
+                            <button #submitButton18 [disabled]="true" pButton id="hscSubmit"
+                                (click)="submit(documentType18, submitButton18)" type="button" label="Submit"></button>
+                        </div>
+                        <div class="field col-12">
+                            <hr>
+                        </div>
+
+
+                        <div class="field col-12 pl-4 pr-4">
+                            <h4>Under Graduation</h4>
+                        </div>
+                        <div class="field col-12 sm:col-6 md:col-6 lg:col-3 pl-4 pr-4">
+                            <label> Degree Name </label>
+                            <input pInputText type="text" id="ugDegreeName" #value56
+                                [disabled]="disableProperty(value56)" [style]="{'width': '100%'}"
+                                (blur)="onDataChange(value56, documentType19, null)"
+                                [(ngModel)]="studentDetailsUpdateRequestGroup.value.ugDegreeName"
+                                formControlName="ugDegreeName" />
+                        </div>
+                        <div class="field col-12 sm:col-6 md:col-6 lg:col-3 pl-4 pr-4">
+                            <label>Institution Name </label>
+                            <input pInputText type="text" id="ugInstitutionName" #value57
+                                [disabled]="disableProperty(value57)" [style]="{'width': '100%'}"
+                                (blur)="onDataChange(value57, documentType19, null)"
+                                [(ngModel)]="studentDetailsUpdateRequestGroup.value.ugInstitutionName"
+                                formControlName="ugInstitutionName" />
+                        </div>
+                        <div class="field col-12 sm:col-6 md:col-6 lg:col-3 pl-4 pr-4">
+                            <label> Board/University </label>
+                            <input pInputText type="text" id="ugBoardUniversity" #value58
+                                [disabled]="disableProperty(value58)" [style]="{'width': '100%'}"
+                                (blur)="onDataChange(value58, documentType19, null)"
+                                [(ngModel)]="studentDetailsUpdateRequestGroup.value.ugBoardUniversity"
+                                formControlName="ugBoardUniversity" />
+                        </div>
+                        <div class="field col-12 sm:col-6 md:col-6 lg:col-3 pl-4 pr-4">
+                            <label>Passing Year </label>
+                            <input pInputText type="text" id="ugPassingYear" minlength="4" #value59
+                                [disabled]="disableProperty(value59)" [style]="{'width': '100%'}"
+                                (blur)="onDataChange(value59, documentType19, null)"
+                                [(ngModel)]="studentDetailsUpdateRequestGroup.value.ugPassingYear"
+                                formControlName="ugPassingYear" />
+                            <ng-container *ngIf="studentDetailsUpdateRequestGroup.controls['ugPassingYear'].errors">
+                                <p
+                                    *ngIf="studentDetailsUpdateRequestGroup.controls['ugPassingYear'].hasError('minlength') ||
+                                            studentDetailsUpdateRequestGroup.controls['ugPassingYear'].hasError('maxlength')">
+                                    Passing year must be 4 digit number.
+                                </p>
+                                <p *ngIf="studentDetailsUpdateRequestGroup.controls['ugPassingYear'].errors['pattern']">
+                                    Passing year must be number.
+                                </p>
+                            </ng-container>
+                        </div>
+                        <div class="field col-12 sm:col-6 md:col-6 lg:col-3 pl-4 pr-4">
+                            <label>Subjects </label>
+                            <input pInputText type="text" id="ugSubject" #value60 [disabled]="disableProperty(value60)"
+                                (blur)="onDataChange(value60, documentType19, null)" [style]="{'width': '100%'}"
+                                [(ngModel)]="studentDetailsUpdateRequestGroup.value.ugSubject"
+                                formControlName="ugSubject" />
+                        </div>
+                        <div class="field col-12 sm:col-6 md:col-6 lg:col-3 pl-4 pr-4">
+                            <label>Total Marks </label>
+                            <input pInputText type="text" id="ugTotalMarks" #value61
+                                [disabled]="disableProperty(value61)" [style]="{'width': '100%'}"
+                                (blur)="onDataChange(value61, documentType19, null)"
+                                [(ngModel)]="studentDetailsUpdateRequestGroup.value.ugTotalMarks"
+                                formControlName="ugTotalMarks" />
+                            <ng-container *ngIf="studentDetailsUpdateRequestGroup.controls['ugTotalMarks'].errors">
+                                <p *ngIf="studentDetailsUpdateRequestGroup.controls['ugTotalMarks'].errors['pattern']">
+                                    Total marks must be in number.
+                                </p>
+                            </ng-container>
+                        </div>
+                        <div class="field col-12 sm:col-6 md:col-6 lg:col-3 pl-4 pr-4">
+                            <label>Obtained Marks</label>
+                            <input pInputText type="text" id="ugObtainedMarks" #value62
+                                [disabled]="disableProperty(value62)" [style]="{'width': '100%'}"
+                                (blur)="onDataChange(value62, documentType19, null)"
+                                [(ngModel)]="studentDetailsUpdateRequestGroup.value.ugObtainedMarks"
+                                formControlName="ugObtainedMarks" />
+                            <ng-container *ngIf="studentDetailsUpdateRequestGroup.controls['ugObtainedMarks'].errors">
+                                <p
+                                    *ngIf="studentDetailsUpdateRequestGroup.controls['ugObtainedMarks'].errors['pattern']">
+                                    Obtained marks must be in number.
+                                </p>
+                            </ng-container>
+                        </div>
+                        <div class="field col-12 sm:col-6 md:col-6 lg:col-3 pl-4 pr-4">
+                            <label>Grade/Division</label>
+                            <input pInputText type="text" id="ugGrade" #value63 [disabled]="disableProperty(value63)"
+                                (blur)="onDataChange(value63, documentType19, null)" [style]="{'width': '100%'}"
+                                [(ngModel)]="studentDetailsUpdateRequestGroup.value.ugGrade"
+                                formControlName="ugGrade" />
+                        </div>
+                        <div class="field col-12 sm:col-6 md:col-6 lg:col-3 pl-4 pr-4">
+                            <label>Comment</label>
+                            <input #comment19 pInputText type="text" id="ugComment" [style]="{'width': '100%'}"
+                                [(ngModel)]="studentDetailsUpdateRequestGroup.value.ugComment"
+                                formControlName="ugComment" (blur)="addComment(comment19)" />
+                        </div>
+                        <div class="field col-12 sm:col-6 md:col-6 lg:col-3 pl-4 pr-4">
+                            <label> Document Type </label>
+                            <p-select #documentType19 inputId="ugDocumentUrl" id="ugDocumentUrl"
+                                [options]="studentEducationUpdateDocumentList" [disabled]="!comment19.value"
+                                [(ngModel)]="studentDetailsUpdateRequestGroup.value.ugDocumentUrl"
+                                formControlName="ugDocumentUrl" [style]="{'width': '100%'}"
+                                (onChange)="onDocumentTypeChanged($event, submitButton19);
+                                        captureMultipalProperty(value56, value57, value58, value59, value60, value61, value62, value63)">
+                            </p-select>
+                        </div>
+                        <div class="field col-12 sm:col-6 md:col-6 lg:col-3" style="text-align: center;">
+                            <label> </label>
+                            <p-fileupload #fileUpload19 mode="basic" [disabled]="isStudentUGFileUploadDisabled"
+                                (onSelect)="documentUpload($event,fileUpload19,19,submitButton19)" chooseLabel="Upload">
+                            </p-fileupload>
+                        </div>
+                        <div class="field col-12 sm:col-6 md:col-6 lg:col-3 "
+                            style="padding-top: 22px; text-align: center;">
+                            <label></label>
+                            <button #submitButton19 [disabled]="true" pButton id="ugSubmit"
+                                (click)="submit(documentType19, submitButton19)" type="button" label="Submit"></button>
+                        </div>
+                        <div class="field col-12 ">
+                            <hr>
+                        </div>
+
+                        <div class="field col-12 pl-4 pr-4">
+                            <h4>Post Graduation</h4>
+                        </div>
+                        <div class="field col-12 sm:col-6 md:col-6 lg:col-3 pl-4 pr-4">
+                            <label> Degree Name </label>
+                            <input pInputText type="text" id="pgDegreeName" #value64
+                                [disabled]="disableProperty(value64)" [style]="{'width': '100%'}"
+                                (blur)="onDataChange(value64, documentType20, null)"
+                                [(ngModel)]="studentDetailsUpdateRequestGroup.value.pgDegreeName"
+                                formControlName="pgDegreeName" />
+                        </div>
+                        <div class="field col-12 sm:col-6 md:col-6 lg:col-3 pl-4 pr-4">
+                            <label>Institution Name </label>
+                            <input pInputText type="text" id="pgInstitutionName" #value65
+                                [disabled]="disableProperty(value65)" [style]="{'width': '100%'}"
+                                (blur)="onDataChange(value65, documentType20, null)"
+                                [(ngModel)]="studentDetailsUpdateRequestGroup.value.pgInstitutionName"
+                                formControlName="pgInstitutionName" />
+                        </div>
+                        <div class="field col-12 sm:col-6 md:col-6 lg:col-3 pl-4 pr-4">
+                            <label> Board/University </label>
+                            <input pInputText type="text" id="pgBoardUniversity" #value66
+                                [disabled]="disableProperty(value66)" [style]="{'width': '100%'}"
+                                (blur)="onDataChange(value66, documentType20, null)"
+                                [(ngModel)]="studentDetailsUpdateRequestGroup.value.pgBoardUniversity"
+                                formControlName="pgBoardUniversity" />
+                        </div>
+                        <div class="field col-12 sm:col-6 md:col-6 lg:col-3 pl-4 pr-4">
+                            <label>Passing Year </label>
+                            <input pInputText type="text" id="pgPassingYear" minlength="4" #value67
+                                [disabled]="disableProperty(value67)" [style]="{'width': '100%'}"
+                                (blur)="onDataChange(value67, documentType20, null)"
+                                [(ngModel)]="studentDetailsUpdateRequestGroup.value.pgPassingYear"
+                                formControlName="pgPassingYear" />
+                            <ng-container *ngIf="studentDetailsUpdateRequestGroup.controls['pgPassingYear'].errors">
+                                <p
+                                    *ngIf="studentDetailsUpdateRequestGroup.controls['pgPassingYear'].hasError('minlength') ||
+                                            studentDetailsUpdateRequestGroup.controls['pgPassingYear'].hasError('maxlength')">
+                                    Passing year must be 4 digit number.
+                                </p>
+                                <p *ngIf="studentDetailsUpdateRequestGroup.controls['pgPassingYear'].errors['pattern']">
+                                    Passing year must be number.
+                                </p>
+                            </ng-container>
+                        </div>
+                        <div class="field col-12 sm:col-6 md:col-6 lg:col-3 pl-4 pr-4">
+                            <label>Subjects/Specialization </label>
+                            <input pInputText type="text" id="pgSubject" #value68 [disabled]="disableProperty(value68)"
+                                (blur)="onDataChange(value68, documentType20, null)" [style]="{'width': '100%'}"
+                                [(ngModel)]="studentDetailsUpdateRequestGroup.value.pgSubject"
+                                formControlName="pgSubject" />
+                        </div>
+                        <div class="field col-12 sm:col-6 md:col-6 lg:col-3 pl-4 pr-4">
+                            <label>Total Marks </label>
+                            <input pInputText type="text" id="pgTotalMarks" #value69
+                                [disabled]="disableProperty(value69)" [style]="{'width': '100%'}"
+                                (blur)="onDataChange(value69, documentType20, null)"
+                                [(ngModel)]="studentDetailsUpdateRequestGroup.value.pgTotalMarks"
+                                formControlName="pgTotalMarks" />
+                            <ng-container *ngIf="studentDetailsUpdateRequestGroup.controls['pgTotalMarks'].errors">
+                                <p *ngIf="studentDetailsUpdateRequestGroup.controls['pgTotalMarks'].errors['pattern']">
+                                    Total marks must be in number.
+                                </p>
+                            </ng-container>
+                        </div>
+                        <div class="field col-12 sm:col-6 md:col-6 lg:col-3 pl-4 pr-4">
+                            <label>Obtained Marks</label>
+                            <input pInputText type="text" id="pgObtainedMarks" #value70
+                                [disabled]="disableProperty(value70)" [style]="{'width': '100%'}"
+                                (blur)="onDataChange(value70, documentType20, null)"
+                                [(ngModel)]="studentDetailsUpdateRequestGroup.value.pgObtainedMarks"
+                                formControlName="pgObtainedMarks" />
+                            <ng-container *ngIf="studentDetailsUpdateRequestGroup.controls['pgObtainedMarks'].errors">
+                                <p
+                                    *ngIf="studentDetailsUpdateRequestGroup.controls['pgObtainedMarks'].errors['pattern']">
+                                    Obtained marks must be in number.
+                                </p>
+                            </ng-container>
+                        </div>
+                        <div class="field col-12 sm:col-6 md:col-6 lg:col-3 pl-4 pr-4">
+                            <label>Grade/Division</label>
+                            <input pInputText type="text" id="pgGrade" #value71 [disabled]="disableProperty(value71)"
+                                (blur)="onDataChange(value71, documentType20, null)" [style]="{'width': '100%'}"
+                                [(ngModel)]="studentDetailsUpdateRequestGroup.value.pgGrade"
+                                formControlName="pgGrade" />
+                        </div>
+                        <div class="field col-12 sm:col-6 md:col-6 lg:col-3 pl-4 pr-4">
+                            <label>Comment</label>
+                            <input #comment20 pInputText type="text" id="pgComment" [style]="{'width': '100%'}"
+                                [(ngModel)]="studentDetailsUpdateRequestGroup.value.pgComment"
+                                formControlName="pgComment" (blur)="addComment(comment20)" />
+                        </div>
+                        <div class="field col-12 sm:col-6 md:col-6 lg:col-3 pl-4 pr-4">
+                            <label> Document Type </label>
+                            <p-select #documentType20 inputId="pgDocumentUrl" id="pgDocumentUrl"
+                                [options]="studentEducationUpdateDocumentList" [disabled]="!comment20.value"
+                                [(ngModel)]="studentDetailsUpdateRequestGroup.value.pgDocumentUrl"
+                                formControlName="pgDocumentUrl" [style]="{'width': '100%'}"
+                                (onChange)="onDocumentTypeChanged($event, submitButton20);
+                                        captureMultipalProperty(value64, value65, value66, value67, value68, value69, value70, value71)">
+                            </p-select>
+                        </div>
+                        <div class="field col-12 sm:col-6 md:col-6 lg:col-3" style="text-align: center;">
+                            <label> </label>
+                            <p-fileupload #fileUpload20 mode="basic" [disabled]="isStudentPGFileUploadDisabled"
+                                (onSelect)="documentUpload($event,fileUpload20,20,submitButton20)" chooseLabel="Upload">
+                            </p-fileupload>
+                        </div>
+                        <div class="field col-12 sm:col-6 md:col-6 lg:col-3"
+                            style="padding-top: 22px; text-align: center;">
+                            <label></label>
+                            <button #submitButton20 [disabled]="true" pButton id="pgSubmit"
+                                (click)="submit(documentType20, submitButton20)" type="button" label="Submit"></button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+            <!-- </div> -->
+
+        </div>
+        <p-confirm-dialog [style]="{ width: '450px' }"></p-confirm-dialog>
+    </div>
+</div>

@@ -1,0 +1,275 @@
+<div class="pb-6">
+    <p-toast></p-toast>
+    <div class="grid">
+        <div class="col-12">
+            <div class="toolbar-demo card">
+                <p-toolbar>
+                    <div class="p-toolbar-group-left">
+                        <div class="header-left-div">
+                            <div class="header-div1">
+                                <i [ngClass]="iconClass" style="font-size: 40px;"></i>
+                            </div>
+                            <div class="header-div2">
+                                <h5>{{componentName}}</h5>
+                            </div>
+                        </div>
+                    </div>
+                    <ng-template pTemplate="right">
+                        <div class="p-d-flex">
+                            <button type="button" pButton pRipple icon="pi pi-file-excel" (click)="exportExcel()"
+                                class="p-button-success mr-2 p-button-raised" pTooltip="XLS"
+                                tooltipPosition="top"></button>
+                            <button type="button" pButton pRipple icon="pi pi-file-pdf" (click)="exportPdf()"
+                                class="p-button-warning mr-2 p-button-raised" pTooltip="PDF"
+                                tooltipPosition="top"></button>
+                        </div>
+                    </ng-template>
+                </p-toolbar>
+            </div>
+        </div>
+
+        <div class="col-12">
+            <div class="card px-5">
+                <form style="width: 100%" [formGroup]="topperStudentSearchFormGroup">
+                    <div class="fluid formgrid grid align-items-end">
+                        <div class="field col-12 sm:col-6 md:col-3 lg:col-2">
+                            <label for="viewType">ViewType</label>
+                            <p-select [filter]="true" inputId="viewType" [options]="viewTypeList" placeholder="Select"
+                                [showClear]="true" (onChange)="onChangeViewType($event)"
+                                styleClass="text-base text-color surface-overlay border-1 border-solid 
+                                    surface-border border-round appearance-none outline-none focus:border-primary w-full" [style]="{'width':'100%'}">
+                            </p-select>
+                        </div>
+                        <div class="field col-12 sm:col-6 md:col-3 lg:col-2">
+                            <label for="examinationId">Examination</label>
+                            <p-select [filter]="true" inputId="examinationId" [options]="examinationSelectItemList"
+                                formControlName="examinationId" placeholder="Select"
+                                (onChange)="onChangeExamination($event)" [showClear]="true"
+                                styleClass="text-base text-color surface-overlay border-1 border-solid 
+                                    surface-border border-round appearance-none outline-none focus:border-primary w-full" [style]="{'width':'100%'}"></p-select>
+                        </div>
+                        <div class="field col-12 sm:col-6 md:col-3 lg:col-2">
+                            <label for="academicSessionId">Academic Session</label>
+                            <p-select [filter]="true" inputId="academicSessionId"
+                                [options]="academicSessionSelectItemList" formControlName="academicSessionId"
+                                placeholder="Select" (onChange)="onChangeAcademicSession($event)" [showClear]="true"
+                                styleClass="text-base text-color surface-overlay border-1 border-solid 
+                                    surface-border border-round appearance-none outline-none focus:border-primary w-full"
+                                [style]="{'width':'100%'}"></p-select>
+                        </div>
+                        <div class="field col-12 sm:col-6 md:col-3 lg:col-2">
+                            <label for="programId">Program</label>
+                            <p-select [filter]="true" inputId="programId"
+                                [options]="programSelectItemList | reduceDuplicatesSelectItem : 'programName' : 'programId'"
+                                formControlName="programId" placeholder="Select" (onChange)="onChangeProgram($event)"
+                                [showClear]="true"
+                                styleClass="text-base text-color surface-overlay border-1 border-solid 
+                                    surface-border border-round appearance-none outline-none focus:border-primary w-full"
+                                [style]="{'width':'100%'}">
+                            </p-select>
+                        </div>
+                        <div class="field col-12 sm:col-6 md:col-3 lg:col-2">
+                            <label for="operationalVerticalId">Operational Vertical</label>
+                            <p-select [filter]="true" inputId="operationalVerticalId"
+                                [options]="operationalVerticalSelectItemList" formControlName="operationalVerticalId"
+                                placeholder="Select" [showClear]="true"
+                                styleClass="text-base text-color surface-overlay border-1 border-solid 
+                                    surface-border border-round appearance-none outline-none focus:border-primary w-full"
+                                [style]="{'width':'100%'}"></p-select>
+                        </div>
+
+                        <div class="field col-12 sm:col-6 md:col-3 lg:col-2">
+                            <button pButton type="button" icon="pi pi-search" (click)="SearchTopper()"
+                                class="p-button-raised" label="Search" pTooltip="Search"
+                                tooltipPosition="bottom"></button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="col-12 md:col-12 lg:col-12" *ngIf="displayTable">
+            <div class="card">
+                @if(!isLoading){
+                <p-table #dt [value]="topperStudents" [totalRecords]="totalSearchResultCount" [columns]="cols"
+                    [rows]="rowsToDisplay" [paginator]="true"
+                    [globalFilterFields]="['studentId','registrationNumber','studentName','sgpa','cgpa','totalMarksObtained']"
+                    [rowHover]="true" dataKey="id" [rowsPerPageOptions]="[10, 20, 50, 100, 500,{ showAll: 'All' }]"
+                    styleClass="p-datatable-customers p-datatable-gridlines p-datatable-striped p-datatable-sm"
+                    currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+                    [showCurrentPageReport]="true">
+                    <ng-template pTemplate="caption">
+                        <div class="flex flex-row flex-md-row md:justify-content-between table-header">
+                            <button pButton label="Reset" class="p-button-outlined" icon="pi pi-filter-slash"
+                                (click)="clear(dt)" style="width: 84px;"></button>
+                            <span class="p-input-icon-left">
+                                <i class="pi pi-search"></i>
+                                <input #searchInput pInputText type="text"
+                                    (input)="dt.filterGlobal((searchInput.value || ''), 'contains')"
+                                    placeholder="Search keyword" />
+                            </span>
+                        </div>
+                    </ng-template>
+                    <ng-template pTemplate="header">
+                        <tr [pSelectableRow]="true">
+                            <th>S.No</th>
+                            <th pSortableColumn="studentId" style="text-align: center;">
+                                Student Id
+                                <p-sort-icon field="studentId"> </p-sort-icon>
+                                <p-column-filter type="text" field="studentId" display="menu"></p-column-filter>
+                            </th>
+                            <th pSortableColumn="registrationNumber" style="text-align: center;">
+                                Registration Number
+                                <p-sort-icon field="registrationNumber"> </p-sort-icon>
+                                <p-column-filter type="text" field="registrationNumber"
+                                    display="menu"></p-column-filter>
+                            </th>
+                            <th pSortableColumn="studentName">
+                                Student Name
+                                <p-sort-icon field="studentName">
+                                </p-sort-icon>
+                                <p-column-filter type="text" field="studentName" display="menu"></p-column-filter>
+                            </th>
+                            <th pSortableColumn="programName">
+                                Program
+                                <p-sort-icon field="programName">
+                                </p-sort-icon>
+                                <p-column-filter type="text" field="programName" display="menu"></p-column-filter>
+                            </th>
+                            <th pSortableColumn="operationalVerticalRange">
+                                Semester Range
+                                <p-sort-icon field="operationalVerticalRange">
+                                </p-sort-icon>
+                                <p-column-filter type="text" field="operationalVerticalRange"
+                                    display="menu"></p-column-filter>
+                            </th>
+                            <th pSortableColumn="sgpa" style="text-align: center;" *ngIf="viewType !== 'Annual'">
+                                SGPA
+                                <p-sort-icon field="sgpa"> </p-sort-icon>
+                                <p-column-filter type="text" field="sgpa" display="menu"></p-column-filter>
+                            </th>
+                            <th pSortableColumn="cgpa" style="text-align: center;" *ngIf="viewType !== 'Annual'">
+                                CGPA
+                                <p-sort-icon field="cgpa">
+                                </p-sort-icon>
+                                <p-column-filter type="text" field="cgpa" display="menu"></p-column-filter>
+                            </th>
+                            <th pSortableColumn="totalMarksObtained" style="text-align: center;">
+                                TotalMarksObtained
+                                <p-sort-icon field="totalMarksObtained">
+                                </p-sort-icon>
+                                <p-column-filter type="text" field="totalMarksObtained"
+                                    display="menu"></p-column-filter>
+                            </th>
+                            <th pSortableColumn="percentage" style="text-align: center;" *ngIf="viewType == 'Annual'">
+                                Percentage
+                                <p-sort-icon field="percentage">
+                                </p-sort-icon>
+                                <p-column-filter type="text" field="percentage" display="menu"></p-column-filter>
+                            </th>
+                            <th pSortableColumn="rank" style="text-align: center;" *ngIf="viewType == 'Annual'">
+                                Rank
+                                <p-sort-icon field="rank">
+                                </p-sort-icon>
+                                <p-column-filter type="text" field="rank" display="menu"></p-column-filter>
+                            </th>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-topperStudent let-rowIndex="rowIndex">
+                        <tr>
+                            <td class="text-center">
+                                {{ rowIndex + 1 }}.
+                            </td>
+                            <td style="text-align: center; padding: 8px !important;">
+                                <span class="p-column-title">StudentId</span>
+                                {{topperStudent?.studentId}}
+                            </td>
+                            <td style="text-align: center; padding: 8px !important;">
+                                <span class="p-column-title">RegistrationNo</span>
+                                {{topperStudent?.registrationNumber}}
+                            </td>
+                            <td>
+                                <span class="p-column-title">StudentName</span>
+                                {{topperStudent?.studentName}}
+                            </td>
+                            <td>
+                                <span class="p-column-title">Program</span>
+                                {{programName}}
+                            </td>
+                            <td>
+                                <span class="p-column-title">Semester Range</span>
+                                {{operationalVerticalRange}}
+                            </td>
+                            <td style="text-align: center;" *ngIf="viewType !== 'Annual'">
+                                <span class="p-column-title">SGPA</span>
+                                {{topperStudent?.sgpa}}
+                            </td>
+                            <td style="text-align: center;" *ngIf="viewType !== 'Annual'">
+                                <span class="p-column-title">CGPA</span>
+                                {{topperStudent?.cgpa}}
+                            </td>
+                            <td style="text-align: center;">
+                                <span class="p-column-title">TotalMarksObtained</span>
+                                {{topperStudent?.totalMarksObtained}}
+                            </td>
+                            <td style="text-align: center;" *ngIf="viewType == 'Annual'">
+                                <span class="p-column-title">Percentage</span>
+                                {{ decimalPipe.transform(topperStudent?.percentage, '1.2-2') }}
+                            </td>
+                            <td style="text-align: center;" *ngIf="viewType == 'Annual'">
+                                <span class="p-column-title">Rank</span>
+                                {{topperStudent?.rank}}
+                            </td>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="summary">
+                        <div class="p-d-flex p-ai-center p-jc-between">
+                            There are total {{ totalRecordCount }} records.
+                        </div>
+                    </ng-template>
+                </p-table>
+                } @else {
+                <p-table [value]="skeletonValue" [columns]="cols" [rows]="10" [paginator]="true"
+                    [rowsPerPageOptions]="[10, 20, 30, 40, 50, 100, { showAll: 'All' }]" autoLayout="true"
+                    resizableColumns="true"
+                    styleClass="p-datatable-customers p-datatable-gridlines p-datatable-striped p-datatable-sm"
+                    currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+                    [showCurrentPageReport]="true" entries="Academic Session(s)">
+                    <ng-template pTemplate="caption">
+                        <div class="flex flex-row flex-md-row md:justify-content-between table-header">
+                            <button pButton label="Reset" class="p-button-outlined" icon="pi pi-filter-slash"
+                                style="width: 84px;"></button>
+                            <span class="p-input-icon-left">
+                                <i class="pi pi-search"></i>
+                                <input #searchInput pInputText type="text" placeholder="Search keyword" />
+                            </span>
+                        </div>
+                    </ng-template>
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th>S.No</th>
+                            @for(col of cols; track $index) {
+                            <th>{{ col.header }} <p-sort-icon field="{{col.field}}"></p-sort-icon>
+                                <p-column-filter [type]="col.filterType" [field]="col.field"
+                                    display="menu"></p-column-filter>
+                            </th>
+                            }
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body">
+                        @for(item of skeletonValue; track $index) {
+                        <tr>
+                            <td><p-skeleton /></td>
+                            @for(col of cols; track $index) {
+                            <td><p-skeleton /></td>
+                            }
+                        </tr>
+                        }
+                    </ng-template>
+                </p-table>
+                }
+            </div>
+        </div>
+    </div>
+    <p-confirm-dialog [style]="{ width: '450px' }"></p-confirm-dialog>
+</div>

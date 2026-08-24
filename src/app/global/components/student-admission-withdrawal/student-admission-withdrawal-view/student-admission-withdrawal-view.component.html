@@ -1,0 +1,147 @@
+<div class="pb-6">
+    <p-toast></p-toast>
+    <div class="grid">
+        <div class="col-12">
+            <div class="card toolbar-demo">
+                <p-toolbar>
+                    <div class="p-toolbar-group-left">
+                        <div class="header-left-div">
+                            <div class="header-div1">
+                                <i [ngClass]="iconClass" style="font-size: 40px;"></i>
+                            </div>
+                            <div class="header-div2">
+                                <label class="header-label">{{componentName}}</label>
+                                <h4 class="header-heading"> {{studentProgramProvisional.studentName}}</h4>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-toolbar-group-right">
+                        <button pButton type="button" label="Back" icon="pi pi-angle-left" (click)="goBack()"
+                            pTooltip="Go Back" tooltipPosition="top"
+                            class="p-button-warning mr-2 p-button-raised"></button>
+                    </div>
+                </p-toolbar>
+            </div>
+        </div>
+
+        <div class="col-12">
+            <div class="card flex flex-column md:flex-row">
+                <div class="col-12 lg:col-6">
+                    <div class="p-2 h-full">
+                        <div class="flex align-items-center mb-4 border-bottom-1 surface-border pb-3">
+                            <div class="text-xl font-bold text-900">Student Admission Details</div>
+                        </div>
+
+                        <div class="fluid formgrid grid">
+                            <div class="field col-12 md:col-6 mb-3">
+                                <span class="text-500 font-medium text-sm block mb-1">Admission Number</span>
+                                <span
+                                    class="text-900 font-semibold block">{{studentProgramProvisional.provisionalNumber}}</span>
+                            </div>
+                            <div class="field col-12 md:col-6 mb-3">
+                                <span class="text-500 font-medium text-sm block mb-1">Student Name</span>
+                                <span
+                                    class="text-900 font-semibold block">{{studentProgramProvisional.studentName}}</span>
+                            </div>
+                            <div class="field col-12 md:col-6 mb-3">
+                                <span class="text-500 font-medium text-sm block mb-1">Program</span>
+                                <span
+                                    class="text-900 font-semibold block">{{studentProgramProvisional.programName}}</span>
+                            </div>
+                            <div class="field col-12 md:col-6 mb-3">
+                                <span class="text-500 font-medium text-sm block mb-1">Academic Session</span>
+                                <span
+                                    class="text-900 font-semibold block">{{studentProgramProvisional.academicSessionName}}</span>
+                            </div>
+                            <div class="field col-12 md:col-6 mb-3">
+                                <span class="text-500 font-medium text-sm block mb-1">Admission Date</span>
+                                <span class="text-900 font-semibold block">{{studentProgramProvisional.dateOfAdmission
+                                    |
+                                    date: 'dd-MMMM-yyyy' }}</span>
+                            </div>
+                            <div class="field col-12 md:col-6 mb-3">
+                                <span class="text-500 font-medium text-sm block mb-1">Paid Amount</span>
+                                <span
+                                    class="text-blue-600 font-bold text-lg block">₹{{studentOnBoardingWithdrawalDetials.paidAmount}}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="w-full md:w-2">
+                    <p-divider layout="vertical" styleClass="hidden md:flex">
+
+                    </p-divider>
+                    <p-divider layout="horizontal" styleClass="flex md:hidden" [align]="'center'">
+
+                    </p-divider>
+                </div>
+                <div class="col-12 lg:col-6">
+                    <div class="p-2 h-full">
+                        <div class="flex align-items-center mb-4 border-bottom-1 surface-border pb-3">
+                            <div class="text-xl font-bold text-900">Bank & Withdrawal Information</div>
+                        </div>
+
+                        <div class="fluid formgrid grid">
+                            <div class="field col-12 md:col-6 mb-3">
+                                <span class="text-500 font-medium text-sm block mb-1">Bank Name</span>
+                                <span
+                                    class="text-900 font-semibold block">{{studentOnBoardingWithdrawalDetials.bankName}}</span>
+                            </div>
+                            <div class="field col-12 md:col-6 mb-3">
+                                <span class="text-500 font-medium text-sm block mb-1">Branch Name</span>
+                                <span
+                                    class="text-900 font-semibold block">{{studentOnBoardingWithdrawalDetials.branchName}}</span>
+                            </div>
+                            <div class="field col-12 md:col-6 mb-3">
+                                <span class="text-500 font-medium text-sm block mb-1">Account Number</span>
+                                <span
+                                    class="text-900 font-semibold block">{{studentOnBoardingWithdrawalDetials.accountNumber}}</span>
+                            </div>
+                            <div class="field col-12 md:col-6 mb-3">
+                                <span class="text-500 font-medium text-sm block mb-1">IFSC Code</span>
+                                <span
+                                    class="text-900 font-semibold block">{{studentOnBoardingWithdrawalDetials.ifscCode}}</span>
+                            </div>
+                            <div class="field col-12 md:col-6 mb-3">
+                                <span class="text-500 font-medium text-sm block mb-1">Account Holder Name</span>
+                                <span
+                                    class="text-900 font-semibold block">{{studentOnBoardingWithdrawalDetials.accountHolderName}}</span>
+                            </div>
+                            <div class="field col-12 md:col-6 mb-3">
+                                <span class="text-500 font-medium text-sm block mb-1">Request Date</span>
+                                <span
+                                    class="text-900 font-semibold block">{{studentOnBoardingWithdrawalDetials.createdDate
+                                    | date: 'dd-MMMM-yyyy' }}</span>
+                            </div>
+                            <div class="field col-12 mb-3">
+                                <span class="text-500 font-medium text-sm block mb-1">Withdrawal Reason</span>
+                                <span
+                                    class="text-900 font-semibold block line-height-3">{{studentOnBoardingWithdrawalDetials.withdrawalReason}}</span>
+                            </div>
+                            <div class="field col-12 mt-2">
+                                <a target="_blank" [href]="studentOnBoardingWithdrawalDetials.fileUrl"
+                                    class="inline-flex align-items-center bg-blue-50 text-blue-600 font-medium py-2 px-4 border-round-md no-underline transition-colors hover:bg-blue-100 w-fit">
+                                    <i class="pi pi-file-pdf mr-2"></i>
+                                    View Chequebook / Passbook
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12">
+            <div class="card p-2" *ngIf="studentOnBoardingWithdrawalDetials && studentProgramProvisional && canEditTo">
+                <div class="text-xl font-bold mb-4 text-900 border-bottom-1 surface-border pb-3">
+                    Payment Process
+                </div>
+                <app-student-admission-withdrawal-payment-process
+                    [studentOnBoardingWithdrawalDetialsTo]="studentOnBoardingWithdrawalDetials"
+                    [studentProgramProvisional]="studentProgramProvisional">
+                </app-student-admission-withdrawal-payment-process>
+            </div>
+
+        </div>
+    </div>
+</div>

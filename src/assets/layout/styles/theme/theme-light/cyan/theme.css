@@ -490,11 +490,11 @@
     right: 3.75rem;
   }
 
-  p-calendar.ng-dirty.ng-invalid>.p-calendar>.p-inputtext {
+  p-datepicker.ng-dirty.ng-invalid>.p-datepicker>.p-inputtext {
     border-color: #e24c4c;
   }
 
-  .p-calendar:not(.p-calendar-disabled).p-focus>.p-inputtext {
+  .p-datepicker:not(.p-datepicker-disabled).p-focus>.p-inputtext {
     outline: 0 none;
     outline-offset: 0;
     box-shadow: 0 0 0 0.2rem #99e3e8;
@@ -753,16 +753,16 @@
     box-shadow: 0 0 0 0.2rem #99e3e8;
   }
 
-  p-calendar.p-calendar-clearable .p-inputtext {
+  p-datepicker.p-datepicker-clearable .p-inputtext {
     padding-right: 2.5rem;
   }
 
-  p-calendar.p-calendar-clearable .p-calendar-clear-icon {
+  p-datepicker.p-datepicker-clearable .p-datepicker-clear-icon {
     color: #6c757d;
     right: 0.75rem;
   }
 
-  p-calendar.p-calendar-clearable .p-calendar-w-btn .p-calendar-clear-icon {
+  p-datepicker.p-datepicker-clearable .p-datepicker-w-btn .p-datepicker-clear-icon {
     color: #6c757d;
     right: 3.75rem;
   }

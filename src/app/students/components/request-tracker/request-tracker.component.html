@@ -1,0 +1,45 @@
+<div class="pb-6">
+    <div class="grid">
+        <p-toast></p-toast>
+        <div class="col-12">
+            <div class="toolbar-demo card">
+                <p-toolbar>
+                    <div class="p-toolbar-group-left">
+                        <div class="header-left-div">
+                            <div class="header-div1">
+                                <i class="fa-brands fa-docker" style="font-size: 40px;"></i>
+                            </div>
+                            <div class="header-div2">
+                                <h5>{{componentName}}</h5>
+                            </div>
+                        </div>
+                    </div>
+                    <ng-template pTemplate="right">
+                        <div class="d-flex">
+                        </div>
+                    </ng-template>
+                </p-toolbar>
+            </div>
+        </div>
+        <div class="col-12 ">
+            <div class="card">
+                <app-generic-table [value]="updateInformationRequestList" [cols]="cols" [rows]="10" [paginator]="true"
+                    [rowsPerPageOptions]="[10, 20, 30, 40, 50, 100, { showAll: 'All' }]" selectionMode="multiple"
+                    [resizableColumns]="true" [isLoading]="isLoading" [globalFilterFields]="['requestId' ,
+                            'createdDate' ,
+                            'propertyName' ,
+                            'propertyValue' ,
+                            'documentType' ,
+                            'comments' ,
+                            'isApproved' ,
+                            'reviewerComments' ,
+                           ]"
+                    styleClass="p-datatable-customers p-datatable-gridlines p-datatable-striped p-datatable-sm"
+                    currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+                    [showCurrentPageReport]="true" entries="Student Program(s)">
+                </app-generic-table>
+            </div>
+        </div>
+        <p-confirm-dialog [style]="{ width: '450px' }"></p-confirm-dialog>
+    </div>
+</div>

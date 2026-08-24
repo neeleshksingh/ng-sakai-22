@@ -1,0 +1,197 @@
+<div class="feed-wrapper w-full flex flex-column pb-6">
+
+    <!-- Feed Header / Title Area -->
+    <div
+        class="feed-section-header card p-3 border-round-xl border-1 surface-border shadow-1 flex align-items-center justify-content-between">
+        <div class="flex align-items-center gap-3">
+            <div class="feed-icon-badge flex align-items-center justify-content-center">
+                <i class="pi pi-compass text-lg"></i>
+            </div>
+            <div class="flex flex-column">
+                <h3 class="m-0 font-bold text-900 text-xl">University Feed</h3>
+                <span class="text-xs text-500 mt-1">Latest announcements & updates</span>
+            </div>
+        </div>
+        <!-- <p-button icon="pi pi-filter" [text]="true" [rounded]="true" severity="secondary" styleClass="feed-filter-btn"
+            pTooltip="Filter Feed" tooltipPosition="left"></p-button> -->
+    </div>
+
+    <!-- Skeleton Loading State -->
+    @if (isLoading()) {
+    @for (i of [1, 2]; track i) {
+    <div class="card p-0 border-round-xl shadow-1 surface-card border-1 surface-border mb-4">
+        <div class="p-4 flex align-items-center gap-3">
+            <p-skeleton shape="circle" size="3rem"></p-skeleton>
+            <div class="flex flex-column gap-2 flex-1">
+                <p-skeleton width="30%" height="1rem"></p-skeleton>
+                <p-skeleton width="20%" height="0.8rem"></p-skeleton>
+            </div>
+        </div>
+        <div class="px-4 pb-4">
+            <p-skeleton width="100%" height="1.5rem" styleClass="mb-2"></p-skeleton>
+            <p-skeleton width="80%" height="1.5rem"></p-skeleton>
+        </div>
+        <p-skeleton width="100%" height="20rem" shape="rectangle"></p-skeleton>
+    </div>
+    }
+    }
+    <!-- Empty State -->
+    @else if (posts().length === 0) {
+    <div class="card p-6 border-round-xl shadow-1 surface-card border-1 surface-border text-center">
+        <div class="bg-surface-100 border-circle inline-flex justify-content-center align-items-center mb-4"
+            style="width: 4rem; height: 4rem;">
+            <i class="pi pi-inbox text-3xl text-500"></i>
+        </div>
+        <h4 class="text-800 m-0 mb-2">You're all caught up!</h4>
+        <p class="text-500 m-0">Check back later for new university announcements.</p>
+    </div>
+    }
+    <!-- Actual Feed Data -->
+    @else {
+    @for (post of posts(); track post.id) {
+    <div class="feed-card card p-0 border-round-xl surface-card border-1 surface-border overflow-hidden transition-all transition-duration-200"
+        [ngClass]="{'border-red-500 border-2': post.postType === 'Emergency'}">
+
+        <!-- Card Header -->
+        <div class="p-4 pb-3">
+            <div class="flex justify-content-between align-items-start">
+                <div class="flex align-items-center gap-3">
+                    <p-avatar [image]="post.avatar" shape="circle" size="large"
+                        styleClass="border-1 surface-border shadow-1"></p-avatar>
+                    <div class="flex flex-column justify-content-center">
+                        <span class="font-bold text-900 text-base mb-1">{{ post.author }}</span>
+                        <span class="text-sm text-500">
+                            {{ post.authorRole }}
+                            @if (hasValidCreatedOn(post.createdOn)) {
+                            <span> • {{ post.createdOn | date:'mediumDate' }}</span>
+                            }
+                        </span>
+                    </div>
+                </div>
+                <div class="flex align-items-center gap-2 mt-1">
+                    @if (isNewPost(post.createdOn)) {
+                    <span class="feed-new-badge">
+                        <i class="pi pi-sparkles text-xs"></i>
+                        New
+                    </span>
+                    }
+                    @if (post.isPinned) {
+                    <span
+                        class="text-xs font-bold text-red-500 bg-red-50 px-2 py-1 border-round flex align-items-center gap-1">
+                        <i class="pi pi-thumbtack text-xs"></i> Pinned
+                    </span>
+                    }
+                    <p-tag [severity]="getCategorySeverity(post.postType)" [rounded]="true" styleClass="px-2">
+                        <div class="flex align-items-center gap-1">
+                            <i [class]="getCategoryIcon(post.postType)" class="text-xs"></i>
+                            <span class="text-xs font-semibold">{{ post.postType }}</span>
+                        </div>
+                    </p-tag>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card Body (Text) -->
+        <div class="px-4 pb-3">
+            @if (post.title) {
+            <h4 class="m-0 mb-2 text-lg font-bold text-900 line-height-3">{{ post.title }}</h4>
+            }
+            <div class="text-800 line-height-3 text-base" [ngClass]="{'line-clamp-3': !isExpanded(post.id)}">
+                {{ post.description }}
+            </div>
+            @if (post.description.length > 200) {
+            <span class="text-primary cursor-pointer font-semibold hover:underline text-sm block mt-2"
+                (click)="toggleReadMore(post.id)">
+                {{ isExpanded(post.id) ? 'Show less' : 'Read more' }}
+            </span>
+            }
+        </div>
+
+        <!-- Rich Media Section (Images & External Link Hover) -->
+        @if (post.imageUrls.length > 0) {
+        <div class="feed-media-section w-full flex justify-content-center">
+
+            @if (post.externalUrl) {
+            <!-- Image with Hover Link (For LinkedIn / External Posts) -->
+            <a [href]="post.externalUrl" target="_blank"
+                class="link-image-container relative w-full h-full flex justify-content-center cursor-pointer overflow-hidden">
+                <img [src]="post.imageUrls[0]" alt="Post Image" class="h-auto max-h-30rem object-contain block"
+                    style="background-color: var(--surface-50);" />
+
+                <!-- Hover Overlay -->
+                <div
+                    class="link-overlay absolute top-0 left-0 w-full h-full flex align-items-end justify-content-center transition-all transition-duration-300 opacity-0">
+                    <div class="link-overlay-badge">
+                        <i class="pi pi-linkedin" *ngIf="post.externalUrl.includes('linkedin')"></i>
+                        <i class="pi pi-external-link" *ngIf="!post.externalUrl.includes('linkedin')"></i>
+                        <span>View on {{ post.externalUrl.includes('linkedin') ? 'LinkedIn' : 'Website' }}</span>
+                    </div>
+                </div>
+            </a>
+            } @else {
+            <!-- Standard Image with Preview (For normal announcements) -->
+            <p-image [src]="post.imageUrls[0]" alt="Post Image" [preview]="true"
+                styleClass="w-full flex justify-content-center"
+                imageClass="w-full h-auto max-h-30rem object-contain block"></p-image>
+            }
+        </div>
+        }
+
+        <!-- Attachments & Links Section (Clean Rich-Link Style) -->
+        @if (post.attachmentUrl || post.externalUrl) {
+        <div class="px-4 py-3 flex flex-column gap-2">
+
+            @if (post.attachmentUrl) {
+            <div (click)="handlePdfView(post.attachmentUrl)"
+                class="flex align-items-center gap-3 bg-surface-50 border-1 surface-border border-round-lg p-3 cursor-pointer hover:bg-surface-100 transition-colors shadow-none hover:shadow-1">
+                <div class="bg-red-50 text-red-500 border-circle flex align-items-center justify-content-center"
+                    style="width: 40px; height: 40px;">
+                    <i class="pi pi-file-pdf text-xl"></i>
+                </div>
+                <div class="flex flex-column flex-1">
+                    <span class="text-sm font-bold text-800">Official Document.pdf</span>
+                    <span class="text-xs text-500">Click to view document</span>
+                </div>
+                <p-button icon="pi pi-download" [rounded]="true" [text]="true" severity="secondary"></p-button>
+            </div>
+            }
+
+            @if (post.externalUrl && !post.embedUrl && post.imageUrls.length === 0) {
+            <a [href]="post.externalUrl" target="_blank" class="no-underline">
+                <div
+                    class="flex align-items-center gap-3 bg-surface-50 border-1 surface-border border-round-lg p-3 hover:bg-surface-100 transition-colors shadow-none hover:shadow-1">
+                    <div class="bg-blue-50 text-blue-500 border-circle flex align-items-center justify-content-center"
+                        style="width: 40px; height: 40px;">
+                        <i class="pi pi-external-link text-xl"></i>
+                    </div>
+                    <div class="flex flex-column flex-1">
+                        <span class="text-sm font-bold text-800">External Resource Link</span>
+                        <span class="text-xs text-500">{{ post.externalUrl | slice:0:40 }}...</span>
+                    </div>
+                    <i class="pi pi-angle-right text-500 text-xl"></i>
+                </div>
+            </a>
+            }
+        </div>
+        }
+
+        <!-- Footer (Metadata & Actions) - Temporarily commented out -->
+        <!-- <div
+            class="feed-card-footer px-4 py-2 border-top-1 surface-border flex justify-content-between align-items-center">
+            <div class="flex align-items-center gap-2 text-500 text-sm font-medium">
+                <i class="pi pi-eye text-xs"></i>
+                <span>{{ post.views | number }} Views</span>
+            </div>
+            
+            <button pButton pRipple type="button" 
+                class="p-button-rounded p-button-text p-0 w-auto px-3 py-2 flex align-items-center gap-2 transition-all transition-duration-200"
+                [ngClass]="{'text-pink-500 hover:bg-pink-50': post.isLiked, 'text-500 hover:text-700': !post.isLiked}"
+                (click)="toggleLike(post)">
+                <i class="pi text-lg like-icon-anim" [ngClass]="{'pi-heart-fill': post.isLiked, 'pi-heart': !post.isLiked}"></i>
+                <span class="font-semibold text-sm">{{ post.likes | number }}</span>
+            </button>
+        </div> -->
+    </div>
+    }
+    }
+</div>

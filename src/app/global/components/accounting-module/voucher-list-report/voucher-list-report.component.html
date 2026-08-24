@@ -1,0 +1,199 @@
+<div>
+    <form [formGroup]="dateRangeFormGroup">
+        <div class="card">
+            <div class="fluid formgrid grid align-items-end px-3">
+                <div class="field col-12 sm:col-6 md:col-4 lg:col-3">
+                    <label for="fromDate">FromDate</label>
+                    <p-datepicker id="fromDate" formControlName="fromDateTime" showIcon="true"
+                        styleClass="text-base text-color surface-overlay surface-border border-round appearance-none outline-none focus:border-primary w-full"></p-datepicker>
+                </div>
+                <div class="field col-12 sm:col-6 md:col-4 lg:col-3">
+                    <label for="ToDate">ToDate</label>
+                    <p-datepicker id="ToDate" formControlName="toDateTime" showIcon="true"
+                        styleClass="text-base text-color surface-overlay surface-border border-round appearance-none outline-none focus:border-primary w-full"></p-datepicker>
+                </div>
+                <div class="field col-12 sm:col-6 md:col-1">
+                    <button pButton label="Search" class="p-button-raised" (click)="searchByDateRange()" type="button"
+                        *ngIf="'Voucher_View' | hasPermission | async"></button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<div class="mt-2">
+    <div class="card">
+        <p-table #dt [value]="vouchers" [rows]="rowsToDisplay" [paginator]="true" [lazy]="true"
+            (onLazyLoad)="loadVouchers($event)" [rowsPerPageOptions]="[10, 20, 50, 100, 500, { showAll: 'All' }]"
+            [totalRecords]="totalMatchingRecordCount" [globalFilterFields]="globalFilterFields" [rowHover]="true"
+            dataKey="id" styleClass="p-datatable-customers p-datatable-gridlines p-datatable-striped p-datatable-sm"
+            currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+            [showCurrentPageReport]="true" [resizableColumns]="true" [loading]="loading">
+
+            <ng-template pTemplate="caption">
+                <div class="flex flex-column sm:flex-row justify-content-end align-items-center gap-3 pb-2">
+                    <span class="p-input-icon-left w-full sm:w-auto">
+                        <i class="pi pi-search"></i>
+                        <input #searchInput pInputText type="text" class="w-full sm:w-20rem"
+                            (input)="dt.filterGlobal($any($event.target).value, 'contains')"
+                            placeholder="Search account groups..." />
+                    </span>
+                </div>
+            </ng-template>
+
+            <ng-template pTemplate="header">
+                <tr>
+                    <th pSortableColumn="voucherNumber" class="text-center">Voucher Number <p-sort-icon
+                            field="voucherNumber"></p-sort-icon>
+                    </th>
+                    <th pSortableColumn="voucherDate" class="text-center">Voucher Date <p-sort-icon
+                            field="voucherDate"></p-sort-icon></th>
+                    <th pSortableColumn="voucherTypeName" class="text-center">Voucher Type <p-sort-icon
+                            field="voucherTypeName"></p-sort-icon></th>
+                    <th pSortableColumn="totalAmount" class="text-center">Total Amount <p-sort-icon
+                            field="totalAmount"></p-sort-icon></th>
+                    <th pSortableColumn="status" class="text-center">Status <p-sort-icon field="status"></p-sort-icon>
+                    </th>
+                    <th pSortableColumn="createdBy" class="text-center">Created By <p-sort-icon
+                            field="createdBy"></p-sort-icon></th>
+                    <th pSortableColumn="createdDate" class="text-center">Created Date <p-sort-icon
+                            field="createdDate"></p-sort-icon></th>
+                    <th *ngIf="showActionButtons" class="text-center">Action</th>
+                </tr>
+            </ng-template>
+
+            <ng-template pTemplate="body" let-voucherResponse>
+                <tr>
+                    <td class="text-center">
+                        <span class="font-bold text-primary cursor-pointer underline"
+                            (click)="showVoucherDetails(voucherResponse)">
+                            {{voucherResponse.voucherNumber}}
+                        </span>
+                    </td>
+                    <td class="text-center">{{voucherResponse.voucherDate | date:'dd/MM/yyyy'}}</td>
+                    <td class="text-center">{{voucherResponse.voucherTypeName}}</td>
+                    <td class="text-center font-bold">{{voucherResponse.totalAmount | globalCurrency:'INR'}}</td>
+                    <td class="text-center">
+                        <span [ngStyle]="{'color': voucherResponse.status === 'DELETED' ? 'red' : 'inherit'}">
+                            {{voucherResponse.status}}
+                        </span>
+                    </td>
+                    <td class="text-center">{{voucherResponse.createdBy}}</td>
+                    <td class="text-center">{{voucherResponse.createdDate | date:'dd/MM/yyyy'}}</td>
+                    <td *ngIf="showActionButtons" class="text-center">
+                        <button pButton pRipple icon="pi pi-eye"
+                            *ngIf="('VoucherEntry_View' | hasPermission | async) && showVoucherDetailsButton"
+                            class="p-button-rounded p-button-info mr-2 p-button-raised"
+                            (click)="showVoucherDetails(voucherResponse)" pTooltip="View Details"
+                            tooltipPosition="bottom" style="width: 2rem; height: 2rem;"></button>
+                        <button pButton pRipple icon="pi pi-pencil"
+                            *ngIf="('Voucher_Update' | hasPermission | async) && showVoucherEditButton"
+                            class="p-button-rounded p-button-primary mr-2 p-button-raised"
+                            (click)="editVoucher(voucherResponse)" pTooltip="Edit" tooltipPosition="bottom"
+                            style="width: 2rem; height: 2rem;"></button>
+                        <button pButton pRipple icon="pi pi-trash"
+                            *ngIf="('Voucher_Delete' | hasPermission | async) && showVoucherDeleteButton"
+                            class="p-button-rounded p-button-danger p-button-raised"
+                            (click)="deleteVoucher(voucherResponse)" pTooltip="Delete" tooltipPosition="bottom"
+                            style="width: 2rem; height: 2rem;"></button>
+                    </td>
+                </tr>
+            </ng-template>
+
+            <ng-template pTemplate="summary">
+                <div class="p-d-flex p-ai-center p-jc-between">
+                    There are {{ totalMatchingRecordCount }} matching records out of total {{ totalCount }}
+                </div>
+            </ng-template>
+        </p-table>
+    </div>
+</div>
+
+<p-dialog header="Voucher Details" [(visible)]="displayDialog" [modal]="true" [style]="{width: '70vw'}"
+    [draggable]="false" [resizable]="false" headerStyleClass="text-center w-full">
+
+    <div *ngIf="selectedVoucher && ('VoucherEntry_View' | hasPermission | async)" class="pt-2">
+
+        <div
+            class="surface-50 border-round border-1 surface-border p-3 mb-3 flex flex-wrap justify-content-between align-items-center gap-3">
+            <div class="flex flex-column">
+                <span class="text-500 font-medium mb-1 text-sm uppercase">Voucher Number</span>
+                <span class="text-900 font-bold text-lg">{{ selectedVoucher.voucherNumber }}</span>
+            </div>
+
+            <div class="flex flex-column">
+                <span class="text-500 font-medium mb-1 text-sm uppercase">Voucher Date</span>
+                <span class="text-900 font-bold text-lg">{{ selectedVoucher.voucherDate | date:'dd/MM/yyyy' }}</span>
+            </div>
+
+            <div class="flex flex-column">
+                <span class="text-500 font-medium mb-1 text-sm uppercase">Voucher Type</span>
+                <span class="text-900 font-bold text-lg">
+                    <span class="bg-primary-reverse text-primary border-round px-2 py-1 text-sm">
+                        {{ selectedVoucher.voucherTypeName }}
+                    </span>
+                </span>
+            </div>
+
+            <div class="flex flex-column text-right">
+                <span class="text-500 font-medium mb-1 text-sm uppercase">Total Amount</span>
+                <span class="text-green-600 font-bold text-2xl">{{ (selectedVoucher.totalAmount ?? 0) |
+                    globalCurrency:'INR'
+                    }}</span>
+            </div>
+        </div>
+        <p-table [value]="selectedVoucher.voucherEntryList ?? []" dataKey="id"
+            styleClass="p-datatable-gridlines p-datatable-sm w-full">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th style="width: 10%" class="text-center">SL No.</th>
+                    <th style="width: 50%">Particulars</th>
+                    <th style="width: 20%" class="text-center">Debit</th>
+                    <th style="width: 20%" class="text-center">Credit</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-entry let-i="rowIndex">
+                <tr>
+                    <td class="text-center">{{ i + 1 }}</td>
+                    <td>
+                        <div class="flex flex-column gap-1">
+                            <span class="font-medium text-800">{{ entry.accountLedgerName }}</span>
+
+                            <div *ngIf="entry.accountLedgerId > 0"
+                                class="text-xs font-semibold px-2 py-1 border-round-md inline-flex align-items-center w-max"
+                                [ngClass]="entry.closingBalance > 0 ? 'bg-green-50 text-green-700' : 'bg-red-50 text-red-700'">
+
+                                Balance: {{ (entry.closingBalance > 0 ? entry.closingBalance : (entry.closingBalance < 0
+                                    ? entry.closingBalance * -1 : 0)) | globalCurrency:'INR' }} {{
+                                    entry.transactionTypeId===1 ? 'Dr' : (entry.transactionTypeId===2 ? 'Cr' : '' ) }}
+                                    </div>
+                            </div>
+                    </td>
+                    <td class="text-center">
+                        <ng-container *ngIf="entry.transactionTypeName === 'Debit'">
+                            {{ entry.amount | globalCurrency:'INR' }}
+                        </ng-container>
+                    </td>
+
+                    <td class="text-center">
+                        <ng-container *ngIf="entry.transactionTypeName === 'Credit'">
+                            {{ entry.amount | globalCurrency:'INR' }}
+                        </ng-container>
+                    </td>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="footer">
+                <tr>
+                    <td colspan="2" class="font-bold py-3">
+                        Narration: <span class="font-normal">{{ selectedVoucher.narration }}</span>
+                    </td>
+                    <td class="text-center font-bold text-xl">{{ (selectedVoucher.totalAmount ?? 0) |
+                        globalCurrency:'INR' }}
+                    </td>
+                    <td class="text-center font-bold text-xl">{{ (selectedVoucher.totalAmount ?? 0) |
+                        globalCurrency:'INR' }}
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
+</p-dialog>

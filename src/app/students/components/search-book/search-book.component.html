@@ -1,0 +1,347 @@
+<div class="pb-6">
+    <div class="grid">
+        <p-toast></p-toast>
+
+        <!-- Enhanced Header -->
+        <div class="col-12">
+            <div class="card shadow-3 border-round-xl overflow-hidden">
+                <p-toolbar>
+                    <div class="p-toolbar-group-left">
+                        <div class="header-left-div">
+                            <div class="header-div1">
+                                <i class="fa-brands fa-docker" style="font-size: 40px;"></i>
+                            </div>
+                            <div class="header-div2">
+                                <h5>{{componentName}}</h5>
+                            </div>
+                        </div>
+                    </div>
+                    <ng-template pTemplate="right">
+                        <div class="d-flex">
+                        </div>
+                    </ng-template>
+                </p-toolbar>
+            </div>
+        </div>
+
+        <!-- Enhanced Search Section -->
+        <div class="col-12 md:col-12 lg:col-12">
+            <div class="card">
+                <div class="grid align-items-end">
+                    <div class="col-12 md:col-6 lg:col-3 p-4">
+                        <span class="p-input-icon-left w-full">
+                            <i class="pi pi-search"></i>
+                            <input pInputText type="text" placeholder="Enter book title, author name or subject..."
+                                [(ngModel)]="searchTerm" (keydown.enter)="searchBook()"
+                                class="w-full text-sm  pl-5  p-3">
+                        </span>
+                    </div>
+                    <div class="col-12 md:col-6 lg:col-2 p-4 flex justify-content-center md:justify-content-start">
+                        <button pButton type="button" label="Search" icon="pi pi-search" (click)="searchBook()">
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <ng-container *ngIf="displayBooks">
+            <!-- Enhanced Filter Panel -->
+            <div class="col-12 md:col-12 lg:col-3">
+                <div class="card pt-6">
+                    <div class="grid align-items-end justify-content-center align-content-center">
+
+                        <div class="field col-11 md:col-11">
+                            <div class="category-container  scrollable-container"
+                                *ngFor="let category of searchCategories">
+                                <h4 *ngIf="category?.searchCategoryName" class="category-title">
+                                    {{ category?.searchCategoryName }}
+                                </h4>
+
+                                <div class="checkbox-group" *ngFor="let item of category?.searchCategoryItems">
+                                    <p-checkbox *ngIf="category?.searchCategoryName && item?.searchCategoryItemName"
+                                        [name]="category.searchCategoryName ?? ''"
+                                        [value]="item?.searchCategoryItemName" [label]="item?.searchCategoryItemName"
+                                        (onChange)="onSearchCategoryChange(category.searchCategoryName, item.searchCategoryItemName, $event)"
+                                        [(ngModel)]="selectedCategories">
+                                    </p-checkbox>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Enhanced Results Grid -->
+            <div class="col-12 lg:col-9">
+                <div class="card shadow-2 border-round-lg">
+                    <div class="flex align-items-center justify-content-between mb-4 pb-3 border-bottom-1 border-200">
+                        <div class="flex align-items-center gap-2">
+                            <i class="pi pi-book text-primary" style="font-size: 1.25rem;"></i>
+                            <h4 class="m-0 font-bold text-900">Search Results</h4>
+                        </div>
+                        <p-tag [value]="bookSearchResponseFilter.books.length + ' Books Found'" severity="success"
+                            [style]="{'font-size': '0.875rem'}"></p-tag>
+                    </div>
+
+                    <p-table [value]="bookSearchResponseFilter.books" [paginator]="true" [rows]="10"
+                        [rowsPerPageOptions]="[10, 20, 30, 40, 50, 100]" [responsiveLayout]="'scroll'" [rowHover]="true"
+                        [styleClass]="'p-datatable-striped'">
+                        <ng-template pTemplate="body" let-item let-i="rowIndex">
+                            <tr>
+                                <td colspan="8" class="p-0">
+                                    <div (click)="openBookDetailsDialog(item.id)"
+                                        class="cursor-pointer transition-all transition-duration-300 hover:shadow-3 m-2 border-round-lg overflow-hidden"
+                                        [style]="{'border-left': '5px solid ' + (item?.expectedReturnDate ? '#ef4444' : '#22c55e')}">
+                                        <div class="p-4"
+                                            [style]="{'background': item?.expectedReturnDate ? 'linear-gradient(90deg, rgba(239, 68, 68, 0.1) 0%, rgba(255, 255, 255, 1) 100%)' : 'linear-gradient(90deg, rgba(34, 197, 94, 0.1) 0%, rgba(255, 255, 255, 1) 100%)'}">
+
+                                            <!-- Book Header -->
+                                            <div
+                                                class="flex flex-wrap align-items-center justify-content-between mb-3 gap-3">
+                                                <div class="flex-1">
+                                                    <h5 class="m-0 mb-1 text-900 font-bold">{{ item?.name }}</h5>
+                                                    <div class="flex align-items-center gap-2">
+                                                        <p-tag [value]="'AN: ' + item?.accessionNumber" severity="info"
+                                                            [style]="{'font-size': '0.75rem'}"></p-tag>
+                                                        <p-tag
+                                                            [value]="item?.expectedReturnDate ? 'Not Available' : 'Available'"
+                                                            [severity]="item?.expectedReturnDate ? 'danger' : 'success'"
+                                                            [style]="{'font-size': '0.75rem'}"></p-tag>
+                                                    </div>
+                                                </div>
+                                                <i class="pi pi-angle-right text-400" style="font-size: 1.5rem;"></i>
+                                            </div>
+
+                                            <!-- Book Details Grid -->
+                                            <div class="grid">
+                                                <div class="col-12 sm:col-6 md:col-4 lg:col-3 mb-2">
+                                                    <div class="text-500 text-sm mb-1">
+                                                        <i class="pi pi-bookmark mr-1"></i>Subject
+                                                    </div>
+                                                    <div class="text-900 font-medium">{{ item?.subjectName || 'N/A' }}
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-12 sm:col-6 md:col-4 lg:col-3 mb-2">
+                                                    <div class="text-500 text-sm mb-1">
+                                                        <i class="pi pi-user mr-1"></i>Author
+                                                    </div>
+                                                    <div class="text-900 font-medium">{{ item?.author || 'N/A' }}</div>
+                                                </div>
+
+                                                <div class="col-12 sm:col-6 md:col-4 lg:col-3 mb-2">
+                                                    <div class="text-500 text-sm mb-1">
+                                                        <i class="pi pi-building mr-1"></i>Publisher
+                                                    </div>
+                                                    <div class="text-900 font-medium">{{ item?.publisher || 'N/A' }}
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-12 sm:col-6 md:col-4 lg:col-3 mb-2">
+                                                    <div class="text-500 text-sm mb-1">
+                                                        <i class="pi pi-map-marker mr-1"></i>City
+                                                    </div>
+                                                    <div class="text-900 font-medium">{{ item?.city || 'N/A' }}</div>
+                                                </div>
+
+                                                <div class="col-12 sm:col-6 md:col-4 lg:col-3 mb-2">
+                                                    <div class="text-500 text-sm mb-1">
+                                                        <i class="pi pi-calendar mr-1"></i>Year
+                                                    </div>
+                                                    <div class="text-900 font-medium">{{ item?.publishedYear || 'N/A' }}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </ng-template>
+
+                        <ng-template pTemplate="emptymessage">
+                            <tr>
+                                <td colspan="8">
+                                    <div class="flex flex-column align-items-center justify-content-center p-5">
+                                        <i class="pi pi-inbox text-400 mb-3" style="font-size: 3rem;"></i>
+                                        <p class="text-600 font-medium">No books found matching your criteria</p>
+                                        <p class="text-500">Try adjusting your search or filters</p>
+                                    </div>
+                                </td>
+                            </tr>
+                        </ng-template>
+                    </p-table>
+                </div>
+            </div>
+        </ng-container>
+
+        <!-- No Results Message -->
+        <div class="col-12" *ngIf="noBooks">
+            <div class="card shadow-2 border-round-lg text-center p-6">
+                <i class="pi pi-search text-400 mb-3" style="font-size: 4rem;"></i>
+                <h3 class="text-900 mb-2">No Books Found</h3>
+                <p class="text-600 m-0">Please try a different search term or adjust your filters</p>
+            </div>
+        </div>
+
+        <p-confirm-dialog [style]="{ width: '450px' }"></p-confirm-dialog>
+    </div>
+</div>
+
+<!-- Enhanced Book Details Dialog -->
+<p-dialog [(visible)]="bookDetailsDialog" [style]="{width: '95vw', 'max-width': '1000px'}" [modal]="true"
+    [closable]="true" [draggable]="false" [resizable]="false" styleClass="border-round-lg">
+    <ng-template pTemplate="header">
+        <div class="flex align-items-center gap-3">
+            <i class="pi pi-book text-primary" style="font-size: 1.5rem;"></i>
+            <span class="font-bold text-xl">Book Details</span>
+        </div>
+    </ng-template>
+
+    <div class="grid">
+        <div class="col-12">
+            <!-- Book Title Section -->
+            <div class="card shadow-2 border-round-lg mb-3"
+                [style]="{'background': bookDetails.expectedReturnDate ? 'linear-gradient(135deg, #fee2e2 0%, #ffffff 100%)' : 'linear-gradient(135deg, #dcfce7 0%, #ffffff 100%)', 'border-left': '5px solid ' + (bookDetails.expectedReturnDate ? '#ef4444' : '#22c55e')}">
+                <div class="flex flex-wrap align-items-start justify-content-between gap-3 p-4">
+                    <div class="flex-1">
+                        <div class="flex align-items-center gap-2 mb-2">
+                            <i class="pi pi-bookmark text-primary" style="font-size: 1.25rem;"></i>
+                            <h3 class="m-0 text-900">{{ bookDetails.name }}</h3>
+                        </div>
+                        <div class="flex flex-wrap gap-2">
+                            <p-tag [value]="'AN: ' + bookDetails.accessionNumber" severity="info"></p-tag>
+                            <p-tag [value]="bookDetails.expectedReturnDate ? 'Not Available' : 'Available'"
+                                [severity]="bookDetails.expectedReturnDate ? 'danger' : 'success'"></p-tag>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Book Information -->
+            <div class="card shadow-1 border-round-lg mb-3">
+                <div class="flex align-items-center gap-2 mb-4 pb-3 border-bottom-1 border-200">
+                    <i class="pi pi-info-circle text-primary"></i>
+                    <h4 class="m-0 font-bold text-900">Book Information</h4>
+                </div>
+
+                <div class="grid">
+                    <div class="col-12 md:col-6 lg:col-4 mb-3">
+                        <div class="flex flex-column gap-2 p-3 border-round surface-50">
+                            <span class="text-500 text-sm font-medium">
+                                <i class="pi pi-bookmark mr-2"></i>Subject
+                            </span>
+                            <span class="text-900 font-semibold">{{ bookDetails.subjectName || 'N/A' }}</span>
+                        </div>
+                    </div>
+
+                    <div class="col-12 md:col-6 lg:col-4 mb-3">
+                        <div class="flex flex-column gap-2 p-3 border-round surface-50">
+                            <span class="text-500 text-sm font-medium">
+                                <i class="pi pi-user mr-2"></i>Author
+                            </span>
+                            <span class="text-900 font-semibold">{{ bookDetails.author || 'N/A' }}</span>
+                        </div>
+                    </div>
+
+                    <div class="col-12 md:col-6 lg:col-4 mb-3">
+                        <div class="flex flex-column gap-2 p-3 border-round surface-50">
+                            <span class="text-500 text-sm font-medium">
+                                <i class="pi pi-building mr-2"></i>Publisher
+                            </span>
+                            <span class="text-900 font-semibold">{{ bookDetails.publisher || 'N/A' }}</span>
+                        </div>
+                    </div>
+
+                    <div class="col-12 md:col-6 lg:col-4 mb-3">
+                        <div class="flex flex-column gap-2 p-3 border-round surface-50">
+                            <span class="text-500 text-sm font-medium">
+                                <i class="pi pi-map-marker mr-2"></i>Published City
+                            </span>
+                            <span class="text-900 font-semibold">{{ bookDetails.city || 'N/A' }}</span>
+                        </div>
+                    </div>
+
+                    <div class="col-12 md:col-6 lg:col-4 mb-3">
+                        <div class="flex flex-column gap-2 p-3 border-round surface-50">
+                            <span class="text-500 text-sm font-medium">
+                                <i class="pi pi-calendar mr-2"></i>Published Year
+                            </span>
+                            <span class="text-900 font-semibold">{{ bookDetails.publishedYear || 'N/A' }}</span>
+                        </div>
+                    </div>
+
+                    <div class="col-12 md:col-6 lg:col-4 mb-3">
+                        <div class="flex flex-column gap-2 p-3 border-round surface-50">
+                            <span class="text-500 text-sm font-medium">
+                                <i class="pi pi-file mr-2"></i>Pages
+                            </span>
+                            <span class="text-900 font-semibold">{{ bookDetails.pages || 'N/A' }}</span>
+                        </div>
+                    </div>
+
+                    <div class="col-12" *ngIf="bookDetails.description">
+                        <div class="flex flex-column gap-2 p-3 border-round surface-50">
+                            <span class="text-500 text-sm font-medium">
+                                <i class="pi pi-align-left mr-2"></i>Description
+                            </span>
+                            <span class="text-900 line-height-3">{{ bookDetails.description }}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Book Location -->
+            <div class="card shadow-1 border-round-lg">
+                <div class="flex align-items-center gap-2 mb-4 pb-3 border-bottom-1 border-200">
+                    <i class="pi pi-map-marker text-primary"></i>
+                    <h4 class="m-0 font-bold text-900">Book Location</h4>
+                </div>
+
+                <div class="grid">
+                    <div class="col-12 md:col-6 mb-3">
+                        <div class="flex flex-column gap-2 p-3 border-round surface-50">
+                            <span class="text-500 text-sm font-medium">
+                                <i class="pi pi-home mr-2"></i>Library
+                            </span>
+                            <span class="text-900 font-semibold">{{ bookDetails.libraryName || 'N/A' }}</span>
+                        </div>
+                    </div>
+
+                    <div class="col-12 md:col-6 mb-3">
+                        <div class="flex flex-column gap-2 p-3 border-round surface-50">
+                            <span class="text-500 text-sm font-medium">
+                                <i class="pi pi-inbox mr-2"></i>Library Room
+                            </span>
+                            <span class="text-900 font-semibold">{{ bookDetails.libraryRoomName || 'N/A' }}</span>
+                        </div>
+                    </div>
+
+                    <div class="col-12 md:col-6 mb-3">
+                        <div class="flex flex-column gap-2 p-3 border-round surface-50">
+                            <span class="text-500 text-sm font-medium">
+                                <i class="pi pi-box mr-2"></i>Library Wardrobe
+                            </span>
+                            <span class="text-900 font-semibold">{{ bookDetails.libraryWardrobeName || 'N/A' }}</span>
+                        </div>
+                    </div>
+
+                    <div class="col-12 md:col-6 mb-3">
+                        <div class="flex flex-column gap-2 p-3 border-round surface-50">
+                            <span class="text-500 text-sm font-medium">
+                                <i class="pi pi-th-large mr-2"></i>Rack Number
+                            </span>
+                            <span class="text-900 font-semibold">{{ bookDetails.rackNumber || 'N/A' }}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <ng-template pTemplate="footer">
+        <div class="flex justify-content-end">
+
+        </div>
+    </ng-template>
+</p-dialog>

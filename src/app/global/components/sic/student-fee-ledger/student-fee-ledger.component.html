@@ -1,0 +1,87 @@
+<div class="mt-2">
+  <div class="flex justify-content-between align-items-center px-4" style="width: 100%;">
+    <h5 class="m-0 text-900 font-semibold">Fee Ledger <span *ngIf="calculateTotalDue() > 0" class="text-red-600">
+        (Overall Due - {{ calculateTotalDue() | currency:'INR' }})
+      </span>
+      <span *ngIf="calculateTotalDue() === 0" class="text-green-600">
+        (No Dues)
+      </span>
+    </h5>
+    <p-button icon="pi pi-refresh" label="Reload" [rounded]="true" severity="primary" size="small" (click)="refresh()"
+      pTooltip="Reload" tooltipPosition="top">
+    </p-button>
+  </div>
+
+  <ng-container *ngFor="let group of groupByOperationalVerticalList; let i = index">
+    <div class="surface-100 border-round-md p-3 mb-3 border-left-3 border-primary">
+      <h6 class="m-0 text-900 font-semibold">
+        <i class="pi pi-money-bill mr-2 text-primary"></i>
+        {{ group.operationalVerticalName }}
+      </h6>
+      <div class="flex align-items-center mt-2">
+        <span class="text-primary font-semibold">
+          Total Due: {{ calculateTotalDue(group.studentFeeLedgerList) | currency:'INR' }}
+        </span>
+      </div>
+    </div>
+
+    <div class="field col-12">
+      <p-table [value]="group.studentFeeLedgerList" [resizableColumns]="true" [rowHover]="true" [scrollable]="true"
+        sortField="feeComponentName" sortMode="single"
+        styleClass="p-datatable-sm p-datatable-striped p-datatable-gridlines">
+        <ng-template pTemplate="header">
+          <tr class="surface-100">
+            <th pFrozenColumn [frozen]="true" class="text-700 font-semibold border-right-2 border-300">S/N.</th>
+            <th class="text-700 font-semibold">Component</th>
+            <th class="text-center text-700 font-semibold"><i class="pi pi-money-bill mr-1"></i>Total Amount</th>
+            <th class="text-center text-700 font-semibold"><i class="pi pi-file mr-1"></i>Receipt Number</th>
+            <th class="text-center text-700 font-semibold"><i class="pi pi-calendar mr-1"></i>Receipt Date</th>
+            <th class="text-center text-700 font-semibold"><i class="pi pi-credit-card mr-1"></i>Payment Mode</th>
+            <th class="text-center text-700 font-semibold"><i class="pi pi-hashtag mr-1"></i>Reference Number</th>
+            <th class="text-center text-700 font-semibold"><i class="pi pi-wallet mr-1"></i>Paid Amount</th>
+            <th class="text-center text-700 font-semibold border-right-2 border-300"><i
+                class="pi pi-exclamation-circle mr-1"></i>Due Amount</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-fee let-rowIndex="rowIndex">
+          <tr [class]="rowIndex % 2 === 0 ? 'surface-0' : 'surface-50'">
+            <td pFrozenColumn [frozen]="true" class="text-center font-medium text-800 border-right-2 border-300">{{
+              rowIndex + 1 }}</td>
+            <td>{{ fee.feeComponentName }}</td>
+            <td class="text-center">{{ fee.feeAmount | currency:'INR' }}</td>
+            <td class="text-center">{{ fee.receiptNumber || '-' }}</td>
+            <td class="text-center">{{ fee.receiptDate ? (fee.receiptDate | date:'dd-MM-yyyy') : '-' }}</td>
+            <td class="text-center">{{ fee.paymentModeName || '-' }}</td>
+            <td class="text-center">{{ fee.referenceNumber || '-' }}</td>
+            <td class="text-center">
+              <span class="font-semibold text-green-600">{{ fee.paidAmount ? (fee.paidAmount | currency:'INR') : '-'
+                }}</span>
+            </td>
+            <td class="text-center border-right-2 border-300">
+              <span class="font-semibold" [class]="(fee.dueAmount) > 0 ? 'text-red-600' : 'text-green-600'">
+                {{ fee.dueAmount | currency:'INR' }}
+              </span>
+            </td>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="footer">
+          <tr class="surface-100">
+            <td colspan="2" class="text-right font-semibold">Total:</td>
+            <td class="text-center font-semibold">{{ calculateTotalAmount(group.studentFeeLedgerList) | currency:'INR'
+              }}</td>
+            <td colspan="4"></td>
+            <td class="text-center font-semibold text-green-600">{{ calculateTotalPaid(group.studentFeeLedgerList) |
+              currency:'INR' }}</td>
+            <td class="text-center font-semibold">
+              <span [class]="calculateTotalDue(group.studentFeeLedgerList) > 0 ? 'text-red-600' : 'text-green-600'">
+                {{ calculateTotalDue(group.studentFeeLedgerList) | currency:'INR' }}
+              </span>
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
+
+    <div *ngIf="i < groupByOperationalVerticalList.length - 1" class="border-top-1 border-300 my-4"></div>
+  </ng-container>
+</div>

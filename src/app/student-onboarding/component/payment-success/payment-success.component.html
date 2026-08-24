@@ -1,0 +1,95 @@
+<div class="payment-container flex flex-column align-items-center" [hidden]="isPaymentGet">
+    <div class="status-wrapper">
+      <div class="header mb-4">
+        <h2 class="text-uppercase text-center m-0">Payment Status</h2>
+        <div class="header-accent"></div>
+      </div>
+      
+      <div class="card glass-card">
+        <div class="status-indicator-container flex justify-content-center align-items-center">
+            <div class="status-indicator flex flex-column align-items-center" 
+                 [ngClass]="getStatusClass()" 
+                 [ngStyle]="{'background-color': getBackgroundColor()}">
+                <i class="pi" [ngClass]="getStatusIcon()"></i>
+                <span class="status-text">{{paymentStatusPrint}}</span>
+              </div>
+        </div>
+        
+        <div class="card-content">
+          <div class="data-row">
+            <div class="data-label">Provisional Admission Number</div>
+            <div class="data-value">{{registrationNumber}}</div>
+          </div>
+          <div class="data-row">
+            <div class="data-label">Student Id</div>
+            <div class="data-value">{{studentId}}</div>
+          </div>
+          <div class="data-row">
+            <div class="data-label">Reference Number</div>
+            <div class="data-value">{{referenceNumber}}</div>
+          </div>
+            <div class="data-row">
+              <div class="data-label">Receipt Number</div>
+              <div class="data-value">{{receiptNumber}}</div>
+            </div>
+          <div class="data-row highlight-row">
+            <div class="data-label">Paid Amount</div>
+            <div class="data-value amount">{{paidAmount | currency: 'INR':'symbol'}}</div>
+          </div>
+          <div class="data-row">
+            <div class="data-label">Transaction Date</div>
+            <div class="data-value">{{transactionDate | date:'medium'}}</div>
+          </div>
+        </div>
+        
+        <!-- Actions -->
+        <div class="actions flex justify-content-center align-items-center flex-wrap">
+          @if (!isHiddenReceipt) {
+            <button 
+              pButton 
+              type="button" 
+              icon="pi pi-print" 
+              label="Print Receipt" 
+              class="p-button-raised primary-button" 
+              (click)="printReceipt()">
+            </button>
+          }
+          
+          @if (!isHiddenRetryPayment) {
+            <button 
+              pButton 
+              type="button" 
+              icon="pi pi-refresh" 
+              label="Retry Payment" 
+              class="p-button-raised secondary-button" 
+              (click)="retryPayment()">
+            </button>
+          }
+        </div>
+      </div>
+      
+      <!-- Bottom decoration -->
+      <div class="bottom-decoration">
+        <div class="decoration-circle"></div>
+      </div>
+    </div>
+
+    <div class="credentials-message">
+      <p>Your credentials have been successfully generated. From now on, please log in to your portal by using the
+        credentials shared below to access your portal.</p>
+    
+      <div class="credentials-info">
+        <p><strong>URL: <span routerLink="/" class="cursor-pointer text-blue-500">https://sbu.ncorepro.com</span></strong>
+        </p>
+        <p><strong>Username:</strong> {{ studentId }}</p>
+        <p><strong>Password:</strong> {{ password }}</p>
+      </div>
+    </div>
+</div>
+
+<p-dialog [(visible)]="feeReceiptDialog" [style]="{width: '1000px'}" header="Fee receipt"
+        [modal]="true" styleClass="p-fluid">
+        @if (feeReceiptDialog) {
+          <app-fee-receipt [reciptNumber]="receiptNumber"></app-fee-receipt>
+        }
+</p-dialog>

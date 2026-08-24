@@ -1,9 +1,16 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
 
-@Injectable({ providedIn: 'root' })
+@Injectable({
+  providedIn: 'root'
+})
 export class IpService {
-    getIpAddress(): Observable<string> {
-        return of('192.168.1.1');
-    }
+  private apiUrl = 'https://jsonip.com';
+
+  constructor(private http: HttpClient) { }
+
+  getPublicIp(): Observable<any> {
+    return this.http.get<any>(this.apiUrl);
+  }
 }

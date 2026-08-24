@@ -1,0 +1,337 @@
+<div class="mt-2">
+    <div class="flex justify-content-between align-items-center px-4" style="width: 100%;">
+        <h5 class="m-0 text-900 font-semibold">Batch Attendance</h5>
+        <p-button icon="pi pi-refresh" label="Reload" [rounded]="true" severity="primary" size="small"
+            (click)="refresh()" pTooltip="Reload" tooltipPosition="top">
+        </p-button>
+    </div>
+    <p-tabs [value]="0" *ngIf="showPannel">
+        <p-tablist>
+            <p-tab
+                *ngFor="let attendanceSummaryRegistrationNumberWise of studentBatchAttendanceSummaryRegistrationNumberWise; let i = index"
+                [value]="i">
+                {{ attendanceSummaryRegistrationNumberWise.programNameWithRegistrationNumber }}
+            </p-tab>
+        </p-tablist>
+        <p-tabpanels>
+            <p-tabpanel
+                *ngFor="let attendanceSummaryRegistrationNumberWise of studentBatchAttendanceSummaryRegistrationNumberWise; let i = index"
+                [value]="i">
+                <ng-container
+                    *ngFor="let attendanceSummaryOperationalVerticalWise of attendanceSummaryRegistrationNumberWise.studentBatchAttendanceSummaryOperationalVerticalWise">
+                    <div class="surface-100 border-round-md p-3 mb-3 border-left-3 border-primary">
+                        <h6 class="m-0 text-900 font-semibold">
+                            <i class="pi pi-graduation-cap mr-2 text-primary"></i>
+                            {{ attendanceSummaryOperationalVerticalWise.operationalVertical }}
+                        </h6>
+                    </div>
+                    <div class="field col-12">
+                        <p-table [value]="attendanceSummaryOperationalVerticalWise.studentBatchAttendanceReport"
+                            [resizableColumns]="true" [rowHover]="true" [scrollable]="true"
+                            sortField="operationalVertical.name" sortMode="single"
+                            styleClass="p-datatable-sm p-datatable-striped p-datatable-gridlines">
+                            <ng-template pTemplate="caption">
+                                <tr class="surface-50">
+                                    <th colspan="11" class="text-left">
+                                        <div class="flex align-items-center">
+                                            <i class="pi pi-book mr-2 text-primary"></i>
+                                            <span class="font-semibold text-900">Attendance Summary for {{
+                                                attendanceSummaryOperationalVerticalWise.operationalVertical }}</span>
+                                            <span class="ml-2 text-primary font-semibold">
+                                                (Cumulative Attendance: {{
+                                                attendanceSummaryOperationalVerticalWise.aggregateAttendance | number:
+                                                '1.2-2' }}%)
+                                            </span>
+                                        </div>
+                                    </th>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="header">
+                                <th class="text-center text-700 font-semibold"><i
+                                        class="pi pi-bookmark-fill mr-1"></i>Credit Unit</th>
+                                <th class="text-center text-700 font-semibold"><i class="pi pi-id-card mr-1"></i>
+                                    <span class="text-green-600">Section</span>
+                                </th>
+                                <th class="text-center text-700 font-semibold"
+                                    *ngIf="attendanceSummaryOperationalVerticalWise.isRecentAttendanceDisplay">
+                                    <i class="pi pi-calendar mr-1"></i>Recent Attendance
+                                </th>
+                                <th class="text-center text-700 font-semibold"><i class="pi pi-clock mr-1"></i>Scheduled
+                                </th>
+                                <th class="text-center text-700 font-semibold"><i
+                                        class="pi pi-check-circle mr-1"></i>Conducted</th>
+                                <th class="text-center text-700 font-semibold"><i class="pi pi-user mr-1"></i>Present
+                                </th>
+                                <th class="text-center text-700 font-semibold"><i
+                                        class="pi pi-user-minus mr-1"></i>Absent</th>
+                                <th class="text-center text-700 font-semibold border-right-2 border-300"><i
+                                        class="pi pi-percentage mr-1"></i>Attendance (%)</th>
+                                <th class="text-center text-700 font-semibold">Details</th>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-batchAttendance let-rowIndex="rowIndex">
+                                <tr [class]="rowIndex % 2 === 0 ? 'surface-0' : 'surface-50'">
+                                    <td pFrozenColumn [frozen]="true"
+                                        class="text-center font-medium text-800 border-right-2 border-300">{{ rowIndex +
+                                        1 }}</td>
+                                    <td pFrozenColumn [frozen]="true"
+                                        class="font-medium text-800 border-right-2 border-300">
+                                        <span>{{ batchAttendance.subjectPaperCodeName }}</span>
+                                    </td>
+                                    <td pFrozenColumn [frozen]="true"
+                                        class="font-medium text-800 border-right-2 border-300"
+                                        pTooltip="{{ batchAttendance.teacherName }}" tooltipPosition="right">
+                                        <span>{{ batchAttendance.subjectName }}</span>
+                                    </td>
+                                    <td class="text-center">
+                                        <span>{{ batchAttendance.creditUnit }}</span>
+                                    </td>
+                                    <td class="text-center">
+                                        <ng-container *ngIf="batchAttendance.section; else noSection">
+                                            <a *ngIf="batchAttendance.batchCode && batchAttendance.batchCode !== 'NA'; else sectionOnly"
+                                                (click)="onBatchCodeClick(batchAttendance.batchCode)"
+                                                class="text-primary" style="cursor: pointer;"
+                                                pTooltip="Click to view details">
+                                                {{ batchAttendance.section }}
+                                            </a>
+                                            <ng-template #sectionOnly>
+                                                <span class="text-green-600 font-bold">{{ batchAttendance.section
+                                                    }}</span>
+                                            </ng-template>
+                                        </ng-container>
+                                        <ng-template #noSection>
+                                            <ng-container
+                                                *ngIf="batchAttendance.batchCode && batchAttendance.batchCode !== 'NA'; else naDisplay">
+                                                <a (click)="onBatchCodeClick(batchAttendance.batchCode)"
+                                                    class="text-primary" style="cursor: pointer;"
+                                                    pTooltip="Click to view details">
+                                                    {{ batchAttendance.batchCode }}
+                                                </a>
+                                            </ng-container>
+                                        </ng-template>
+                                        <ng-template #naDisplay>
+                                            <span>NA</span>
+                                        </ng-template>
+                                    </td>
+                                    <td class="text-center flex justify-content-center align-items-center"
+                                        *ngIf="attendanceSummaryOperationalVerticalWise.isRecentAttendanceDisplay">
+                                        <div *ngIf="batchAttendance.recentAttendance.length > 0; else noAttendance"
+                                            style="display: flex; gap: 0.25rem; justify-content: center;">
+                                            <div *ngFor="let recentAtten of batchAttendance.recentAttendance">
+                                                <p-button *ngIf="recentAtten === true" icon="pi pi-check"
+                                                    styleClass="p-button-success check-icon-size">
+                                                </p-button>
+                                                <p-button *ngIf="recentAtten === false" icon="pi pi-times"
+                                                    styleClass="p-button-danger check-icon-size">
+                                                </p-button>
+                                            </div>
+                                        </div>
+                                        <ng-template #noAttendance>
+                                            <p-button icon="pi pi-ellipsis-h"
+                                                styleClass="p-button-secondary check-icon-size">
+                                            </p-button>
+                                        </ng-template>
+                                    </td>
+                                    <td class="text-center">
+                                        <span>{{ batchAttendance.totalScheduled }}</span>
+                                    </td>
+                                    <td class="text-center">
+                                        <span>{{ batchAttendance.totalClassConducted }}</span>
+                                    </td>
+                                    <td class="text-center">
+                                        <span class="font-semibold text-green-600">{{ batchAttendance.totalPresent
+                                            }}</span>
+                                    </td>
+                                    <td class="text-center">
+                                        <span class="font-semibold text-red-600">{{ batchAttendance.totalAbsent
+                                            }}</span>
+                                    </td>
+                                    <td class="text-center border-right-2 border-300">
+                                        <span class="font-semibold"
+                                            [class]="batchAttendance.attendancePercentage >= 75 ? 'text-green-600' : batchAttendance.attendancePercentage >= 50 ? 'text-orange-600' : 'text-red-600'">
+                                            {{ batchAttendance.attendancePercentage | number: '1.2-2' }}%
+                                        </span>
+                                    </td>
+                                    <td class="text-center">
+                                        <p-button label="Details" icon="pi pi-list" size="small"
+                                            (onClick)="showAttendanceDetails(batchAttendance.subjectPaperCodeId, attendanceSummaryRegistrationNumberWise.registrationNumber)">
+                                        </p-button>
+                                    </td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                    </div>
+                </ng-container>
+            </p-tabpanel>
+        </p-tabpanels>
+    </p-tabs>
+</div>
+
+<p-dialog [(visible)]="isBatchCodeDetailsViewDialog" [style]="{width: '900px'}" [modal]="true" [draggable]="false"
+    [resizable]="false">
+    <div class="p-fluid">
+        <div class="surface-card border-round p-3 mb-3 shadow-1">
+            <div class="flex align-items-center justify-content-between">
+                <div class="flex align-items-center gap-3">
+                    <div class="flex align-items-center justify-content-center bg-primary border-circle"
+                        style="width: 40px; height: 40px;">
+                        <i class="fas fa-brain text-white" style="font-size: 16px;"></i>
+                    </div>
+                    <div>
+                        <h4 class="text-primary m-0">{{ batch?.batchCode }} - {{ batch?.subjectPaperCodeName }}</h4>
+                        <span class="text-600">{{ batch?.subjectName }}</span>
+                    </div>
+                </div>
+                <div class="flex align-items-center gap-2">
+                    <p-tag [value]="batch?.status" [severity]="batch?.status === 'Active' ? 'success' : 'info'"
+                        [rounded]="true"></p-tag>
+                    <p-tag [value]="batch?.isClosed ? 'Closed' : 'Open'"
+                        [severity]="batch?.isClosed ? 'danger' : 'success'" [rounded]="true"></p-tag>
+                </div>
+            </div>
+        </div>
+        <div class="surface-card border-round p-3 shadow-1">
+            <div class="formgrid grid">
+                <div class="field col-6 md:col-3">
+                    <label class="text-600 font-medium block mb-1">Academic Session</label>
+                    <span class="text-900 font-semibold">{{ batch?.academicSessionName }}</span>
+                </div>
+                <div class="field col-6 md:col-3">
+                    <label class="text-600 font-medium block mb-1">Program</label>
+                    <span class="text-900 font-semibold">{{ batch?.programName }}</span>
+                </div>
+                <div class="field col-6 md:col-3">
+                    <label class="text-600 font-medium block mb-1">Version</label>
+                    <span class="text-900 font-semibold">{{ batch?.version }}</span>
+                </div>
+                <div class="field col-6 md:col-3">
+                    <label class="text-600 font-medium block mb-1">Cycle</label>
+                    <span class="text-900 font-semibold">{{ batch?.cycle }}</span>
+                </div>
+                <div class="field col-6 md:col-3">
+                    <label class="text-600 font-medium block mb-1">Primary Faculty</label>
+                    <span class="text-900 font-semibold">{{ batch?.primaryFacultyCode }} - {{ batch?.primaryFacultyName
+                        }}</span>
+                </div>
+                <div class="field col-6 md:col-3">
+                    <label class="text-600 font-medium block mb-1">Secondary Faculty</label>
+                    <span class="text-900 font-semibold">{{ batch?.secondaryFacultyCode }} - {{
+                        batch?.secondaryFacultyName }}</span>
+                </div>
+                <div class="field col-6 md:col-3">
+                    <label class="text-600 font-medium block mb-1">Operational Vertical</label>
+                    <span class="text-900 font-semibold">{{ batch?.operationalVerticalName }}</span>
+                </div>
+                <div class="field col-6 md:col-3">
+                    <label class="text-600 font-medium block mb-1">Start Date</label>
+                    <div class="flex align-items-center gap-1">
+                        <i class="pi pi-calendar text-green-500"></i>
+                        <span class="text-900 font-semibold">{{ batch?.startDate | date }}</span>
+                    </div>
+                </div>
+                <div class="field col-6 md:col-3">
+                    <label class="text-600 font-medium block mb-1">Capacity</label>
+                    <div class="flex align-items-center gap-1">
+                        <i class="pi pi-users text-blue-500"></i>
+                        <span class="text-900 font-semibold">{{ batch?.batchCapacity }}</span>
+                    </div>
+                </div>
+                <div class="field col-6 md:col-3">
+                    <label class="text-600 font-medium block mb-1">Schedule Status</label>
+                    <div class="flex align-items-center gap-1">
+                        <i
+                            [class]="batch?.isScheduleGenerated ? 'pi pi-check text-green-500' : 'pi pi-times text-red-500'"></i>
+                        <span
+                            [class]="batch?.isScheduleGenerated ? 'text-green-600 font-semibold' : 'text-red-600 font-semibold'">
+                            {{ batch?.isScheduleGenerated ? 'Yes' : 'No' }}
+                        </span>
+                    </div>
+                </div>
+                <div class="field col-6 md:col-3">
+                    <label class="text-600 font-medium block mb-1">Parent Batch</label>
+                    <span class="text-900 font-semibold">{{ batch?.parentBatchCode || 'N/A' }}</span>
+                </div>
+                <div class="field col-12">
+                    <label class="text-600 font-medium block mb-1">Schedule Master</label>
+                    <span class="text-900 font-semibold">{{ batch?.batchScheduleMasterName }}</span>
+                </div>
+                <div class="field col-12" *ngIf="batch?.isClosed">
+                    <div class="surface-100 border-round p-2 mt-2">
+                        <div class="flex align-items-center gap-3 mb-2">
+                            <i class="pi pi-times-circle text-red-500"></i>
+                            <span class="text-red-600 font-semibold">Batch Closed</span>
+                        </div>
+                        <div class="formgrid grid">
+                            <div class="field col-6 md:col-3">
+                                <label class="text-600 font-medium block mb-1">Status</label>
+                                <span class="text-red-600 font-semibold">{{ batch!.isClosed ? 'Closed' : 'Open'
+                                    }}</span>
+                            </div>
+                            <div class="field col-6 md:col-3">
+                                <label class="text-600 font-medium block mb-1">Closed Date</label>
+                                <span class="text-red-600 font-semibold">{{ batch!.closedDate }}</span>
+                            </div>
+                            <div class="field col-6 md:col-3">
+                                <label class="text-600 font-medium block mb-1">Closed By</label>
+                                <span class="text-red-600 font-semibold">{{ batch!.closedBy }}</span>
+                            </div>
+                            <div class="field col-6 md:col-3">
+                                <label class="text-600 font-medium block mb-1">Reason</label>
+                                <span class="text-red-600 font-semibold">{{ batch!.closedReason }}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="field col-12" *ngIf="batch?.description">
+                    <div class="surface-100 border-round p-2 mt-2">
+                        <label class="text-600 font-medium block mb-1">Description</label>
+                        <p class="text-700 m-0 line-height-3">{{ batch!.description }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</p-dialog>
+
+<p-dialog [(visible)]="isAttendanceDetailsDialog" [header]="attendanceDetailsHeader" [modal]="true"
+    [style]="{ width: '80%' }" [maximizable]="true">
+    <p-table [value]="filteredBatchAttendanceDetails" [resizableColumns]="true" [rowHover]="true"
+        styleClass="p-datatable-sm p-datatable-striped p-datatable-gridlines">
+        <ng-template pTemplate="header">
+            <tr>
+                <th>Academic Session</th>
+                <th>Operational Vertical</th>
+                <th>Subject Paper Code</th>
+                <th class="text-center">Section</th>
+                <th>Batch Code</th>
+                <th class="text-center">Cycle</th>
+                <th class="text-center">Date</th>
+                <th class="text-center">Attendance</th>
+                <th>Status</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-batchAttendance>
+            <tr>
+                <td>{{ batchAttendance.academicSessionName }}</td>
+                <td>{{ batchAttendance.operationalVerticalName }}</td>
+                <td>{{ batchAttendance.subjectPaperCodeName }}</td>
+                <td class="text-center">{{ batchAttendance.section }}</td>
+                <td>{{ batchAttendance.batchCode }}</td>
+                <td class="text-center">{{ batchAttendance.cycle }}</td>
+                <td class="text-center">
+                    {{ batchAttendance.date | date: "dd-MMM-yyyy" }}
+                </td>
+                <td class="text-center">
+                    <p-tag [value]="batchAttendance.isPresent ? 'P' : 'A'" [severity]="
+                            batchAttendance.isPresent ? 'success' : 'danger'
+                        "></p-tag>
+                </td>
+                <td>{{ batchAttendance.status }}</td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="summary">
+            In total there are
+            {{ filteredBatchAttendanceDetails.length }} record(s).
+        </ng-template>
+    </p-table>
+</p-dialog>

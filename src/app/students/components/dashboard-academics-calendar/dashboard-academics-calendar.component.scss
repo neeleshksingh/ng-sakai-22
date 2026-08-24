@@ -1,0 +1,24 @@
+@media screen and (max-width: 768px) {
+    .toolbar-buttons button {
+        font-size: 12px !important;
+        padding: 0.3rem 0.5rem !important;
+    }
+   
+}
+:host ::ng-deep .calendar-container {
+  width: 100%;
+  overflow-x: auto;
+}
+
+:host ::ng-deep .fc {
+  width: 100% !important;
+}
+
+@media screen and (max-width: 768px) {
+  :host ::ng-deep .fc-toolbar-title {
+    font-size: 16px !important;
+  }
+  :host ::ng-deep .fc {
+    font-size: 12px;
+  }
+}

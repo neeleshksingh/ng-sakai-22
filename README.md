@@ -134,7 +134,7 @@ src/
 │   ├── animations/                     # Lottie/GIF animation files
 │   └── partner-images/                 # Partner logo placeholders
 └── app/
-    ├── app.component.ts                # Root: <app-lazy-loader>, <p-toast>, <p-confirmDialog>, <router-outlet>
+    ├── app.component.ts                # Root: <app-lazy-loader>, <p-toast>, <p-confirm-dialog>, <router-outlet>
     ├── app.component.html
     ├── app.component.scss
     ├── app.routes.ts                   # Standalone routing config (replaces app-routing.module.ts)

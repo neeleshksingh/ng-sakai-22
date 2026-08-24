@@ -1,31 +1,28 @@
-import { Injectable, signal } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
+import { ModuleTrackerService } from './module-tracker.service';
 
-@Injectable({ providedIn: 'root' })
+@Injectable({
+    providedIn: 'root'
+})
 export class LoadingService {
-    private activeRequests = 0;
-    private readonly loadingSubject = new BehaviorSubject(false);
+    private isLoading = new BehaviorSubject<boolean>(false);
+    isLoading$ = this.isLoading.asObservable();
 
-    readonly isLoading$ = this.loadingSubject.asObservable();
-    readonly loading = signal(false);
+    constructor(private moduleTracker: ModuleTrackerService) { }
 
-    show(): void {
-        this.activeRequests += 1;
-        this.setLoading(true);
+    shouldShowLoader(modulePath: string): boolean {
+        return !this.moduleTracker.isModuleLoaded(modulePath);
     }
 
-    hide(): void {
-        this.activeRequests = Math.max(0, this.activeRequests - 1);
-        this.setLoading(this.activeRequests > 0);
+    show() {
+        this.isLoading.next(true);
     }
 
-    reset(): void {
-        this.activeRequests = 0;
-        this.setLoading(false);
-    }
-
-    private setLoading(value: boolean): void {
-        this.loading.set(value);
-        this.loadingSubject.next(value);
+    hide(modulePath?: string) {
+        if (modulePath) {
+            this.moduleTracker.markModuleAsLoaded(modulePath);
+        }
+        this.isLoading.next(false);
     }
 }

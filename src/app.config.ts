@@ -6,10 +6,10 @@ import { providePrimeNG } from 'primeng/config';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { appRoutes } from './app.routes';
 import { authInterceptor } from './app/shared/interceptors/auth.interceptor';
-import { errorInterceptor } from './app/shared/interceptors/error.interceptor';
-import { progressBarInterceptor } from './app/shared/interceptors/progress-bar.interceptor';
-import { NCoreStore } from './app/store/provider';
 import { environment } from './environments/environment';
+import { provideAppStore } from './app/store/provider';
+import { progressBarInterceptor } from './app/shared/interceptors/progress-bar.interceptor';
+import { errorInterceptor } from './app/shared/interceptors/error.interceptor';
 
 export const appConfig: ApplicationConfig = {
     providers: [
@@ -22,6 +22,6 @@ export const appConfig: ApplicationConfig = {
         }),
         MessageService,
         ConfirmationService,
-        NCoreStore
+        provideAppStore()
     ]
 };

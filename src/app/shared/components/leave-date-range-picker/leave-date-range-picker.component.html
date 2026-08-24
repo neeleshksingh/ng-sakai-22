@@ -1,4 +1,33 @@
-<label class="range-field">
-    <span>{{ label() }}</span>
-    <p-datepicker [(ngModel)]="range" selectionMode="range" [readonlyInput]="true" (ngModelChange)="rangeChange.emit($event)" />
+<label class="field-label block mb-2" style="font-size: 0.95rem; font-weight: 600;">
+  Select Leave Date(s) <span class="text-red-500">*</span>
 </label>
+<div class="calendar-column">
+  <p-datepicker styleClass="enhanced-calendar" [ngModel]="rangeDates" (ngModelChange)="onRangeChange($event)"
+    selectionMode="range" [inline]="true" [minDate]="minDate" [maxDate]="maxDate" [disabled]="disabled"
+    dateFormat="dd M yy" (onSelect)="onDateSelect($event)">
+    <ng-template pTemplate="date" let-date>
+      <span [ngClass]="getDateClass(date)" [ngStyle]="getDateStyle(date)" [pTooltip]="getHolidayTooltip(date)"
+        [tooltipPosition]="'top'" [escape]="false" [showDelay]="300">
+        {{date.day}}
+      </span>
+    </ng-template>
+  </p-datepicker>
+  <div class="calendar-legend mt-2">
+    <div class="legend-item">
+      <span class="legend-color academic-holiday-indicator"></span>
+      <span class="legend-text">Academic Holiday</span>
+    </div>
+    <div class="legend-item">
+      <span class="legend-color sunday-indicator"></span>
+      <span class="legend-text">Sunday</span>
+    </div>
+    <div class="legend-item">
+      <span class="legend-color saturday-indicator"></span>
+      <span class="legend-text">2nd/4th Saturday</span>
+    </div>
+    <div class="legend-item">
+      <span class="legend-color selected-indicator"></span>
+      <span class="legend-text">Selected</span>
+    </div>
+  </div>
+</div>

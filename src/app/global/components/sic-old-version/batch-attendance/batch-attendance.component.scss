@@ -1,0 +1,16 @@
+:host ::ng-deep .check-icon-size {
+  height: 1.4em;
+  width: 1.4em;
+  margin-left: 4px;
+  margin-top: 6px;
+  margin-bottom: 6px;
+  display: flex;
+}
+
+:host ::ng-deep .p-dialog .p-dialog-header {
+  padding: 0rem;
+}
+
+:host ::ng-deep .p-accordion-header {
+  height: 40px;
+}

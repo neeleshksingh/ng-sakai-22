@@ -1,0 +1,56 @@
+<form [formGroup]="bankForm" style="width: 100%;">
+    <div class="fluid formgrid grid align-items-end">
+        <div class="field col-12 sm:col-6 md:col-4 lg:col-3">
+            <label for="bankName" class="font-bold">
+                <i class="pi pi-building" style="margin-right: 3px;"></i> Bank Name
+            </label>
+            <input pInputText type="text" id="bankName" formControlName="bankName"
+                class="text-base text-color surface-overlay border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full">
+        </div>
+        <div class="field col-12 sm:col-6 md:col-4 lg:col-3">
+            <label for="accountHolderName" class="font-bold">
+                <i class="pi pi-user" style="margin-right: 3px;"></i> Account
+                Holder Name<span style="color: red;">*</span>
+            </label>
+            <input pInputText type="text" id="accountHolderName" formControlName="accountHolderName"
+                class="text-base text-color surface-overlay border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full">
+        </div>
+        <div class="field col-12 sm:col-6 md:col-4 lg:col-3">
+            <label for="accountNumber" class="font-bold">
+                <i class="pi pi-credit-card" style="margin-right: 3px;"></i> Account
+                Number<span style="color: red;">*</span>
+            </label>
+            <input pInputText type="text" id="accountNumber" formControlName="accountNumber"
+                class="text-base text-color surface-overlay border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full">
+        </div>
+        <div class="field col-12 sm:col-6 md:col-4 lg:col-3">
+            <label for="ifsc" class="font-bold">
+                <i class="pi pi-lock" style="margin-right: 3px;"></i> IFSC
+            </label>
+            <input pInputText type="text" id="ifsc" formControlName="ifsc"
+                class="text-base text-color surface-overlay border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full">
+        </div>
+        <div class="field col-12 sm:col-6 md:col-4 lg:col-3">
+            <label for="branch" class="font-bold">
+                <i class="pi pi-home" style="margin-right: 3px;"></i> Branch
+            </label>
+            <input pInputText type="text" id="branch" formControlName="branch"
+                class="text-base text-color surface-overlay border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full">
+        </div>
+        <div class="field col-12 sm:col-6 md:col-4 lg:col-3">
+            <label for="pinCode" class="font-bold">
+                <i class="pi pi-map-marker" style="margin-right: 3px;"></i> Pin Code
+            </label>
+            <input pInputText type="text" id="pinCode" formControlName="pinCode"
+                class="text-base text-color surface-overlay border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full">
+        </div>
+        <div class="field col-12 sm:col-6 md:col-4 lg:col-3">
+            <label for="status" class="font-bold">
+                <i class="pi pi-verified" style="margin-right: 3px;"></i> Status
+            </label>
+            <p-select [filter]="true" inputId="status" [options]="statusList" formControlName="status"
+                placeholder="Select"
+                styleClass="text-base text-color surface-overlay border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full"></p-select>
+        </div>
+    </div>
+</form>

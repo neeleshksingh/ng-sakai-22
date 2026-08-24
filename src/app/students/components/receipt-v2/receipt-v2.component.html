@@ -1,0 +1,133 @@
+<div class="pb-6">
+    <div class="grid">
+        <div class="col-12">
+            <div class="toolbar-demo card">
+                <p-toolbar>
+                    <div class="p-toolbar-group-left">
+                        <div class="header-left-div">
+                            <div class="header-div1">
+                                <i class="fas fa-indian-rupee-sign" style="font-size: 40px;"></i>
+                            </div>
+                            <div class="header-div2">
+                                <h5>Reciept - V2</h5>
+                            </div>
+                        </div>
+                    </div>
+                </p-toolbar>
+            </div>
+        </div>
+        <div class="col-12 md:col-12 lg:col-12"  [hidden]="isDisabledFeeReceipt">
+            <div class="card p-3" style="text-align: center;font-size: medium;  color: rgb(247, 43, 7); text-transform: uppercase;">
+                <span>*NOTE :- </span> <span>ROWS HIGHLIGHTED IN RED INDICATE CANCELLED RECEIPTS.*</span>
+            </div>
+            <div class="card">
+                @if(!isLoading){
+                <p-table #dt [value]="feeReceipts" [rowHover]="true" dataKey="id"
+                    styleClass="p-datatable-customers p-datatable-gridlines p-datatable-striped p-datatable-sm">
+                    <ng-template pTemplate="header">
+                        <tr [pSelectableRow]="">
+
+                            <th>RegistrationNumber
+                            </th>
+                            <th>ReceiptNumber
+                            </th>
+                            <th>ReceiptDate
+                            </th>
+                            <th>PaidAmount
+                            </th>
+                            <th>ReferenceNumber
+                            </th>
+                            <th>PaymentMode
+                            </th>
+                            <th>PaymentDate
+                            </th>
+                            <th style="width: 4rem">
+                            </th>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-feeReceipt>
+                        <tr [style.background-color]="feeReceipt.status === 'CANCELLED' ? 'rgb(245, 181, 181)' : ''">
+
+                            <td><span class="p-column-title">RegistrationNumber</span>
+                                {{feeReceipt.registrationNumber}}
+                            </td>
+                            <td><span class="p-column-title">ReceiptNumber</span>
+                                {{feeReceipt.receiptNumber}}
+                            </td>
+                            <td><span class="p-column-title">ReceiptDate</span>
+                                {{feeReceipt.receiptDate|date}}
+                            </td>
+                            <td><span class="p-column-title">PaidAmount</span>
+                                {{feeReceipt.paidAmount}}
+                            </td>
+                            <td><span class="p-column-title">ReferenceNumber</span>
+                                {{feeReceipt.referenceNumber}}
+                            </td>
+                            <td><span class="p-column-title">PaymentMode</span>
+                                {{
+                                paymentModeList[(feeReceipt.paymentMode)-1].label
+                                }}
+
+                            </td>
+                            <td><span class="p-column-title">PaymentDate</span>
+                                {{feeReceipt.paymentDate|date}}
+                            </td>
+                            <td><span class="p-column-title">Download</span>
+                                <button type="button" pButton pRipple icon="pi pi-download"
+                                    (click)="selectReceiptNumber(feeReceipt)"></button>
+                            </td>
+                        </tr>
+                    </ng-template>
+                </p-table>
+            
+        } @else {
+            <p-table [value]="skeletonValue" [columns]="cols" [rows]="10" [paginator]="true"
+                [rowsPerPageOptions]="[10, 20, 30, 40, 50, 100, { showAll: 'All' }]" autoLayout="true"
+                resizableColumns="true"
+                styleClass="p-datatable-customers p-datatable-gridlines p-datatable-striped p-datatable-sm"
+                currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+                [showCurrentPageReport]="true">
+                <ng-template pTemplate="header">
+                    <tr>
+                        @for(col of cols; track $index) {
+                        <th>{{ col.header }} 
+                        </th>
+                        }
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body">
+                    @for(item of skeletonValue; track $index) {
+                    <tr>
+                        @for(col of cols; track $index) {
+                        <td><p-skeleton /></td>
+                        }
+                    </tr>
+                    }
+                </ng-template>
+            </p-table>}
+            </div>
+        </div>
+        <div class="col-12" [hidden]="isDisabledFeeReceipt">
+            <div class="col-12" [hidden]="isDisabledFeeReceiptNotFound">
+                <div class="card">
+                    <div class="p-fluid formgrid grid">
+                        <div class="p-col-12" style="text-align: center;">
+                            <h4>No Record Found !!!</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        
+        <p-dialog header="Fee Receipt" [(visible)]="displayReceiptDialog" [modal]="true" [style]="{width: '80%'}" 
+        [baseZIndex]="10000" [draggable]="false" [resizable]="false">
+        <div class="p-grid">
+            <div class="p-col-12" id="receipt-content" [innerHTML]="receiptHtml"></div>
+        </div>
+        <ng-template pTemplate="footer">
+            <button pButton pRipple type="button" icon="pi pi-print" label="Print" class="p-button-primary" (click)="printReceipt()"></button>
+            <button pButton pRipple type="button" icon="pi pi-times" label="Close" class="p-button-secondary p-ml-2" (click)="displayReceiptDialog=false"></button>
+        </ng-template>
+    </p-dialog>
+</div>

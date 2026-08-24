@@ -1,0 +1,78 @@
+<div class="col-12">
+    <p-table #dt [value]="tableArrayGeneralDetails" [rowHover]="true" dataKey="id" autoLayout="true"
+        resizableColumns="true"
+        styleClass="p-datatable-customers p-datatable-gridlines p-datatable-striped p-datatable-lg">
+        <ng-template pTemplate="caption">
+            <h5 style="margin: 0;">General Details</h5>
+        </ng-template>
+        <ng-template pTemplate="body" let-row let-i="rowIndex">
+            <tr>
+                <td style="width: 12.5%; padding: 8px !important;">
+                    {{row?.col1}}
+                </td>
+                <td style="width: 12.5%;">
+                    <b>{{row?.col2}}</b>
+                </td>
+                <td style="width: 12.5%;">
+                    {{row?.col3}}
+                </td>
+                <!-- <td style="width: 12.5%;">
+                    <b>{{row?.col4}}</b>
+                    <span *ngIf="isABCIDVerified">Verified</span>
+                </td> -->
+                <td style="width: 12.5%;">                    
+                    <div class="flex align-items-center justify-content-between">
+                        <b>{{row?.col4}}</b>
+
+                        <span *ngIf="row?.col4 && i==0" class="flex align-items-center gap-2 mt-1">
+                            <!-- Verified Icon -->
+                            <i *ngIf="isABCIDVerified" 
+                                class="pi pi-shield text-green-500" 
+                                pTooltip="✓ Verified" 
+                                tooltipPosition="top">
+                            </i>
+                            
+                            <!-- Not Verified Icon with Custom Tooltip -->
+                            <i *ngIf="!isABCIDVerified" 
+                                class="pi pi-exclamation-triangle text-orange-500 cursor-pointer" 
+                                [pTooltip]="tooltipTemplate" 
+                                tooltipPosition="top"
+                                escape="false"
+                                (click)="navigateToVerification()">
+                            </i>
+                        </span>
+                    </div>
+
+                    <ng-template #tooltipTemplate>
+                        <div class="text-center">
+                            <p class="mb-2">Not verified yet</p>
+                            <small class="text-blue-400 cursor-pointer">
+                                Click here to verify
+                            </small>
+                        </div>
+                    </ng-template>               
+                </td>
+                <td style="width: 12.5%;">
+                    {{row?.col5}}
+                </td>
+                <td style="width: 12.5%;">
+                    <b>{{row?.col6}}</b>
+                </td>
+                <td style="width: 12.5%;">
+                    {{row?.col7}}
+                </td>
+                <td style="width: 12.5%;">
+                    <b>{{row?.col8}}</b>
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="summary">
+            <div class="flex align-items-center justify-content-end">
+                <button pButton type="button" icon="pi pi-refresh" label="Reload" class="p-button-text p-0"
+                (click)="refreshGeneralDetails()"></button>
+            </div>
+        </ng-template>
+    </p-table>
+</div>
+<app-student-family-details [studentId]="studentId"></app-student-family-details>
+<app-student-address-details [studentId]="studentId"></app-student-address-details>

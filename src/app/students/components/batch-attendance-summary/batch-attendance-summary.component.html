@@ -1,0 +1,195 @@
+<div class="pb-6">
+    <div class="grid">
+        <p-toast></p-toast>
+        <div class="col-12">
+            <div class="toolbar-demo card">
+                <p-toolbar>
+                    <div class="p-toolbar-group-left">
+                        <div class="header-left-div">
+                            <div class="header-div1">
+                                <i class="fa-solid  fa-graduation-cap" style="font-size: 40px;"></i>
+                            </div>
+                            <div class="header-div2">
+                                <h5>Batch Attendence Summary</h5>
+                            </div>
+                        </div>
+                    </div>
+                </p-toolbar>
+            </div>
+        </div>
+        <form [formGroup]="attendanceReportGroup" style="width: 100%;">
+            <div class="col-12">
+                <div class="card p-2">
+                    <div class="p-fluid formgrid grid ">
+                        <div class="field col-12 sm:col-6 md:col-6 lg:col-3 pl-4 pr-4">
+                            <label for="programName">Program *</label>
+                            <p-select [filter]="true" inputId="programName" [options]="programSelectItemList"
+                                [(ngModel)]="attendanceReportGroup.value.programName" formControlName="programName"
+                                placeholder="Select" (onChange)="onProgamChanged($event)"></p-select>
+                        </div>
+                        <div class="field col-12 sm:col-6 md:col-6 lg:col-3 pl-4 pr-4">
+                            <label for="registrationNumber">RegistrationNumber</label>
+                            <input pInputText type="text" id="registrationNumber"
+                                [(ngModel)]="attendanceReportGroup.value.registrationNumber"
+                                formControlName="registrationNumber" placeholder="Registration Number" readonly>
+                        </div>
+                        <div class="field col-12 md:col-2" style="margin-top: 24px;">
+                            <p-button label="Search" icon="pi pi-search"
+                                (click)="getBatchAttendanceSummaryByRegistrationNumber(this.attendanceReportGroup.value.registrationNumber)"
+                                class="p-mr-2 p-mb-2"></p-button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="col-12">
+                <div class="card" [hidden]="isAttendenceHidden">
+                    @if(!isLoading){
+                    <h5 class="p-2">{{programName}}</h5>
+                    <p-table [value]="batchAttendanceSummaryList" sortField="operationalVertical.name" sortMode="single"
+                        (onSort)="onSort()" [resizableColumns]="true" [rowHover]="true"
+                        styleClass="p-datatable-customers p-datatable-gridlines p-datatable-striped p-datatable-sm">
+                        <ng-template pTemplate="header">
+                            <tr>
+                                <th>PaperCode</th>
+                                <th>Subject</th>
+                                <th>Batch Code / Section</th>
+                                <th class="text-center">Conducted</th>
+                                <th class="text-center">Present</th>
+                                <th class="text-center">Absent</th>
+                                <th class="text-center">Attendance(%)</th>
+                                <th>Action</th>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body" let-batchAttendance let-rowIndex="rowIndex">
+                            <tr *ngIf="rowGroupMetadata[batchAttendance.operationalVertical.name].index === rowIndex">
+                                <td colspan="8">
+                                    <span class="p-text-bold p-ml-2">{{batchAttendance.operationalVertical.name}}</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><span class="p-column-title">PaperCode</span>
+                                    {{batchAttendance.subjectPaperCodeName}}
+                                </td>
+                                <td>
+                                    <span class="p-column-title">Subject</span>
+                                    {{batchAttendance.subjectName}}
+                                </td>
+                                <td style="text-align: center;">
+                                    <span class="p-column-title">BatchCode/Section</span>
+                                    {{ batchAttendance.section && batchAttendance.section.trim() !== ''
+                                    ? batchAttendance.section
+                                    : batchAttendance.batchCode }}
+                                </td>
+                                <td style="text-align: center;"><span class="p-column-title">Conducted</span>
+                                    {{batchAttendance.totalClassConducted}}
+                                </td>
+                                <td style="text-align: center;"><span class="p-column-title">Present</span>
+                                    {{batchAttendance.totalPresent}}
+                                </td>
+                                <td style="text-align: center;"><span class="p-column-title">Absent</span>
+                                    {{batchAttendance.totalAbsent}}
+                                </td>
+                                <td style="text-align: center;"><span class="p-column-title">Attendance(%)</span>
+                                    {{batchAttendance.attendancePercentage}}
+                                </td>
+                                <td style="text-align: center;"><span class="p-column-title">Action</span>
+                                    <p-button label="Details" severity="primary"
+                                        (onClick)="showDialog(batchAttendance.subjectPaperCodeId)"></p-button>
+                                </td>
+                            </tr>
+                        </ng-template>
+                    </p-table>
+                    } @else {
+                    <h5 class="p-2">{{programName}}</h5>
+                    <p-table [value]="skeletonValue" [columns]="cols" [rows]="10" [paginator]="true"
+                        [rowsPerPageOptions]="[10, 20, 30, 40, 50, 100, { showAll: 'All' }]" autoLayout="true"
+                        resizableColumns="true"
+                        styleClass="p-datatable-customers p-datatable-gridlines p-datatable-striped p-datatable-sm"
+                        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+                        [showCurrentPageReport]="true">
+                        <ng-template pTemplate="header">
+                            <tr>
+                                @for(col of cols; track $index) {
+                                <th>{{ col.header }}
+                                </th>
+                                }
+                                <th style="width: 7rem">
+                                </th>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body">
+                            @for(item of skeletonValue; track $index) {
+                            <tr>
+
+                                @for(col of cols; track $index) {
+                                <td><p-skeleton /></td>
+                                }
+                                <td style="width: 7rem"> <p-skeleton /></td>
+                            </tr>
+                            }
+                        </ng-template>
+                    </p-table>}
+                </div>
+
+            </div>
+        </form>
+        <p-dialog header="{{modelHeaderString}}" [modal]="true" [(visible)]="visible" [style]="{ width: '80%' }"
+            [maximizable]="true">
+            <p-table [value]="filteredBatchAttendanceList" [resizableColumns]="true" [rowHover]="true"
+                styleClass="p-datatable-customers p-datatable-gridlines p-datatable-striped p-datatable-sm">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th>Subject Paper Code</th>
+                        <th style="text-align: center;">Period</th>
+                        <th style="text-align: center;">Date</th>
+                        <th style="text-align: center;">Start Time</th>
+                        <th style="text-align: center;">End Time</th>
+                        <th style="text-align: center;">Is Present</th>
+                        <th style="text-align: center;">Notes</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-batchAttendance let-rowIndex="rowIndex">
+                    <tr>
+                        <td>
+                            <span class="p-column-title">Subject Paper Code</span>
+                            {{batchAttendance.subjectPaperCodeName}}
+                        </td>
+                        <td style="text-align: center;">
+                            <span class="p-column-title">Period</span>
+                            {{batchAttendance.period}}
+                        </td>
+                        <td style="text-align: center;">
+                            <span class="p-column-title">Date</span>
+                            {{batchAttendance.date | date: 'dd-MMM-yyyy'}}
+                        </td>
+                        <td style="text-align: center;">
+                            <span class="p-column-title">Start Time</span>
+                            {{batchAttendance.startTime}}
+                        </td>
+                        <td style="text-align: center;">
+                            <span class="p-column-title">End Time</span>
+                            {{batchAttendance.endTime}}
+                        </td>
+                        <td style="text-align: center;">
+                            <span class="p-column-title">Is Present</span>
+                            <p-tag [value]="batchAttendance.isPresent ? 'P' : 'A'"
+                                [style]="{'background-color': batchAttendance.isPresent ? 'green' : 'red', 'color': 'white'}">
+                            </p-tag>
+                        </td>
+                        <td>
+                            <span class="p-column-title">Notes</span>
+                            {{batchAttendance.notes || '-'}}
+                        </td>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="summary">
+                    <div class="flex align-items-center justify-content-between">
+                        In total there are {{filteredBatchAttendanceList ? filteredBatchAttendanceList.length : 0 }}
+                        record(s).
+                    </div>
+                </ng-template>
+            </p-table>
+        </p-dialog>
+    </div>
+</div>

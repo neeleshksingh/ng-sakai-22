@@ -1,0 +1,77 @@
+<form [formGroup]="partyForm" style="width: 100%;">
+    <div class="fluid formgrid grid align-items-end">
+        <div class="field col-12 sm:col-6 md:col-4 lg:col-3">
+            <label for="contactPerson" class="font-bold">
+                <i class="pi pi-user" style="margin-right: 3px;"></i> Contact Person
+            </label>
+            <input pInputText type="hidden" id="id" formControlName="id">
+            <input pInputText type="text" id="contactPerson" formControlName="contactPerson"
+                class="text-base text-color surface-overlay border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full">
+        </div>
+        <div class="field col-12 sm:col-6 md:col-4 lg:col-3">
+            <label for="phoneNumber" class="font-bold">
+                <i class="pi pi-mobile" style="margin-right: 3px;"></i> Phone Number
+            </label>
+            <input pInputText type="text" id="phoneNumber" formControlName="phoneNumber"
+                class="text-base text-color surface-overlay border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full">
+        </div>
+        <div class="field col-12 sm:col-6 md:col-4 lg:col-3">
+            <label for="email" class="font-bold">
+                <i class="pi pi-envelope" style="margin-right: 3px;"></i> Email
+            </label>
+            <input pInputText type="text" id="email" formControlName="email"
+                class="text-base text-color surface-overlay border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full">
+        </div>
+        <div class="field col-12 sm:col-6 md:col-4 lg:col-3">
+            <label for="website" class="font-bold">
+                <i class="pi pi-globe" style="margin-right: 3px;"></i> Website
+            </label>
+            <input pInputText type="text" id="website" formControlName="website"
+                class="text-base text-color surface-overlay border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full">
+        </div>
+        <div class="field col-12 sm:col-6 md:col-4 lg:col-3">
+            <label for="state" class="font-bold">
+                <i class="pi pi-map" style="margin-right: 3px;"></i> State
+            </label>
+            <input pInputText type="text" id="state" formControlName="state"
+                class="text-base text-color surface-overlay border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full">
+        </div>
+        <div class="field col-12 sm:col-6 md:col-4 lg:col-3">
+            <label for="country" class="font-bold">
+                <i class="pi pi-globe" style="margin-right: 3px;"></i> Country
+            </label>
+            <p-select [filter]="true" inputId="country" [options]="countryList" formControlName="country"
+                placeholder="Select"
+                styleClass="text-base text-color surface-overlay border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full"></p-select>
+        </div>
+        <div class="field col-12 sm:col-6 md:col-4 lg:col-3">
+            <label for="pinCode" class="font-bold">
+                <i class="pi pi-map-marker" style="margin-right: 3px;"></i> Pin Code
+            </label>
+            <input pInputText type="text" id="pinCode" formControlName="pinCode"
+                class="text-base text-color surface-overlay border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full">
+        </div>
+        <div class="field col-12 sm:col-6 md:col-4 lg:col-3">
+            <label for="pan" class="font-bold">
+                <i class="pi pi-id-card" style="margin-right: 3px;"></i> PAN
+            </label>
+            <input pInputText type="text" id="pan" formControlName="pan"
+                class="text-base text-color surface-overlay border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full">
+        </div>
+        <div class="field col-12 sm:col-6 md:col-4 lg:col-3">
+            <label for="status" class="font-bold">
+                <i class="pi pi-verified" style="margin-right: 3px;"></i> Status
+            </label>
+            <p-select [filter]="true" inputId="status" [options]="statusList" formControlName="status"
+                placeholder="Select"
+                styleClass="text-base text-color surface-overlay border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full"></p-select>
+        </div>
+        <div class="field col-12 sm:col-12 md:col-12 lg:col-12">
+            <label for="address" class="font-bold">
+                <i class="pi pi-map-marker" style="margin-right: 3px;"></i> Address
+            </label>
+            <textarea id="address" pInputTextarea required rows="3" cols="20" formControlName="address"
+                class="text-base text-color surface-overlay border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full"></textarea>
+        </div>
+    </div>
+</form>

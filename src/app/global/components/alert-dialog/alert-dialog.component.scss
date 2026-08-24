@@ -1,0 +1,78 @@
+.alert-wrap {
+    border-radius: 1rem;
+    padding: 1.25rem;
+    border: 1px solid transparent;
+}
+
+.alert-head {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    margin-bottom: 0.75rem;
+}
+
+.alert-icon-shell {
+    height: 3rem;
+    width: 3rem;
+    border-radius: 9999px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #ffffff;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    flex-shrink: 0;
+}
+
+.alert-meta {
+    flex: 1;
+}
+
+.alert-title {
+    margin: 0 0 0.35rem;
+    font-size: 1.2rem;
+    font-weight: 700;
+}
+
+.alert-message {
+    margin: 0;
+    line-height: 1.65;
+    font-size: 1.02rem;
+}
+
+.alert-expiry {
+    margin-top: 0.9rem;
+    padding: 0.5rem 0.65rem;
+    border-radius: 0.6rem;
+    background: rgba(255, 255, 255, 0.6);
+    font-size: 0.92rem;
+}
+
+.alert-actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 1rem;
+}
+
+.alert-card-warning {
+    background: linear-gradient(140deg, #fff7ed 0%, #ffedd5 45%, #ffe4e6 100%);
+    border-color: rgba(249, 115, 22, 0.3);
+    color: #7c2d12;
+}
+
+.alert-card-info {
+    background: linear-gradient(140deg, #eff6ff 0%, #dbeafe 50%, #f0f9ff 100%);
+    border-color: rgba(59, 130, 246, 0.3);
+    color: #1e3a8a;
+}
+
+.alert-card-success {
+    background: linear-gradient(140deg, #ecfdf5 0%, #d1fae5 50%, #f0fdf4 100%);
+    border-color: rgba(16, 185, 129, 0.35);
+    color: #065f46;
+}
+
+.alert-card-error {
+    background: linear-gradient(140deg, #fff1f2 0%, #ffe4e6 50%, #fef2f2 100%);
+    border-color: rgba(239, 68, 68, 0.35);
+    color: #991b1b;
+}

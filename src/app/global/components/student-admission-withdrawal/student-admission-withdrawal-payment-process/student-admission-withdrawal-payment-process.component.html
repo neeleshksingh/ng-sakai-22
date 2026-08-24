@@ -1,0 +1,92 @@
+<div>
+    <p-toast></p-toast>
+    <div class="col-12">
+        <form #form [formGroup]="withdrawalPaymentProcessFormGroup">
+            <div class="fluid formgrid grid">
+                <div class="field col-12 sm:col-12 md:col-2">
+                    <label for="totalRefund">Total Refund*</label>
+                    <input pInputText type="number" id="totalRefund" formControlName="totalRefund"
+                        class="text-base text-color surface-overlay border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full">
+                </div>
+
+                <div class="field col-12 sm:col-12 md:col-3">
+                    <label for="approvalStatus">Approve Status*</label>
+                    <p-select inputId="approvalStatus" formControlName="approvalStatus"
+                        styleClass="text-base text-color surface-overlay border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full"
+                        [options]="approvalStatusList" placeholder="Select approval Status" [style]="{ width: '100%' }"
+                        (onChange)="approvalStatusChange($event)"></p-select>
+                </div>
+                <div class="field col-12 sm:col-12 md:col-7" [ngClass]="{ 'disabled-div': isHoldReasonDisabled }">
+                    <label for="holdReason">Hold Reason*</label>
+                    <input pInputText type="text" id="holdReason" formControlName="holdReason"
+                        class="text-base text-color surface-overlay border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full">
+                </div>
+
+                <div class="field col-12 sm:col-12 md:col-12">
+                    <label for="refundDescription">Refund description*</label>
+                    <textarea id="refundDescription" pInputTextarea rows="3" formControlName="refundDescription"
+                        class="text-base text-color surface-overlay border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full"></textarea>
+                </div>
+                <div class="field col-12 sm:col-12 md:col-12" style="text-align: center;">
+                    <button pButton type="submit" label="Submit" (click)="onSubmit()"
+                        class="p-button-raised  p-button-success"
+                        [disabled]="!withdrawalPaymentProcessFormGroup.valid"></button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <p-dialog header="Confirm Payment Process" [(visible)]="withdrawalPaymentProcessConfirmationBox" [modal]="true"
+        [breakpoints]="{ '768px': '75vw', '576px': '90vw' }" [style]="{ width: '500px' }" [draggable]="false"
+        [resizable]="false">
+        <div class="flex flex-column gap-3 pt-2">
+            <p class="m-0 text-600 text-sm line-height-3">
+                Please review the withdrawal payment details carefully before proceeding. This action cannot be
+                undone.
+            </p>
+
+            <div class="surface-50 border-1 surface-border border-round-xl p-4 flex flex-column gap-3 mt-2">
+                <div class="flex justify-content-between align-items-center">
+                    <span class="text-500 font-medium">Total Refund</span>
+                    <span
+                        class="text-blue-600 font-bold text-2xl">₹{{withdrawalPaymentProcessFormGroup.value.totalRefund}}</span>
+                </div>
+
+                <div class="border-top-1 surface-border my-1"></div>
+
+                <div class="flex justify-content-between align-items-center">
+                    <span class="text-500 font-medium">Approval Status</span>
+                    <span class="font-semibold text-900 bg-blue-100 text-blue-800 px-2 py-1 border-round text-sm">
+                        {{withdrawalPaymentProcessFormGroup.value.approvalStatus}}
+                    </span>
+                </div>
+
+                <div class="flex justify-content-between align-items-center">
+                    <span class="text-500 font-medium">Hold Reason</span>
+                    <span class="text-900 font-medium text-right max-w-15rem">
+                        {{withdrawalPaymentProcessFormGroup.value.holdReason || '-'}}
+                    </span>
+                </div>
+
+                <div class="flex flex-column gap-2 mt-2">
+                    <span class="text-500 font-medium">Refund Description</span>
+                    <div class="surface-0 p-3 border-round border-1 surface-border text-800 line-height-3 text-sm">
+                        {{withdrawalPaymentProcessFormGroup.value.refundDescription || 'No description provided.'}}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <ng-template pTemplate="footer">
+            <div class="flex justify-content-end gap-2 border-top-none pt-3">
+                <button pButton pRipple type="button" label="Cancel" icon="pi pi-times"
+                    class="p-button-text p-button-secondary font-medium"
+                    (click)="withdrawalPaymentProcessConfirmationBox = false">
+                </button>
+
+                <button pButton pRipple type="button" label="Confirm Refund" icon="pi pi-check"
+                    class="p-button-success font-medium" (click)="withdrawalPaymentProcessConfirmation()">
+                </button>
+            </div>
+        </ng-template>
+    </p-dialog>
+</div>

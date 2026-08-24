@@ -1,0 +1,77 @@
+<div class="pb-6">
+    <div class="grid">
+        <p-toast></p-toast>
+        <div class="col-12">
+            <div class="toolbar-demo card">
+                <p-toolbar>
+                    <div class="p-toolbar-group-left">
+                        <div class="header-left-div">
+                            <div class="header-div1">
+                                <i class="fa-brands fa-docker" style="font-size: 40px;"></i>
+                            </div>
+                            <div class="header-div2">
+                                <h5>{{componentName}}</h5>
+                            </div>
+                        </div>
+                    </div>
+                    <ng-template pTemplate="right">
+                        <div class="d-flex">
+                        </div>
+                    </ng-template>
+                </p-toolbar>
+            </div>
+        </div>
+        <div class="col-12 md:col-12 lg:col-12 ">
+            <div class="card pt-4">
+                <div *ngFor="let documentCenterCategory of documentCenterCategoryList">
+                    <div
+                        style="background-color: #A5D6A7; font-family: arial, sans-serif;font-size: 18px;font-weight: 600; color: #1a0dab;">
+                        <div style="padding-top: 10px; padding-bottom: 10px;padding-left: 5px;">
+                            {{documentCenterCategory?.category}}
+                        </div>
+                    </div>
+                    <div class="col-12" style="background-color: #C8E6C9">
+                        <div *ngFor="let documentCenterData of documentCenterCategory?.items">
+                            <a href={{documentCenterData?.documentUrl}} target="_blank">
+                                <div style="padding-left: 5px;">
+                                    <div class="col-12"
+                                        style="font-family: arial, sans-serif;font-size: 15px;font-weight: 400; color: #1a0dab;">
+                                        <u> {{documentCenterData?.title}}</u> <i class="pi pi-file-pdf"
+                                            style="font-size: 1rem"></i>
+                                    </div>
+                                    <div class="col-12"
+                                        style="font-family: arial, sans-serif; font-size: 12px;font-weight: normal;">
+                                        {{documentCenterData?.description}}</div>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                    <br>
+                </div>
+                <div class="border-round border-1 surface-border p-4 surface-card" *ngIf="skeleton">
+                    <div class="flex mb-3">
+                        <div>
+                            <p-skeleton width="10rem" styleClass="mb-2" height="2rem" />
+                            <p-skeleton width="5rem" styleClass="mb-2" />
+                        </div>
+                    </div>
+                    <div style="flex: 1">
+                        <p-skeleton width="100%" styleClass="mb-2" />
+                        <p-skeleton width="75%" />
+                    </div>
+                    <div class="flex mb-3 mt-3">
+                        <div>
+                            <p-skeleton width="10rem" styleClass="mb-2" height="2rem" />
+                            <p-skeleton width="5rem" styleClass="mb-2" />
+                        </div>
+                    </div>
+                    <div style="flex: 1">
+                        <p-skeleton width="100%" styleClass="mb-2" />
+                        <p-skeleton width="75%" />
+                    </div>
+                </div>
+            </div>
+        </div>
+        <p-confirm-dialog [style]="{ width: '450px' }"></p-confirm-dialog>
+    </div>
+</div>

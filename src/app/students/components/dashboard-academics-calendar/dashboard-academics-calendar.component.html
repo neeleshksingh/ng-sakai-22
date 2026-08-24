@@ -1,0 +1,44 @@
+<div class="pb-6">
+    <div class="grid">
+        <p-toast></p-toast>
+
+        <div class="col-12">
+            <div class="toolbar-demo card">
+                <p-toolbar>
+                    <div class="p-toolbar-group-left">
+                        <div class="header-left-div">
+                            <div class="header-div1">
+                                <i class="fa-solid fa-graduation-cap" style="font-size: 40px;"></i>
+                            </div>
+                            <div class="header-div2">
+                                <h5>Batch Schedules</h5>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-toolbar-group-right toolbar-buttons">
+                        <button pButton type="button" class="mr-2 p-button-warning">Scheduled</button>
+                        <button pButton type="button" class="mr-2 p-button-primary">Present</button>
+                        <button pButton type="button" class="mr-2 p-button-danger">Absent</button>
+                        <button pButton type="button" class="mr-2 p-button-success">Holiday</button>
+                    </div>
+                </p-toolbar>
+            </div>
+        </div>
+
+        <div class="col-12">
+            <div class="card calendar-container">
+                <full-calendar #calendar [options]="fullcalendarOptions"></full-calendar>
+
+                <p-dialog [(visible)]="eventDialog" [style]="{ width: '450px' }" header="Batch Schedules" [modal]="true" [closable]="true">
+                    <ng-template pTemplate="content">
+                        <div class="p-fluid">
+                            <div class="p-field">
+                                <label for="title" style="font-size: medium;">{{ title }}</label>
+                            </div>
+                        </div>
+                    </ng-template>
+                </p-dialog>
+            </div>
+        </div>
+    </div>
+</div>

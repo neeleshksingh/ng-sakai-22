@@ -1,0 +1,23 @@
+<form [formGroup]="filterSearchFormGroup">
+    <div class="fluid formgrid grid px-3">
+        <div class="col-12 md:col-4">
+            <p-multiSelect [filter]="true" inputId="academicSessionIds" [options]="academicSessionSelectItemList"
+                [style]="{'width':'100%'}" formControlName="academicSessionIds"
+                (onChange)="onAcademicSessionIdChange($event)" placeholder="AcademicSession">
+            </p-multiSelect>
+        </div>
+
+        <div class="col-12 md:col-4">
+            <p-multiSelect [filter]="true" inputId="programIds" [options]="programSelectItemList"
+                (onChange)="onProgramIdsChange()"
+                [style]="{'width':'100%'}" [showClear]="true" formControlName="programIds" placeholder="Program">
+            </p-multiSelect>
+        </div>
+
+        <div class="col-12 md:col-4">
+            <p-multiSelect [filter]="true" inputId="operationalVerticalIds" [options]="operationalVerticalSelectItemList"
+                [style]="{'width':'100%'}" [showClear]="true" formControlName="operationalVerticalIds" placeholder="OperationalVertical">
+            </p-multiSelect>
+        </div>
+    </div>
+</form>

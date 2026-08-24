@@ -1,0 +1,12 @@
+::ng-deep .p-progressbar-indeterminate .p-progressbar-value {
+    animation: p-progressbar-stripes 4s linear infinite !important;
+}
+
+@keyframes p-progressbar-stripes {
+    0% {
+        background-position: 0 0;
+    }
+    100% {
+        background-position: 100% 0;
+    }
+}

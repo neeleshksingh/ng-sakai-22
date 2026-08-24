@@ -1,0 +1,171 @@
+<div class="pb-6">
+    <div class="grid">
+        <p-toast></p-toast>
+        <div class="col-12">
+            <div class="toolbar-demo card">
+                <p-toolbar>
+                    <div class="p-toolbar-group-left">
+                        <div class="header-left-div">
+                            <div class="header-div1">
+                                <i class="fas fa-book-open" style="font-size: 40px;"></i>
+                            </div>
+                            <div class="header-div2">
+                                <h5>{{componentName}}</h5>
+                            </div>
+                        </div>
+                    </div>
+                    <ng-template pTemplate="right">
+                        <div class="d-flex">
+                        </div>
+                    </ng-template>
+                </p-toolbar>
+            </div>
+        </div>
+        <div class="col-12 md:col-12 lg:col-12">
+            <div class="card">
+                <form [formGroup]="backlogExaminationRegDataFormGroup">
+                    <div class="grid align-items-end">
+                        <div class="col-12 md:col-6 lg:col-2 p-4">
+                            <label for="registrationNumber">Registration Number</label>
+                            <p-select [filter]="true" inputId="registrationNumber" placeholder="Registration Number"
+                                [options]="registrationNumberSelectItemList" formControlName="registrationNumber"
+                                [style]="{'width':'100%'}"></p-select>
+                        </div>
+                        <div class="col-12 md:col-6 lg:col-3 p-4">
+                            <label for="examinationName">Examination</label>
+                            <p-select [filter]="true" inputId="examinationName" [options]="activeExaminationItemList"
+                                formControlName="examinationId" placeholder="Select Examination"
+                                [style]="{'width':'100%'}"></p-select>
+                        </div>
+                        <div class="col-12 md:col-6 lg:col-2 p-4">
+                            <button pButton type="submit" [disabled]="!backlogExaminationRegDataFormGroup.valid"
+                                label="Search" #newItem (click)="onSearch()">
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div style="width: 100vw;">
+            <div class="col-12">
+                <div class="card" *ngIf="basicDetailVisible">
+                    <div class="formgrid grid align-items-start">
+                        <div class="field col-12 sm:col-6 md:col-6 lg:col-3 pl-4 pr-4">
+                            <label style="font-weight: bold;">Academic Session</label>
+                            <label class="text-base text-color surface-overlay w-full">
+                                {{this.backlogExamRegistrationBasicDetails?.academicSessionName}}</label>
+                        </div>
+
+                        <div class="field col-12 sm:col-6 md:col-6 lg:col-3 pl-4 pr-4">
+                            <label style="font-weight: bold;">Examination Name : &nbsp; </label>
+
+                            <label class="text-base text-color surface-overlay w-full">
+                                {{this.backlogExamRegistrationBasicDetails?.examinationName}}
+                            </label>
+                        </div>
+
+                        <div class="field col-12 sm:col-6 md:col-6 lg:col-3 pl-4 pr-4">
+                            <label style="font-weight: bold;">Program : &nbsp; </label>
+                            <label class="text-base text-color surface-overlay w-full">
+                                {{this.backlogExamRegistrationBasicDetails?.programName}}
+                            </label>
+                        </div>
+
+                        <div class="field col-12 sm:col-6 md:col-6 lg:col-3 pl-4 pr-4">
+                            <label style="font-weight: bold;">Semester : &nbsp; </label>
+
+                            <label class="text-base text-color surface-overlay w-full">
+                                {{this.currentSemesterDetails[0]?.operationalVerticalName}}
+                            </label>
+                        </div>
+
+                        <div class="field col-12 sm:col-6 md:col-6 lg:col-3 pl-4 pr-4">
+                            <label style="font-weight: bold;">Exam Type : &nbsp; </label>
+
+                            <label class="text-base text-color surface-overlay w-full">
+                                {{this.backlogExamRegistrationBasicDetails?.examinationTypeName}}
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div style="width: 100vw;">
+            <div class="col-12">
+                <div class="card" *ngIf="tableVisible">
+                    <p-table #dt [value]="studentExaminationRegistrations" [rowHover]="true"
+                        styleClass="p-datatable-customers p-datatable-gridlines p-datatable-striped">
+
+                        <ng-template pTemplate="header">
+                            <tr [pSelectableRow]="rowData">
+                                <th style="text-align: center;">
+                                    OperationalVertical
+                                </th>
+
+                                <th style="text-align: center;">
+                                    SubjectPaperCode
+                                </th>
+
+                                <th style="text-align: center;">
+                                    Subject
+                                </th>
+
+                                <th style="text-align: center;">
+                                    SubjectType
+                                </th>
+
+                                <th style="text-align: center;">
+                                    PaperType
+                                </th>
+                            </tr>
+
+                        </ng-template>
+
+                        <ng-template pTemplate="body" let-result let-rowIndex="rowIndex">
+                            <tr
+                                [style.background-color]="result.status === 'PUBLISHED' && result.id != 0 ? '#E5E4E2' : 'transparent'">
+                                <td style="text-align: center; height: 30px;">
+                                    <span class="p-column-title">OperationalVertical</span>
+                                    {{result.operationalVerticalName}}
+                                </td>
+
+                                <td style="text-align: center; height: 30px;">
+                                    <span class="p-column-title">SubjectPaperCode</span>
+                                    {{result.subjectPaperCodeName}}
+                                </td>
+
+                                <td style="text-align: center; height: 35px;">
+                                    <span class="p-column-title">Subject</span>
+                                    {{result.subjectName}}
+                                </td>
+
+                                <td style="text-align: center; height: 35px;">
+                                    <span class="p-column-title">SubjectType </span>
+                                    {{result.subjectTypeName}}
+                                </td>
+
+                                <td style="text-align: center; height: 35px;">
+                                    <span class="p-column-title"> PaperType</span>
+                                    {{result.paperTypeName}}
+                                </td>
+                        </ng-template>
+                    </p-table>
+
+                    <div class="flex flex-row-reverse flex-wrap justify-content-between">
+                        <div class="flex align-items-center justify-content-center">
+                            <button pButton type="button" label="Submit" [disabled]="disableSubmitButton"
+                                (click)="onExamSubmit()" #newItem style="margin-top: 6px;">
+                            </button>
+                        </div>
+                        <div class="flex align-items-center justify-content-center text-xl text-green-500">
+                            <span>The highlighted rows indicate that registration has been completed for the specified
+                                subjects.</span>
+                        </div>
+                        <div></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <p-confirm-dialog [style]="{ width: '450px' }"></p-confirm-dialog>
+    </div>
+</div>

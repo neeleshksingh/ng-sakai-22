@@ -1,0 +1,220 @@
+.search-box {
+    position: relative;
+    width: 600px;
+    height: 50px;
+  }
+  
+  @media screen and (max-width: 1200px) {
+    .search-box {
+      max-width: 500px; /* Reduce width on medium-sized screens */
+    }
+  }
+  
+  @media screen and (max-width: 768px) {
+    .search-box {
+      max-width: 400px; /* Further reduce width on tablets */
+    }
+  }
+  
+  @media screen and (max-width: 480px) {
+    .search-box {
+      max-width: 100%; /* Use full width on small screens */
+      height: 45px; /* Adjust height for smaller screens */
+    }
+  }
+  
+  /* Style the input field */
+  .search-input {
+    width: 100%;
+    padding: 10px 40px 10px 10px; /* Add space for the button */
+    border: 2px solid #ddd;
+    border-radius: 20px;
+    font-size: 16px;
+    transition: border-color 0.3s ease;
+  }
+  
+  /* Focus effect for input */
+  .search-input:focus {
+    border-color: #4A90E2;
+    outline: none;
+  }
+  
+  /* Style the button inside the input */
+ 
+  
+  /* Increase the icon size */
+  // .search-button .pi-search::before {
+  //   font-size: 1.5rem /* Adjust this value as needed */
+  // }
+  // .span.p-button-icon.pi.pi-search {
+  //   font-size: 1.5rem !important;
+  // }
+  
+  
+  
+  ///////////////////////////////////////////////////////////////////////
+  /* Style for the container that holds the items */
+  // .container {
+  //   display: flex;
+  //   flex-direction: column;
+  //   gap: 10px; /* Space between the items */
+  //   padding: 20px;
+  // }
+  
+  /* Style for each individual item card */
+  // .item-card {
+  //   background-color: #f9f9f9;
+  //   border-radius: 8px;
+  //   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  //   padding: 15px;
+  //   transition: transform 0.3s ease, box-shadow 0.3s ease;
+  // }
+  
+  /* Hover effect for the item card */
+  // .item-card:hover {
+  //   transform: translateY(-5px);
+  //   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  // }
+  
+  /* Style for the index and content inside the item card */
+  // .item-index {
+  //   font-size: 14px;
+  //   color: #888;
+  // }
+  
+  // .item-content {
+  //   font-size: 18px;
+  //   font-weight: bold;
+  //   color: #333;
+  // }
+  
+  
+  ////////////////////////////////////////////////////////////
+  /* Style for the container of search results */
+  .search-results {
+    display: flex;
+    flex-direction: column;
+    gap: 20px; /* Increased space between result cards */
+    padding: 20px;
+  }
+  
+  /* Style for each individual result card */
+  .result-card {
+    background: linear-gradient(135deg, #f3f4f6, #ffffff);
+    border-radius: 12px;
+    border: 1px solid #ddd;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    padding: 10px;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+  }
+  
+  /* Hover effect for result cards */
+  // .result-card:hover {
+  //   box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+  //   transform: translateY(-5px);
+  // }
+  
+  /* Adding an accent line at the top of the card */
+  .result-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 5px;
+    height: 100%;
+    background: #4a90e2;
+  }
+  
+  /* Style for the result title */
+  .result-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: #333;
+    // margin-bottom: 12px;
+    position: relative;
+    z-index: 1;
+  }
+  
+  /* Style for the result description */
+  .result-description {
+    font-size: 15px;
+    color: #666;
+    line-height: 1.5;
+    z-index: 1;
+  }
+  
+  /* Additional styling for better readability */
+  .result-card:hover .result-description {
+    color: #333;
+  }
+  
+  /* Subtle animation effect */
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  
+  .result-card {
+    animation: fadeIn 0.6s ease-out;
+  }
+  
+  
+  // Checkbox styling
+  .category-container {
+    margin-bottom: 10px;
+    background-color: #f9f9f9;
+    padding: 5px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .category-title {
+    font-size: 18px;
+    color: #333;
+    font-weight: 600;
+    margin-bottom: 10px;
+    border-bottom: 2px solid #007ad9;
+    padding-bottom: 5px;
+  }
+  
+  .checkbox-group {
+    display: flex;
+    align-items: center;
+    margin-bottom: 8px;
+  }
+  
+  p-checkbox {
+    margin-right: 10px;
+  }
+  
+  p-checkbox .p-checkbox-box {
+    border-radius: 4px !important;
+    border-color: #007ad9 !important;
+    background-color: #fff !important;
+  }
+  
+  p-checkbox .p-checkbox-box.p-highlight {
+    background-color: #007ad9 !important;
+    border-color: #007ad9 !important;
+  }
+  
+  .checkbox-group label {
+    font-size: 14px;
+    color: #555;
+    margin-left: 8px;
+  }
+  
+  .scrollable-container {
+    max-height: 300px; /* Set the maximum height you want */
+    overflow-y: auto;  /* Enable vertical scroll when content overflows */
+    padding: 10px;     /* Optional: Add some padding */
+    border: 1px solid #ccc; /* Optional: Add a border for better visibility */
+  }
+  
+  :host ::ng-deep .p-dialog-header {
+    padding-bottom: 5px;
+    padding-top: 5px;
+    background: #4a90e2;
+  }

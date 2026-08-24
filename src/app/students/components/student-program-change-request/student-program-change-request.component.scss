@@ -1,0 +1,520 @@
+.form-readonly {
+    pointer-events: none;
+    opacity: 0.75;
+}
+
+.supporting-documents-label {
+    display: inline-block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    color: var(--text-color);
+}
+
+.supporting-documents-uploader {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 0.5rem;
+    min-height: 7.25rem;
+    padding: 1rem;
+    border: 1px dashed var(--surface-border);
+    border-radius: 12px;
+    background:
+        linear-gradient(
+            135deg,
+            color-mix(in srgb, var(--primary-color) 6%, transparent),
+            color-mix(in srgb, var(--green-500) 5%, transparent)
+        ),
+        var(--surface-card);
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease,
+        transform 0.2s ease;
+}
+
+.supporting-documents-uploader:hover,
+.supporting-documents-uploader:focus-within {
+    border-color: var(--primary-color);
+    box-shadow: 0 8px 20px
+        color-mix(in srgb, var(--primary-color) 18%, transparent);
+    transform: translateY(-1px);
+}
+
+.supporting-documents-header {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    width: fit-content;
+    padding: 0.35rem 0.75rem;
+    border-radius: 999px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--primary-color);
+    background: color-mix(in srgb, var(--primary-color) 12%, transparent);
+}
+
+.supporting-documents-header .pi {
+    font-size: 0.95rem;
+}
+
+.supporting-documents-input {
+    width: 100%;
+    max-width: 100%;
+    color: var(--text-color);
+    font-size: 0.95rem;
+    cursor: pointer;
+}
+
+.supporting-documents-input::file-selector-button {
+    margin-right: 0.75rem;
+    padding: 0.5rem 0.9rem;
+    border: 0;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #ffffff;
+    background: linear-gradient(
+        135deg,
+        var(--primary-color),
+        color-mix(in srgb, var(--primary-color) 65%, black)
+    );
+    cursor: pointer;
+    transition: filter 0.2s ease;
+}
+
+.supporting-documents-input::file-selector-button:hover {
+    filter: brightness(0.95);
+}
+
+.supporting-documents-hint {
+    font-size: 0.75rem;
+    color: var(--text-color-secondary);
+}
+
+.eligibility-card {
+    border: 1px solid
+        color-mix(in srgb, var(--yellow-500) 35%, var(--surface-border));
+    background:
+        linear-gradient(
+            140deg,
+            rgba(251, 191, 36, 0.1),
+            rgba(249, 115, 22, 0.08)
+        ),
+        var(--surface-card);
+}
+
+.eligibility-card-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    gap: 0.75rem;
+    min-height: 14rem;
+    padding: 1.5rem 1rem;
+}
+
+.eligibility-icon {
+    font-size: 2.4rem;
+    color: var(--yellow-600);
+}
+
+.eligibility-title {
+    margin: 0;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--text-color);
+}
+
+.eligibility-message {
+    margin: 0;
+    max-width: 48rem;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    color: var(--text-color-secondary);
+}
+
+.progress-card {
+    padding: 1.75rem;
+    animation: progress-card-in 0.4s ease;
+}
+
+.progress-header {
+    gap: 0.15rem;
+    margin-bottom: 1.25rem;
+}
+
+.progress-title {
+    margin: 0;
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--text-color);
+}
+
+.progress-subtitle {
+    font-size: 0.85rem;
+    color: var(--text-color-secondary);
+}
+
+.progress-summary {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1.25rem;
+    flex-wrap: wrap;
+    padding: 1rem 1.25rem;
+    margin-bottom: 2.25rem;
+    border-radius: 12px;
+    background:
+        linear-gradient(
+            135deg,
+            color-mix(in srgb, var(--primary-color) 6%, transparent),
+            color-mix(in srgb, var(--green-500) 5%, transparent)
+        ),
+        var(--surface-ground);
+}
+
+.progress-summary-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    text-align: center;
+}
+
+.progress-summary-label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    color: var(--text-color-secondary);
+}
+
+.progress-summary-value {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--text-color);
+}
+
+.progress-summary-arrow {
+    font-size: 1.1rem;
+    color: var(--primary-color);
+}
+
+.progress-stepper {
+    position: relative;
+    padding: 0 0.5rem;
+}
+
+.progress-track {
+    position: absolute;
+    top: 1.25rem;
+    left: calc(100% / 14);
+    right: calc(100% / 14);
+    height: 4px;
+    border-radius: 999px;
+    background: var(--surface-border);
+    overflow: hidden;
+}
+
+.progress-track-fill {
+    height: 100%;
+    border-radius: 999px;
+    background: linear-gradient(90deg, var(--green-500), var(--green-600));
+    transition: width 0.8s cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+.progress-track-fill.rejected {
+    background: linear-gradient(90deg, var(--red-500), var(--red-600));
+}
+
+.progress-steps {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    gap: 0.5rem;
+}
+
+.progress-step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    flex: 1;
+    min-width: 0;
+}
+
+.progress-step-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 50%;
+    background: var(--surface-card);
+    border: 2px solid var(--surface-border);
+    color: var(--text-color-secondary);
+    font-size: 1rem;
+    transition:
+        background 0.3s ease,
+        border-color 0.3s ease,
+        color 0.3s ease,
+        transform 0.3s ease;
+}
+
+.progress-step.completed .progress-step-icon {
+    background: linear-gradient(135deg, var(--green-500), var(--green-600));
+    border-color: transparent;
+    color: #ffffff;
+    transform: scale(1.05);
+}
+
+.progress-step.active .progress-step-icon {
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+    background: var(--surface-card);
+    animation: progress-step-pulse 1.6s ease-out infinite;
+}
+
+.progress-step.rejected .progress-step-icon {
+    background: linear-gradient(135deg, var(--red-500), var(--red-600));
+    border-color: transparent;
+    color: #ffffff;
+    transform: scale(1.05);
+    animation: none;
+}
+
+.progress-step.rejected .progress-step-label {
+    color: var(--red-600);
+}
+
+.progress-step-label {
+    font-size: 0.78rem;
+    font-weight: 600;
+    text-align: center;
+    color: var(--text-color);
+    line-height: 1.25;
+}
+
+.progress-step.active .progress-step-label {
+    color: var(--primary-color);
+}
+
+.progress-step-date {
+    font-size: 0.68rem;
+    color: var(--text-color-secondary);
+}
+
+@keyframes progress-step-pulse {
+    0% {
+        box-shadow: 0 0 0 0
+            color-mix(in srgb, var(--primary-color) 45%, transparent);
+    }
+    70% {
+        box-shadow: 0 0 0 10px
+            color-mix(in srgb, var(--primary-color) 0%, transparent);
+    }
+    100% {
+        box-shadow: 0 0 0 0
+            color-mix(in srgb, var(--primary-color) 0%, transparent);
+    }
+}
+
+@keyframes progress-card-in {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.completion-animation-card {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 24rem;
+    padding: 1rem;
+    overflow: hidden;
+    background:
+        radial-gradient(
+            circle at center,
+            color-mix(in srgb, var(--green-500) 9%, transparent),
+            transparent 65%
+        ),
+        var(--surface-card);
+    animation: completion-card-in 0.35s ease;
+}
+
+.completion-animation-player {
+    width: min(100%, 28rem);
+    aspect-ratio: 1;
+}
+
+.workflow-success-card {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1.25rem;
+    padding: 1.75rem 2rem;
+    border: 1px solid
+        color-mix(in srgb, var(--green-500) 38%, var(--surface-border));
+    background:
+        linear-gradient(
+            135deg,
+            color-mix(in srgb, var(--green-500) 13%, transparent),
+            color-mix(in srgb, var(--primary-color) 5%, transparent)
+        ),
+        var(--surface-card);
+    box-shadow: 0 12px 30px
+        color-mix(in srgb, var(--green-500) 13%, transparent);
+    animation: success-card-in 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.workflow-success-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 3.5rem;
+    width: 3.5rem;
+    height: 3.5rem;
+    border-radius: 50%;
+    color: #ffffff;
+    background: linear-gradient(135deg, var(--green-500), var(--green-600));
+    box-shadow: 0 8px 20px color-mix(in srgb, var(--green-500) 30%, transparent);
+}
+
+.workflow-success-icon .pi {
+    font-size: 1.6rem;
+    font-weight: 700;
+}
+
+.workflow-success-content {
+    min-width: 0;
+}
+
+.workflow-success-title {
+    margin: 0 0 0.35rem;
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--green-600);
+}
+
+.workflow-success-message {
+    margin: 0;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    color: var(--text-color-secondary);
+}
+
+@keyframes completion-card-in {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes success-card-in {
+    from {
+        opacity: 0;
+        transform: translateY(12px) scale(0.98);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+@media (max-width: 767px) {
+    .completion-animation-card {
+        min-height: 18rem;
+        padding: 0.5rem;
+    }
+
+    .completion-animation-player {
+        width: min(100%, 20rem);
+    }
+
+    .workflow-success-card {
+        flex-direction: column;
+        gap: 0.9rem;
+        padding: 1.5rem 1rem;
+        text-align: center;
+    }
+
+    .workflow-success-title {
+        font-size: 1.1rem;
+    }
+
+    .progress-track {
+        display: none;
+    }
+
+    .progress-steps {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 1.1rem;
+    }
+
+    .progress-step {
+        flex-direction: row;
+        justify-content: flex-start;
+        text-align: left;
+        gap: 0.85rem;
+    }
+
+    .progress-step-icon {
+        flex-shrink: 0;
+    }
+
+    .progress-step-label,
+    .progress-step-date {
+        text-align: left;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .completion-animation-card,
+    .workflow-success-card {
+        animation: none;
+    }
+}
+
+.skeleton-card {
+    padding: 1.25rem;
+}
+
+.skeleton-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 0.8rem 1rem;
+    margin-bottom: 1.25rem;
+}
+
+.skeleton-actions {
+    display: flex;
+    justify-content: center;
+    gap: 0.9rem;
+}
+
+@media (max-width: 1199px) {
+    .skeleton-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 991px) {
+    .skeleton-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 767px) {
+    .skeleton-grid {
+        grid-template-columns: 1fr;
+    }
+}

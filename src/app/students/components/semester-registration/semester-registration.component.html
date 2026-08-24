@@ -1,0 +1,176 @@
+<div class="pb-6">
+    <div class="grid">
+        <p-toast></p-toast>
+        <div class="col-12">
+            <div class="toolbar-demo card">
+                <p-toolbar>
+                    <div class="p-toolbar-group-left">
+                        <div class="header-left-div">
+                            <div class="header-div1">
+                                <i class=" fa-solid  fa-graduation-cap" style="font-size: 40px;"></i>
+                            </div>
+                            <div class="header-div2">
+                                <h5>Semester Registration</h5>
+                            </div>
+                        </div>
+                    </div>
+                </p-toolbar>
+            </div>
+        </div>
+        <form [formGroup]="semesterRegistrationGroup" style="width: 100%;">
+            <div class="col-12" *ngIf="currentSemesterNotRegistred">
+                <div class="card p-3"
+                    style="text-align: center;font-size: medium;  color: red; text-transform: uppercase;">
+                    <span class="blink">Registraton Pending: {{msgCurrentSemesterNotRegistred}}</span>
+                </div>
+            </div>
+            <div class="col-12">
+                <div class="card p-4">
+                    <div class="p-fluid formgrid grid">
+                        <div class="field col-12 sm:col-6 md:col-6 lg:col-3 pl-4 pr-4">
+                            <label for="programName">Program *</label>
+                            <p-select [filter]="true" inputId="programName" [options]="programList"
+                                formControlName="programName" placeholder="Select"
+                                (onChange)="onProgamChanged($event)"></p-select>
+                        </div>
+                        <div class="field col-12 sm:col-6 md:col-6 lg:col-3 pl-4 pr-4">
+                            <label for="operationalVerticalName">Operational Vertical *</label>
+                            <p-select [filter]="true" inputId="operationalVerticalName"
+                                [options]="operationalVerticalList" formControlName="operationalVerticalName"
+                                placeholder="Select" (onChange)="onOperationalVerticalChanged($event)"></p-select>
+                        </div>
+                        <div class="field col-12 sm:col-6 md:col-6 lg:col-3 pl-4 pr-4">
+                            <label for="registrationNumber">RegistrationNumber</label>
+                            <input pInputText type="text" id="registrationNumber"
+                                [(ngModel)]="semesterRegistrationGroup.value.registrationNumber"
+                                formControlName="registrationNumber" placeholder="Registration Number" readonly>
+                        </div>
+                        <div class="field col-12 md:col-2" style="margin-top: 24px;">
+                            <p-button label="Search" icon="pi pi-search"
+                                (click)="getCurrentSemesterPapers(fileterdStudentProgram[0].academicSessionId,this.semesterRegistrationGroup.value.programName,this.semesterRegistrationGroup.value.operationalVerticalName)"
+                                class="p-mr-2 p-mb-2"></p-button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12" *ngIf="displayAlert">
+                <div class="card" style="text-align: center;font-size: medium;"
+                    [style.color]="semesterAllreadyRegistred ? 'green' : 'red'">
+                    <span>{{semesterAllreadyRegistred?msgSemesterAlreadyRegistred:msgSemesterNotRegistred}}</span>
+                </div>
+            </div>
+            <!-- <div class="grid card" *ngIf="operationalVerticalSubjects.length>0">
+                    <div class="col-12 "> -->
+            <div class="col-12 pl-2  " [hidden]="isDisplay">
+                <div class="fluid formgrid grid">
+
+                    <div class="field col-12 sm:col-12 md:col-12">
+                        <div class="card ml-2 mr-2">
+                            @if(!isLoading){
+                            <p-table [value]="operationalVerticalSubjects" sortField="subjectType.name"
+                                sortMode="single" (onSort)="onSort()" dataKey="id" [rowHover]="true"
+                                [resizableColumns]="true"
+                                styleClass="p-datatable-customers p-datatable-gridlines p-datatable-striped p-datatable-sm"
+                                [showCurrentPageReport]="true">
+                                <ng-template pTemplate="header">
+                                    <tr>
+                                        <th style="width: 3rem">
+                                        </th>
+                                        <th>BatchCode</th>
+                                        <th>SubjectPaperCode</th>
+                                        <th>Subject</th>
+                                        <th>PaperType</th>
+                                        <th>Credits</th>
+                                        <th>Registration Date</th>
+
+                                    </tr>
+                                </ng-template>
+                                <ng-template pTemplate="body" let-operationalVerticalSubject let-rowIndex="rowIndex">
+                                    <tr
+                                        *ngIf="rowGroupMetadata[operationalVerticalSubject.subjectType.name].index === rowIndex">
+                                        <td colspan="7">
+                                            <span
+                                                class="p-text-bold p-ml-3">{{operationalVerticalSubject.subjectType.name}}</span>
+                                            <span *ngIf="operationalVerticalSubject?.isSelectionAllowedLabel"
+                                                style="margin:20px;font-weight: bold;">( Choose Any :
+                                                {{operationalVerticalSubject.noOfSelection}} )</span>
+                                        </td>
+                                    </tr>
+                                    <tr
+                                        [ngClass]="{'row-accessories': operationalVerticalSubject?.isSubjectPaperCodeSelected == true}">
+                                        <td>
+                                            <p-checkbox type="checkbox"
+                                                *ngIf="operationalVerticalSubject.isSelectionAllowed"
+                                                [ngModelOptions]="{standalone: true}"
+                                                [(ngModel)]="operationalVerticalSubject.isSubjectPaperCodeSelected"
+                                                binary="true" id={{operationalVerticalSubject.id}} #f></p-checkbox>
+                                        </td>
+                                        <td><span class="p-column-title">Batch Code</span>
+                                            {{operationalVerticalSubject.batchCode}}
+                                        </td>
+                                        <td><span class="p-column-title">Paper Code</span>
+                                            {{operationalVerticalSubject.subjectPaperCodeName}}
+                                        </td>
+                                        <td>
+                                            <span class="p-column-title">Paper Name</span>
+                                            {{operationalVerticalSubject.subjectName}}
+                                        </td>
+                                        <td>
+                                            <span class="p-column-title">Paper Type</span>
+                                            {{operationalVerticalSubject.paperTypeName}}
+                                        </td>
+                                        <td>
+                                            <span class="p-column-title">Credits</span>
+                                            {{operationalVerticalSubject.creditUnit}}
+                                        </td>
+                                        <td>
+                                            <span class="p-column-title">Registration Date</span>
+                                            {{operationalVerticalSubject.createdDate}}
+                                        </td>
+                                    </tr>
+                                </ng-template>
+                            </p-table>
+                            } @else {
+                            <p-table [value]="skeletonValue" [columns]="cols" [rows]="10" [paginator]="true"
+                                [rowsPerPageOptions]="[10, 20, 30, 40, 50, 100, { showAll: 'All' }]" autoLayout="true"
+                                resizableColumns="true"
+                                styleClass="p-datatable-customers p-datatable-gridlines p-datatable-striped p-datatable-sm"
+                                currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+                                [showCurrentPageReport]="true">
+                                <ng-template pTemplate="header">
+                                    <tr>
+                                        <th style="width: 3rem">
+                                        </th>
+                                        @for(col of cols; track $index) {
+                                        <th>{{ col.header }}
+                                        </th>
+                                        }
+                                    </tr>
+                                </ng-template>
+                                <ng-template pTemplate="body">
+                                    @for(item of skeletonValue; track $index) {
+                                    <tr>
+                                        <td><p-checkbox type="checkbox"></p-checkbox></td>
+
+                                        @for(col of cols; track $index) {
+                                        <td><p-skeleton /></td>
+                                        }
+                                    </tr>
+                                    }
+                                </ng-template>
+                            </p-table>}
+
+                        </div>
+                    </div>
+                    <div class="field col-12 sm:col-12 md:col-12" *ngIf="isSubmitButtonEnabled">
+                        <div class="card ml-2 mr-2" style="text-align: right;">
+                            <p-button label="Submit" icon="pi pi-save" (click)="submit()"
+                                class="p-mr-2 p-mb-2"></p-button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+
+    </div>
+</div>

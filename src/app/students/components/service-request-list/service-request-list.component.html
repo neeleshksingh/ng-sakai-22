@@ -1,0 +1,39 @@
+<div class="pb-6">
+    <p-toast></p-toast>
+    <div class="grid">
+        <div class="col-12">
+            <div class="toolbar-demo card">
+                <p-toolbar>
+                    <div class="p-toolbar-group-left">
+                        <div class="header-left-div">
+                            <div class="header-div1">
+                                <i class="fa-brands fa-docker" style="font-size: 40px;"></i>
+                            </div>
+                            <div class="header-div2">
+                                <h5>{{componentName}}</h5>
+                            </div>
+                        </div>
+                    </div>
+                    <ng-template pTemplate="right">
+                        <div class="d-flex">
+                            <button pButton type="button" label="New Request" pTooltip="New Request"
+                                tooltipPosition="bottom" routerLink="/home/students/service-request"></button>
+                        </div>
+                    </ng-template>
+                </p-toolbar>
+            </div>
+        </div>
+        <div class="col-12 md:col-12 lg:col-12">
+            <div class="card ">
+                <app-generic-table [value]="serviceRequestList" [cols]="cols" [rows]="10" [paginator]="true"
+                    [rowsPerPageOptions]="[10, 20, 30, 40, 50, 100, { showAll: 'All' }]" selectionMode="multiple"
+                    [(selection)]="selectedServiceRequest" [resizableColumns]="true" [isLoading]="isLoading"
+                    [globalFilterFields]="globalFilterFields" [dataKey]="dataKey"
+                    styleClass="p-datatable-customers p-datatable-gridlines p-datatable-striped p-datatable-sm"
+                    currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+                    [showCurrentPageReport]="true" [actions]="actions" entries="data(s)"
+                    (onAction)="handleAction($event)">
+                </app-generic-table>
+            </div>
+        </div>
+    </div>

@@ -1,5 +1,13 @@
-@if (loadingService.loading()) {
-    <div class="global-progress-bar-inner" role="progressbar" aria-label="Loading page">
-        <p-progressbar mode="indeterminate" [style]="{ height: '3px' }" />
+<div *ngIf="loading$ | async" class="loader-overlay">
+    <div class="loader-content">
+        <div class="cube-loader">
+            <div class="cube-face front"></div>
+            <div class="cube-face back"></div>
+            <div class="cube-face right"></div>
+            <div class="cube-face left"></div>
+            <div class="cube-face top"></div>
+            <div class="cube-face bottom"></div>
+        </div>
+        <p>Loading...</p>
     </div>
-}
+</div>

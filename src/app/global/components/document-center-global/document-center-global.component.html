@@ -1,0 +1,74 @@
+<div class="pb-6">
+  <p-toast></p-toast>
+  <div class="grid">
+    <div class="col-12">
+      <div class="toolbar-demo card">
+        <p-toolbar>
+          <div class="p-toolbar-group-left">
+            <div class="header-left-div">
+              <div class="header-div1">
+                <i [ngClass]="iconClass" style="font-size: 40px;"></i>
+              </div>
+              <div class="header-div2">
+                <h5>{{componentName}}</h5>
+              </div>
+            </div>
+          </div>
+        </p-toolbar>
+      </div>
+    </div>
+    <div class="col-12 md:col-12 lg:col-12">
+      <div class="card">
+        @if(!isLoading){
+        <div *ngFor="let documentCenterCategory of documentCenterCategoryList"
+          style="border-radius: 8px; overflow: hidden;">
+          <div
+            style="background-color: #4C63B6; color: white; font-family: Arial, sans-serif; font-size: 18px; font-weight: 600; padding: 10px 15px;">
+            {{ documentCenterCategory?.category }}
+          </div>
+
+          <div class="col-12" style="background-color: #E0E6FF; padding: 15px;">
+            <div *ngFor="let documentCenterData of documentCenterCategory?.items"
+              style="border-bottom: 1px solid #BDBDBD; padding: 10px 0;">
+              <a href="{{ documentCenterData?.documentUrl }}" target="_blank"
+                style="text-decoration: none; color: inherit;">
+                <div class="col-12" style="display: flex; align-items: center;">
+                  <div
+                    style="flex-grow: 1; font-family: Arial, sans-serif; font-size: 15px; font-weight: 500; color: #1a0dab;">
+                    <u>{{ documentCenterData?.title }}</u>
+                  </div>
+                  <i class="pi pi-file-pdf" style="font-size: 1.2rem; color: #D32F2F; margin-left: 10px;"></i>
+                </div>
+                <div class="col-12"
+                  style="font-family: Arial, sans-serif; font-size: 13px; color: #4B6CB7; margin-top: 5px;">
+                  {{ documentCenterData?.description }}
+                </div>
+              </a>
+            </div>
+          </div>
+        </div>
+        } @else {
+        <div>
+          <div
+            style="background-color: #4C63B6; color: white; font-family: Arial, sans-serif; font-size: 18px; font-weight: 600; padding: 10px 15px; border-radius: 8px 8px 0 0;">
+            <p-skeleton width="60%" height="18px"></p-skeleton>
+          </div>
+
+          <div class="col-12" style="background-color: #E0E6FF; padding: 15px; border-radius: 0 0 8px 8px;">
+            <div *ngFor="let i of [1, 2, 3, 4, 5]" style="border-bottom: 1px solid #BDBDBD; padding: 10px 0;">
+              <div style="display: flex; align-items: center;">
+                <div style="flex-grow: 1;">
+                  <p-skeleton width="80%" height="15px"></p-skeleton>
+                </div>
+                <p-skeleton shape="circle" size="1.2rem"></p-skeleton>
+              </div>
+              <p-skeleton width="70%" height="13px"></p-skeleton>
+            </div>
+          </div>
+        </div>
+        }
+      </div>
+    </div>
+  </div>
+  <p-confirm-dialog [style]="{ width: '450px' }"></p-confirm-dialog>
+</div>

@@ -1,0 +1,262 @@
+<div class="pb-6">
+    <div class="grid">
+        <p-toast></p-toast>
+        <div class="col-12">
+            <div class="toolbar-demo card">
+                <p-toolbar>
+                    <div class="p-toolbar-group-left">
+                        <div class="header-left-div">
+                            <div class="header-div1">
+                                <i class="fas fa-book-open" style="font-size: 40px;"></i>
+                            </div>
+                            <div class="header-div2">
+                                <h5>{{componentName}}</h5>
+                            </div>
+                        </div>
+                    </div>
+                    <ng-template pTemplate="right">
+                        <div class="d-flex">
+                        </div>
+                    </ng-template>
+                </p-toolbar>
+            </div>
+        </div>
+        <div class="col-12 md:col-12 lg:col-12">
+            <div class="card">
+                <form [formGroup]="backlogExaminationDataFormGroup">
+                    <div class="grid align-items-end">
+                        <div class="col-12 md:col-6 lg:col-3 p-4">
+                            <label for="programName">Program</label>
+                            <p-select [filter]="true" inputId="programName" [options]="programList"
+                                formControlName="programId" placeholder="Select Program"
+                                (onChange)="bindStudentRegNum()" [style]="{'width':'100%'}"></p-select>
+                        </div>
+                        <div class="col-12 md:col-6 lg:col-2 p-4">
+                            <label for="registrationNumber">Registration Number</label>
+                            <p-select [filter]="true" inputId="registrationNumber" [options]="regNumber"
+                                formControlName="registrationNumber" [style]="{'width':'100%'}"></p-select>
+                        </div>
+                        <div class="col-12 md:col-6 lg:col-3 p-4">
+                            <label for="examinationId">Examination</label>
+                            <p-select [filter]="true" inputId="examinationId" [options]="activeExaminationList"
+                                formControlName="examinationId" (onChange)="onExaminationChange($event)"
+                                placeholder="Select Examination" [style]="{'width':'100%'}"></p-select>
+                        </div>
+                        <div class="col-12 md:col-6 lg:col-2 p-4">
+                            <button pButton type="button" label="Search" #newItem (click)="SearchResult()"
+                                [disabled]="!backlogExaminationDataFormGroup.valid">
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="col-12" *ngIf="examPaperSelectLimitMessage">
+            <div class="card" style="color: red; font-size: 16px; width: 100%; text-align: center;"
+                *ngIf="!disableSaveBtn && searchResult">
+                <span>{{ examPaperSelectLimitMessage }}</span>
+            </div>
+        </div>
+        <div style="width: 100vw;">
+            <div class="col-12">
+                <div class="card" *ngIf="searchResult">
+                    <div class="formgrid grid align-items-start">
+                        <div class="field col-12 sm:col-6 md:col-6 lg:col-3 pl-4 pr-4">
+                            <label style="font-weight: bold;">Academic Session : &nbsp; </label>
+
+                            <label class="text-base text-color surface-overlay w-full">
+                                {{this.studentBacklogExaminationDetails.academicSessionName}}
+                            </label>
+                        </div>
+
+                        <div class="field col-12 sm:col-6 md:col-6 lg:col-3 pl-4 pr-4">
+                            <label style="font-weight: bold;">Program : &nbsp; </label>
+
+                            <label class="text-base text-color surface-overlay w-full">
+                                {{this.studentBacklogExaminationDetails.programName}}
+                            </label>
+                        </div>
+
+                        <div class="field col-12 sm:col-6 md:col-6 lg:col-3 pl-4 pr-4">
+                            <label style="font-weight: bold;">Student ID : &nbsp; </label>
+                            <label class="text-base text-color surface-overlay w-full">
+                                {{this.studentBacklogExaminationDetails.studentId}}
+                            </label>
+                        </div>
+
+                        <div class="field col-12 sm:col-6 md:col-6 lg:col-3 pl-4 pr-4">
+                            <label style="font-weight: bold;">Student Name : &nbsp; </label>
+
+                            <label class="text-base text-color surface-overlay w-full">
+                                {{this.studentBacklogExaminationDetails.studentName}}
+                            </label>
+                        </div>
+
+                        <div class="field col-12 sm:col-6 md:col-6 lg:col-3 pl-4 pr-4">
+                            <label style="font-weight: bold;">Registration Number : &nbsp; </label>
+
+                            <label class="text-base text-color surface-overlay w-full">
+                                {{this.studentBacklogExaminationDetails.registrationNumber }}
+                            </label>
+                        </div>
+
+                        <div class="field col-12 sm:col-6 md:col-6 lg:col-3 pl-4 pr-4">
+                            <label style="font-weight: bold;">Roll Number : &nbsp; </label>
+
+                            <label class="text-base text-color surface-overlay w-full">
+                                {{this.studentBacklogExaminationDetails.rollNumber }}
+                            </label>
+                        </div>
+
+                        <div class="field col-12 sm:col-6 md:col-6 lg:col-3 pl-4 pr-4">
+                            <label style="font-weight: bold;">Payment Status : &nbsp; </label>
+
+                            <label class="text-base text-color surface-overlay w-full">
+                                {{ this.studentBacklogExaminationDetails.paymentStatus }}
+                            </label>
+                        </div>
+
+                        <div class="field col-12 sm:col-6 md:col-6 lg:col-2 pl-4 pr-4">
+                            <label style="font-weight: bold;">Paid Amount : &nbsp; </label>
+
+                            <label class="text-base text-color surface-overlay w-full">
+                                {{ this.studentBacklogExaminationDetails.paidAmount }}
+                            </label>
+                        </div>
+                        <div class="field col-12 sm:col-6 md:col-6 lg:col-1 pl-4 pr-4">
+                            <label style="font-weight: bold;">Due Amount : &nbsp; </label>
+
+                            <label class="text-base text-color surface-overlay w-full">
+                                {{ this.studentBacklogExaminationDetails.dueAmount }}
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div style="width: 100vw;">
+            <div class="col-12">
+                <div class="card" *ngIf="searchResult">
+                    <p-table #dt [value]="studentBacklogExaminationApplicationSubjectPaperCodeResponseList"
+                        [rowHover]="true" styleClass="p-datatable-customers p-datatable-gridlines p-datatable-striped">
+
+                        <ng-template pTemplate="header">
+                            <tr [pSelectableRow]="rowData">
+
+                                <th pSortableColumn="operationalVerticalName" style="text-align: center;">
+                                    OperationalVertical <p-sort-icon field="name"></p-sort-icon>
+                                </th>
+
+                                <th pSortableColumn="subjectPaperCodeName" style="text-align: center;">
+                                    SubjectPaperCodeName <p-sort-icon field="subjectPaperCodeName"></p-sort-icon>
+                                </th>
+
+                                <th pSortableColumn="subjectName" style="text-align: center;">
+                                    SubjectName <p-sort-icon field="subjectName"></p-sort-icon>
+                                </th>
+
+                                <th style="width: 3rem">
+                                    Select
+                                </th>
+                            </tr>
+
+                        </ng-template>
+
+                        <ng-template pTemplate="body" let-result let-rowIndex="rowIndex">
+                            <tr
+                                [style.background-color]="result.status === 'PUBLISHED' && applicationStatus === 'PUBLISHED' && result.isSelected ? '#E5E4E2' : 'transparent'">
+                                <td style="text-align: center; height: 35px;">
+                                    <span class="p-column-title">OperationalVertical</span>
+                                    {{result.operationalVerticalName}}
+                                </td>
+                                <td style="text-align: center; height: 35px;">
+                                    <span class="p-column-title">SubjectPaperCodeName </span>
+                                    {{result.subjectPaperCodeName}}
+                                </td>
+
+                                <td style="text-align: center; height: 35px;">
+                                    <span class="p-column-title"> SubjecName </span>
+                                    {{result.subjectName}}
+                                </td>
+
+                                <td style="text-align: center">
+                                    <input type="checkbox" [value]="result" id="{{result.subjectPaperCodeId}}"
+                                        [disabled]="result.isDisableSubjectCheckBox" [checked]="result.isSelected"
+                                        (click)="createArrayForSlectedProgram(result, rowIndex)" [style.height.px]="18"
+                                        [style.width.px]="18">
+                                </td>
+                            </tr>
+                        </ng-template>
+                    </p-table>
+                </div>
+            </div>
+        </div>
+        <div style="width: 100vw;" *ngIf="searchResult">
+            <div class="col-12">
+                <div class="card flex flex-row-reverse flex-wrap justify-content-between">
+                    <div class="flex align-items-center justify-content-center">
+                        <button pButton type="button" label="Save" icon="pi pi-check" class="p-button-primary p-mr-2"
+                            (click)="confirmation()">
+                        </button>
+                    </div>
+                    <div class="flex align-items-center justify-content-center" style="color: green; font-size: 16px;"
+                        *ngIf="noteA">
+                        <span>The highlighted rows indicate that application fees for these subjects
+                            have already been INITIATED for Backlog Examinations. Kindly submit the fee.</span>
+                    </div>
+                    <div class="flex align-items-center justify-content-center" style="font-size: 16px;" *ngIf="noteB">
+                        <span style="color: green;">You have successfully submitted the application for selected papers.
+                            Go to&nbsp;&nbsp; </span> <span (click)="goToRegistartion()"
+                            style="cursor: pointer; color: blue;">Backlog Examination Registration.</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <p-dialog header="Proceed For Payment" [(visible)]="paymentModalBox" [modal]="true"
+            [breakpoints]="{ '768px': '75vw' }" [style]="{ width: '450px'}" [draggable]="false" [resizable]="false">
+            <div>
+                <h6>
+                    Application Initiated. <br>
+                    Pay the fee to complete your application.
+                </h6>
+            </div>
+            <div class="flex flex-row-reverse flex-wrap justify-content-between">
+                <button pButton type="button" label="Procced" class="p-button-primary p-mr-2"
+                    (click)="proceedForPayment()">
+                </button>
+            </div>
+        </p-dialog>
+
+        <p-dialog header="Confirmation for Backlog Application" [(visible)]="visibleConfirmationBox" [modal]="true"
+            [breakpoints]="{ '768px': '75vw' }" [style]="{ width: '450px'}" [draggable]="false" [resizable]="false">
+            <div>
+                <h6>
+                    Are you sure you want to proceed with the selected Subjects?
+                </h6>
+                <!-- <p>
+                    You can appply only once.
+                    Please ensure that you have selected the correct subjects for Application.
+                    Once the application initiated with the selected subjects, you won't be able to submit more
+                    application.
+                </p> -->
+            </div>
+            <div class="flex flex-row-reverse flex-wrap justify-content-between mt-3">
+                <button pButton type="button" label="Yes" icon="pi pi-check" class="p-button-primary p-mr-2"
+                    (click)="applyBacklogExamRegistration()">
+                </button>
+                <button pButton type="button" label="No" icon="pi pi-times" class="p-button-danger p-mr-2"
+                    (click)="handleCancelConfirmation()"> </button>
+            </div>
+        </p-dialog>
+
+        <p-dialog header="Application CLOSED" [(visible)]="registartionCloseMsg" [modal]="true"
+            [breakpoints]="{ '768px': '75vw' }" [style]="{ width: '450px'}" [draggable]="false" [resizable]="false">
+            <div>
+                <p>
+                    The Application for EVEN 2023-24 Backlog Examination has been closed.
+                </p>
+            </div>
+        </p-dialog>
+        <p-confirm-dialog [style]="{ width: '450px' }"></p-confirm-dialog>
+    </div>
+</div>

@@ -1,0 +1,332 @@
+<div class="pb-6">
+    <div class="grid">
+        <p-toast></p-toast>
+        <div class="col-12">
+            <div class="toolbar-demo card">
+                <p-toolbar>
+                    <div class="p-toolbar-group-left">
+                        <div class="header-left-div">
+                            <div class="header-div1">
+                                <i class="fas fa-indian-rupee-sign" style="font-size: 40px;"></i>
+                            </div>
+                            <div class="header-div2">
+                                <h5>Challan</h5>
+                            </div>
+                        </div>
+                    </div>
+                </p-toolbar>
+            </div>
+        </div>
+        <form #form [formGroup]="challanFormGroup" style="width: 100%;">
+            <div class="col-12">
+                <div class="card p-4">
+                    <div class="p-fluid formgrid grid">
+                        <div class="field col-12 md:col-3">
+                            <label for="registrationNumber">Registration Number</label>
+                            <p-select [filter]="true" inputId="registrationNumber" [options]="registrationNumberList"
+                                formControlName="registrationNumber" placeholder="Select"
+                                (onChange)="onRegistrationNumberChanged($event)">
+                            </p-select>
+                        </div>
+                        <div class="field col-12 md:col-3">
+                            <label for="programName">Program</label>
+                            <input pInputText type="text" id="programName" formControlName="programName">
+                        </div>
+                        <div class="field col-12 md:col-2">
+                            <label for="operationalVerticalId">Semesters</label>
+                            <p-multiSelect id="operationalVerticalId" formControlName="operationalVerticalId"
+                                [options]="operationalVerticalList" optionLabel="label"
+                                defaultLabel="Select"></p-multiSelect>
+
+                        </div>
+                        <div class="field col-12 md:col-2" style="margin-top: 24px;">
+                            <p-button label="Search" icon="pi pi-search"
+                                (click)="studentPaymentSearchClick(challanFormGroup.value.operationalVerticalId)"
+                                class="p-mr-2 p-mb-2"></p-button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+        <div class="col-12 pl-2 ">
+            <div class="fluid formgrid grid">
+                @if(!isLoading){
+                <div class="field col-12 sm:col-12 md:col-8" [hidden]="isPaymentDetailsHidden">
+                    <div class="card ml-2">
+
+                        <p-table #dt [value]="filteredStudentFeeMasters" [(selection)]="selectedStudentFeeMaster"
+                            [rowHover]="true" dataKey="id" [rowHover]="true" dataKey="id" [resizableColumns]="true"
+                            [rows]="10" [rowsPerPageOptions]="[10,20,50,100,200, { showAll: 'All' }]" [paginator]="true"
+                            [globalFilterFields]="['operationalVerticalName','feeComponentName','feeAmount','dueAmount','paidAmount']"
+                            styleClass="p-datatable-customers p-datatable-gridlines p-datatable-striped p-datatable-sm">
+                            <ng-template pTemplate="header">
+                                <tr>
+                                    <th style="width: 3rem">
+
+                                    </th>
+                                    <th pSortableColumn="operationalVerticalName">Semester<p-sort-icon
+                                            field="operationalVerticalName">
+                                        </p-sort-icon>
+                                        <p-column-filter type="text" field="operationalVerticalName"
+                                            display="menu"></p-column-filter>
+                                    </th>
+                                    <th pSortableColumn="feeComponentName">Fee Component<p-sort-icon
+                                            field="feeComponentName">
+                                        </p-sort-icon>
+                                        <p-column-filter type="text" field="feeComponentName"
+                                            display="menu"></p-column-filter>
+                                    </th>
+                                    <th pSortableColumn="feeAmount">Fee Amount<p-sort-icon field="feeAmount">
+                                        </p-sort-icon>
+                                        <p-column-filter type="text" field="feeAmount" display="menu"></p-column-filter>
+                                    </th>
+                                    <th pSortableColumn="paidAmount">Paid<p-sort-icon field="paidAmount">
+                                        </p-sort-icon>
+                                        <p-column-filter type="text" field="paidAmount"
+                                            display="menu"></p-column-filter>
+                                    </th>
+                                    <th pSortableColumn="dueAmount">Due<p-sort-icon field="dueAmount">
+                                        </p-sort-icon>
+                                        <p-column-filter type="text" field="dueAmount" display="menu"></p-column-filter>
+                                    </th>
+                                    <!-- <th>Current Paying Amount
+                                    </th> -->
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-studentFeeMaster>
+                                <tr>
+                                    <td>
+                                        <p-tableCheckbox [value]="studentFeeMaster" id={{studentFeeMaster.id}}
+                                            (click)="selectSingleRow(f,studentFeeMaster)" #f></p-tableCheckbox>
+                                    </td>
+                                    <td><span class="p-column-title">Semester</span>
+                                        {{studentFeeMaster.operationalVerticalName}}
+                                    </td>
+                                    <td><span class="p-column-title">Fee Component</span>
+                                        {{studentFeeMaster.feeComponentName}}
+                                    </td>
+
+                                    <td><span class="p-column-title">Fee Amount</span>
+                                        {{studentFeeMaster.feeAmount}}
+                                    </td>
+                                    <td><span class="p-column-title">Paid Amount</span>
+                                        {{studentFeeMaster.paidAmount}}
+                                    </td>
+                                    <td><span class="p-column-title">Due Amount</span>
+                                        {{studentFeeMaster.dueAmount}}
+                                    </td>
+                                    <!-- <td><span class="p-column-title">programName</span>
+                                        {{studentFeeMaster.programName}}
+                                    </td> -->
+                                </tr>
+                            </ng-template>
+                        </p-table>
+
+
+
+                    </div>
+
+
+                    <div class="card challanTable ml-2" style="overflow:scroll ;">
+                        <p-table [value]="challanList">
+                            <ng-template pTemplate="header">
+                                <tr>
+                                    <th>Challan Number</th>
+                                    <th>Challan Date</th>
+                                    <th>GrossTotal Amount</th>
+                                    <th>Excess Amount</th>
+                                    <th>NetTotal Amount</th>
+                                    <th></th>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-challan>
+                                <tr>
+                                    <td>{{challan.challanNumber}}</td>
+                                    <td>{{challan.challanDate |date:'dd-MM-yyyy'}}</td>
+                                    <td>{{challan.grossTotalAmount}}</td>
+                                    <td>{{challan.excessAmount}}</td>
+                                    <td>{{challan.netTotalAmount}}</td>
+                                    <td>
+                                        <button type="button" pButton pRipple icon="pi pi-download"
+                                            (click)="downloadChallan(challan)"></button>
+                                    </td>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="summary">
+                                <div style="text-align: right;margin-top: 20px;">
+
+                                </div>
+                            </ng-template>
+                        </p-table>
+
+                    </div>
+
+
+                </div>
+                <div class="col-12 sm:col-12 md:col-4" [hidden]="isPaymentDetailsHidden">
+                    <div class="card   mr-2">
+                        <div class="col-12" style="text-align: center;">
+                            <h6>SUMMARY</h6>
+                            <div class="p-fluid mt-2">
+                                <div class="grid" style="text-align: center;">
+                                    <label for="firstname4" class="col-12 md:col-6 lg:col-6 mb-2">Total
+                                        Amount</label>
+                                    <div class="col-12 md:col-6 lg:col-6">
+                                        {{totalAmount}}
+                                    </div>
+                                </div>
+                                <div class="grid" [style.display]="hiddenAccessAmount" style="text-align: center;">
+                                    <label for="firstname4" class="col-12 md:col-6 lg:col-6 mb-2">Total Excess
+                                        Amount</label>
+                                    <div class="col-12 md:col-6 lg:col-6">
+                                        {{accessAmount}}
+                                    </div>
+                                </div>
+                                <div class="grid">
+
+                                    <div class="p-col-12">
+                                        <hr>
+                                    </div>
+                                </div>
+                                <div class="grid" [style.display]="hiddenAdjustedAmount">
+                                    <label for="firstname4" class="col-12 md:col-6 lg:col-6 mb-2"
+                                        style="font-weight: bold;">Adjust
+                                        Amount</label>
+                                    <div class="col-12 md:col-6 lg:col-6" style="font-weight: bold;">
+                                        {{adjustedAmount}}
+                                    </div>
+                                </div>
+                                <div class="grid">
+                                    <label for="firstname4" class="col-12 md:col-6 lg:col-6 mb-2"
+                                        style="font-weight: bold;">Payable
+                                        Amount</label>
+                                    <div class="col-12 md:col-6 lg:col-6" style="font-weight: bold;">
+                                        {{payableAmount}}
+                                    </div>
+                                </div>
+                                <div class="grid">
+                                    <label for="firstname4" class="col-12 md:col-6 lg:col-6 mb-2"
+                                        style="font-weight: bold;">Amount in
+                                        Words</label>
+                                    <div class="col-12 md:col-6 lg:col-6" style="font-weight: bold;">
+                                        {{payableAmount }}
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="grid mt-1"
+                                    style="text-align: center; display: flex;  justify-content: center;">
+
+                                    <div class="md-4 offset-4 ">
+                                        <button pButton type="button" (click)="requestChallan()"
+                                            label="Generate Challan" style="display:flex ;" icon="pi pi-caret-right"
+                                            [style.display]="hiddenChallanButton"></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                } @else {
+                <div class="field col-12 sm:col-12 md:col-8">
+                    <div class="card ml-2">
+                        <p-table [value]="skeletonValue" [columns]="cols" [rows]="10" [paginator]="true"
+                            [rowsPerPageOptions]="[10, 20, 30, 40, 50, 100, { showAll: 'All' }]" autoLayout="true"
+                            resizableColumns="true"
+                            styleClass="p-datatable-customers p-datatable-gridlines p-datatable-striped p-datatable-sm"
+                            currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+                            [showCurrentPageReport]="true">
+                            <ng-template pTemplate="header">
+                                <tr>
+                                    <th style="width: 3rem">
+
+                                    </th>
+                                    @for(col of cols; track $index) {
+                                    <th>{{ col.header }}
+                                    </th>
+                                    }
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body">
+                                @for(item of skeletonValue; track $index) {
+                                <tr>
+                                    <td style="pointer-events: none;">
+                                        <p-tableCheckbox></p-tableCheckbox>
+                                    </td>
+                                    @for(col of cols; track $index) {
+                                    <td><p-skeleton /></td>
+                                    }
+                                </tr>
+                                }
+                            </ng-template>
+                        </p-table>
+                    </div>
+                    <div class="card ml-2">
+                        <p-table [value]="skeletonValue" [columns]="cols2" [rows]="10" [paginator]="true"
+                            [rowsPerPageOptions]="[10, 20, 30, 40, 50, 100, { showAll: 'All' }]" autoLayout="true"
+                            resizableColumns="true"
+                            styleClass="p-datatable-customers p-datatable-gridlines p-datatable-striped p-datatable-sm"
+                            currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+                            [showCurrentPageReport]="true">
+                            <ng-template pTemplate="header">
+                                <tr>
+                                    @for(col of cols2; track $index) {
+                                    <th>{{ col.header }}
+                                    </th>
+                                    }
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body">
+                                @for(item of skeletonValue; track $index) {
+                                <tr>
+                                    @for(col of cols2; track $index) {
+                                    <td><p-skeleton /></td>
+                                    }
+                                </tr>
+                                }
+                            </ng-template>
+                        </p-table>
+                    </div>
+                </div>
+
+                <div class="field col-12 sm:col-12 md:col-4" [hidden]="isPaymentDetailsHidden">
+                    <div class=" card skeleton p-4">
+                        <div class="fluid formgrid grid mt-2"
+                            style="display: flex; justify-content: center; margin-bottom: 20px;">
+                            <div class="col-12 sm:col-6 md:col-6 lg:col-6" style="margin-bottom: 10px;"><p-skeleton
+                                    height="30px" width="100%"></p-skeleton></div>
+                        </div>
+                        <div class="p-fluid formgrid grid">
+                            <div class="col-12 sm:col-6 md:col-6 lg:col-6" style="margin-bottom: 10px;"><p-skeleton
+                                    height="20px" width="100%"></p-skeleton></div>
+                            <div class="col-12 sm:col-6 md:col-6 lg:col-6" style="margin-bottom: 10px;"><p-skeleton
+                                    height="20px" width="100%"></p-skeleton></div>
+                            <div class="col-12 sm:col-6 md:col-6 lg:col-6" style="margin-bottom: 10px;"><p-skeleton
+                                    height="20px" width="100%"></p-skeleton></div>
+                            <div class="col-12 sm:col-6 md:col-6 lg:col-6" style="margin-bottom: 10px;"><p-skeleton
+                                    height="20px" width="100%"></p-skeleton></div>
+                            <div class="col-12 sm:col-6 md:col-6 lg:col-6" style="margin-bottom: 10px;"><p-skeleton
+                                    height="20px" width="100%"></p-skeleton></div>
+                            <div class="col-12 sm:col-6 md:col-6 lg:col-6" style="margin-bottom: 10px;"><p-skeleton
+                                    height="20px" width="100%"></p-skeleton></div>
+                        </div>
+                        <hr>
+                        <div class="fluid formgrid grid mt-2"
+                            style="display: flex; justify-content: center; margin-bottom: 20px;">
+                            <div class="col-12 sm:col-6 md:col-6 lg:col-6" style="margin-bottom: 10px;"><p-skeleton
+                                    height="30px" width="100%"></p-skeleton></div>
+                        </div>
+
+
+
+
+                    </div>
+                </div>
+
+                }
+            </div>
+        </div>
+
+    </div>
+</div>

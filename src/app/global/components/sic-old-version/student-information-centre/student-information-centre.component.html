@@ -1,0 +1,51 @@
+<div class="pb-6">
+    <div class="fixed-header">
+        <div class="top-right-icon" *ngIf="!isSearchPanelVisible">
+            <button pButton class="search-button" icon="pi pi-search" (click)="showSearchPanel()">
+            </button>
+        </div>
+        <!-- <div class="col-12 student-info p-2 bg-black">
+            <app-student-search (studentId)="studentIdSearch($event)" *ngIf="isSearchPanelVisible"
+                [currentModuleNameToSearchStudent]="currentModuleNameFromStudentInfoCentre"></app-student-search>
+            <div class="card toolbar-demo" *ngIf="studentId && !isSearchPanelVisible">
+                <div class="fluid formgrid grid align-items-end">
+                    <div class="field col-12 sm:col-12 md:col-6 lg:col-6 align-items-center">
+                        <app-student-information-centre-tabs (activeIndex)="activeTab($event)"
+                            [currentModuleNameToTab]="currentModuleNameFromStudentInfoCentre"></app-student-information-centre-tabs>
+                    </div>
+                    <div class="field col-12 sm:col-12 md:col-6 lg:col-6 justify-content-center align-items-center"
+                        style="margin: 0;">
+                        <app-student-basic-information></app-student-basic-information>
+                    </div>
+                </div>
+            </div>
+        </div> -->
+    </div>
+    <!-- <div class="col-12 scrollable-content">
+        <ng-container *ngIf="activeIndex==0 && !isSearchPanelVisible">
+            <app-student-general-details></app-student-general-details>
+            <app-student-family-details></app-student-family-details>
+            <app-student-address-details></app-student-address-details>
+            <app-student-program></app-student-program>
+            <br>
+        </ng-container>
+        <ng-container *ngIf="activeIndex==1 && !isSearchPanelVisible">
+            <app-student-program></app-student-program>
+        </ng-container>
+        <ng-container *ngIf="activeIndex==1 && !isSearchPanelVisible">
+            <app-batch-attendance></app-batch-attendance>
+        </ng-container>
+        <ng-container *ngIf="activeIndex==2 && !isSearchPanelVisible">
+            <app-examination-result></app-examination-result>
+        </ng-container>
+        <ng-container *ngIf="activeIndex==3 && !isSearchPanelVisible">
+            <app-examination-backlog-history></app-examination-backlog-history>
+        </ng-container>
+        <ng-container *ngIf="activeIndex==4">
+            <app-student-fee-ledger></app-student-fee-ledger>
+        </ng-container>
+        <ng-container *ngIf="activeIndex==5">
+            <app-student-bus-hostel-opt-in-opt-out></app-student-bus-hostel-opt-in-opt-out>
+        </ng-container>
+    </div> -->
+</div>

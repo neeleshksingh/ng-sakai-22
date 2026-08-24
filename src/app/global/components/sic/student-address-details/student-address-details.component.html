@@ -1,0 +1,44 @@
+<div class="col-12">
+    <div *ngFor="let address of tableArrayAddressDetailsList">
+        <p-table #dt2 [value]="address" [rowHover]="true" dataKey="id" autoLayout="true" resizableColumns="true"
+            styleClass="p-datatable-customers p-datatable-gridlines p-datatable-striped p-datatable-lg">
+            <ng-template pTemplate="caption">
+                <h5 style="margin: 0;">{{address[0].col2}} Address</h5>
+            </ng-template>
+            <ng-template pTemplate="body" let-studentAddress>
+                <tr>
+                    <td style="width: 12.5%; padding: 8px !important;">
+                        {{studentAddress?.col1}}
+                    </td>
+                    <td style="width: 12.5%;">
+                        <b>{{studentAddress?.col2}}</b>
+                    </td>
+                    <td style="width: 12.5%;">
+                        {{studentAddress?.col3}}
+                    </td>
+                    <td style="width: 12.5%;">
+                        <b>{{studentAddress?.col4}}</b>
+                    </td>
+                    <td style="width: 12.5%;">
+                        {{studentAddress?.col5}}
+                    </td>
+                    <td style="width: 12.5%;">
+                        <b>{{studentAddress?.col6}}</b>
+                    </td>
+                    <td style="width: 12.5%;">
+                        {{studentAddress?.col7}}
+                    </td>
+                    <td style="width: 12.5%;">
+                        <b>{{studentAddress?.col8}}</b>
+                    </td>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="summary">
+                <div class="flex align-items-center justify-content-end">
+                    <button pButton type="button" icon="pi pi-refresh" label="Reload" class="p-button-text p-0"
+                        (click)="refresh()"></button>
+                </div>
+            </ng-template>
+        </p-table> <br>
+    </div>
+</div>

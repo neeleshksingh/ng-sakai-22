@@ -1,10 +1,16 @@
-import { Injectable, signal } from '@angular/core';
+import { Injectable } from '@angular/core';
 
-@Injectable({ providedIn: 'root' })
+@Injectable({
+    providedIn: 'root'
+})
 export class ModuleTrackerService {
-    readonly activeModule = signal('Dashboard');
+    private loadedModules = new Set<string>();
 
-    setActiveModule(moduleName: string): void {
-        this.activeModule.set(moduleName);
+    markModuleAsLoaded(modulePath: string): void {
+        this.loadedModules.add(modulePath);
+    }
+
+    isModuleLoaded(modulePath: string): boolean {
+        return this.loadedModules.has(modulePath);
     }
 }

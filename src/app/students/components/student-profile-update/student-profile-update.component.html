@@ -1,0 +1,253 @@
+<div class="pb-6">
+    <div class="grid">
+        <p-toast></p-toast>
+        <div class="col-12">
+            <div class="toolbar-demo card">
+                <p-toolbar>
+                    <div class="p-toolbar-group-left">
+                        <div class="header-left-div">
+                            <div class="header-div1">
+                                <i class="fa-solid  fa-user-pen" style="font-size: 40px;"></i>
+                            </div>
+                            <div class="header-div2">
+                                <h5>Student Profile Update</h5>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-toolbar-group-right">
+                        <button pButton type="button" label="InfoUpdateRequest" class="p-mr-2 p-button-raised"
+                            pTooltip="Update General Info" tooltipPosition="bottom"
+                            routerLink="/home/students/student-info-update-request"></button>
+                    </div>
+                </p-toolbar>
+            </div>
+        </div>
+        <div class="col-12 md:col-12 lg:col-12" style="position: relative;">
+            <div class="card">
+                <p-tabs value="0">
+                    <p-tablist>
+                        <p-tab value="0">Details</p-tab>
+                        <p-tab value="1">Related</p-tab>
+                        <p-tab value="2">History</p-tab>
+                    </p-tablist>
+                    <p-tabpanels>
+                        <p-tabpanel value="0">
+                            <div class="fluid formgrid grid" style="display: flex; justify-content: end;">
+                                <div class="field col-12 sm:col-4"
+                                    style="display: flex;gap:10px; width: 125px; position: absolute; right: -42px; top:20px;">
+                                </div>
+                            </div>
+                            <div>
+                                <app-generic-view [data]="student" [fields]="studentFields"
+                                    [iconClass]="'view-icon'"></app-generic-view>
+                            </div>
+                        </p-tabpanel>
+                        <p-tabpanel value="1">
+
+                        </p-tabpanel>
+                        <p-tabpanel value="2">
+                        </p-tabpanel>
+                    </p-tabpanels>
+                    <hr>
+                </p-tabs>
+            </div>
+        </div>
+        <form [formGroup]="studentDetailsUpdateGroup" style="width: 100%;">
+
+            <div class="col-12">
+                <div class="card p-4">
+                    @if(!isLoading){
+                    <div class="p-fluid formgrid grid">
+                        <!-- Phone Number -->
+                        <div class="col-12 sm:col-6 md:col-4 lg:col-3">
+                            <label for="phoneNumber" class="font-bold">
+                                <i class="pi pi-phone" style="margin-right: 3px;"></i> Phone Number<span
+                                    style="color: red;">*</span>
+                            </label>
+                            <input pInputText type="text" id="phoneNumber" minlength="10" formControlName="phoneNumber"
+                                placeholder="Enter phone number"
+                                class="text-base text-color surface-overlay border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full">
+                            <ng-container *ngIf="studentDetailsUpdateGroup.get('phoneNumber')?.errors">
+                                <p *ngIf="studentDetailsUpdateGroup.get('phoneNumber')?.hasError('minlength') || 
+                                                  studentDetailsUpdateGroup.get('phoneNumber')?.hasError('maxlength')">
+                                    Phone number must be 10 characters.
+                                </p>
+                                <p *ngIf="studentDetailsUpdateGroup.get('phoneNumber')?.hasError('required')">
+                                    Phone number is required.
+                                </p>
+                                <p *ngIf="studentDetailsUpdateGroup.get('phoneNumber')?.hasError('pattern')">
+                                    Phone number must be numeric.
+                                </p>
+                            </ng-container>
+
+                        </div>
+
+                        <!-- Email -->
+                        <div class="col-12 sm:col-6 md:col-4 lg:col-3">
+                            <label for="email" class="font-bold">
+                                <i class="pi pi-envelope" style="margin-right: 3px;"></i> Email Id<span
+                                    style="color: red;">*</span>
+                            </label>
+                            <input pInputText type="text" id="email" formControlName="email" placeholder="Enter email"
+                                class="text-base text-color surface-overlay border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full">
+                            <ng-container *ngIf="studentDetailsUpdateGroup.get('email')?.errors">
+                                <p *ngIf="studentDetailsUpdateGroup.get('email')?.hasError('pattern')">
+                                    Invalid Email Id.
+                                </p>
+                                <p *ngIf="studentDetailsUpdateGroup.get('email')?.hasError('required')">
+                                    Email Id is required.
+                                </p>
+                            </ng-container>
+
+                        </div>
+
+                        <!-- Alternate Phone -->
+                        <div class="col-12 sm:col-6 md:col-4 lg:col-3">
+                            <label for="alternatePhoneNumber" class="font-bold">
+                                <i class="pi pi-phone" style="margin-right: 3px;"></i> Alternate Phone
+                            </label>
+                            <input pInputText type="text" id="alternatePhoneNumber" minlength="10"
+                                formControlName="alternatePhoneNumber" placeholder="Enter alternate phone number"
+                                class="text-base text-color surface-overlay border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full">
+                            <ng-container *ngIf="studentDetailsUpdateGroup.get('alternatePhoneNumber')?.errors">
+                                <p
+                                    *ngIf="studentDetailsUpdateGroup.get('alternatePhoneNumber')?.hasError('minlength') ||
+                                                  studentDetailsUpdateGroup.get('alternatePhoneNumber')?.hasError('maxlength')">
+                                    Your phone must be 10 characters.
+                                </p>
+                                <p *ngIf="studentDetailsUpdateGroup.get('alternatePhoneNumber')?.hasError('pattern')">
+                                    Phone number must be a number.
+                                </p>
+                            </ng-container>
+
+                        </div>
+
+                        <!-- Alternate Email -->
+                        <div class="col-12 sm:col-6 md:col-4 lg:col-3">
+                            <label for="alternateEmail" class="font-bold">
+                                <i class="pi pi-envelope" style="margin-right: 3px;"></i> Alternate Email
+                            </label>
+                            <input pInputText type="text" id="alternateEmail" formControlName="alternateEmail"
+                                placeholder="Enter alternate email"
+                                class="text-base text-color surface-overlay border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full">
+                            <ng-container *ngIf="studentDetailsUpdateGroup.get('alternateEmail')?.errors">
+                                <p *ngIf="studentDetailsUpdateGroup.get('alternateEmail')?.hasError('pattern')">
+                                    Invalid Email Id.
+                                </p>
+                            </ng-container>
+                        </div>
+
+                        <!-- ABC ID -->
+                        <div class="col-12 sm:col-6 md:col-4 lg:col-3">
+                            <label for="abcid" class="font-bold">
+                                <i class="pi pi-id-card" style="margin-right: 3px;"></i> ABC Id<span
+                                    style="color: red;">*</span>
+                            </label>
+                            <input pInputText type="text" id="abcid" formControlName="abcid" placeholder="Enter ABC Id"
+                                class="text-base text-color surface-overlay border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full">
+                        </div>
+
+                        <!-- Marital Status -->
+                        <div class="col-12 sm:col-6 md:col-4 lg:col-3">
+                            <label for="maritalStatus" class="font-bold">
+                                <i class="pi pi-heart" style="margin-right: 3px;"></i> Marital Status<span
+                                    style="color: red;">*</span>
+                            </label>
+                            <p-select [filter]="true" inputId="maritalStatus" [options]="maritalList"
+                                formControlName="maritalStatus" placeholder="Select Marital Status"
+                                class="w-full"></p-select>
+                        </div>
+
+                        <!-- Blood Group -->
+                        <div class="col-12 sm:col-6 md:col-4 lg:col-3">
+                            <label for="bloodGroup" class="font-bold">
+                                <i class="pi pi-heart" style="margin-right: 3px;"></i> Blood Group<span
+                                    style="color: red;">*</span>
+                            </label>
+                            <p-select [filter]="true" inputId="bloodGroup" [options]="bloodGroupList"
+                                formControlName="bloodGroup" placeholder="Select Blood Group" class="w-full"></p-select>
+                        </div>
+
+                        <!-- Mother Tongue -->
+                        <div class="col-12 sm:col-6 md:col-4 lg:col-3">
+                            <label for="motherTongue" class="font-bold">
+                                <i class="pi pi-globe" style="margin-right: 3px;"></i> Mother Tongue<span
+                                    style="color: red;">*</span>
+                            </label>
+                            <p-select [filter]="true" inputId="motherTongue" [options]="motherToungeList"
+                                formControlName="motherTongue" placeholder="Select Mother Tongue"
+                                class="w-full"></p-select>
+                        </div>
+
+                        <!-- Submit Button -->
+                        <div class="col-12" style="text-align: center;">
+                            <button pButton type="button" style="width: 200px;" label="Submit"
+                                [disabled]="!studentDetailsUpdateGroup.valid" (click)="UpdateStudentProfile()"></button>
+                        </div>
+                    </div>
+
+                    } @else {
+                    <div class=" skeleton">
+                        <div class="p-fluid formgrid grid">
+                            <!-- <p-skeleton width="100%" height="50rem"></p-skeleton> -->
+
+                            <div class="col-12 sm:col-6 md:col-4 lg:col-3" style="margin-bottom: 10px;"><p-skeleton
+                                    height="40px" width="100%"></p-skeleton></div>
+                            <div class="col-12 sm:col-6 md:col-4 lg:col-3" style="margin-bottom: 10px;"><p-skeleton
+                                    height="40px" width="100%"></p-skeleton></div>
+                            <div class="col-12 sm:col-6 md:col-4 lg:col-3" style="margin-bottom: 10px;"><p-skeleton
+                                    height="40px" width="100%"></p-skeleton></div>
+                            <div class="col-12 sm:col-6 md:col-4 lg:col-3" style="margin-bottom: 10px;"><p-skeleton
+                                    height="40px" width="100%"></p-skeleton></div>
+                            <div class="col-12 sm:col-6 md:col-4 lg:col-3" style="margin-bottom: 10px;"><p-skeleton
+                                    height="40px" width="100%"></p-skeleton></div>
+                            <div class="col-12 sm:col-6 md:col-4 lg:col-3" style="margin-bottom: 10px;"><p-skeleton
+                                    height="40px" width="100%"></p-skeleton></div>
+                            <div class="col-12 sm:col-6 md:col-4 lg:col-3" style="margin-bottom: 10px;"><p-skeleton
+                                    height="40px" width="100%"></p-skeleton></div>
+                            <div class="col-12 sm:col-6 md:col-4 lg:col-3" style="margin-bottom: 10px;"><p-skeleton
+                                    height="40px" width="100%"></p-skeleton></div>
+                            <div class="col-12 sm:col-6 md:col-4 lg:col-3" style="margin-bottom: 10px;"><p-skeleton
+                                    height="40px" width="100%"></p-skeleton></div>
+
+                        </div>
+                        <div class="fluid formgrid grid mt-2"
+                            style="display: flex; justify-content: center; margin-bottom: 20px;">
+                            <div class="col-12 sm:col-6 md:col-3 lg:col-2" style="margin-bottom: 10px;"><p-skeleton
+                                    height="40px" width="100%"></p-skeleton></div>
+                        </div>
+
+
+
+                    </div>
+                    }
+                </div>
+            </div>
+        </form>
+        <p-dialog header="Validate OTP" [(visible)]="isOTPDialogVisible" [style]="{width: '500px'}"
+            styleClass="dialogBox" [modal]="true">
+            <form [formGroup]="otpGroup">
+                <div class="card">
+                    <div class="col-12 ">
+                        <label>We have sent OTP to {{userOTPRequest.phoneNumber}}</label>
+                        <br /> <br />
+                        <input pInputText type="text" formControlName="otp" minlength="6"
+                            [(ngModel)]="otpGroup.value.otp" id="otp" placeholder="Enter OTP" style="width:100%">
+                    </div>
+
+                    <div class="col-12" *ngIf="isOTPError==true">
+                        <div style="color: red; text-align: center; font-size: 15px;">
+                            {{otpErrorMessage}}
+                        </div>
+                    </div>
+                    <div class="col-12" style="text-align: center;">
+                        <button style="width: 50%;" pButton type="button" (click)="ValidateOTPandUpdateStudentProfile()"
+                            [disabled]="!otpGroup.valid" label="Submit"></button>
+                    </div>
+                </div>
+            </form>
+        </p-dialog>
+
+
+    </div>
+</div>

@@ -1,0 +1,317 @@
+.certificate {
+    width: 210mm;
+    height: 297mm;
+    box-sizing: border-box;
+    padding: 5mm;
+    color: #4e4e4e;
+    min-width: 210mm;
+    background-color: #fff;
+    overflow: visible;
+    margin: 0 auto;
+}
+
+.certificate-wrapper {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+@media (max-width: 800px) {
+    .certificate-wrapper {
+        padding: 0;
+        overflow-x: auto;
+        justify-content: flex-start;
+    }
+
+    .certificate {
+        overflow: scroll;
+        margin: 0;
+        flex-shrink: 0;
+    }
+}
+
+@media (min-width: 800px) {
+    .certificate {
+        overflow: visible;
+    }
+
+    .certificate-wrapper {
+        overflow: visible;
+    }
+}
+
+.header {
+    text-align: center;
+    margin-bottom: 3mm;
+}
+
+.header img {
+    height: 20mm;
+    vertical-align: middle;
+}
+
+.univ-address {
+    text-align: center;
+    font-size: 14px;
+    margin-bottom: 2mm;
+    font-weight: bold;
+}
+
+.title {
+    text-align: center;
+    font-size: 20px;
+    margin-bottom: 2mm;
+    font-weight: 500;
+}
+
+.info-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 6mm;
+    margin-top: -1mm;
+}
+
+.info-table tr {
+    height: 40px;
+}
+
+.info-table td {
+    vertical-align: middle;
+}
+
+.info-table .label {
+    width: 30%;
+    font-weight: bold;
+}
+
+.info-table .value {
+    width: 70%;
+    border-bottom: 1px solid #ccc;
+}
+.info-table .subtext {
+    font-size: 10px;
+    //   font-style: italic;
+    color: #666;
+    margin-top: 2px;
+    line-height: 1;
+}
+
+.accounts {
+    width: 100%;
+    border: 1px solid #ccc;
+    border-collapse: collapse;
+}
+.accounts-info {
+    margin-bottom: 4mm;
+    font-size: 12px;
+}
+.accounts tr:nth-child(2) td {
+    height: 48px;
+}
+.accounts td {
+    border: 1px solid #ccc;
+    padding: 6px;
+}
+
+.accounts .label {
+    font-weight: bold;
+}
+
+.table-heading {
+    border: 1px solid #ffffff00;
+    border-bottom: 1px solid #ccc;
+    text-align: left;
+}
+
+.dues-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 5mm;
+}
+
+.dues-table tr {
+    height: 20px;
+}
+
+.dues-table th,
+.dues-table td {
+    border: 1px solid #ccc;
+    padding: 6px;
+    text-align: left;
+}
+.dues-table tbody td {
+    height: 50px;
+    vertical-align: middle;
+}
+.dues-table th:nth-child(1),
+.dues-table td:nth-child(1) {
+    width: 30%;
+}
+
+.dues-table th:nth-child(2),
+.dues-table td:nth-child(2) {
+    width: 35%;
+}
+
+.dues-table th:nth-child(3),
+.dues-table td:nth-child(3) {
+    width: 35%;
+}
+
+.dues-table tbody tr:nth-child(odd) {
+    background-color: #fff;
+}
+
+.dues-table tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+.custom-checkbox {
+    width: 12px;
+    height: 12px;
+    border: 1px solid #4e4e4e;
+    display: inline-block;
+}
+
+.section-title {
+    font-weight: bold;
+    margin-top: 2mm;
+    margin-bottom: 2mm;
+    text-align: center;
+}
+
+.declaration {
+    font-size: 14px;
+    margin-bottom: 3mm;
+}
+
+.signatures {
+    width: 100%;
+    margin-top: 3mm;
+}
+
+.signatures td {
+    vertical-align: top;
+    padding: 6px;
+    font-size: 14px;
+}
+
+.footer-note {
+    margin-top: 10mm;
+    font-size: 12px;
+}
+
+.page-break {
+    page-break-before: always;
+}
+@media print {
+    .page-break {
+        page-break-before: always;
+    }
+}
+.checkbox-box {
+    display: inline-block;
+    width: 6mm;
+    height: 6mm;
+    border: 1px solid #4e4e4e;
+    vertical-align: middle;
+}
+
+.watermark {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(-30deg);
+    font-size: 48px;
+    color: rgba(0, 0, 0, 0.1); /* light gray transparent */
+    white-space: nowrap;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.no-dues-page {
+    padding-top: 4mm;
+    padding-bottom: 4mm;
+}
+
+.no-dues-page .header {
+    margin-bottom: 2mm;
+}
+
+.no-dues-page .univ-address {
+    font-size: 12px;
+    margin-bottom: 1mm;
+}
+
+.no-dues-page .title {
+    font-size: 18px;
+    margin-bottom: 1mm;
+}
+
+.no-dues-page .info-table {
+    margin-bottom: 4mm;
+}
+
+.no-dues-page .info-table tr {
+    height: 32px;
+}
+
+.no-dues-page .accounts tr:nth-child(2) td {
+    height: 40px;
+}
+
+.no-dues-page .accounts-info {
+    margin-bottom: 2mm;
+    font-size: 11px;
+}
+
+.no-dues-page .dues-table {
+    margin-bottom: 3mm;
+}
+
+.no-dues-page .dues-table tbody td {
+    height: 40px;
+}
+
+.no-dues-page .declaration {
+    font-size: 12px;
+    line-height: 2.0;
+    margin-bottom: 2mm;
+}
+
+.no-dues-page .declaration .declaration-row {
+    display: flex;
+    justify-content:flex-start;
+    align-items: flex-start;
+    gap: 4px;
+}
+
+.no-dues-page .declaration .declaration-row-spaced {
+    margin-top: 3px;
+}
+
+.no-dues-page .declaration .checkbox-box {
+    width: 4.5mm;
+    height: 4.5mm;
+    min-width: 4.5mm;
+}
+
+.no-dues-page .section-title {
+    margin-top: 6mm;
+    margin-bottom: 1mm;
+}
+
+.no-dues-page .signatures {
+    margin-top: 1mm;
+}
+
+.no-dues-page .signatures td {
+    padding: 3px;
+    font-size: 12px;
+}
+
+.no-dues-page .footer-note {
+    margin-top: 3mm;
+    font-size: 11px;
+}

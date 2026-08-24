@@ -1,0 +1,147 @@
+<div class="pb-6">
+    <div class="grid">
+        <p-toast></p-toast>
+        <div class="col-12">
+            <div class="toolbar-demo card">
+                <p-toolbar>
+                    <div class="p-toolbar-group-left">
+                        <div class="header-left-div">
+                            <div class="header-div1">
+                                <i class="fa-brands fa-docker" style="font-size: 40px;"></i>
+                            </div>
+                            <div class="header-div2">
+                                <h5>{{componentName}}</h5>
+                            </div>
+                        </div>
+                    </div>
+                    <ng-template pTemplate="right">
+                        <div class="d-flex">
+                        </div>
+                    </ng-template>
+                </p-toolbar>
+            </div>
+        </div>
+        <div style="width: 100vw;">
+
+            <div class="col-12">
+                <form [formGroup]="studentFeedbackFormGroup">
+                    <div class="card">
+                        <div class="grid align-items-end pt-4">
+                            <div class="field col-12 sm:col-6 md:col-6 lg:col-2 pl-4 pr-4">
+                                <label for="feedbackAnnouncementId">Feedback Announcement</label>
+                                <p-select [filter]="true" id="feedbackAnnouncementId"
+                                    formControlName="feedbackAnnouncementId" placeholder="Select"
+                                    [options]="feedbackAnnouncementList" [style]="{'width':'100%'}"
+                                    (onChange)="onFeedbackAnnouncementChanged($event)">
+                                </p-select>
+                            </div>
+                            <div class="field col-12 sm:col-6 md:col-6 lg:col-2 pl-4 pr-4">
+                                <label for="studentRegistrationNumber">RegistrationNumber</label>
+                                <p-select [filter]="true" inputId="studentRegistrationNumber"
+                                    [options]="studentRegistrationNumberList"
+                                    formControlName="studentRegistrationNumber" placeholder="Select"
+                                    [style]="{'width':'100%'}" (onChange)="onChangeStudentRegistrationNumber($event)">
+                                </p-select>
+                            </div>
+                            <div class="field col-12 sm:col-6 md:col-6 lg:col-2 pl-4 pr-4">
+                                <label for="operationalVerticalId">Semester</label>
+                                <p-select [filter]="true" inputId="operationalVerticalId"
+                                    formControlName="operationalVerticalId" [options]="operationalVerticalList"
+                                    placeholder="Select" [style]="{'width':'100%'}"
+                                    (onChange)="onoperationalVerticalChanged($event)">
+                                </p-select>
+                            </div>
+                            <div class="field col-12 sm:col-6 md:col-6 lg:col-2 pl-4 pr-4">
+                                <label>SubjectPaperFaculty</label>
+                                <p-select [options]="subjectPaperCodeFacultyList" placeholder="Select"
+                                    formControlName="subjectPaperCodeFacultyList"
+                                    (onChange)="onSubjectPaperCodeFacultyCodeChanged($event)"
+                                    [style]="{'width':'100%'}">
+                                </p-select>
+                            </div>
+                            <div class="field col-12 sm:col-6 md:col-6 lg:col-2 pl-4 pr-4">
+                                <button pButton label="View" (click)="getFeedbackQuestions()" class="p-mr-2"
+                                    [disabled]="disableViewBtn"></button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+
+        </div>
+        <div style="width: 100vw;" [hidden]="showTable">
+            <div class="col-12 ">
+                <div class="card">
+                    <p-table #dt [value]="feedbackques"
+                        [rowsPerPageOptions]="[10, 20, 30, 40, 50, 100, { showAll: 'All' }]" selectionMode="multiple"
+                        [rowHover]="true" dataKey="id" [resizableColumns]="true"
+                        styleClass="p-datatable-customers p-datatable-gridlines p-datatable-striped p-datatable-sm"
+                        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+                        [showCurrentPageReport]="true">
+
+                        <!-- <ng-template pTemplate="caption">
+                        <div class="p-d-flex p-flex-column p-flex-md-row p-jc-md-between table-header">
+                            <button pButton label="Reset" class="p-button-outlined" icon="pi pi-filter-slash"
+                                (click)="clear(dt)" style="width: 84px;"></button>
+                            <span class="p-input-icon-left">
+                                <i class="pi pi-search"></i>
+                                <input #searchInput pInputText type="text"
+                                    (input)="dt.filterGlobal($event.target.value, 'contains')"
+                                    placeholder="Search keyword" />
+                            </span>
+                        </div>
+                    </ng-template> -->
+
+                        <ng-template pTemplate="header">
+                            <tr [pSelectableRow]="rowData">
+                                <th>
+                                    Sl.No
+                                </th>
+                                <th pSortableColumn="name">Questions
+                                </th>
+                                <th [attr.colspan]=optionLabellength pSortableColumn="name" class="p-text-center">
+                                    Feedback
+                                </th>
+
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body" let-feedback let-rowIndex="rowIndex">
+                            <tr>
+                                <td style="height: 35px;"><span class="p-column-title"></span>
+                                    {{rowIndex+1}}.
+                                </td>
+                                <td class="p-text-nowrap feedback-question"
+                                    style="text-wrap: wrap !important; padding: 8px !important; ">
+                                    {{feedback.question}}
+                                </td>
+                                <ng-container *ngFor="let label of getDynamicLabels(feedback); let i=index">
+                                    <td class="p-text-right rating-cell"
+                                        [ngClass]="getCellClasses(feedback, i, rowIndex)"
+                                        style="padding-right: 20px !important;">{{label}}&nbsp;&nbsp;
+                                        <p-radioButton name="groupname{{rowIndex}}"
+                                            [value]="getDynamicValue(feedback, i)"
+                                            [(ngModel)]="feedbackques[rowIndex].rating"></p-radioButton>
+                                    </td>
+                                </ng-container>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="summary">
+                            <div class="flex align-items-center justify-content-end">
+                                <p-button label="Submit Feedback" (click)="submitFeedback()"></p-button>
+                            </div>
+                        </ng-template>
+                    </p-table>
+
+                </div>
+            </div>
+        </div>
+        <div class="col-12 " [hidden]="showLabel">
+            <div class="card text-center p-3" style="color: green; font-size: large;">
+                <label>You have submitted the feedback of subject paper code - {{subjectPaperCodeName}}
+                    ({{subjectName}}) already on {{submitDate | date:'yyyy-MM-dd / hh:mm:ss'}}</label>
+            </div>
+        </div>
+        <p-confirm-dialog [style]="{ width: '450px' }"></p-confirm-dialog>
+    </div>
+</div>

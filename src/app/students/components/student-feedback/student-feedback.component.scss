@@ -1,0 +1,130 @@
+/* Color map for Likert selections */
+/* Distinct, accessible palette with soft fill + solid border */
+/* Strongly Agree: teal, Agree: green, Neutral: blue-gray, Disagree: amber, Strongly Disagree: crimson */
+:host ::ng-deep {
+    .rating-strongly-agree { 
+        background: var(--cyan-100);
+        color: var(--cyan-800);
+    }
+    .rating-agree { 
+        background: var(--green-100);
+        color: var(--green-700);
+    }
+    .rating-neutral { 
+        background: var(--bluegray-100);
+        color: var(--bluegray-700);
+    }
+    .rating-disagree { 
+        background: var(--orange-100);
+        color: var(--orange-700);
+    }
+    .rating-strongly-disagree { 
+        background: var(--red-100);
+        color: var(--red-700);
+    }
+
+    .p-radiobutton {
+        .p-radiobutton-box {
+            background: var(--surface-card) !important;
+            border: 2px solid var(--surface-border) !important;
+
+            &.p-highlight {
+                background: var(--primary-color) !important;
+                border-color: var(--primary-color) !important;
+
+                // .p-radiobutton-icon {
+                //     background-color: var(--surface-0);
+                // }
+            }
+        }
+    }
+
+    /* Dark theme overrides */
+    [data-theme='dark'] {
+        .rating-strongly-agree { 
+            background: var(--cyan-900);
+            color: var(--cyan-100);
+        }
+        .rating-agree { 
+            background: var(--green-900);
+            color: var(--green-100);
+        }
+        .rating-neutral { 
+            background: var(--bluegray-900);
+            color: var(--bluegray-100);
+        }
+        .rating-disagree { 
+            background: var(--orange-900);
+            color: var(--orange-100);
+        }
+        .rating-strongly-disagree { 
+            background: var(--red-900);
+            color: var(--red-100);
+        }
+    }
+}
+
+/* Nice polish */
+td.rating-strongly-agree,
+td.rating-agree,
+td.rating-neutral,
+td.rating-disagree,
+td.rating-strongly-disagree {
+	transition: background-color 140ms ease-in-out, color 140ms ease-in-out, border-color 140ms;
+	border-radius: 6px;
+	position: relative;
+	border: 2px solid transparent; /* default replaced dynamically below */
+}
+
+/* Base rating cell to stabilize height & vertical alignment */
+td.rating-cell {
+  height: 40px; /* fixed consistent row height */
+  vertical-align: middle;
+  min-width: 120px; /* prevent width sliding on selection */
+  width: 120px;
+  box-sizing: border-box;
+}/* Ensure radio controls have consistent size so selection doesn't expand cell */
+td.rating-cell .p-radiobutton .p-radiobutton-box {
+	width: 18px;
+	height: 18px;
+	min-width: 18px;
+}
+
+td.rating-cell .p-radiobutton {
+	vertical-align: middle;
+}
+
+td.rating-strongly-agree { border-color: #007c7c; }
+td.rating-agree { border-color: #2e9c44; }
+td.rating-neutral { border-color: #586f7c; }
+td.rating-disagree { border-color: #b98100; }
+td.rating-strongly-disagree { border-color: #b51e1e; }
+
+/* Subtle inset focus indicator */
+td[class^='rating-']::after {
+	content: '';
+	position: absolute;
+	inset: 1px;
+	border: 1px solid rgba(255,255,255,0.35);
+	border-radius: 4px;
+	mix-blend-mode: overlay;
+	pointer-events: none;
+}
+
+/* Keep radio visible on colored bg */
+td[class^='rating-'] .p-radiobutton .p-radiobutton-box {
+	border-color: rgba(0,0,0,0.45);
+	background: rgba(255,255,255,0.70);
+}
+
+td[class^='rating-'] .p-radiobutton .p-radiobutton-box.p-highlight {
+	background: #fff;
+	border-color: #111;
+}
+
+td[class^='rating-'] .p-radiobutton .p-radiobutton-icon {
+	background: #111;
+}
+
+/* Hover preview for unselected cells */
+td[class^='rating-']:not(.active):hover { filter: brightness(1.05) saturate(1.05); cursor: pointer; }

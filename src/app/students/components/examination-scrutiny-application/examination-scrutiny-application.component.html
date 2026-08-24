@@ -1,0 +1,350 @@
+<div class="pb-6">
+    <div class="grid">
+        <p-toast></p-toast>
+        <div class="col-12">
+            <div class="toolbar-demo card">
+                <p-toolbar>
+                    <div class="p-toolbar-group-left">
+                        <div class="header-left-div">
+                            <div class="header-div1">
+                                <i class="fas fa-book-open" style="font-size: 40px;"></i>
+                            </div>
+                            <div class="header-div2">
+                                <h5>{{componentName}}</h5>
+                            </div>
+                        </div>
+                    </div>
+                    <ng-template pTemplate="right">
+                        <div class="d-flex">
+                        </div>
+                    </ng-template>
+                </p-toolbar>
+            </div>
+        </div>
+        <div class="col-12 md:col-12 lg:col-12">
+            <div class="card pr-4 pl-4 pt-4 pb-4">
+                <label style="font-size: 16px;"><b>Note*</b></label>
+                <ul
+                    style="list-style: none; padding: 0; margin: 0; color: red; font-size: 15.4px; text-align: justify;">
+                    <li>Please make the Examination Scrutiny Form Fee withing 2 hours of your application submission
+                        otherwise your scrutiny application will be cancelled automatically by the system.</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="col-12 md:col-12 lg:col-12">
+            <div class="card">
+                <form [formGroup]="academicResultFormGroup">
+                    <div class="grid align-items-end">
+                        <div class="col-12 md:col-6 lg:col-2 p-4">
+                            <label for="programName">Program</label>
+                            <p-select [filter]="true" inputId="programName" [options]="programList"
+                                formControlName="programId" [style]="{'width':'100%'}" placeholder="Select Program"
+                                (onChange)="onProgamChanged($event)"></p-select>
+                        </div>
+                        <div class="col-12 md:col-6 lg:col-2 p-4">
+                            <label for="operationalVerticalName">Semester</label>
+                            <p-select [filter]="true" inputId="operationalVerticalName"
+                                [options]="operationalVerticalList" [style]="{'width':'100%'}"
+                                formControlName="operationalVerticalId" placeholder="Select Semester"
+                                (onChange)="onOperationalVerticalChanged($event)"></p-select>
+                        </div>
+                        <div class="col-12 md:col-6 lg:col-2 p-4">
+                            <label for="examinationType">Examination Type</label>
+                            <p-select [filter]="true" inputId="examinationType" [options]="examinationTypeList"
+                                [style]="{'width':'100%'}" formControlName="examinationTypeId"
+                                placeholder="Select Examination Type" (onChange)="onExaminationTypeChanged($event)">
+                            </p-select>
+                        </div>
+                        <div class="col-12 md:col-6 lg:col-2 p-4">
+                            <label for="examination">Examination</label>
+                            <p-select [filter]="true" inputId="examination" [options]="examinationList"
+                                formControlName="examinationId" [style]="{'width':'100%'}"
+                                placeholder="Select Examination" (onChange)="onExaminationChanged($event)"></p-select>
+                        </div>
+                        <div class="col-12 md:col-6 lg:col-2 p-4">
+                            <button pButton type="button" [disabled]="!academicResultFormGroup.valid"
+                                label="View Result" #newItem (click)="SearchResult()" style="margin-top: 6px;"></button>
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+        <div style="width: 100vw;">
+            <div class="col-12">
+                <div class="card" *ngIf="searchResult">
+                    <div class="formgrid grid align-items-start">
+                        <div class="field col-12 sm:col-6 md:col-6 lg:col-3 pl-4 pr-4">
+                            <label style="font-weight: 600;">AcademicSession : &nbsp; </label>
+                            <label class="text-base text-color surface-overlay w-full">
+                                {{academicSession}}
+                            </label>
+                        </div>
+                        <div class="field col-12 sm:col-6 md:col-6 lg:col-3 pl-4 pr-4">
+                            <label style="font-weight: 600;">Program : &nbsp; </label>
+
+                            <label class="text-base text-color surface-overlay w-full">
+                                {{programName}}
+                            </label>
+                        </div>
+                        <div class="field col-12 sm:col-6 md:col-6 lg:col-3 pl-4 pr-4">
+                            <label style="font-weight: 600;">Semester : &nbsp; </label>
+
+                            <label class="text-base text-color surface-overlay w-full">
+                                {{operationalVerticalName}}
+                            </label>
+                        </div>
+                        <div class="field col-12 sm:col-6 md:col-6 lg:col-3 pl-4 pr-4">
+                            <label style="font-weight: 600;">Examination : &nbsp; </label>
+
+                            <label class="text-base text-color surface-overlay w-full">
+                                {{fullExaminationName}}
+                            </label>
+                        </div>
+                        <div class="field col-12 sm:col-6 md:col-6 lg:col-3 pl-4 pr-4">
+                            <label style="font-weight: 600;">StudentID : &nbsp; </label>
+                            <label class="text-base text-color surface-overlay w-full">
+                                {{studentExaminationResult[0].studentId}}
+                            </label>
+                        </div>
+                        <div class="field col-12 sm:col-6 md:col-6 lg:col-3 pl-4 pr-4">
+                            <label style="font-weight: 600;">StudentName : &nbsp; </label>
+
+                            <label class="text-base text-color surface-overlay w-full">
+                                {{studentExaminationResult[0].studentName}}
+                            </label>
+                        </div>
+                        <div class="field col-12 sm:col-6 md:col-6 lg:col-3 pl-4 pr-4">
+                            <label style="font-weight: 600;">RegistrationNumber : &nbsp; </label>
+
+                            <label class="text-base text-color surface-overlay w-full">
+                                {{studentExaminationResult[0].registrationNumber }}
+                            </label>
+                        </div>
+                        <div class="field col-12 sm:col-6 md:col-6 lg:col-3 pl-4 pr-4">
+                            <label style="font-weight: 600;">RollNumber : &nbsp; </label>
+
+                            <label class="text-base text-color surface-overlay w-full">
+                                {{studentExaminationResult[0].rollNumber }}
+                            </label>
+                        </div>
+                        <div class="field col-12 sm:col-6 md:col-6 lg:col-3 pl-4 pr-4">
+                            <label style="font-weight: 600;">Father'sName : &nbsp; </label>
+
+                            <label class="text-base text-color surface-overlay w-full">
+                                {{studentExaminationResult[0].fathersName }}
+                            </label>
+                        </div>
+                        <div class="field col-12 sm:col-6 md:col-6 lg:col-3 pl-4 pr-4">
+                            <label style="font-weight: 600;">Mother'sName : &nbsp; </label>
+
+                            <label class="text-base text-color surface-overlay w-full">
+                                {{studentExaminationResult[0].mothersName }}
+                            </label>
+                        </div>
+                        <div class="field col-12 sm:col-6 md:col-6 lg:col-3 pl-4 pr-4">
+                            <label style="font-weight: 600;">D.O.B. : &nbsp; </label>
+
+                            <label class="text-base text-color surface-overlay w-full">
+                                {{studentExaminationResult[0].dateOfBirth | date : "dd-MMM-yyyy" }}
+                            </label>
+                        </div>
+                        <div class="field col-12 sm:col-6 md:col-6 lg:col-3 pl-4 pr-4">
+                            <label style="font-weight: 600;">IsHold : &nbsp; </label>
+
+                            <label class="text-base text-color surface-overlay w-full">
+                                {{studentExaminationResult[0].isHold }}
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-12">
+            <div class="card" *ngIf="searchResult" style="font-size: 14px; font-weight: 600; color: gray;">
+                <span style="color: red;">*Note</span> : You are permitted to submit / initiate only one application.
+                Please ensure
+                to select all the papers for which you wish to apply for scrutiny in a single submission.
+                Application will be confirmed once the payment is done from student's end.
+            </div>
+        </div>
+        <div class="col-12">
+            <div class="card" *ngIf="searchResult">
+                <p-table #dt [value]="studentSubjectPaperCodeEndExamMarks" [rowHover]="true"
+                    styleClass="p-datatable-customers p-datatable-gridlines p-datatable-striped">
+
+                    <ng-template pTemplate="header">
+                        <tr [pSelectableRow]="rowData">
+                            <th style="width: 3rem">
+                                Select
+                            </th>
+
+                            <th style="text-align: center;">
+                                SubjectName
+                            </th>
+
+                            <th style="text-align: center;">
+                                SubjectPaperCodeName
+                            </th>
+
+                            <th style="text-align: center;">
+                                Grade
+                            </th>
+
+                            <th style="text-align: center;">
+                                GradePonits
+                            </th>
+                            <th style="text-align: center;">
+                                Credits
+                            </th>
+                        </tr>
+
+                    </ng-template>
+
+                    <ng-template pTemplate="body" let-result let-rowIndex="rowIndex">
+                        <tr [style.background-color]="result.isSubmittedForScrutiny ? 'lightgray' : 'transparent'">
+                            <td>
+                                <input type="checkbox" [value]="result" id="{{result.subjectId}}"
+                                    [disabled]="result.isSubmittedForScrutiny" [checked]="result.isSubmittedForScrutiny"
+                                    (click)="createArrayForSlectedProgram(result.subjectId, result.subjectPaperCodeId, rowIndex)"
+                                    [style.height.px]="18" [style.width.px]="18">
+                            </td>
+                            <td style="text-align: center; height: 35px;">
+                                <span class="p-column-title">SubjectName</span>
+                                {{result.subjectName}}
+                            </td>
+
+                            <td style="text-align: center; height: 35px;">
+                                <span class="p-column-title"> SubjectPaperCodeName </span>
+                                {{result.subjectPaperCodeName}}
+                            </td>
+
+                            <td style="text-align: center; height: 35px;">
+                                <span class="p-column-title">Grade</span>
+                                {{result.grade}}
+                            </td>
+
+                            <td style="text-align: center; height: 35px;">
+                                <span class="p-column-title">GradePoint</span>
+                                {{result.gradePoint}}
+                            </td>
+                            <td style="text-align: center; height: 35px;">
+                                <span class="p-column-title">Credits</span>
+                                {{result.credits}}
+                            </td>
+                        </tr>
+                    </ng-template>
+                </p-table>
+            </div>
+        </div>
+        <div style="width: 100vw;">
+            <div class="col-12">
+                <div class="card" *ngIf="searchResult">
+                    <div class="formgrid grid align-items-start">
+                        <div class="field col-12 sm:col-6 md:col-6 lg:col-3 pl-4 pr-4">
+                            <strong style="width: 500px;">SGPA : </strong>
+                            {{studentSubjectPaperCodeEndExamMarksConsolidated.sgpa}}
+                        </div>
+                        <div class="field col-12 sm:col-6 md:col-6 lg:col-3 pl-4 pr-4">
+                            <strong style="width: 500px;">CGPA : </strong>
+                            {{studentSubjectPaperCodeEndExamMarksConsolidated.cgpa}}
+                        </div>
+                        <div class="field col-12 sm:col-6 md:col-6 lg:col-3 pl-4 pr-4">
+                            <strong style="width: 500px;">Cummulative Credits : </strong>
+                            {{studentSubjectPaperCodeEndExamMarksConsolidated.commulativeCredits}}
+                        </div>
+                        <div class="field col-12 sm:col-6 md:col-6 lg:col-3 pl-4 pr-4">
+                            <strong style="width: 500px;">Cummulative EGP : </strong>
+                            {{studentSubjectPaperCodeEndExamMarksConsolidated.commulativeEGP}}
+                        </div>
+                        <div class="field col-12 sm:col-6 md:col-6 lg:col-3 pl-4 pr-4">
+                            <strong style="width: 500px;">Total Credits : </strong>
+                            {{studentSubjectPaperCodeEndExamMarksConsolidated.totalCredits}}
+                        </div>
+                        <div class="field col-12 sm:col-6 md:col-6 lg:col-3 pl-4 pr-4">
+                            <strong style="width: 500px;">Total Grade Points : </strong>
+                            {{studentSubjectPaperCodeEndExamMarksConsolidated.totalGradePoints}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div style="width: 100vw;" *ngIf="searchResult">
+            <div class="col-12">
+                <div class="card">
+                    <div class="flex flex-row-reverse flex-wrap justify-content-between">
+                        <div class="flex align-items-center justify-content-center">
+                            <button [disabled]="disableSaveBtn" pButton type="button" label="Save" icon="pi pi-check"
+                                class="p-button-primary p-mr-2" (click)="confirmation()">
+                            </button>
+                        </div>
+                        <div class="flex align-items-center justify-content-center text-xl text-green-500"
+                            *ngIf="noteA">
+                            <span>The highlighted rows indicate that application fees for these subjects
+                                have already been INITIATED for Scrutiny. Kindly submit the fee.</span>
+                        </div>
+                        <div class="flex align-items-center justify-content-center text-xl text-green-500"
+                            *ngIf="noteB">
+                            <span style="color: green;">You have successfully submitted the scrutiny application for
+                                selected papers</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <p-dialog header="Proceed For Payment" [(visible)]="paymentModalBox" [modal]="true"
+            [breakpoints]="{ '768px': '75vw' }" [style]="{ width: '450px'}" [draggable]="false" [resizable]="false">
+            <div>
+                <h6>
+                    Application Initiated. <br>
+                    Pay the fee to complete your application.
+                </h6>
+            </div>
+            <div class="flex flex-row-reverse">
+                <div></div>
+                <button pButton type="button" label="Procced" class="p-button-primary p-mr-2"
+                    (click)="proceedForPayment()">
+                </button>
+            </div>
+        </p-dialog>
+        <p-dialog header="Confirmation for Scrutiny" [(visible)]="visibleConfirmationBox" [modal]="true"
+            [breakpoints]="{ '768px': '75vw' }" [style]="{ width: '450px'}" [draggable]="false" [resizable]="false">
+            <div>
+                <h6>
+                    Are you sure you want to proceed with the selected Subjects for Scrutiny?
+                </h6>
+
+                <p>
+                    This action is irreversible, and once applied, it cannot be reversed.
+                    Please ensure that you have selected the correct subjects for Scrutiny.
+                </p>
+
+            </div>
+            <div class="flex justify-content-between mt-2">
+                <button pButton type="button" label="No" icon="pi pi-times" class="p-button-danger p-mr-2"
+                    (click)="visibleConfirmationBox = false"> </button>
+                <button pButton type="button" label="Yes" icon="pi pi-check" class="p-button-primary p-mr-2"
+                    (click)="applyScrutiny()">
+                </button>
+            </div>
+        </p-dialog>
+
+        <p-dialog header="Notice regarding scrutiy application" [(visible)]="this.initialNotice" [modal]="true"
+            [breakpoints]="{ '768px': '75vw' }" [style]="{ width: '450px'}" [draggable]="false" [resizable]="false">
+            <div>
+                <p>
+                    In response to recent adjustments in the results, we would like to inform you that prior scrutiny
+                    applications are no longer valid.
+                    If you have previously submitted an application, we kindly request you to reapply after the
+                    republication of results for accurate processing.
+                </p>
+            </div>
+            <div class="flex flex-row-reverse">
+                <button pButton type="button" label="OK" icon="pi pi-times" class="p-button-success p-mr-2"
+                    (click)="this.initialNotice = false"> </button>
+            </div>
+        </p-dialog>
+        <p-confirm-dialog [style]="{ width: '450px' }"></p-confirm-dialog>
+    </div>
+</div>

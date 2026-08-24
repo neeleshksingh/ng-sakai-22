@@ -1,0 +1,77 @@
+:host ::ng-deep .MH {
+    margin-left: 100px;
+  }
+  
+  :host ::ng-deep {
+    .p-image-preview {
+      height: 35em !important;
+      width: 35em !important;
+      transition: transform .15s;
+    }
+  }
+  
+  :host ::ng-deep .p-tabview-panels {
+    min-height: auto !important;
+  }
+  
+  body {
+    background: -webkit-linear-gradient(left, #3931af, #00c6ff);
+  }
+  
+  :host ::ng-deep .profile-img {
+    text-align: center;
+  }
+  
+  :host ::ng-deep .profile-img img {
+    height: 100px;
+    width: 100px;
+    border-radius: 50%;
+  }
+  
+  :host ::ng-deep .image-upload>input {
+    display: none;
+  }
+  
+  :host ::ng-deep .profile-img .file {
+    position: relative;
+    overflow: hidden;
+    color: white;
+    border: none;
+    border-radius: 0;
+    font-size: 15px;
+    background: #212529d9;
+    margin-left: auto;
+    margin-right: auto;
+    height: 37px;
+    padding: 10px;
+    width: 137px;
+    margin-top: -42px;
+  }
+  
+  :host ::ng-deep .profile-img .file input {
+    position: absolute;
+    opacity: 0;
+    right: 0;
+    top: 0;
+  }
+  
+  :host ::ng-deep .profile-head h5 {
+    color: #333;
+    font-size: 1.25rem;
+    margin-bottom: 0.5rem;
+    font-family: inherit;
+    font-weight: bold;
+    line-height: 1.2;
+    margin-top: 0;
+  }
+  
+  :host ::ng-deep .profile-head h6 {
+    color: #0062cc;
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+    font-family: inherit;
+    font-weight: bold;
+    line-height: 1.2;
+    margin-top: 0;
+  }
+  

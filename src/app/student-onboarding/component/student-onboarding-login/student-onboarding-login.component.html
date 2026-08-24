@@ -1,0 +1,111 @@
+<p-toast position="top-right"></p-toast>
+<div class="wrapper p-0 m-0">
+    <div class="inner p-0 m-0" style="height: 100%;">
+        <div class="image-holder p-0 m-0" style="height: auto; flex: 1; position: relative;">
+            <div class="mainimg p-0 m-0" style="height: 100%; width: 100%; overflow: hidden; position: relative;">
+                <img src="../../../../assets/images/onboarding-wallpaper.jpg" alt=""
+                    style="width: 100%; height: 100%; object-fit: cover; margin: 0; padding: 0; border-top-left-radius: 20px; border-bottom-left-radius: 20px;" />
+                <div
+                    style="position: absolute; top: 50%;left: 50%;transform: translate(-50%, -50%);color: white;text-align: center; padding: 20px;width: 80%;max-width: 350px;">
+                    <h5 style="font-weight: 400; letter-spacing: 1px; margin-bottom: 10px;">Hello & Welcome!</h5>
+                    <h2 style="font-size: 32px; font-weight: 700; letter-spacing: 2px;">{{title}},{{city}}
+                    </h2>
+                    <p style="font-size: 14px; margin-top: 15px; line-height: 1.6; color: #e0e0e0;">
+                        Embark on your academic journey with confidence. This portal gives you easy access to your
+                        courses, profile, schedules, and essential university services. Let's make your transition
+                        smooth and your student life successful.
+                    </p>
+                </div>
+            </div>
+        </div>
+        <form [formGroup]="onboardingLoginFormGroup">
+            <div style="width: 100%; word-wrap: break-word">
+                <div class="grid">
+                    <div class="logo col-12" style="margin-top: 0px;">
+                        <div style="display: flex; justify-content: center; align-items: center;">
+                            <img [src]="logoUrl" [style.borderRadius]="'50%'" [style.width]="'150px'"
+                                [style.height]="'150px'" class="shadow-4" />
+                        </div>
+                        <h3 style="text-align: center;" [style.fontSize]="'18px'" [style.fontWeight]="'500'"
+                            [style.letterSpacing]="'1.5px'" [style.marginBottom]="'6px'" [style.marginTop]="'10px'"
+                            [style.color]="'#616161'">
+                            {{ title }}
+                        </h3>
+                        <p style="text-align: center;" [style]="'color:#20cb22e0;'">{{ slogan }}</p>
+                        <br />
+                    </div>
+
+                    <div class="field col-12 px-4" *ngIf="!isOtpdisable">
+                        <input pInputText type="tel" pattern="[0-9]{10}" id="userName" class="center-placeholder w-full"
+                            [(ngModel)]="onboardingLoginFormGroup.value.userName" formControlName="userName"
+                            placeholder="Mobile Number" required="true" />
+
+                        <div *ngIf="onboardingLoginFormGroup.get('userName')?.touched && onboardingLoginFormGroup.get('userName')?.invalid"
+                            style="color: red; font-size: small;">
+                            <div *ngIf="onboardingLoginFormGroup.get('userName')?.errors?.['required']">Phone number is
+                                required.</div>
+                            <div *ngIf="onboardingLoginFormGroup.get('userName')?.errors?.['pattern']">Enter a valid
+                                10-digit phone number.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="field col-12" style="text-align: center;" *ngIf="isOtpdisable">
+                        <label for="userName" style="font-size: 20px; padding-left: 5px; font-weight: 500;">
+                            {{ onboardingLoginFormGroup.value.userName }}
+                        </label>
+                        <label (click)="editUserName()" for="edit"
+                            style="font-size: medium; margin-left: 10px; color: #5a5aef; cursor: pointer;">Edit</label>
+                    </div>
+
+                    <div class="field col-12 px-4" *ngIf="isOtpdisable">
+                        <input pInputText type="text" id="otp" class="center-placeholder w-full"
+                            [(ngModel)]="onboardingLoginFormGroup.value.otp" formControlName="otp" placeholder="OTP"
+                            required="true" />
+
+                        <div *ngIf="onboardingLoginFormGroup.get('otp')?.touched && onboardingLoginFormGroup.get('otp')?.invalid"
+                            style="color: red; font-size: small;">
+                            <div *ngIf="onboardingLoginFormGroup.get('otp')?.errors?.['required']">OTP is required.
+                            </div>
+                            <div *ngIf="onboardingLoginFormGroup.get('otp')?.errors?.['pattern']">OTP must be exactly 6
+                                digits.</div>
+                        </div>
+                    </div>
+
+                    <div class="field col-12" style="display: flex; justify-content: center; align-items: center;"
+                        *ngIf="!isOtpdisable">
+                        <button pButton type="button" class="p-button-primary"
+                            [disabled]="!onboardingLoginFormGroup.value.userName" (click)="sendLoginOtp()"
+                            icon="pi pi-send" label="Send OTP" style="width: 50%" [loading]="isSendingOtp"></button>
+                    </div>
+
+                    <div class="field col-12" style="display: flex; justify-content: center; align-items: center;"
+                        *ngIf="isOtpdisable">
+                        <button pButton type="button" class="p-button-primary"
+                            [disabled]="!onboardingLoginFormGroup.value.userName" (click)="validateLoginOtp()"
+                            icon="pi pi-check" label="Validate" style="width: 50%" [loading]="isVerifyingOtp"></button>
+                    </div>
+
+                    <div class="col-12" *ngIf="onboardingLoginMessage">
+                        <div class="field">
+                            <label style="color: red" for="onboardingLoginMessage">{{ onboardingLoginMessage }}</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid">
+                    <div class="field col-12">
+                        <br />
+                        <div style="color: black; width: 100%; font-size: small; text-align: center;">
+                            Please reach out to <a href="mailto:{{supportEmailId}}"><b>{{ supportEmailId }}</b></a> for
+                            any technical issues.
+                        </div>
+                        <div style="color: red; font-size: medium; padding-top: 5px;">
+                            <marquee>{{ alertMessage }}</marquee>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

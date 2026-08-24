@@ -1,0 +1,245 @@
+<div class="col-12">
+    <div class="card">
+        <p-tabs [value]="0">
+            <p-tablist>
+                <p-tab
+                    *ngFor="let studentExaminationResultProgram of examinationResultExpandoResponse?.studentExaminationResultPrograms; let i = index"
+                    [value]="i">
+                    {{ studentExaminationResultProgram?.registrationNumberProgramCode ?? '' }}
+                </p-tab>
+            </p-tablist>
+            <p-tabpanels>
+                <p-tabpanel
+                    *ngFor="let studentExaminationResultProgram of examinationResultExpandoResponse?.studentExaminationResultPrograms; let i = index"
+                    [value]="i">
+                    <p-tabs [value]="0">
+                        <p-tablist>
+                            <p-tab
+                                *ngFor="let studentExaminationResultOperationalVertical of studentExaminationResultProgram?.studentExaminationResultOperationalVerticals; let j = index"
+                                [value]="j">
+                                {{ studentExaminationResultOperationalVertical?.operationalVerticalName ?? '' }}
+                            </p-tab>
+                        </p-tablist>
+                        <p-tabpanels>
+                            <p-tabpanel
+                                *ngFor="let studentExaminationResultOperationalVertical of studentExaminationResultProgram?.studentExaminationResultOperationalVerticals; let j = index"
+                                [value]="j">
+                                <div class="field col-12">
+                                    <p-table
+                                        [value]="studentExaminationResultOperationalVertical?.examinationData ?? []"
+                                        [resizableColumns]="true" [rowHover]="true" [rows]="10"
+                                        [rowsPerPageOptions]="[ 10, 20, 30, 40, 50, { showAll: 'All' } ]"
+                                        [paginator]="true"
+                                        styleClass="datatable-customers datatable-gridlines datatable-striped datatable-sm">
+                                        <ng-template pTemplate="header">
+                                            <tr>
+                                                <th>Examination</th>
+                                                <th></th>
+                                                <th colspan="3"
+                                                    *ngIf="studentExaminationResultOperationalVertical?.midSemester?.[0]?.examinationName">
+                                                    {{
+                                                    studentExaminationResultOperationalVertical.midSemester[0].examinationName
+                                                    }}
+                                                </th>
+                                                <th colspan="3"
+                                                    *ngFor="let data of studentExaminationResultOperationalVertical?.endSemesterExams">
+                                                    {{ data?.examinationName }}
+                                                </th>
+                                            </tr>
+                                            <tr>
+                                                <th>StartDate</th>
+                                                <th></th>
+                                                <th colspan="3"
+                                                    *ngIf="studentExaminationResultOperationalVertical?.examinationData?.[0]?.midSemesterData?.startDate">
+                                                    {{
+                                                    studentExaminationResultOperationalVertical?.examinationData?.[0]?.midSemesterData?.startDate
+                                                    | date: 'yyyy-MM-dd' }}
+                                                </th>
+                                                <th colspan="3"
+                                                    *ngFor="let data of studentExaminationResultOperationalVertical?.examinationData?.[0]?.endSemesterData || []">
+                                                    {{ data?.startDate | date: 'yyyy-MM-dd' }}
+                                                </th>
+                                            </tr>
+                                            <tr>
+                                                <th>Paper Code</th>
+                                                <th>Subject</th>
+                                                <th>Total Marks</th>
+                                                <th>Marks Obtained</th>
+                                                <th>Marks Weightage</th>
+                                                <ng-container
+                                                    *ngFor="let data of studentExaminationResultOperationalVertical?.examinationData?.[0]?.endSemesterData || []">
+                                                    <th>Credits</th>
+                                                    <th>Grade</th>
+                                                    <th>Grade Point</th>
+                                                </ng-container>
+                                            </tr>
+                                        </ng-template>
+                                        <ng-template pTemplate="body" let-row>
+                                            <tr>
+                                                <td>{{ row.paperCode }}</td>
+                                                <td>{{ row.subject }}</td>
+                                                <td>{{ row.totalMarks || '-' }}</td>
+                                                <td>{{ row.obtainedMarks || '-' }}</td>
+                                                <td>{{ row.marksWeightage || '-' }}</td>
+                                                <ng-container *ngFor="let endData of row.endSemesterData">
+                                                    <td>{{ endData.credits || '-' }}</td>
+                                                    <td>{{ endData.grade || '-' }}</td>
+                                                    <td>{{ endData.gradePoint || '-' }}</td>
+                                                </ng-container>
+                                            </tr>
+                                        </ng-template>
+                                    </p-table>
+                                </div>
+                            </p-tabPanel>
+                            <p-tabPanel header="Marks Statement">
+                                <div class="field col-12"
+                                    *ngFor="let studentExaminationResultOperationalVertical of studentExaminationResultProgram?.studentExaminationResultOperationalVerticals">
+                                    <!-- Mid Semester Table -->
+                                    <p-table
+                                        *ngIf="studentExaminationResultOperationalVertical && studentExaminationResultOperationalVertical.midSemester && studentExaminationResultOperationalVertical.midSemester.length > 0"
+                                        [value]="studentExaminationResultOperationalVertical?.examinationData ?? []"
+                                        [resizableColumns]="true" [rowHover]="true"
+                                        styleClass="datatable-customers datatable-gridlines datatable-striped datatable-sm">
+
+                                        <ng-template pTemplate="header">
+                                            <tr>
+                                                <th>Examination:</th>
+                                                <th style="font-size: larger;">{{
+                                                    studentExaminationResultOperationalVertical?.midSemester?.[0]?.examinationName
+                                                    ??
+                                                    'Mid Semester' }}</th>
+                                                <th>StartDate:</th>
+                                                <th colspan="2">{{
+                                                    studentExaminationResultOperationalVertical?.midSemester?.[0]?.startDate
+                                                    |
+                                                    date:
+                                                    'yyyy-MM-dd'}}</th>
+                                                <th>Semester:</th>
+                                                <th colspan="2">{{
+                                                    studentExaminationResultOperationalVertical?.operationalVerticalName
+                                                    }}</th>
+                                            </tr>
+                                            <tr>
+                                                <th>Paper Code</th>
+                                                <th>Subject</th>
+                                                <th>Credits</th>
+                                                <th>Grade</th>
+                                                <th>Grade Point</th>
+                                                <th>Total Marks</th>
+                                                <th>Marks Obtained</th>
+                                            </tr>
+                                        </ng-template>
+                                        <ng-template pTemplate="body" let-row>
+                                            <tr>
+                                                <td>{{ row.paperCode }}</td>
+                                                <td>{{ row.subject }}</td>
+                                                <td>{{ row.credits || '-' }}</td>
+                                                <td>{{ row.grade || '-' }}</td>
+                                                <td>{{ row.gradePoint || '-' }}</td>
+                                                <td>{{ row.totalMarks || '-' }}</td>
+                                                <td>{{ row.obtainedMarks || '-' }}</td>
+                                            </tr>
+                                        </ng-template>
+                                    </p-table>
+
+                                    <br>
+                                    <br>
+                                    <!-- End Semester Tables -->
+                                    <ng-container
+                                        *ngFor="let endExam of studentExaminationResultOperationalVertical?.studentEndExaminations">
+                                        <p-table [value]="endExam.studentSubjectPaperCodeEndExamMarks"
+                                            [resizableColumns]="true" [rowHover]="true"
+                                            styleClass="datatable-customers datatable-gridlines datatable-striped datatable-sm">
+
+                                            <ng-template pTemplate="header">
+                                                <tr>
+                                                    <th>Examination:</th>
+                                                    <th style="font-size: larger;">{{
+                                                        getExamName(endExam?.examinationId)}}</th>
+                                                    <th>StartDate:</th>
+                                                    <th colspan="2">{{ endExam?.startDate | date: 'yyyy-MM-dd'}}</th>
+                                                    <th>Semester:</th>
+                                                    <th colspan="2">{{
+                                                        studentExaminationResultOperationalVertical?.operationalVerticalName
+                                                        }}
+                                                    </th>
+                                                </tr>
+                                                <tr>
+                                                    <th>Paper Code</th>
+                                                    <th>Subject</th>
+                                                    <th>Credits</th>
+                                                    <th>Grade</th>
+                                                    <th>Grade Point</th>
+                                                    <th>Total Marks</th>
+                                                    <th>Marks Obtained</th>
+                                                </tr>
+                                            </ng-template>
+                                            <ng-template pTemplate="body" let-row>
+                                                <tr>
+                                                    <td>{{ row.subjectPaperCodeName }}</td>
+                                                    <td>{{ row.subjectName }}</td>
+                                                    <td>{{ row.credits || '-' }}</td>
+                                                    <td>{{ row.grade || '-' }}</td>
+                                                    <td>{{ row.gradePoint || '-' }}</td>
+                                                    <td>-</td>
+                                                    <td>-</td>
+                                                </tr>
+                                            </ng-template>
+                                            <ng-template pTemplate="footer">
+                                                <tr>
+                                                    <td colspan="7">
+                                                        <div class="footer-container">
+                                                            <div class="footer-item">
+                                                                SGPA: {{
+                                                                endExam.studentSubjectPaperCodeEndExamMarksConsolidated?.sgpa
+                                                                || '-' }}
+                                                            </div>
+                                                            <div class="footer-item">
+                                                                CGPA: {{
+                                                                endExam.studentSubjectPaperCodeEndExamMarksConsolidated?.cgpa
+                                                                || '-' }}
+                                                            </div>
+                                                            <div class="footer-item">
+                                                                Total Credit: {{
+                                                                calculateTotalCredits(endExam.studentSubjectPaperCodeEndExamMarks)
+                                                                }}
+                                                            </div>
+                                                            <div class="footer-item">
+                                                                Total Earned Credit: {{
+                                                                endExam.studentSubjectPaperCodeEndExamMarksConsolidated?.totalCredits
+                                                                ||
+                                                                '-' }}
+                                                            </div>
+                                                            <div class="footer-item">
+                                                                Cumulative Credits: {{
+                                                                endExam.studentSubjectPaperCodeEndExamMarksConsolidated?.commulativeCredits
+                                                                || '-' }}
+                                                            </div>
+                                                            <div class="footer-item">
+                                                                Total Grade Points: {{
+                                                                endExam.studentSubjectPaperCodeEndExamMarksConsolidated?.totalGradePoints
+                                                                || '-' }}
+                                                            </div>
+                                                            <div class="footer-item">
+                                                                Cumulative Grade Point: {{
+                                                                endExam.studentSubjectPaperCodeEndExamMarksConsolidated?.commulativeEGP
+                                                                || '-' }}
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            </ng-template>
+                                        </p-table>
+                                        <br>
+                                        <br>
+                                    </ng-container>
+                                </div>
+
+                            </p-tabpanel>
+                        </p-tabpanels>
+                    </p-tabs>
+                </p-tabpanel>
+            </p-tabpanels>
+        </p-tabs>
+    </div>
+</div>

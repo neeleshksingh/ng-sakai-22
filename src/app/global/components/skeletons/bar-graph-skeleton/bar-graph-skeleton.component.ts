@@ -1,12 +1,23 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { Component, Input, OnInit } from '@angular/core';
 import { SkeletonModule } from 'primeng/skeleton';
 
 @Component({
-    selector: 'app-bar-graph-skeleton',
-    standalone: true,
-    imports: [SkeletonModule],
-    templateUrl: './bar-graph-skeleton.component.html',
-    styleUrl: './bar-graph-skeleton.component.scss',
-    changeDetection: ChangeDetectionStrategy.OnPush
+  selector: 'app-bar-graph-skeleton',
+  standalone: true,
+  imports: [SkeletonModule, CommonModule],
+  templateUrl: './bar-graph-skeleton.component.html',
+  styleUrl: './bar-graph-skeleton.component.scss',
+  styles: `
+      .bar-skeleton {
+        width: 7rem;
+      }
+  `
 })
-export class BarGraphSkeletonComponent {}
+export class BarGraphSkeletonComponent implements OnInit {
+
+  @Input() data: any;
+
+  ngOnInit(): void {
+  }
+}

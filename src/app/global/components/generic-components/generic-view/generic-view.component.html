@@ -1,11 +1,146 @@
-<div class="card generic-view">
-    <h2>{{ title() }}</h2>
-    <dl>
-        @for (entry of data() | keyvalue; track entry.key) {
-            <div>
-                <dt>{{ entry.key }}</dt>
-                <dd>{{ entry.value }}</dd>
+<div class="fluid view-container1 fadein animation-duration-300 mb-3">
+
+    <div class="flex justify-content-end mb-3">
+        <div class="inline-flex surface-100 border-round-2xl p-1 border-1 border-50 shadow-none">
+            <button pButton *ngFor="let option of viewOptions" type="button" (click)="onViewChange(option)"
+                [ngClass]="viewFormGroup.value.view === option.value ? 'shadow-1 font-semibold text-primary bg-white' : 'p-button-text hover:text-700'"
+                class="border-round-xl transition-colors transition-duration-150 px-3 py-1 border-none text-xs flex align-items-center gap-2"
+                [pTooltip]="option.tooltip" tooltipPosition="top">
+                <i [class]="'text-sm pi ' + option.icon"></i>
+                <span class="hidden sm:inline">{{ option.label }}</span>
+            </button>
+        </div>
+    </div>
+
+    @if(viewFormGroup.value.view === 'compact'){
+    <div class="surface-card border-1 border-200 border-round-xl overflow-hidden shadow-none">
+        <div class="grid grid-nogutter">
+            @if(!isLoading){
+            @for (field of fields; track field){
+            <div
+                class="col-12 md:col-6 lg:col-4 p-2 border-bottom-1 border-right-1 border-100 hover:surface-50 transition-colors flex align-items-center">
+                <div class="flex align-items-center gap-2 w-5 pl-2">
+                    <i [class]="'pi ' + field?.icon + ' text-xs text-primary'"></i>
+                    <span class="text-xs font-medium white-space-nowrap text-overflow-ellipsis overflow-hidden">{{
+                        field?.label }}</span>
+                </div>
+
+                <div class="w-7 text-sm font-semibold pr-2" [style]="field.cssStyle">
+                    @if (field.type === 'image') {
+                    <p-image [src]="data?.[field?.key || '']" alt="{{field?.label}}" width="80" [preview]="true"
+                        styleClass="border-round shadow-1 mt-1"></p-image>
+                    } @else if(field.type === 'innerHTML') {
+                    <span class="line-height-2"
+                        [innerHTML]="transformValue(data?.[field?.key || ''], field?.pipe)"></span>
+                    } @else {
+                    <span class="white-space-nowrap text-overflow-ellipsis overflow-hidden block">
+                        {{ transformValue(data?.[field?.key || ''], field?.pipe) || '—' }}
+                    </span>
+                    }
+                </div>
             </div>
+            }
+            } @else {
+            <ng-container *ngFor="let skeleton of [].constructor(9)">
+                <div
+                    class="col-12 md:col-6 lg:col-4 p-2 border-bottom-1 border-right-1 border-100 flex align-items-center">
+                    <div class="w-5 pl-2"><p-skeleton width="70%" height="0.8rem"></p-skeleton></div>
+                    <div class="w-7 pr-2"><p-skeleton width="90%" height="1rem"></p-skeleton></div>
+                </div>
+            </ng-container>
+            }
+        </div>
+    </div>
+    }
+
+    @else if (viewFormGroup.value.view === 'tiles') {
+    <div class="grid formgrid gap-y-2">
+        @if(!isLoading){
+        @for (field of fields; track field){
+        <div class="col-12 sm:col-6 md:col-4 lg:col-3">
+            <div
+                class="card border-1 border-200 border-round-lg p-3 h-full flex flex-column gap-2 hover:border-primary hover:shadow-1 transition-all transition-duration-200">
+                <div class="flex align-items-center gap-2">
+                    <i [class]="'text-xs pi ' + field?.icon + ' text-primary'"></i>
+                    <span
+                        class="text-xs font-semibold uppercase tracking-wide text-overflow-ellipsis overflow-hidden white-space-nowrap">{{
+                        field?.label }}</span>
+                </div>
+
+                <div class="text-900 font-bold text-lg text-overflow-ellipsis overflow-hidden white-space-nowrap"
+                    [style]="field.cssStyle">
+                    @if (field.type === 'image') {
+                    <p-image [src]="data?.[field?.key || '']" alt="{{field?.label}}" width="60"
+                        styleClass="border-round"></p-image>
+                    } @else if(field.type === 'innerHTML') {
+                    <span class="text-sm font-medium"
+                        [innerHTML]="transformValue(data?.[field?.key || ''], field?.pipe)"></span>
+                    } @else {
+                    {{ transformValue(data?.[field?.key || ''], field?.pipe) || '—' }}
+                    }
+                </div>
+            </div>
+        </div>
         }
-    </dl>
+        } @else {
+        <ng-container *ngFor="let skeleton of [].constructor(8)">
+            <div class="col-12 sm:col-6 md:col-4 lg:col-3">
+                <div class="card border-1 border-100 border-round-lg p-3">
+                    <div class="flex align-items-center gap-2 mb-2">
+                        <p-skeleton shape="circle" size="1rem"></p-skeleton>
+                        <p-skeleton width="50%" height="0.8rem"></p-skeleton>
+                    </div>
+                    <p-skeleton width="70%" height="1.5rem"></p-skeleton>
+                </div>
+            </div>
+        </ng-container>
+        }
+    </div>
+    }
+
+    @else if (viewFormGroup.value.view === 'list') {
+    <div class="surface-card border-1 border-200 border-round-xl overflow-hidden mx-2 shadow-none">
+        <ul class="list-none p-0 m-0">
+            @if(!isLoading){
+            @for (field of fields; track field; let last = $last) {
+            <li class="flex align-items-center justify-content-between py-2 px-4 hover:surface-50 transition-colors"
+                [ngClass]="{'border-bottom-1 border-100': !last}">
+
+                <div class="flex align-items-center gap-3 w-5 md:w-4 text-600">
+                    <i [class]="'text-sm pi ' + field?.icon + ' text-primary'"></i>
+                    <span class="text-sm font-medium">{{ field?.label }}</span>
+                </div>
+
+                <div class="text-900 font-semibold text-sm w-7 md:w-8 flex justify-content-end text-right"
+                    [style]="field.cssStyle">
+                    @if (field.type === 'image') {
+                    <p-image [src]="data?.[field?.key || '']" alt="{{field?.label}}" width="40" [preview]="true"
+                        styleClass="border-round shadow-1 my-1"></p-image>
+                    } @else if(field.type === 'innerHTML') {
+                    <span [innerHTML]="transformValue(data?.[field?.key || ''], field?.pipe)"></span>
+                    } @else {
+                    <span class="text-overflow-ellipsis overflow-hidden white-space-nowrap">
+                        {{ transformValue(data?.[field?.key || ''], field?.pipe) || '—' }}
+                    </span>
+                    }
+                </div>
+            </li>
+            }
+            } @else {
+            <ng-container *ngFor="let skeleton of [].constructor(6); let last = last">
+                <li class="flex align-items-center justify-content-between py-2 px-4"
+                    [ngClass]="{'border-bottom-1 border-100': !last}">
+                    <div class="flex align-items-center gap-3 w-5">
+                        <p-skeleton shape="circle" size="1.2rem"></p-skeleton>
+                        <p-skeleton width="60%" height="1rem"></p-skeleton>
+                    </div>
+                    <div class="w-7 flex justify-content-end">
+                        <p-skeleton width="30%" height="1rem"></p-skeleton>
+                    </div>
+                </li>
+            </ng-container>
+            }
+        </ul>
+    </div>
+    }
 </div>

@@ -1,5 +1,185 @@
-<p-dialog [header]="title()" [(visible)]="visible" [modal]="true" [style]="{ width: '32rem' }">
-    <label for="generic-name">Name</label>
-    <input id="generic-name" pInputText [(ngModel)]="name" class="w-full mt-2" />
-    <ng-template #footer><button pButton type="button" label="Cancel" severity="secondary" text (click)="visible.set(false)"></button><button pButton type="button" label="Save" (click)="visible.set(false)"></button></ng-template>
-</p-dialog>
+<div class="pb-6">
+    <p-toast></p-toast>
+    <form [formGroup]="formGroup" (ngSubmit)="onSubmit()" style="width: 100%;">
+        <div class="grid">
+            <div class="col-12">
+                <div class="toolbar-demo card">
+                    <p-toolbar>
+                        <div class="p-toolbar-group-left">
+                            <div class="header-left-div">
+                                <div class="header-div1">
+                                    <i [ngClass]="iconClass" style="font-size: 40px;"></i>
+                                </div>
+                                <div class="header-div2">
+                                    <label class="header-label">{{componentName}}</label>
+                                    <h4 class="header-heading">{{formGroup.value.name}}</h4>
+                                </div>
+                            </div>
+                        </div>
+                        <ng-template pTemplate="right">
+                            <div class="p-d-flex p-flex-column p-flex-md-row" style="gap:10px">
+                                @if(id>0){
+                                <button pButton type="button" label="Back" icon="pi pi-angle-left" pTooltip="Go Back"
+                                    tooltipPosition="top" class="p-button-warning mr-2 p-button-raised"
+                                    (click)="goBack()">
+                                </button>
+                                } @else {
+                                <button pButton type="button" label="Back" icon="pi pi-angle-left" (click)="goToList()"
+                                    pTooltip="Go Back" tooltipPosition="top"
+                                    class="p-button-warning mr-2 p-button-raised"></button>
+                                }
+                                <button pButton type="button" label="New" icon="pi pi-plus" (click)="addNew()"
+                                    pTooltip="Add New" tooltipPosition="top" class="p-button-raised"
+                                    *ngIf="(permissionPrefix + '_Create') | hasPermission | async"></button>
+                            </div>
+                        </ng-template>
+                    </p-toolbar>
+                </div>
+            </div>
+
+            <div class="col-12 md:col-12 lg:col-9">
+                <div class="card">
+                    <p-tabs value="0">
+                        <p-tablist>
+                            <p-tab value="0">Manage</p-tab>
+                            <p-tab value="1">Related</p-tab>
+                            <p-tab value="2">History</p-tab>
+                        </p-tablist>
+                        <p-tabpanels>
+                            <p-tabpanel value="0">
+                            <div class="fluid formgrid grid align-items-end">
+                                <div class="field col-12 sm:col-6 md:col-4 lg:col-4">
+                                    <label for="name" class="font-bold">
+                                        <i class="pi pi-user" style="margin-right: 3px;"></i> Name<span
+                                            style="color: red;">*</span>
+                                    </label>
+                                    <input pInputText type="hidden" id="id" formControlName="id">
+                                    <input pInputText type="text" id="name" formControlName="name"
+                                        class="text-base text-color surface-overlay border-1 border-solid 
+                                        surface-border border-round appearance-none outline-none focus:border-primary w-full">
+                                </div>
+                                <div class="field col-12 sm:col-6 md:col-4 lg:col-4">
+                                    <label for="title" class="font-bold">
+                                        <i class="pi pi-tag" style="margin-right: 3px;"></i> Title<span
+                                            style="color: red;">*</span>
+                                    </label>
+                                    <input pInputText type="text" id="title" formControlName="title"
+                                        class="text-base text-color surface-overlay border-1 border-solid 
+                                        surface-border border-round appearance-none outline-none focus:border-primary w-full">
+                                </div>
+                                <div class="field col-12 sm:col-6 md:col-4 lg:col-4">
+                                    <label for="status" class="font-bold">
+                                        <i class="pi pi-verified" style="margin-right: 3px;"></i> Status<span
+                                            style="color: red;">*</span>
+                                    </label>
+                                    <p-select [filter]="true" inputId="status" [options]="statusList"
+                                        formControlName="status" placeholder="Select"
+                                        styleClass="text-base text-color surface-overlay border-1 border-solid 
+                                        surface-border border-round appearance-none outline-none focus:border-primary w-full"></p-select>
+                                </div>
+                                <div class="p-field col-12 sm:col-12">
+                                    <label for="description" class="font-bold">
+                                        <i class="pi pi-align-left" style="margin-right: 3px;"></i> Description<span
+                                            style="color: red;">*</span>
+                                    </label>
+                                    <textarea id="description" pInputTextarea required rows="3" cols="20"
+                                        formControlName="description"
+                                        class="text-base text-color surface-overlay border-1 border-solid 
+                                            surface-border border-round appearance-none outline-none focus:border-primary w-full"></textarea>
+                                </div>
+                            </div>
+
+                            <div class="fluid formgrid grid mt-2"
+                                style="display: flex; justify-content: center; margin-bottom: 20px;">
+                                @if(id <= 0){ <button pButton type="submit" label="Submit"
+                                    class="p-button-success p-button-raised" [disabled]="!formGroup.valid"
+                                    icon="pi pi-check" pTooltip="Submit" tooltipPosition="top"
+                                    *ngIf="(permissionPrefix + '_Create') | hasPermission | async"></button>
+                                    } @else {
+                                    <button pButton type="submit" label="Update" class="p-button-help p-button-raised"
+                                        [disabled]="!formGroup.valid" icon="pi pi-refresh" pTooltip="Update"
+                                        tooltipPosition="top" style="background-color: #BE6DCE; border: #BE6DCE;"
+                                        *ngIf="(permissionPrefix + '_Update') | hasPermission | async"></button>
+                                    }
+                            </div>
+                        </p-tabpanel>
+                        <p-tabpanel value="1">
+
+                        </p-tabpanel>
+                        <p-tabpanel value="2">
+
+                        </p-tabpanel>
+                        </p-tabpanels>
+
+                        <hr>
+
+                        <div class="fluid formgrid grid">
+                            <div class="field col-12 sm:col-3">
+                                <label class="font-bold">
+                                    <i class="pi pi-user-edit" style="margin-right: 3px;"></i> CreatedBy
+                                </label><br>
+                                <label> {{formGroup.value.createdBy}}</label>
+                            </div>
+                            <div class="field col-12 sm:col-3">
+                                <label class="font-bold">
+                                    <i class="pi pi-calendar" style="margin-right: 3px;"></i> CreatedDate
+                                </label><br>
+                                <label> {{formGroup.value.createdDate}}</label>
+                            </div>
+                            <div class="field col-12 sm:col-3">
+                                <label class="font-bold">
+                                    <i class="pi pi-user-edit" style="margin-right: 3px;"></i> ModifiedBy
+                                </label><br>
+                                <label> {{formGroup.value.modifiedBy}}</label>
+                            </div>
+                            <div class="field col-12 sm:col-3">
+                                <label class="font-bold">
+                                    <i class="pi pi-calendar" style="margin-right: 3px;"></i> ModifiedDate
+                                </label><br>
+                                <label> {{formGroup.value.modifiedDate}}</label>
+                            </div>
+                        </div>
+                    </p-tabs>
+                </div>
+            </div>
+
+            <div class="field col-12 md:col-12 lg:col-3">
+                <div class="card" style="padding: 10px;">
+                    <div>
+                        <h6>Related</h6>
+                    </div>
+                    <p-panel header="Instructions" [toggleable]="true" [collapsed]="false"
+                        [style]="{ 'margin-bottom': '10px', width: '100%' }">
+                        <h6>How to Use This Page:</h6>
+                        <ul>
+                            <li>Use the "Back" button to return to the previous page.</li>
+                            <li>Click "New" to create a new entry.</li>
+                            <li>Ensure to fill every field that is marked as required (*).</li>
+                            <li>Verify all details before submitting the form.</li>
+                        </ul>
+                        <h6>Purpose of This Page:</h6>
+                        <p>This page allows you to manage and view details about <span>{{componentName}}</span>,
+                            including options to edit or delete entries.</p>
+                    </p-panel>
+                    <p-panel header="Important" [toggleable]="true" [collapsed]="false"
+                        [style]="{ 'margin-bottom': '10px', width: '100%' }">
+                        <h6>Important:</h6>
+                        <p>Please mark the status as "PUBLISHED" or "DELETED" only after verifying or analyzing it
+                            thoroughly. Incorrect status changes can disrupt the CRM workflow.</p>
+                    </p-panel>
+                    <p-panel header="Related Pages" [toggleable]="true" [collapsed]="true"
+                        [style]="{ 'margin-bottom': '10px', width: '100%' }">
+                        <ul>
+                            <li><span class="text-blue-600 cursor-pointer" (click)="goToList()">
+                                    <span>{{componentName}}</span> List page</span></li>
+                            <li><span class="text-blue-600 cursor-pointer" (click)="addNew()"
+                                    *ngIf="(permissionPrefix + '_Create') | hasPermission | async">
+                                    <span>{{componentName}}</span> Manage page</span></li>
+                        </ul>
+                    </p-panel>
+                </div>
+            </div>
+        </div>
+    </form>
+    <p-confirm-dialog [style]="{ width: '450px' }"></p-confirm-dialog>
+</div>

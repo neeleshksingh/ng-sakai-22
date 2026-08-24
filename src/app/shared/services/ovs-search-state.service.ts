@@ -1,6 +1,21 @@
-import { Injectable, signal } from '@angular/core';
+// ovs-search-state.service.ts
+import { Injectable } from '@angular/core';
 
-@Injectable({ providedIn: 'root' })
+@Injectable({
+  providedIn: 'root'
+})
 export class OvsSearchStateService {
-    readonly query = signal('');
+  private searchState: any = null;
+
+  setSearchState(data: any) {
+    this.searchState = data;
+  }
+
+  getSearchState() {
+    return this.searchState;
+  }
+
+  hasState(): boolean {
+    return !!this.searchState;
+  }
 }

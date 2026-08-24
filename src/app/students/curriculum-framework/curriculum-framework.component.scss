@@ -1,0 +1,127 @@
+
+.vertical-menu {
+    width: 100%;
+    background-color: #f4f4f4;
+    padding: 10px;
+    border: 1px solid rgba(0, 0, 0, 0.1); 
+    border-radius: 0px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .menu-header {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  .menu-header h3 {
+    font-size: 18px;
+    font-weight: bold;
+    color: #333;
+    margin: 0;
+  }
+  
+  .menu-items {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .active-link {
+    background-color: #e0e6ff;
+    color: white;
+    border-radius: 6px;
+}
+
+  
+  .menu-item {
+    background-color: #ffffff;
+    padding: 15px;
+    border-radius: 5px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+  }
+  .menu-item:hover {
+   background-color:#a09a9a;
+    color: #333;
+    transform: translateX(5px);
+  }
+  
+  .menu-item p {
+    margin: 0;
+    font-size: 14px;
+    font-weight: normal;
+    color: #333;
+  }
+  
+  .menu-item p:hover {
+    color: #333;
+  }
+  
+  .menu-item.active {
+    background-color: #e0e6ff;
+    color: #fff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    font-weight: bold;
+  }
+  .no-data-card {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 15px;
+    padding: 20px;
+    width: 100%;
+}
+
+#notfound {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+  padding: 20px;
+  box-sizing: border-box;
+}
+.notfoundStart{
+  text-align: center;
+}
+
+
+.subject-title {
+  font-family: 'Montserrat', sans-serif;
+  color: #333;
+  font-size: 24px;
+  font-weight: 700;
+  text-transform: uppercase;
+  margin: 10px 0;
+}
+
+.notfound p {
+  font-family: 'Montserrat', sans-serif;
+  color: #555;
+  font-size: 16px;
+  font-weight: 400;
+  margin: 0 0 20px;
+}
+
+@media only screen and (max-width: 767px) {
+  #notfound {
+    padding: 15px;
+  }
+
+  .notfound-404 h1 {
+    font-size: 80px;
+  }
+
+  .subject-title {
+    font-size: 20px;
+  }
+
+  .notfound p {
+    font-size: 14px;
+  }
+}
+
+
+
+  

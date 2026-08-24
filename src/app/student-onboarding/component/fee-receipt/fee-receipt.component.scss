@@ -1,0 +1,393 @@
+.receipt-container {
+    padding: 1.5rem;
+    border-radius: 8px;
+    max-width: 800px;
+    margin: 0 auto;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.header-section {
+    margin-bottom: 0.5rem;
+    text-align: center;
+}
+
+.logo-container {
+    display: flex;
+    justify-content: center;
+}
+
+.logo-img {
+    height: 80px;
+    width: 80px;
+    object-fit: contain;
+}
+
+.header-text {
+    text-align: center;
+}
+
+.header-text h1 {
+    font-size: 1.8rem;
+    margin: 0.5rem 0;
+}
+
+.header-text p {
+    font-size: 1rem;
+    font-weight: bold;
+    margin: 0;
+}
+
+.details-container {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(2, auto);
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    border: 1px solid #c2c5c8;
+    padding: 1rem;
+    border-radius: 4px;
+}
+
+.details-item {
+    display: flex;
+    flex-direction: column;
+    border-bottom: 1px solid #ddd;
+    padding: 0.5rem 0;
+    gap: 0.8rem;
+}
+
+.details-label {
+    font-weight: bold;
+    font-size: 0.9rem;
+    color: #333;
+}
+
+.details-value {
+    font-size: 0.9rem;
+    color: #555;
+}
+
+.p-text-center h2 {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin: 0 0 1rem;
+}
+
+.fee-table .p-datatable-table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+.fee-table th,
+.fee-table td {
+    border: 1px solid #c2c5c8;
+    text-align: left;
+}
+
+.due-amount-td,
+.paid-amount-td {
+    margin-right: 20px;
+}
+
+.fee-table th {
+    background-color: #f4f4f4;
+    font-weight: bold;
+}
+
+.fee-table .p-datatable-footer td {
+    font-weight: bold;
+}
+
+.footer-notes {
+    border: 1px solid #c2c5c8;
+    padding: 1rem;
+    margin-top: 1.5rem;
+    border-radius: 4px;
+}
+
+.footer-notes p {
+    margin: 0.5rem 0;
+    font-size: 0.85rem;
+}
+
+.mobile-total-due {
+    display: none;
+}
+
+/* Medium Screens (481px to 767px) */
+@media (max-width: 767px) {
+    .receipt-container {
+        .details-container {
+            grid-template-columns: repeat(2, 1fr);
+            grid-template-rows: repeat(4, auto);
+        }
+
+        .receipt-container {
+            padding: 1rem;
+        }
+
+        .header-text h1 {
+            font-size: 1.4rem;
+        }
+
+        .header-text p {
+            font-size: 0.9rem;
+        }
+
+        .logo-img {
+            height: 60px;
+            width: 60px;
+        }
+
+        .details-item {
+            padding: 0.3rem 0;
+        }
+
+        .details-label,
+        .details-value {
+            font-size: 0.85rem;
+        }
+
+        .p-text-center h2 {
+            font-size: 1.2rem;
+        }
+
+        .fee-table th,
+        .fee-table td {
+            font-size: 0.8rem;
+            padding: 0.3rem;
+        }
+
+        .footer-notes p {
+            font-size: 0.8rem;
+        }
+
+        .due-amount-td,
+        .paid-amount-td {
+            margin-right: 0;
+        }
+    }
+}
+
+@media (max-width: 960px) {
+    .receipt-container {
+        .mobile-total-due {
+            display: block;
+            text-align: right;
+            font-size: 0.9rem;
+            padding: 0.5rem;
+        }
+    }
+}
+
+/* Mobile Screens (<= 480px) */
+@media (max-width: 480px) {
+    .receipt-container {
+        .details-container {
+            grid-template-columns: 1fr;
+            grid-template-rows: repeat(8, auto);
+        }
+
+        .receipt-container {
+            padding: 0.5rem;
+        }
+
+        .header-text h1 {
+            font-size: 1.2rem;
+        }
+
+        .header-text p {
+            font-size: 0.8rem;
+        }
+
+        .logo-img {
+            height: 50px;
+            width: 50px;
+        }
+
+        .details-label,
+        .details-value {
+            font-size: 0.75rem;
+        }
+
+        .p-text-center h2 {
+            font-size: 1rem;
+        }
+
+        .fee-table th,
+        .fee-table td {
+            font-size: 0.7rem;
+            padding: 0.2rem;
+        }
+
+        .footer-notes p {
+            font-size: 0.7rem;
+        }
+
+        .due-amount-td,
+        .paid-amount-td {
+            margin-right: 0;
+        }
+    }
+}
+
+/* Styles for PDF receipt container (desktop view only) */
+.pdf-receipt-container {
+    width: 800px;
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+}
+
+.pdf-header-section {
+    margin-bottom: 0.5rem;
+}
+
+.pdf-header-grid {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.pdf-logo-container {
+    flex: 0 0 80px;
+    display: flex;
+    justify-content: center;
+    margin-right: 1rem;
+}
+
+.pdf-logo-img {
+    height: 80px;
+    width: 80px;
+    object-fit: contain;
+    border-radius: 50%;
+}
+
+.pdf-header-text {
+    flex: 1;
+    text-align: left;
+}
+
+.pdf-header-text h1 {
+    font-size: 1.8rem;
+    margin: 0.5rem 0;
+}
+
+.pdf-header-text p {
+    font-size: 1rem;
+    font-weight: bold;
+    margin: 0;
+}
+
+.pdf-details-container {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(2, auto);
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    border: 1px solid #c2c5c8;
+    padding: 1rem;
+    border-radius: 4px;
+}
+
+.pdf-details-item {
+    display: flex;
+    flex-direction: column;
+    border-bottom: 1px solid #ddd;
+    padding: 0.5rem 0;
+    gap: 0.8rem;
+}
+
+.pdf-details-label {
+    font-weight: bold;
+    font-size: 0.9rem;
+    color: #333;
+}
+
+.pdf-details-value {
+    font-size: 0.9rem;
+    color: #555;
+}
+
+.pdf-receipt-title {
+    text-align: center;
+    margin-bottom: 1rem;
+}
+
+.pdf-receipt-title h2 {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin: 0;
+}
+
+.pdf-fee-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 1rem;
+}
+
+.pdf-fee-table th,
+.pdf-fee-table td {
+    border-top: 0.5px solid #c2c5c8;
+    border-bottom: 0.5px solid #c2c5c8;
+    border-left: none;
+    border-right: none;
+    padding: 0.5rem;
+    font-size: 0.85rem;
+}
+
+.pdf-fee-table th {
+    background-color: #f4f4f4;
+    font-weight: bold;
+    text-align: left;
+}
+
+.pdf-fee-table td {
+    text-align: left;
+}
+
+.pdf-fee-table th:nth-child(1),
+.pdf-fee-table td:nth-child(1) {
+    text-align: center;
+    width: 10%;
+}
+
+.pdf-fee-table th:nth-child(4),
+.pdf-fee-table td:nth-child(4),
+.pdf-fee-table th:nth-child(5),
+.pdf-fee-table td:nth-child(5) {
+    text-align: right;
+    padding-right: 20px;
+}
+
+.pdf-fee-table tfoot td {
+    font-weight: bold;
+    text-align: right;
+    padding-right: 20px;
+    border-top: 1px solid #c2c5c8;
+    border-bottom: 1px solid #c2c5c8;
+    border-left: none;
+    border-right: none;
+}
+
+.pdf-amount-words {
+    text-align: left;
+    margin: 0.5rem 0;
+}
+
+.pdf-amount-words p {
+    font-size: 0.9rem;
+    margin: 0;
+}
+
+.pdf-footer-notes {
+    border: 1px solid #c2c5c8;
+    padding: 1rem;
+    border-radius: 4px;
+}
+
+.pdf-footer-notes p {
+    margin: 0.5rem 0;
+    font-size: 0.85rem;
+}

@@ -1,0 +1,36 @@
+<p-dialog [header]="dialogHeader" [(visible)]="isVisible" [modal]="true" [dismissableMask]="false" [closable]="false"
+    [draggable]="false" [resizable]="false" [style]="{ width: '40rem', 'max-width': '96vw' }"
+    [breakpoints]="{ '1199px': '85vw', '768px': '94vw', '500px': '98vw' }">
+    <ng-template pTemplate="content">
+        @if (activeAlert) {
+        <div class="alert-wrap" [ngClass]="cardClass">
+            <div class="alert-head">
+                <div class="alert-icon-shell">
+                    <i [class]="alertIcon + ' text-2xl'"></i>
+                </div>
+                <div class="alert-meta">
+                    <h4 class="alert-title">{{ activeAlert.title }}</h4>
+                    <p-tag [value]="badgeText" [severity]="badgeSeverity"></p-tag>
+                </div>
+            </div>
+
+            <p class="alert-message">{{ activeAlert.message }}</p>
+
+            <!-- @if (activeAlert.expiresAt) {
+            <div class="alert-expiry">
+                <i class="pi pi-clock mr-2"></i>
+                Active till {{ activeAlert.expiresAt | date: 'dd MMM yyyy, h:mm a' }}
+            </div>
+            } -->
+
+            <div class="alert-actions">
+                <button pButton type="button" class="p-button-warning"
+                    (click)="dismissCurrentAlert()">
+                    <i class="pi pi-check mr-2"></i>
+                    <span>{{ actionLabel }}</span>
+                </button>
+            </div>
+        </div>
+        }
+    </ng-template>
+</p-dialog>

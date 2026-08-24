@@ -1,0 +1,585 @@
+.loader-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255, 255, 255, 0.8);
+    z-index: 1000;
+
+    p {
+        margin-top: 1rem;
+        color: #2c3e50;
+        font-size: 1rem;
+    }
+}
+
+:host ::ng-deep .custom-spinner .p-progress-spinner-circle {
+    stroke: #2196f3;
+}
+
+:host ::ng-deep {
+    .vertical-tabs-container {
+        display: flex;
+        min-height: 100vh;
+        background-color: #f8f9fa;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        overflow: hidden;
+        margin: 0rem;
+    }
+
+    .tabs-section {
+        background-color: #f0f3f5;
+        padding: 2rem 0;
+        border-right: 1px solid #dee2e6;
+        height: 100vh;
+    }
+
+    .content-section {
+        padding: 1rem;
+        background-color: #ffffff;
+        flex: 1;
+        height: 100vh;
+        overflow-y: auto;
+    }
+
+    .tabs-header {
+        padding: 0 1.5rem;
+        margin-bottom: 2rem;
+
+        h2 {
+            color: #2c3e50;
+            margin: 0;
+            font-weight: 600;
+        }
+    }
+
+    .vertical-tab-list {
+        list-style: none;
+        margin: 0;
+
+        li {
+            padding: 1rem 1.5rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            color: #495057;
+            transition: all 0.3s ease;
+            border-left: 4px solid transparent;
+
+            &:hover {
+                background-color: rgba(33, 150, 243, 0.05);
+                color: #2196f3;
+            }
+
+            &.active-tab {
+                background-color: rgba(33, 150, 243, 0.1);
+                color: #2196f3;
+                border-left: 4px solid #2196f3;
+                font-weight: 500;
+            }
+
+            i {
+                margin-right: 0.75rem;
+            }
+        }
+    }
+
+    .tab-content {
+        animation: fadeIn 0.3s ease;
+        height: 100%;
+    }
+
+    .p-panel {
+        height: 100%;
+
+        .p-panel-header {
+            background-color: #f8f9fa;
+            padding: 1rem 1.5rem;
+            font-weight: 600;
+        }
+
+        .p-panel-content {
+            padding: 0.5rem;
+            height: calc(100% - 60px);
+            overflow-y: auto;
+        }
+    }
+
+    .panel-content {
+        padding: 0.5rem 0;
+    }
+
+    .info-card {
+        background-color: #f8f9fa;
+        border-radius: 8px;
+        padding: 1.5rem;
+        margin-bottom: 1rem;
+        border: 1px solid #e9ecef;
+        height: 100%;
+
+        h3 {
+            margin-top: 0;
+            margin-bottom: 1rem;
+            color: #2c3e50;
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+    }
+
+    .info-row {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 0.75rem;
+        padding-bottom: 0.75rem;
+        border-bottom: 1px solid #e9ecef;
+
+        &:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        &.highlight {
+            background-color: rgba(33, 150, 243, 0.1);
+            padding: 0.75rem;
+            border-radius: 4px;
+            margin: 0.5rem 0;
+            font-weight: 600;
+        }
+
+        .label {
+            color: #6c757d;
+            font-weight: 500;
+        }
+
+        .value {
+            color: #2c3e50;
+            font-weight: 500;
+        }
+    }
+
+    .highlight-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+
+        li {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.75rem;
+
+            i {
+                color: #4caf50;
+                margin-right: 0.5rem;
+            }
+        }
+    }
+
+    .payment-methods {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+
+        li {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.75rem;
+
+            i {
+                color: #2196f3;
+                margin-right: 0.5rem;
+            }
+        }
+    }
+
+    .payment-plans {
+        .p-tabview {
+            .p-tabview-nav {
+                border-color: #dee2e6;
+            }
+
+            .p-tabview-panels {
+                padding: 1.5rem;
+                background-color: #f8f9fa;
+                border-radius: 0 0 8px 8px;
+            }
+        }
+
+        .plan-details {
+            p {
+                margin: 0.5rem 0;
+
+                &.highlight {
+                    color: #4caf50;
+                    font-weight: 500;
+                }
+            }
+        }
+    }
+
+    .alert-box {
+        display: flex;
+        align-items: flex-start;
+        background-color: #fff3cd;
+        border-left: 4px solid #ffc107;
+        padding: 1rem;
+        border-radius: 4px;
+        margin-top: 1rem;
+
+        i {
+            color: #ffc107;
+            margin-right: 0.75rem;
+            font-size: 1.25rem;
+            margin-top: 0.125rem;
+        }
+
+        p {
+            margin: 0;
+            color: #856404;
+        }
+    }
+
+    .action-buttons {
+        display: flex;
+        justify-content: flex-start;
+        margin-top: 1rem;
+    }
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+        }
+        to {
+            opacity: 1;
+        }
+    }
+
+    :host {
+        display: block;
+        height: 100%;
+    }
+
+    .mobile-total-due {
+        display: none;
+    }
+
+    @media (max-width: 960px) {
+        .mobile-total-due {
+            display: block;
+            text-align: right;
+            font-size: 0.9rem;
+            padding: 0.5rem;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .vertical-tabs-container {
+            flex-direction: column;
+            height: auto;
+            min-height: 100vh;
+        }
+
+        .tabs-section {
+            border-right: none;
+            border-bottom: 1px solid #dee2e6;
+            padding: 1rem;
+            height: auto;
+        }
+
+        .content-section {
+            height: auto;
+            min-height: 80vh;
+        }
+
+        .vertical-tab-list {
+            display: flex;
+            justify-content: space-between;
+
+            li {
+                padding: 0.75rem;
+                text-align: center;
+                flex-direction: column;
+                flex: 1;
+                border-left: none;
+                border-bottom: 3px solid transparent;
+                display: flex !important;
+                align-items: center !important;
+                justify-content: center !important;
+                &.active-tab {
+                    border-left: none;
+                    border-bottom: 3px solid #2196f3;
+                }
+
+                i {
+                    margin-right: 0;
+                    margin-bottom: 0.5rem;
+                    font-size: 1.25rem;
+                }
+            }
+        }
+
+        .info-row {
+            flex-direction: column;
+
+            .label {
+                margin-bottom: 0.25rem;
+            }
+        }
+    }
+}
+
+.status-card {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.75rem 1rem;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    margin-bottom: 0.5rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.status-icon {
+    font-size: 1.5rem;
+}
+
+.status-label {
+    font-weight: 600;
+    font-size: 1rem;
+    text-transform: capitalize;
+}
+
+.status-date {
+    font-size: 0.85rem;
+    color: #6c757d;
+}
+.disabled-div {
+    pointer-events: none;
+    opacity: 0.8;
+}
+
+.sub-menu {
+    padding-left: 20px; /* Indent nested menu */
+    display: block; /* Ensure it's a block */
+}
+
+.sub-menu li {
+    display: block;
+}
+.vertical-tab-list {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.vertical-tab-list > li {
+    display: block;
+    padding: 10px 15px;
+    border-bottom: 1px solid #ddd;
+    cursor: pointer;
+}
+
+.vertical-tab-list > li .sub-menu {
+    list-style-type: none;
+    margin-top: 5px;
+    padding-left: 20px; /* Indent the submenu */
+}
+
+.vertical-tab-list > li .sub-menu li {
+    padding: 8px 12px;
+    display: block;
+    cursor: pointer;
+}
+.refund-policy {
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    max-width: 900px;
+    margin: 0 auto;
+    line-height: 1.6;
+    color: #333;
+    padding: 20px;
+    border: 1px solid #ccc;
+}
+
+.refund-policy hr {
+    margin: 24px 0;
+    border: none;
+    border-top: 1px solid #ccc;
+}
+
+/* Paragraph spacing */
+.refund-policy p {
+    margin: 8px 0;
+}
+
+/* Custom bold section titles */
+.refund-policy .section-title {
+    font-weight: 700;
+    font-size: 1rem;
+    margin-top: 20px;
+    color: #0d47a1;
+}
+
+/* Table styles */
+.refund-policy table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 16px;
+    box-shadow: 0 0 6px rgba(0, 0, 0, 0.1);
+}
+
+.refund-policy th,
+.refund-policy td {
+    padding: 10px 12px;
+    border: 1px solid #ccc;
+    text-align: left;
+}
+
+.refund-policy th {
+    background-color: #f5f5f5;
+    font-weight: bold;
+}
+
+/* Notes list */
+.refund-policy .notes {
+    margin-top: 10px;
+    font-weight: bold;
+}
+
+.refund-policy .notes p {
+    margin: 4px 0;
+}
+
+.course-structure-table {
+    .truncate-text {
+        max-width: 0;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        &:hover {
+            overflow: visible;
+            white-space: normal;
+            background-color: #f0f0f0;
+        }
+    }
+
+    p-table {
+        width: 100%;
+        table-layout: fixed;
+    }
+
+    th,
+    td {
+        padding: 8px;
+        text-align: left;
+    }
+
+    .year-col {
+        width: 15%;
+    }
+
+    .semester-col {
+        width: 15%;
+    }
+
+    .subjects-col {
+        width: 50%;
+    }
+
+    .credits-col {
+        width: 20%;
+    }
+
+    @media screen and (max-width: 1024px) {
+        .year-col {
+            width: 20%;
+        }
+        .semester-col {
+            width: 20%;
+        }
+        .subjects-col {
+            width: 40%;
+        }
+        .credits-col {
+            width: 20%;
+        }
+        th,
+        td {
+            padding: 6px;
+            font-size: 14px;
+        }
+    }
+
+    @media screen and (max-width: 768px) {
+        p-table {
+            table-layout: auto;
+        }
+        th,
+        td {
+            display: block;
+            width: 100%;
+            padding: 6px;
+            box-sizing: border-box;
+        }
+        .truncate-text {
+            max-width: none;
+            white-space: normal;
+            overflow: visible;
+            text-overflow: initial;
+        }
+        th {
+            font-size: 14px;
+        }
+        td {
+            font-size: 14px;
+        }
+        tr[role="row"]:last-child {
+            td {
+                border-top: 1px solid #ddd;
+            }
+        }
+        td[colspan="3"] {
+            display: table-cell;
+            width: 70%;
+        }
+        .credits-col {
+            display: table-cell;
+            width: 30%;
+        }
+    }
+
+    @media screen and (max-width: 480px) {
+        th,
+        td {
+            padding: 4px;
+            font-size: 12px;
+        }
+        td[colspan="3"] {
+            width: 65%;
+        }
+        .credits-col {
+            width: 35%;
+        }
+    }
+
+    @media screen and (max-width: 320px) {
+        th,
+        td {
+            padding: 3px;
+            font-size: 10px;
+        }
+        td[colspan="3"] {
+            width: 60%;
+        }
+        .credits-col {
+            width: 40%;
+        }
+    }
+}

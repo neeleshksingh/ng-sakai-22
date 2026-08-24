@@ -1,1 +1,288 @@
-<app-module-dashboard title="Student Portal" subtitle="Academics, accounts, examinations, and services" [kpis]="kpis" />
+<div pAnimateOnScroll enterClass="fadeinleft" leaveClass="fadeoutleft"
+    class="animation-duration-1000 animation-ease-in-out">
+    <p-toast></p-toast>
+    <app-alert-dialog [alerts]="dashboardPriorityAlerts"
+        (allAlertsHandled)="onPriorityAlertsHandled()"></app-alert-dialog>
+
+    <div class="grid pb-6">
+
+        <!-- TILE 1: Student Info -->
+        <div class="col-12 lg:col-6 xl:col-3">
+            <div class="card h-full p-0 overflow-hidden flex flex-column"
+                [style]="{ 'border-top': '3px solid ' + getStudentGroupDisplayColor() }">
+                <div class="flex align-items-center p-3">
+                    <i class="pi pi-book text-6xl text-purple-500"></i>
+                    <div class="ml-3">
+                        @if(tiles.length != 0){
+                        <span class="tile-label text-purple-500">{{studentTileInfo.studentId}} -
+                            {{studentTileInfo.studentName}}</span>
+                        <span class="tile-value text-purple-500">{{studentTileInfo.rollNumber}} ⎯ Section -
+                            {{studentTileInfo.section}}</span>
+                        <span class="tile-sub text-purple-500">{{studentTileInfo.programName}}</span>
+
+                        <a href="https://docs.google.com/spreadsheets/d/1NUWd5QNE8o8fSbmTS3MyqswkN2h5RMJ5aBidWLhLJgE/edit?gid=203042617#gid=203042617"
+                            target="_blank">
+                            <span class="text-green-500 block text-sm font-semibold mt-1"
+                                pTooltip="Click here to view Time Table" tooltipPosition="top">Time Table - <i
+                                    class="pi pi-file-excel"></i></span>
+                        </a>
+                        } @else {
+                        <app-dashboard-cards-skeleton [data]="'finpro'"></app-dashboard-cards-skeleton>
+                        }
+                    </div>
+                </div>
+                <img [src]="'assets/demo/images/dashboard/interactions' + (colorScheme === 'light' ? '' : '-dark') + '.svg'"
+                    class="w-full mt-auto" alt="interactions">
+            </div>
+        </div>
+
+        <!-- TILE 2: Attendance -->
+        <div class="col-12 lg:col-6 xl:col-3">
+            <div class="card p-0 h-full overflow-hidden flex flex-column">
+                <div class="flex align-items-center p-3">
+                    <i class="pi pi-users text-6xl text-blue-500"></i>
+                    <div class="ml-3">
+                        @if(tiles.length != 0){
+                        <span class="tile-label text-blue-500">{{tiles[0]?.name}}</span>
+
+                        @if(tiles[0]?.title == null){
+                        <span class="tile-value text-blue-500">NA</span>
+                        } @else {
+                        <span class="tile-value text-blue-500">{{ (tiles[0]?.title?.replace('%', '') | number:'1.2-2') +
+                            '%' }}</span>
+                        }
+
+                        <span class="tile-sub text-blue-500">{{tiles[0]?.description}}</span>
+                        <div class="tile-note-alert">*For attendance related query, contact the concerned department.
+                        </div>
+                        } @else {
+                        <app-dashboard-cards-skeleton [data]="'finpro'"></app-dashboard-cards-skeleton>
+                        }
+                    </div>
+                </div>
+                <img [src]="'assets/demo/images/dashboard/users' + (colorScheme === 'light' ? '' : '-dark') + '.svg'"
+                    class="w-full mt-auto" alt="users">
+            </div>
+        </div>
+
+        <!-- TILE 3: Fee Due -->
+        <div class="col-12 lg:col-6 xl:col-3">
+            <div class="card p-0 h-full overflow-hidden flex flex-column">
+                <div class="flex align-items-center p-3">
+                    <i class="pi pi-map text-6xl text-orange-500"></i>
+                    <div class="ml-3">
+                        @if(tiles.length != 0){
+                        <span class="tile-label text-orange-500">{{tiles[1]?.name}}</span>
+                        <span class="tile-value text-orange-500">{{tiles[1]?.title}}</span>
+                        <span class="tile-sub text-orange-500">Last Payment: {{tiles[1]?.description}}</span>
+                        } @else {
+                        <app-dashboard-cards-skeleton [data]="'finpro'"></app-dashboard-cards-skeleton>
+                        }
+                    </div>
+                </div>
+                <img [src]="'assets/demo/images/dashboard/locations' + (colorScheme === 'light' ? '' : '-dark') + '.svg'"
+                    class="w-full mt-auto" alt="locations">
+            </div>
+        </div>
+
+        <!-- TILE 4: CGPA to % Conversion PDF + Student House (moved here, separated by divider) -->
+        <div class="col-12 lg:col-6 xl:col-3">
+            <div
+                class="card p-0 h-full overflow-hidden flex flex-column hover:shadow-6 transition-all transition-duration-300">
+                <div class="flex align-items-center p-3">
+                    <i class="pi pi-file-pdf text-6xl text-red-500"></i>
+                    <div class="ml-3">
+                        <span class="tile-label text-red-500">CGPA to % Conversion</span>
+                        <span class="tile-value text-red-500">Certificate</span>
+                        <span class="tile-sub text-red-500 cursor-pointer"
+                            (click)="isCgpaConversionCertificateVisible = true">
+                            <i class="pi pi-eye text-xs"></i> View PDF
+                        </span>
+                    </div>
+                </div>
+
+                <p-divider styleClass="my-0"></p-divider>
+
+                <div class="px-3 pt-2 pb-3">
+                    @if(studentGroupName) {
+                    <div class="flex align-items-start gap-2">
+                        <i class="pi pi-users text-6xl mt-1"></i>
+                        <div class="ml-3">
+                            <span class="tile-label text-500">Student House</span>
+                            <div class="mt-1">
+                                <span class="px-2 py-1 border-round text-white text-lg font-semibold inline-block"
+                                    [style]="{ 'background-color': getStudentGroupDisplayColor() }">
+                                    {{ studentGroupName }}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    } @else {
+                    <span class="px-2 py-1 border-round text-500 text-sm border-1 surface-border">
+                        <i class="pi pi-exclamation-triangle mr-1 text-orange-400"></i>Student group not assigned
+                    </span>
+                    }
+                </div>
+
+                <img [src]="'assets/demo/images/dashboard/rate' + (colorScheme === 'light' ? '' : '-dark') + '.svg'"
+                    class="w-full mt-auto block" alt="conversion">
+            </div>
+        </div>
+
+        <!-- Quick link banner -->
+        <div class="col-12">
+            <div class="card quick-link-new-feature p-3">
+                <div class="flex align-items-center justify-content-between flex-wrap gap-3">
+                    <div class="flex align-items-center gap-3">
+                        <i class="pi pi-verified text-3xl"></i>
+                        <div>
+                            <div class="flex align-items-center gap-2 mb-1">
+                                <h5 class="m-0">Verify ABC ID (APAAR)</h5>
+                                <p-tag value="NEW" severity="success" icon="pi pi-star-fill"></p-tag>
+                            </div>
+                            <p class="m-0 text-600">Quick verification for student ABC ID.</p>
+                        </div>
+                    </div>
+                    <button pButton type="button" label="Open" icon="pi pi-arrow-right"
+                        class="p-button-sm p-button-success" routerLink="/home/students/verify-apaar"></button>
+                </div>
+            </div>
+        </div>
+
+        <!-- University Feed: reverted to standalone, no injected static block -->
+        <div class="col-12 lg:col-6 xl:col-6 dashboard-scrollable-column flex-order-2 lg:flex-order-0">
+            <app-university-feed (onPdfClick)="isScholarshipPdfVisible = true"></app-university-feed>
+        </div>
+
+        <!-- Notices + Attendance Overview column -->
+        <div
+            class="col-12 lg:col-6 xl:col-6 flex flex-column gap-4 dashboard-scrollable-column flex-order-1 lg:flex-order-0">
+
+            <div class="card relative p-3 m-0 shadow-1 hover:shadow-2 transition-all transition-duration-200">
+                <h5>Important Notice</h5>
+                <ul class="list-none p-0 m-0">
+                    <li class="mb-4 flex align-items-center" *ngFor="let notice of notices">
+                        <p-avatar label="BS" size="large" shape="circle" styleClass="text-base font-bold"
+                            [style]="{'background-color':'rgba(101, 214, 173, 0.1)', 'color': '#27AB83', 'border': '1px solid #65D6AD'}"></p-avatar>
+                        <div class="ml-3">
+                            <span class="">{{notice?.source}}</span>&nbsp;&nbsp;
+                            <span class="text-500">{{notice?.noticeDate | date: 'dd/MM/yyyy'}}</span>
+                            <a target="_blank" href={{notice?.attachmentUrl}}>
+                                <span class="text-700 block">{{notice.description}}</span>
+                            </a>
+                        </div>
+                    </li>
+                </ul>
+                <p-button class="absolute bottom-0 right-0 mb-2 mr-2" label="View All" icon="pi pi-arrow-right"
+                    iconPos="right" [text]="true" (onClick)="showDialog()"></p-button>
+            </div>
+
+            <div class="card p-3 m-0 shadow-1 hover:shadow-2 transition-all transition-duration-200">
+                <div class="flex justify-content-between align-items-center mb-3">
+                    <h5>Attendance Overview</h5>
+                    <p-select [options]="overviewWeeks" [(ngModel)]="selectedOverviewWeek" optionLabel="name"
+                        optionValue="id" (onChange)="onSemesterChange($event)" placeholder="Select Semester"
+                        [style]="{ 'min-width': '150px' }">
+                    </p-select>
+                </div>
+                <div class="graph">
+                    <p-chart type="bar" [data]="data" [options]="options" [style]="{ height: '400px' }"></p-chart>
+                </div>
+                <div class="tile-note-alert mt-2">*For attendance related query, contact the concerned department.</div>
+                <div class="flex justify-content-center gap-4 mt-2">
+                    <div class="flex align-items-center gap-1">
+                        <div class="w-1rem h-1rem" style="background-color: #10b981;"></div>
+                        <small>≥75% (Excellent)</small>
+                    </div>
+                    <div class="flex align-items-center gap-1">
+                        <div class="w-1rem h-1rem" style="background-color: #f59e0b;"></div>
+                        <small>60-74% (Good)</small>
+                    </div>
+                    <div class="flex align-items-center gap-1">
+                        <div class="w-1rem h-1rem" style="background-color: #ef4444;"></div>
+                        <small>&lt;60% (Poor)</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12" *ngIf="isWelcomeLetterDialogVisible">
+            <div class="card h-full p-3">
+                <p-dialog [(visible)]="isWelcomeLetterDialogVisible" header="Welcome Letter" [modal]="true"
+                    [closable]="true">
+                    <ng-template pTemplate="content">
+                        <app-welcome-letter [studentName]="studentName"></app-welcome-letter>
+                    </ng-template>
+                </p-dialog>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<p-dialog header="Header" [(visible)]="visible" [modal]="true" [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }"
+    [style]="{ width: '50vw' }" [draggable]="false" [resizable]="false">
+    <div class="card relative p-3">
+        <h5>Important Notice</h5>
+        <ul class="list-none p-0 m-0">
+            <li class="mb-4 flex align-items-center" *ngFor="let notice of fullNotice">
+                <p-avatar label="BS" size="large" shape="circle" styleClass="text-base font-bold"
+                    [style]="{'background-color':'rgba(101, 214, 173, 0.1)', 'color': '#27AB83', 'border': '1px solid #65D6AD'}"></p-avatar>
+                <div class="ml-3">
+                    <span class="">{{notice?.source}}</span>&nbsp;&nbsp;
+                    <span class="text-500">{{notice?.noticeDate | date: 'dd/MM/yyyy'}}</span>
+                    <a target="_blank" href={{notice?.attachmentUrl}}>
+                        <span class="text-700 block">{{notice.description}}</span>
+                    </a>
+                </div>
+            </li>
+        </ul>
+    </div>
+</p-dialog>
+
+<p-dialog header="Scholarship for Students" [modal]="true" [(visible)]="isScholarshipPdfVisible"
+    [style]="{ width: '80vw', height: '90vh' }" [breakpoints]="{ '1199px': '90vw', '768px': '98vw', '500px': '100vw' }"
+    [closable]="true" [maximizable]="true">
+    <ng-template pTemplate="content">
+        <div style="height: calc(90vh - 120px); width: 100%; overflow: hidden;">
+            <iframe src="assets/Partner_Documents/Common/Scholarship for students.pdf"
+                style="width: 133%; height: 133%; border: none; transform: scale(0.75); transform-origin: top left;"
+                loading="lazy">
+                <p>Your browser does not support PDF preview.
+                    <a href="assets/Partner_Documents/Common/Scholarship for students.pdf" target="_blank">Download
+                        PDF</a>
+                </p>
+            </iframe>
+        </div>
+    </ng-template>
+</p-dialog>
+
+<p-dialog header="CGPA to % Conversion Certificate" [modal]="true" [(visible)]="isCgpaConversionCertificateVisible"
+    [style]="{ width: '80vw', height: '90vh' }" [breakpoints]="{ '1199px': '90vw', '768px': '98vw', '500px': '100vw' }"
+    [closable]="true" [maximizable]="true">
+    <ng-template pTemplate="content">
+        <div style="height: calc(90vh - 120px); width: 100%; overflow: hidden;">
+            <iframe src="/assets/Partner_Documents/Common/CgpaToPercentageConversionCertificate.pdf"
+                style="width: 133%; height: 133%; border: none; transform: scale(0.75); transform-origin: top left;"
+                loading="lazy">
+                <p>Your browser does not support PDF preview.
+                    <a href="/assets/Partner_Documents/Common/CgpaToPercentageConversionCertificate.pdf"
+                        target="_blank">Download PDF</a>
+                </p>
+            </iframe>
+        </div>
+    </ng-template>
+</p-dialog>
+
+<p-dialog header="Parking Policy" [modal]="true" [(visible)]="isParkingPolicyModalVisible" [style]="{ width: '60rem' }"
+    [breakpoints]="{ '1199px': '75vw', '500px': '95vw' }" [closable]="true">
+    <ng-template pTemplate="content">
+        <div class="p-4">
+            <app-student-dashboard-notice></app-student-dashboard-notice>
+        </div>
+    </ng-template>
+</p-dialog>
+
+<p-speedDial [model]="speedDialActions" direction="up" showIcon="pi pi-plus" hideIcon="pi pi-times" raised="true"
+    styleClass="global-speed-dial shadow-8" pTooltip="Quick actions" tooltipPosition="left">
+</p-speedDial>

@@ -1,0 +1,197 @@
+<div class="profile-dashboard-wrapper pb-8">
+    <p-toast></p-toast>
+
+    @if(!isLoading) {
+    <div class="profile-container w-full">
+        <div class="card flat-card profile-header-card p-3 md:p-4 w-full">
+            <div class="flex flex-column md:flex-row align-items-center md:align-items-start gap-4 md:gap-5 w-full">
+
+                <div class="profile-image-section flex justify-content-center w-full md:w-auto mt-2 md:mt-0">
+                    <div class="image-upload-wrapper group">
+                        <img class="profile-avatar" [src]="displayImageUrl" alt="Profile Photo" title="Change Photo" />
+                        <div class="upload-overlay">
+                            <label
+                                class="flat-btn-upload flex align-items-center justify-content-center h-full w-full m-0 cursor-pointer">
+                                <i class="pi pi-camera mr-2"></i> <span class="upload-text">Update</span>
+                                <input type="file" name="file" accept="image/*" class="hidden" />
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="profile-details-section flex-1 w-full text-center md:text-left mt-2 md:mt-0">
+                    <div
+                        class="flex flex-column md:flex-row justify-content-between align-items-center md:align-items-start w-full gap-4">
+
+                        <div class="info-group w-full md:w-auto">
+                            <h2
+                                class="student-name m-0 mb-2 flex align-items-center justify-content-center md:justify-content-start">
+                                <i class="pi pi-user mr-2 icon-primary"></i>
+                                <span>{{studentName}}</span>
+                            </h2>
+                            <p
+                                class="student-id m-0 mb-4 flex align-items-center justify-content-center md:justify-content-start">
+                                <i class="pi pi-id-card mr-2 icon-primary"></i>
+                                <span>{{studentId}}</span>
+                            </p>
+
+                            <div class="contact-info flex flex-column gap-3 mt-2">
+                                <span
+                                    class="info-item flex align-items-center justify-content-center md:justify-content-start">
+                                    <i class="pi pi-mobile mr-2 icon-primary"></i>
+                                    <span>{{phoneNumber}}</span>
+                                </span>
+                                <span
+                                    class="info-item flex align-items-center justify-content-center md:justify-content-start text-break">
+                                    <i class="pi pi-envelope mr-2 icon-primary"></i>
+                                    <span>{{email | lowercase}}</span>
+                                </span>
+                            </div>
+                        </div>
+
+                        <div
+                            class="status-action-group flex flex-column align-items-center md:align-items-end gap-3 mt-2 md:mt-0 w-full md:w-auto">
+                            <div class="status-badge w-full md:w-auto flex justify-content-center"
+                                [ngClass]="student.statusDescription === 'Active' ? 'status-active' : 'status-inactive'">
+                                <i class="pi pi-circle-fill mr-2" style="font-size: 0.5rem;"></i>
+                                {{student.statusDescription}}
+                            </div>
+
+                            <button class="flat-btn-outline w-full md:w-auto flex justify-content-center mt-1"
+                                (click)="downloadIDCard()">
+                                <i class="pi pi-download mr-2"></i> View ID Card
+                            </button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card flat-card p-0">
+            <p-tabs value="0" (valueChange)="handleChange($event)">
+                <p-tablist>
+                    <p-tab value="0" *ngIf="tableArrayGeneralDetails.length > 0">
+                        <i class="pi pi-align-left mr-2"></i>General Details
+                    </p-tab>
+                    <p-tab value="1">
+                        <i class="pi pi-book mr-2"></i>Program Details
+                    </p-tab>
+                    <p-tab value="2">
+                        <i class="pi pi-users mr-2"></i>Family Details
+                    </p-tab>
+                    <p-tab value="3">
+                        <i class="pi pi-map-marker mr-2"></i>Address Details
+                    </p-tab>
+                </p-tablist>
+                <p-tabpanels>
+                    <p-tabpanel value="0" *ngIf="tableArrayGeneralDetails.length > 0">
+                        <div class="p-3">
+                            <p-table #dt [value]="tableArrayGeneralDetails" [rowHover]="true" dataKey="id" autoLayout="true"
+                                responsiveLayout="scroll" styleClass="p-datatable-flat">
+                                <ng-template pTemplate="body" let-student>
+                                    <tr>
+                                        <td class="w-3">{{student?.col1}}</td>
+                                        <td class="font-semibold w-3">{{student?.col2}}</td>
+                                        <td class="w-3">{{student?.col3}}</td>
+                                        <td class="font-semibold w-3">{{student?.col4}}</td>
+                                    </tr>
+                                </ng-template>
+                            </p-table>
+                        </div>
+                    </p-tabpanel>
+
+                    <p-tabpanel value="1">
+                        <div class="p-3">
+                            <p-table #dt3 [value]="tableArrayStudentProgramsList" [rowHover]="true" dataKey="id"
+                                autoLayout="true" responsiveLayout="scroll" styleClass="p-datatable-flat">
+                                <ng-template pTemplate="body" let-studentPrograms>
+                                    <tr>
+                                        <td class="w-3">{{studentPrograms?.col1}}</td>
+                                        <td class="font-semibold w-3">{{studentPrograms?.col2}}</td>
+                                        <td class="w-3">{{studentPrograms?.col3}}</td>
+                                        <td class="font-semibold w-3">{{studentPrograms?.col4}}</td>
+                                    </tr>
+                                </ng-template>
+                            </p-table>
+                        </div>
+                    </p-tabpanel>
+
+                    <p-tabpanel value="2">
+                        <div class="p-3">
+                            <div *ngFor="let familyArray of tableArrayFamilyDetailsList" class="mb-4">
+                                <h4 class="section-title mb-3">{{familyArray[0].col2}} Details</h4>
+                                <p-table #dt2 [value]="familyArray" [rowHover]="true" dataKey="id" autoLayout="true"
+                                    responsiveLayout="scroll" styleClass="p-datatable-flat">
+                                    <ng-template pTemplate="body" let-family>
+                                        <tr>
+                                            <td class="w-3">{{family?.col1}}</td>
+                                            <td class="font-semibold w-3">{{family?.col2}}</td>
+                                            <td class="w-3">{{family?.col3}}</td>
+                                            <td class="font-semibold w-3">{{family?.col4}}</td>
+                                        </tr>
+                                    </ng-template>
+                                </p-table>
+                            </div>
+                        </div>
+                    </p-tabpanel>
+
+                    <p-tabpanel value="3">
+                        <div class="p-3">
+                            <div *ngFor="let address of tableArrayAddressDetailsList" class="mb-4">
+                                <h4 class="section-title mb-3">{{address[0].col2}} Address</h4>
+                                <p-table #dt2 [value]="address" [rowHover]="true" dataKey="id" autoLayout="true"
+                                    responsiveLayout="scroll" styleClass="p-datatable-flat">
+                                    <ng-template pTemplate="body" let-studentAddress>
+                                        <tr>
+                                            <td class="w-3">{{studentAddress?.col1}}</td>
+                                            <td class="font-semibold w-3">{{studentAddress?.col2}}</td>
+                                            <td class="w-3">{{studentAddress?.col3}}</td>
+                                            <td class="font-semibold w-3">{{studentAddress?.col4}}</td>
+                                        </tr>
+                                    </ng-template>
+                                </p-table>
+                            </div>
+                        </div>
+                    </p-tabpanel>
+                </p-tabpanels>
+            </p-tabs>
+        </div>
+    </div>
+
+    } @else {
+    <div class="profile-container w-full">
+        <div class="card flat-card p-4 mb-4">
+            <div class="flex flex-column md:flex-row align-items-center md:align-items-start gap-5">
+                <div class="profile-image-section">
+                    <p-skeleton shape="circle" size="12rem"></p-skeleton>
+                </div>
+                <div class="profile-details-section flex-1 w-full mt-3 md:mt-0">
+                    <div class="flex flex-column md:flex-row justify-content-between align-items-start w-full">
+                        <div class="info-group w-full md:w-6">
+                            <p-skeleton width="70%" height="2rem" styleClass="mb-3"></p-skeleton>
+                            <p-skeleton width="40%" height="1.2rem" styleClass="mb-4"></p-skeleton>
+                            <div class="flex flex-column gap-2 mt-3">
+                                <p-skeleton width="50%" height="1rem"></p-skeleton>
+                                <p-skeleton width="60%" height="1rem"></p-skeleton>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card flat-card p-0">
+            <div class="flex gap-4 p-3" style="border-bottom: 1px solid var(--surface-border)">
+                <p-skeleton width="120px" height="1.5rem"></p-skeleton>
+                <p-skeleton width="120px" height="1.5rem"></p-skeleton>
+                <p-skeleton width="120px" height="1.5rem"></p-skeleton>
+            </div>
+            <div class="p-4 grid">
+                <div class="col-12 sm:col-6 md:col-3 mb-3" *ngFor="let i of [1,2,3,4,5,6,7,8]"><p-skeleton
+                        height="1.5rem" width="90%"></p-skeleton></div>
+            </div>
+        </div>
+    </div>
+    }
+</div>

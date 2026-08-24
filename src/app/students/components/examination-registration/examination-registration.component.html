@@ -1,0 +1,173 @@
+<div class="pb-6">
+    <div class="grid">
+        <p-toast></p-toast>
+        <div class="col-12">
+            <div class="toolbar-demo card">
+                <p-toolbar>
+                    <div class="p-toolbar-group-left">
+                        <div class="header-left-div">
+                            <div class="header-div1">
+                                <i class="fas fa-book-open" style="font-size: 40px;"></i>
+                            </div>
+                            <div class="header-div2">
+                                <h5>{{componentName}}</h5>
+                            </div>
+                        </div>
+                    </div>
+                    <ng-template pTemplate="right">
+                        <div class="d-flex">
+                        </div>
+                    </ng-template>
+                </p-toolbar>
+            </div>
+        </div>
+        <div class="col-12 md:col-12 lg:col-12">
+            <div class="card p-4">
+                <form [formGroup]="examinationRegistrationGroup">
+                    <div class="grid align-items-end">
+                        <div class="col-12 md:col-6 lg:col-2 pl-4 pr-4">
+                            <label for="programName">Program *</label>
+                            <p-select [filter]="true" inputId="programName" [options]="programList"
+                                formControlName="programName" [style]="{'width':'100%'}" placeholder="Select"
+                                (onChange)="onProgamChanged($event)"></p-select>
+                        </div>
+                        <div class="col-12 md:col-6 lg:col-2 pl-4 pr-4">
+                            <label for="operationalVerticalName">Operational Vertical *</label>
+                            <p-select [filter]="true" inputId="operationalVerticalName"
+                                [options]="operationalVerticalList" formControlName="operationalVerticalName"
+                                placeholder="Select" [style]="{'width':'100%'}" placeholder="Select"
+                                (onChange)="onOperationalVerticalChanged($event)"></p-select>
+                        </div>
+                        <div class="col-12 md:col-6 lg:col-2 pl-4 pr-4">
+                            <label for="registrationNumber">RegistrationNumber</label>
+                            <input pInputText type="text" id="registrationNumber" formControlName="registrationNumber"
+                                [(ngModel)]="examinationRegistrationGroup.value.registrationNumber"
+                                [style]="{'width':'100%'}" placeholder="Registration Number" readonly>
+                        </div>
+                        <div class="col-12 md:col-6 lg:col-2 pl-4 pr-4">
+                            <label for="examinationTypeId">Examination *</label>
+                            <p-select [filter]="true" inputId="examinationTypeId" [options]="activeExaminationList"
+                                formControlName="examinationTypeId" [style]="{'width':'100%'}" placeholder="Select"
+                                (onChange)="onExaminationTypeChanged($event)"></p-select>
+                        </div>
+                        <div class="col-12 md:col-6 lg:col-2 pl-4 pr-4 flex justify-center items-center">
+                            <button pButton type="button" label="Search" #newItem (click)="searchList()">
+                            </button>
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+        <div class="col-12" *ngIf="isSemesterFeedbackCompleted">
+            <div class="card" style="text-align: center;font-size: medium;  color: red; text-transform: uppercase;">
+                <span></span>
+            </div>
+        </div>
+        <div class="col-12" *ngIf="isCurrentSemExamRegistred">
+            <div class="card" style="text-align: center;font-size: medium;  color: green; text-transform: uppercase;">
+                <span>There is no active pending exam to register.</span>
+            </div>
+        </div>
+        <div *ngIf="isCurrentSemesterExamRegistrationPending" style="width: 100vw;">
+            <div class="col-12 " *ngFor=" let exam of groupListStudentExaminationRegistrations;">
+                <div class="card">
+                    <div class="formgrid grid align-items-start">
+                        <div class="field col-12 sm:col-6 md:col-6 lg:col-3 pl-4 pr-4">
+                            <label style="font-weight: bold;">Examination Name</label><br />
+                            <label class="text-base text-color surface-overlay w-full">{{exam.examinationName}}</label>
+                        </div>
+                        <div class="field col-12 sm:col-6 md:col-6 lg:col-3 pl-4 pr-4">
+                            <label style="font-weight: bold;">Program</label>
+                            <label class="text-base text-color surface-overlay w-full">{{exam.programName}}</label>
+                        </div>
+                        <div class="field col-12 sm:col-6 md:col-6 lg:col-3 pl-4 pr-4">
+                            <label style="font-weight: bold;">Semester</label>
+                            <label
+                                class="text-base text-color surface-overlay w-full">{{exam.operationalVerticalName}}</label>
+                        </div>
+                        <div class="field col-12 sm:col-6 md:col-6 lg:col-3 pl-4 pr-4">
+                            <label style="font-weight: bold;">Exam Type</label>
+                            <label
+                                class="text-base text-color surface-overlay w-full">{{exam.examinationTypeName}}</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <p-table #dt [value]="exam.studentExaminationRegistration" responsiveLayout="scroll"
+                        styleClass="p-datatable-customers p-datatable-gridlines p-datatable-striped p-datatable-sm"
+                        responsiveLayout="scroll"
+                        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+                        [globalFilterFields]="[
+                        'subjectPaperCodeName',
+                        'subjectName',
+                        'paperTypeName',
+                        'examinationStartDateTime',
+                        'examinationEndDateTime'
+                    ]" [showCurrentPageReport]="true">
+                        <ng-template pTemplate="header">
+                            <tr>
+                                <th>Paper Code</th>
+                                <th>Paper Name</th>
+                                <th>Paper Type</th>
+                                <th>Examination Start DateTime</th>
+                                <th>Examination End DateTime</th>
+                                <th>Submit DateTime</th>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body" let-studentExaminationRegistration>
+                            <tr>
+                                <td>
+                                    <span class="p-column-title">Paper Code</span>
+                                    {{studentExaminationRegistration.subjectPaperCodeName}}
+                                </td>
+                                <td>
+                                    <span class="p-column-title">Paper Name</span>
+                                    {{studentExaminationRegistration.subjectName}}
+                                </td>
+                                <td>
+                                    <span class="p-column-title">Paper Type</span>
+                                    {{studentExaminationRegistration.paperTypeName}}
+                                </td>
+                                <td>
+                                    <span class="p-column-title">Examination start date and time</span>
+                                    {{studentExaminationRegistration.examinationStartDateTime |date:'dd-MM-yyyy hh:mm
+                                    aa'}}
+                                </td>
+                                <td>
+                                    <span class="p-column-title">Examination end date and time</span>
+                                    {{studentExaminationRegistration.examinationEndDateTime | date:'dd-MM-yyyy hh:mm
+                                    aa'}}
+                                </td>
+                                <td>
+                                    <span class="p-column-title">Submit DateTime</span>
+                                    {{studentExaminationRegistration.submitDateTime | date:'dd-MM-yyyy hh:mm aa'}}
+                                </td>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="summary">
+                            <div class="p-d-flex p-ai-center p-jc-between">
+                                In total there are
+                                {{
+                                studentExaminationRegistration
+                                ? studentExaminationRegistration.length
+                                : 0
+                                }}
+                                studentExaminationRegistration Component.
+                            </div>
+                        </ng-template>
+                        <ng-template pTemplate="summary">
+                            <div style="text-align: right;">
+                                <button pButton label="Submit" icon="pi pi-check"
+                                    (click)="onExamSubmit(exam.studentExaminationRegistration)"
+                                    style="width: 100%px;"></button>
+                            </div>
+                        </ng-template>
+                    </p-table>
+
+                </div>
+            </div>
+        </div>
+        <p-confirm-dialog [style]="{ width: '450px' }"></p-confirm-dialog>
+    </div>
+</div>

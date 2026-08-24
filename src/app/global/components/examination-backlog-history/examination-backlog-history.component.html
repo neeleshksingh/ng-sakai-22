@@ -1,0 +1,51 @@
+<div class="col-12">
+    <div class="card">
+        <p-table [value]="backlogHistoryList" [resizableColumns]="true" [rowHover]="true" [rows]="10"
+            [rowsPerPageOptions]="[ 10, 20, 30, 40, 50, { showAll: 'All' } ]" [paginator]="true"
+            styleClass="p-datatable-customers p-datatable-gridlines p-datatable-striped p-datatable-sm">
+
+            <ng-template pTemplate="header">
+                <tr>
+                    <th>Sr no</th>
+                    <th>Academic Session</th>
+                    <th>Program</th>
+                    <th>Operational Vertical</th>
+                    <th>Examination</th>
+                    <th>Subject</th>
+                    <th>Total Marks</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-backlogHistory let-rowIndex="rowIndex">
+                <tr>
+                    <td>{{rowIndex+1}}</td>
+                    <td><span class="p-column-title">Academic Session</span>
+                        {{backlogHistory.academicSessionName}}
+                    </td>
+                    <td>
+                        <span class="p-column-title">Program</span>
+                        {{backlogHistory.programName}}
+                    </td>
+                    <td>
+                        <span class="p-column-title">Operational Vertical</span>
+                        {{backlogHistory.operationalVerticalName}}
+                    </td>
+                    <td>
+                        <span class="p-column-title">Examination</span>
+                        {{backlogHistory.examinationName}}
+                    </td>
+                    <td><span class="p-column-title">Subject</span>
+                        {{backlogHistory.subjectName}}
+                    </td>
+                    <td style="text-align:center"><span class="p-column-title">Total Marks</span>
+                        {{backlogHistory.total}}
+                    </td>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="summary">
+                <div style="color:green; text-align: center;" *ngIf="backlogHistoryList?.length == 0">
+                    THE STUDENT HAS NO HISTORY OF BACKLOGS.
+                </div>
+            </ng-template>
+        </p-table>
+    </div>
+</div>

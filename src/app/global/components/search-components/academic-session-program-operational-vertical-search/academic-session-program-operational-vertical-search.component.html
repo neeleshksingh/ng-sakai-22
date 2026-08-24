@@ -1,0 +1,42 @@
+<!-- <p>academic-session-program-operational-vertical-multiple-search works!</p> -->
+<form [formGroup]="filterSearchFormGroup">
+    <div class="fluid formgrid grid px-3">
+        <div class="col-12 md:col-2 mt-2">
+            <label for="registrationNumber">AcademicSession</label>
+            <p-select [filter]="true" inputId="academicSessionIds" [options]="academicSessionSelectItemList"
+                [style]="{'width':'100%'}" formControlName="academicSessionIds"
+                (onChange)="onAcademicSessionIdChange($event)" placeholder="select">
+            </p-select>
+        </div>
+
+        <div class="col-12 md:col-2 mt-2">
+            <label for="registrationNumber">Program</label>
+            <p-select [filter]="true" inputId="programIds" [options]="programSelectItemList"
+                (onChange)="onProgramIdsChange()" [style]="{'width':'100%'}" formControlName="programIds"
+                placeholder="select">
+            </p-select>
+        </div>
+
+        <div class="col-12 md:col-2 mt-2">
+            <label for="registrationNumber">OperationalVertical</label>
+            <p-multiSelect [filter]="true" inputId="operationalVerticalIds"
+                [options]="operationalVerticalSelectItemList" [style]="{'width':'100%'}" [showClear]="true"
+                formControlName="operationalVerticalIds" placeholder="select">
+            </p-multiSelect>
+        </div>
+        <div class=" field col-12 sm:col-12 md:col-2 lg:col-2 ">
+            <div class="" style="width: 100%; margin: 5px; display:flex ; flex-direction: column;">
+                <label for="registrationNumber">Registration Number</label>
+                <input pInputText type="text" id="registrationNumber" placeholder="Registration Number"
+                    formControlName="registrationNumber">
+            </div>
+
+        </div>
+        <div class="col-12 md:col-2 " style="margin-bottom: 10px;">
+            <div style="width: 100%; display:flex; justify-content: center; ">
+                <button pButton pRipple type="button" class="p-button-raised " icon="pi pi-search" label="Search"
+                    style="margin-top: 20px;" (click)="searchList()" pTooltip="Search" tooltipPosition="top"></button>
+            </div>
+        </div>
+    </div>
+</form>

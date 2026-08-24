@@ -1,0 +1,154 @@
+<div class="pb-6">
+    <div class="grid">
+        <div class="col-12">
+            <div class="toolbar-demo card">
+                <p-toolbar>
+                    <div class="p-toolbar-group-left">
+                        <div class="header-left-div">
+                            <div class="header-div1">
+                                <i class=" fa-solid  fa-graduation-cap" style="font-size: 40px;"></i>
+                            </div>
+                            <div class="header-div2">
+                                <h5>Curriculum Framework </h5>
+                            </div>
+                        </div>
+                    </div>
+                </p-toolbar>
+            </div>
+        </div>
+
+        <form [formGroup]="curriculumFrameworkFormGroup" style="width: 100%;">
+            <div class="col-12">
+                <div class="card p-4">
+                    <div class="p-fluid formgrid grid">
+                        <div class="field col-12 sm:col-6 md:col-6 lg:col-3  pr-4">
+                            <label for="academicSessionId">Academic Session</label>
+                            <p-select [filter]="true" inputId="academicSessionId" [options]="academicSessionList"
+                                (onChange)="bindStudentPrograms()" formControlName="academicSessionId"
+                                [style]="{'width':'100%'}" placeholder="Select Academic Session">
+                            </p-select>
+                        </div>
+                        <div class="field col-12 sm:col-6 md:col-6 lg:col-3  pr-4">
+                            <label for="programName">Program *</label>
+                            <p-select [filter]="true" inputId="programName" [options]="programList"
+                                formControlName="programName" placeholder="Select"
+                                (onChange)="onProgamChanged($event)"></p-select>
+                        </div>
+                        <div class="field col-12 sm:col-6 md:col-6 lg:col-3 pr-4">
+                            <label for="operationalVerticalName">Operational Vertical *</label>
+                            <p-select [filter]="true" inputId="operationalVerticalName"
+                                [options]="operationalVerticalList" formControlName="operationalVerticalName"
+                                placeholder="Select" (onChange)="onOperationalVerticalChanged($event)"></p-select>
+                        </div>
+                        <div class="field col-12 md:col-2" style="margin-top: 24px;">
+                            <p-button label="Search" icon="pi pi-search"
+                                (click)="getOperationalVerticalSubjects(this.curriculumFrameworkFormGroup.value.academicSessionId,this.curriculumFrameworkFormGroup.value.programName,this.curriculumFrameworkFormGroup.value.operationalVerticalName)"
+                                class="p-mr-2 p-mb-2"></p-button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+
+        <div *ngIf="!isDisplay" class="col-12">
+
+            <div class=" card moduleSubModule pl-4 pr-4">
+                <div class="p-fluid formgrid grid">
+                    <div class="field col-12 sm:col-12 md:col-12 lg:col-4 modules pt-1 mt-2">
+                        <div class="vertical-menu">
+                            <div class="menu-header">
+                                <h3>Subject Name</h3>
+                            </div>
+                            <div class="menu-items">
+                                <div *ngFor="let subject of filteredSubjectPapers" class="menu-item"
+                                    [ngClass]="{ 'active': activeSubjectId === subject.subjectPaperCodeId }"
+                                    (click)="onViewRequest(subject.subjectPaperCodeId, subject.subjectName)">
+                                    <p>{{ subject.subjectPaperCodeName }} - {{ subject.subjectName }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="field col-12 sm:col-12 md:col-12 lg:col-8 subModules">
+                        <div class="fluid formgrid grid">
+                            <div class="field col-12 pb-0 m-0">
+                                <p-table [rowHover]="true"
+                                    styleClass="p-datatable-customers p-datatable-gridlines p-datatable-striped p-datatable-lg p-0 m-0">
+                                    <ng-template pTemplate="header" class="p-0 m-0">
+                                        <tr class="p-0 m-0">
+                                            <th class=" m-0" pSortableColumn="cycle">Subject Paper :
+                                                {{this.subjectPaperCodeName}}
+                                            </th>
+                                        </tr>
+                                    </ng-template>
+                                </p-table>
+                            </div>
+                        </div>
+
+                        <div *ngFor="let subjectPaperCode of subjectPaperCodeModuleSubModuleExpando;  let i = index"
+                            class="fluid formgrid grid">
+                            <div *ngIf="!emptyResponse" style="width:100%">
+                                <div class="paper-module field col-12 pt-2 pb-0 pl-3 pr-3 ">
+                                    <div class="fluid formgrid grid">
+                                        <div class="field col-12 md:col-6 sm:col-6 lg:col-6 m-0 pl-3">
+                                            <span style="font-weight: 600;">{{i+1}}. &nbsp;</span>
+                                            <label style="font-weight: 600;" for="name">Name: </label>
+                                            <span style="font-weight: 600; color: gray;"> {{subjectPaperCode?.name}}
+                                            </span>
+                                        </div>
+                                        <div class="field col-12 md:col-6 sm:col-6 lg:col-6 m-0"
+                                            style="display: flex; justify-content: right;">
+                                            <label style="font-weight: 600;" for="name">Last Updated On: </label>
+                                            <span style="font-weight: 600; color: gray;">
+                                                {{subjectPaperCode?.modifiedDate}} </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12 md:col-12 lg:col-12">
+                                    <p-table #dt
+                                        [value]="subjectPaperCode.subjectPaperCodeModuleSubModuleResponseList || []"
+                                        [globalFilterFields]="['cycle', 'name','title','description','status']"
+                                        [rowHover]="true" dataKey="id"
+                                        styleClass="p-datatable-customers p-datatable-gridlines p-datatable-striped p-datatable-lg">
+                                        <ng-template pTemplate="header">
+                                            <tr>
+                                                <th style="display: flex; justify-content: center;"
+                                                    pSortableColumn="cycle">Cycle
+                                                </th>
+                                                <th pSortableColumn="name">Name
+                                                </th>
+                                            </tr>
+                                        </ng-template>
+                                        <ng-template pTemplate="body" let-subModules>
+                                            <tr>
+                                                <td style="display: flex; justify-content: center;height: 30px;"><span
+                                                        class="p-column-title">Cycle</span>
+                                                    {{subModules.cycle}}
+                                                </td>
+                                                <td style="height: 30px;"><span class="p-column-title">Name</span>
+                                                    {{subModules.title}}
+                                                </td>
+                                            </tr>
+                                        </ng-template>
+                                    </p-table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="no-data-card" *ngIf="emptyResponse">
+                            <div class=" notfoundStart" id="notfound">
+                                <div class="notfound">
+                                    <h2 class="subject-title">No Records Available</h2>
+                                    <p>
+                                        For the selected subject <strong>" {{this.subjectPaperCodeName}} "</strong>,
+                                        There is no records updated yet.
+                                    </p>
+                                    <p>Please check back later.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

@@ -1,0 +1,200 @@
+<div class="pb-6">
+    <div class="grid">
+        <p-toast></p-toast>
+        <div class="col-12">
+            <div class="toolbar-demo card">
+                <p-toolbar>
+                    <div class="p-toolbar-group-left">
+                        <div class="header-left-div">
+                            <div class="header-div1">
+                                <i class="fas fa-book-open" style="font-size: 40px;"></i>
+                            </div>
+                            <div class="header-div2">
+                                <h5>{{componentName}}</h5>
+                            </div>
+                        </div>
+                    </div>
+                    <ng-template pTemplate="right">
+                        <div class="d-flex">
+                        </div>
+                    </ng-template>
+                </p-toolbar>
+            </div>
+        </div>
+        <div class="col-12 md:col-12 lg:col-12">
+            <div class="card">
+                <form [formGroup]="hallTicketFormGroup">
+                    <div class="grid align-items-end">
+                        <div class="col-12 md:col-6 lg:col-2 p-4">
+                            <label for="academicSessionId">Academic Session</label>
+                            <p-select [filter]="true" inputId="academicSessionId" [options]="academicSessionList"
+                                (onChange)="onAcademicChanged($event)" formControlName="academicSessionId"
+                                [style]="{'width':'100%'}" placeholder="Select Academic Session">
+                            </p-select>
+                        </div>
+                        <div class="col-12 md:col-6 lg:col-3 p-4">
+                            <label for="programId">Program</label>
+                            <p-select [filter]="true" inputId="programId" [options]="programList"
+                                [style]="{'width':'100%'}" formControlName="programId" placeholder="Select Program"
+                                (onChange)="onProgramChanged($event)">
+                            </p-select>
+                        </div>
+                        <div class="col-12 md:col-6 lg:col-2 p-4">
+                            <label for="operationalVerticalId">Semester</label>
+                            <p-select [filter]="true" inputId="operationalVerticalId"
+                                [options]="operationalVerticalList" [style]="{'width':'100%'}"
+                                (onChange)="onOperationalVerticalChanged($event)"
+                                formControlName="operationalVerticalId" placeholder="Select Semester">
+                            </p-select>
+                        </div>
+                        <div class="col-12 md:col-6 lg:col-3 p-4">
+                            <label for="examinationId">Examination</label>
+                            <p-select [filter]="true" inputId="examinationId" [options]="examinationList"
+                                (onChange)="onExaminationChanged($event)" formControlName="examinationId"
+                                placeholder="Select Examination" [style]="{'width':'100%'}"></p-select>
+                        </div>
+                        <div class="col-12 md:col-6 lg:col-2 p-4">
+                            <button pButton type="button" [disabled]="!hallTicketFormGroup.valid" label="View" #newItem
+                                (click)="viewExaminationHallTicketDetails()" style="margin-top: 6px;"></button>
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+            <div class="card" *ngIf="examinationHallTicketResponse && examinationHallTicketResponse.studentName">
+                <div class="formgrid grid align-items-start">
+                    <div class="field col-12 sm:col-6 md:col-6 lg:col-3 pl-4 pr-4">
+                        <label style="font-weight: bold;">Student Name</label><br />
+                        <label class="text-base text-color surface-overlay w-full">
+                            {{examinationHallTicketResponse.studentName}}</label>
+                    </div>
+                    <div class="field col-12 sm:col-6 md:col-6 lg:col-3 pl-4 pr-4">
+                        <label style="font-weight: bold;">Registration Number</label><br />
+                        <label class="text-base text-color surface-overlay w-full">
+                            {{examinationHallTicketResponse.registrationNumber}}</label>
+                    </div>
+                    <div class="field col-12 sm:col-6 md:col-6 lg:col-3 pl-4 pr-4">
+                        <label style="font-weight: bold;">Roll Number</label><br />
+                        <label class="text-base text-color surface-overlay w-full">
+                            {{examinationHallTicketResponse.rollNumber}}</label>
+                    </div>
+                    <div class="field col-12 sm:col-6 md:col-6 lg:col-3 pl-4 pr-4">
+                        <label style="font-weight: bold;">Hall Ticket Number</label><br />
+                        <label class="text-base text-color surface-overlay w-full">
+                            {{examinationHallTicketResponse.hallTicketNumber}}</label>
+                    </div>
+
+                    <div class="field col-12 sm:col-6 md:col-6 lg:col-3 pl-4 pr-4">
+                        <label style="font-weight: bold;">Academic Session</label><br />
+                        <label class="text-base text-color surface-overlay w-full">
+                            {{examinationHallTicketResponse.academicSessionName}}</label>
+                    </div>
+                    <div class="field col-12 sm:col-6 md:col-6 lg:col-3 pl-4 pr-4">
+                        <label style="font-weight: bold;">Examination</label><br />
+                        <label class="text-base text-color surface-overlay w-full">
+                            {{examinationHallTicketResponse.examinationName}}</label>
+                    </div>
+                    <div class="field col-12 sm:col-6 md:col-6 lg:col-3 pl-4 pr-4">
+                        <label style="font-weight: bold;">Program</label>
+                        <label class="text-base text-color surface-overlay w-full">
+                            {{examinationHallTicketResponse.programName}}</label>
+                    </div>
+                    <div class="field col-12 sm:col-6 md:col-6 lg:col-3 pl-4 pr-4">
+                        <label style="font-weight: bold;">Semester</label>
+                        <label class="text-base text-color surface-overlay w-full">
+                            {{examinationHallTicketResponse.operationalVerticalName}}</label>
+                    </div>
+                </div>
+            </div>
+            <div class="card"
+                *ngIf="(examinationHallTicketResponse?.examinationHallTicketSubjectPaperCodeResponseList?.length ?? 0) > 0">
+                <p-table #dt
+                    [value]="examinationHallTicketResponse.examinationHallTicketSubjectPaperCodeResponseList  ?? []"
+                    responsiveLayout="scroll"
+                    styleClass="p-datatable-customers p-datatable-gridlines p-datatable-striped p-datatable-sm"
+                    responsiveLayout="scroll"
+                    currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+                    [globalFilterFields]="[
+                        'subjectPaperCodeName',
+                        'subjectName',
+                        'paperTypeName',
+                        'examinationDate',
+                        'batchAttendancePercentage',
+                        'fromTime',
+                        'toTime'
+                    ]" [showCurrentPageReport]="true">
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th>Subject Code</th>
+                            <th>Subject</th>
+                            <th *ngIf="showBatchAttendancePercentageColumn">AttendancePercentage</th>
+                            <th>Examination Date</th>
+                            <th>Examination Start Time</th>
+                            <th>Examination End Time</th>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-item>
+                        <tr [ngStyle]="isRowLowAttendance(item) ? {'background-color': '#f8d7da'} : {}">
+                            <td>
+                                <span class="p-column-title">Subject Code</span>
+                                {{item.subjectPaperCodeName}}
+                            </td>
+                            <td>
+                                <span class="p-column-title">Subject</span>
+                                {{item.subjectName}}
+                            </td>
+                            <td *ngIf="showBatchAttendancePercentageColumn">
+                                <span class="p-column-title">Attendance Percentage</span>
+                                {{item.batchAttendancePercentage}}
+                            </td>
+                            <td>
+                                <span class="p-column-title">Examination Date</span>
+                                {{item.examinationDate |date:'dd-MM-yyyy'}}
+                            </td>
+                            <td>
+                                <span class="p-column-title">Examination start time</span>
+                                {{item.fromTime }}
+                            </td>
+                            <td>
+                                <span class="p-column-title">Examination end time</span>
+                                {{item.toTime }}
+                            </td>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="summary">
+                        <div class="p-d-flex p-ai-center p-jc-between">
+                            In total there are
+                            {{
+                            examinationHallTicketResponse
+                            ? examinationHallTicketResponse.examinationHallTicketSubjectPaperCodeResponseList?.length
+                            : 0
+                            }}
+                            Subject's component.
+                        </div>
+                    </ng-template>
+                    <ng-template pTemplate="summary">
+                        <div style="text-align: right;" *ngIf="!examinationHallTicketResponse?.hallTicketNumber">
+                            <button pButton label="Save" icon="pi pi-check" (click)="onSave()"
+                                style="width: 100%px;"></button>
+                        </div>
+                        <div style="text-align: right;" *ngIf="examinationHallTicketResponse?.hallTicketNumber">
+                            <button pButton label="Download" icon="pi pi-check" (click)="onDownload()"
+                                style="width: 100%px;"></button>
+                        </div>
+                    </ng-template>
+                </p-table>
+            </div>
+            <!-- <div class="card" *ngIf="downloadByAdmitCardLink">
+                <div style="overflow:auto;">
+                    <iframe [src]="downloadByAdmitCardLink | safe" width="100%" height="1300" loading="lazy"></iframe>
+                </div>
+            </div> -->
+            <div class="card" *ngIf="isAdmitCardPublished==false">
+                <div style="color: red; text-align: center; font-size: 20px;">
+                    {{resultMessage}}
+                </div>
+            </div>
+        </div>
+        <p-confirm-dialog [style]="{ width: '450px' }"></p-confirm-dialog>
+    </div>
+</div>

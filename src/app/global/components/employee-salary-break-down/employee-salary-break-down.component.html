@@ -1,0 +1,182 @@
+<div class="salary-breakdown-container">
+    <div class="company-header">
+        <div class="logo">
+            <img [src]=partnerImage.imagePath alt="Company Logo" />
+        </div>
+        <div class="company-details">
+            <h1>{{partnerResponse.displayName}}</h1>
+            <p>{{partnerResponse.address1}}, {{partnerResponse.address2}}<br />{{partnerResponse.city}},
+                {{partnerResponse.state}} - {{partnerResponse.pinCode}}</p>
+        </div>
+    </div>
+
+    <div class="header mt-3">
+        <h2>Payslip for the Monthly of {{ monthYear }}</h2>
+    </div>
+
+    <div class="summary-section" style="margin-bottom: 20px;" *ngIf="employeeSalaryBasicDetail.employeeCode">
+        <table class="details-table table-1">
+            <tbody>
+                <tr>
+                    <td class="label">Emp Code:</td>
+                    <td class="value">{{ employeeSalaryBasicDetail.employeeCode }}</td>
+                </tr>
+                <tr>
+                    <td class="label">Name:</td>
+                    <td class="value">{{ employeeSalaryBasicDetail.employeeName }}</td>
+                </tr>
+                <tr>
+                    <td class="label">Designation:</td>
+                    <td class="value">{{ employeeSalaryBasicDetail.designation }}</td>
+                </tr>
+                <tr>
+                    <td class="label">Department:</td>
+                    <td class="value">{{ employeeSalaryBasicDetail.department }}</td>
+                </tr>
+                <tr>
+                    <td class="label">Location:</td>
+                    <td class="value">{{ employeeSalaryBasicDetail.location }}</td>
+                </tr>
+                <tr>
+                    <td class="label">DOJ:</td>
+                    <td class="value">{{ employeeSalaryBasicDetail.dateOfJoining | date }}</td>
+                </tr>
+                <tr>
+                    <td class="label">DOB:</td>
+                    <td class="value">{{ employeeSalaryBasicDetail.dateOfBirth | date }}</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <table class="details-table table-2">
+            <tbody>
+                <tr>
+                    <td class="label">LOP:</td>
+                    <td class="value">{{ employeeSalaryWorkDetail.lop }}</td>
+                </tr>
+                <tr>
+                    <td class="label">Arrear LOP:</td>
+                    <td class="value">{{ employeeSalaryWorkDetail.arrearLOP }}</td>
+                </tr>
+                <tr>
+                    <td class="label">Arrear Days:</td>
+                    <td class="value">{{ employeeSalaryWorkDetail.arrearDays }}</td>
+                </tr>
+                <tr>
+                    <td class="label">Pay Days:</td>
+                    <td class="value">{{ employeeSalaryWorkDetail.payDays }}</td>
+                </tr>
+                <tr>
+                    <td class="label"></td>
+                    <td class="value"></td>
+                </tr>
+                <tr>
+                    <td class="label"></td>
+                    <td class="value"></td>
+                </tr>
+                <tr>
+                    <td class="label"></td>
+                    <td class="value"></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <table class="details-table table-3">
+            <tbody>
+                <tr>
+                    <td class="label">Bank Name:</td>
+                    <td class="value">{{ employeeSalaryAccountDetail.bankName }}</td>
+                </tr>
+                <tr>
+                    <td class="label">Bank A/c No.:</td>
+                    <td class="value">{{ employeeSalaryAccountDetail.bankAccountNumber }}</td>
+                </tr>
+                <tr>
+                    <td class="label">PF No:</td>
+                    <td class="value">{{ employeeSalaryAccountDetail.pfAccountNumber }}</td>
+                </tr>
+                <tr>
+                    <td class="label">UAN No:</td>
+                    <td class="value">{{ employeeSalaryAccountDetail.uan }}</td>
+                </tr>
+                <tr>
+                    <td class="label">ESI No:</td>
+                    <td class="value">{{ employeeSalaryAccountDetail.esiNumber }}</td>
+                </tr>
+                <tr>
+                    <td class="label">Encashment Days:</td>
+                    <td class="value">{{ employeeSalaryWorkDetail.encashmentDays }}</td>
+                </tr>
+                <tr>
+                    <td class="label">Notice Ded. Days:</td>
+                    <td class="value">{{ employeeSalaryWorkDetail.payDays }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+
+    <!-- Earnings and Deductions -->
+    <div class="breakdown-tables">
+        <!-- Earnings Table -->
+        <div class="table-section">
+            <h3>Earnings</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Description</th>
+                        <th>Amount</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let earning of earnings">
+                        <td>{{ earning.salaryComponentName }}</td>
+                        <td style="text-align:right">{{ earning.amount | currency : 'INR' }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Deductions Table -->
+        <div class="table-section">
+            <h3>Deductions</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Description</th>
+                        <th>Amount</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let deduction of deductions">
+                        <td>{{ deduction.salaryComponentName }}</td>
+                        <td style="text-align:right">{{ deduction.amount | currency : 'INR' }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Summary Section -->
+    <div class="summary-section">
+        <table class="summary-table">
+            <tbody>
+                <tr>
+                    <td class="label">Gross Salary:</td>
+                    <td style="text-align:right" class="value val-1">{{ employeeSalaryBreakDownSummary.grossSalary | currency : 'INR' }}</td>
+                    <td class="label">Total Deduction:</td>
+                    <td style="text-align:right" class="value val-2">{{ employeeSalaryBreakDownSummary.totalDeduction | currency : 'INR' }}</td>
+                </tr>
+                <tr>
+                    <td class="label">Net Salary:</td>
+                    <td style="text-align:right" class="value val-1">
+                        <strong>{{ employeeSalaryBreakDownSummary.netSalary | currency : 'INR' }}</strong>
+                    </td>
+                    <td colspan="2" class="value val-3">
+                        ({{ employeeSalaryBreakDownSummary.netSalaryInWords }})
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

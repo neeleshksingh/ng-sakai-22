@@ -1,23 +1,37 @@
 import { Injectable } from '@angular/core';
+import * as CryptoJS from 'crypto-js';
+import * as LZString from 'lz-string';
 
-@Injectable({ providedIn: 'root' })
-export class LocalStorageService {
-    get<T>(key: string): T | null {
-        if (typeof window === 'undefined') return null;
-        const value = window.localStorage.getItem(key);
-        if (!value) return null;
-        try {
-            return JSON.parse(value) as T;
-        } catch {
-            return null;
+@Injectable({
+  providedIn: 'root'
+})
+export class LocalstorageService {
+
+  private readonly SECRET_KEY = 'myncoreprouisupersecretkey';
+
+  constructor() { }
+
+  setItem(key: string, value: any): void {
+    const compressedValue = LZString.compressToUTF16(JSON.stringify(value));
+    const encryptedValue = CryptoJS.AES.encrypt(compressedValue, this.SECRET_KEY).toString();
+    localStorage.setItem(key, encryptedValue);
+  }
+
+  getItem(key: string): any {
+    const encryptedValue = localStorage.getItem(key);
+    if (encryptedValue) {
+      const bytes = CryptoJS.AES.decrypt(encryptedValue, this.SECRET_KEY);
+      try {
+        const decryptedValue = bytes.toString(CryptoJS.enc.Utf8);
+        const parsedData = JSON.parse(LZString.decompressFromUTF16(decryptedValue));
+        if (Array.isArray(parsedData)) {
+          return parsedData.filter(item => item != null);
         }
+        return parsedData;
+      } catch (jsonError) {
+        console.error('Error parsing JSON data:', jsonError);
+      }
     }
-
-    set<T>(key: string, value: T): void {
-        if (typeof window !== 'undefined') window.localStorage.setItem(key, JSON.stringify(value));
-    }
-
-    remove(key: string): void {
-        if (typeof window !== 'undefined') window.localStorage.removeItem(key);
-    }
+    return null;
+  }
 }

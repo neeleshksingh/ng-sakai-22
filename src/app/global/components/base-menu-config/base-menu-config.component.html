@@ -1,0 +1,28 @@
+<div>
+    <div class="grid">
+        <div class="col-12">
+            <div class="card menu-card">
+                <!-- REAL MENU -->
+                <p-menubar *ngIf="!(loading$ | async); else loadingTemplate" [model]="(items$ | async) ?? []">
+                </p-menubar>
+
+                <!-- LOADING SHIMMER -->
+                <ng-template #loadingTemplate>
+                    <div class="menu-loading-pure">
+                        <span class="loading-message">Loading your menus</span>
+                        <span class="loading-ellipsis">...</span>
+                    </div>
+                </ng-template>
+            </div>
+        </div>
+    </div>
+</div>
+
+<br>
+
+<div>
+    <div pAnimateOnScroll enterClass="fadeinleft" leaveClass="fadeoutleft"
+        class="animation-duration-1000 animation-ease-in-out">
+        <router-outlet></router-outlet>
+    </div>
+</div>

@@ -1,0 +1,763 @@
+<div class="col-12">
+    <div class="flex justify-content-between align-items-center px-4 py-3 border-bottom-1 surface-border bg-surface-50"
+        style="width: 100%;"
+        *ngIf="(examinationResultExpandoResponse?.studentExaminationResultPrograms?.length ?? 0) > 0">
+
+        <div class="flex flex-column gap-1">
+            <h5 class="m-0 text-900 font-semibold">
+                Student Examination Report
+            </h5>
+            <div class="flex align-items-center gap-2 flex-wrap">
+                <span class="text-600 text-lg font-medium">
+                    <span class="text-900 font-semibold">
+                        {{examinationResultExpandoResponse.studentExaminationResultPrograms[0].registrationNumberProgramCode
+                        ?? 'N/A'}}
+                    </span>
+                </span>
+                <div class="border-left-1 surface-300 h-1rem mx-1"></div>
+                <span
+                    class="inline-flex align-items-center gap-1 px-2 py-1 border-round text-lg font-medium surface-100 text-700">
+                    <i class="pi pi-id-card text-lg"></i>
+                    Roll Number: <span
+                        class="text-primary text-900 ">{{examinationResultExpandoResponse.studentExaminationResultPrograms[0].rollNumber
+                        ?? 'N/A'}}</span>
+                </span>
+            </div>
+        </div>
+
+        <p-button icon="pi pi-refresh" [label]="'Reload'" [rounded]="true" severity="secondary" size="small"
+            [outlined]="true" class="flex-shrink-0" (click)="reloadStudentExaminationData()"
+            pTooltip="Refresh examination data" tooltipPosition="top">
+        </p-button>
+
+    </div>
+    <p-tabs [value]="0">
+        <p-tablist>
+            <ng-container
+                *ngFor="let studentExaminationResultProgram of examinationResultExpandoResponse?.studentExaminationResultPrograms">
+                <p-tab
+                    *ngFor="let studentExaminationResultOperationalVertical of studentExaminationResultProgram?.studentExaminationResultOperationalVerticals; let i = index"
+                    [value]="i">
+                    {{ studentExaminationResultOperationalVertical?.operationalVerticalName ?? '' }}
+                </p-tab>
+            </ng-container>
+        </p-tablist>
+        <p-tabpanels>
+            <ng-container
+                *ngFor="let studentExaminationResultProgram of examinationResultExpandoResponse?.studentExaminationResultPrograms">
+                <ng-container
+                    *ngFor="let studentExaminationResultOperationalVertical of studentExaminationResultProgram?.studentExaminationResultOperationalVerticals; let i = index">
+                    <p-tabpanel [value]="i">
+                        <div class="field col-12">
+                            <p-table [value]="studentExaminationResultOperationalVertical?.examinationData ?? []"
+                                [resizableColumns]="true" [rowHover]="true" [scrollable]="true"
+                                styleClass="p-datatable-sm p-datatable-striped p-datatable-gridlines">
+
+                                <ng-template pTemplate="header">
+                                    <tr>
+                                        <th pFrozenColumn [frozen]="true"
+                                            class="surface-100 text-900 font-semibold border-right-2 border-300"
+                                            style="min-width: 120px;">
+                                        </th>
+                                        <th pFrozenColumn [frozen]="true"
+                                            class="surface-100 text-900 font-semibold border-right-2 border-300"
+                                            style="min-width: 250px;">
+                                            <i class="pi pi-book mr-2"></i>Examination &#8594;
+                                        </th>
+                                        <th colspan="3"
+                                            class="text-center surface-50 text-primary font-semibold border-right-2 border-300"
+                                            *ngIf="studentExaminationResultOperationalVertical?.midSemester?.[0]?.examinationName; else emptyMidHeader">
+                                            <i class="pi pi-calendar mr-2"></i>
+                                            {{
+                                            studentExaminationResultOperationalVertical.midSemester[0].examinationName
+                                            ||"-"}}
+                                        </th>
+                                        <ng-template #emptyMidHeader>
+                                            <th colspan="3"
+                                                class="text-center text-600 font-medium border-right-1 border-300">-
+                                            </th>
+                                        </ng-template>
+                                        <th colspan="6"
+                                            class="text-center surface-50 text-primary font-semibold border-right-2 border-300"
+                                            *ngFor="let data of studentExaminationResultOperationalVertical?.endSemesterExams">
+                                            <i class="pi pi-calendar-plus mr-2"></i>
+                                            {{ data?.examinationName ||"-"}}
+                                        </th>
+                                    </tr>
+                                    <tr class="surface-50">
+                                        <th pFrozenColumn [frozen]="true"
+                                            class="text-600 font-medium border-right-2 border-300"></th>
+                                        <th pFrozenColumn [frozen]="true" class="border-right-2 border-300"
+                                            style="min-width: 250px;">
+                                            <i class="pi pi-clock mr-1"></i>Published Date &#8594;
+                                        </th>
+                                        <th colspan="3"
+                                            class="text-center text-600 font-medium border-right-2 border-300"
+                                            *ngIf="studentExaminationResultOperationalVertical?.examinationData?.[0]?.midSemesterData?.startDate; else emptyMidHeaderDate">
+                                            {{
+                                            studentExaminationResultOperationalVertical?.examinationData?.[0]?.midSemesterData?.resultPublishDate
+                                            | date: 'MMM dd, yyyy'}}
+                                        </th>
+                                        <ng-template #emptyMidHeaderDate>
+                                            <th colspan="3"
+                                                class="text-center text-600 font-medium border-right-1 border-300">-
+                                            </th>
+                                        </ng-template>
+                                        <th colspan="6"
+                                            class="text-center text-600 font-medium border-right-2 border-300"
+                                            *ngFor="let data of studentExaminationResultOperationalVertical?.examinationData?.[0]?.endSemesterData || []">
+                                            {{ data?.resultPublishDate | date: 'MMM dd, yyyy'}}
+                                        </th>
+                                    </tr>
+                                    <tr class="surface-100">
+                                        <th pFrozenColumn [frozen]="true"
+                                            class="text-700 font-semibold border-right-2 border-300">PaperCode</th>
+                                        <th pFrozenColumn [frozen]="true"
+                                            class="text-700 font-semibold border-right-2 border-300">Subject</th>
+                                        <th class="text-center text-700 font-medium">
+                                            <i class="pi pi-chart-bar mr-1"></i>Total
+                                        </th>
+                                        <th class="text-center text-700 font-medium">
+                                            <i class="pi pi-star mr-1"></i>Obtained
+                                        </th>
+                                        <th class="text-center text-700 font-medium border-right-2 border-300">
+                                            <i class="pi pi-percentage mr-1"></i>Weightage
+                                        </th>
+                                        <ng-container
+                                            *ngFor="let data of studentExaminationResultOperationalVertical?.examinationData?.[0]?.endSemesterData || []">
+                                            <th class="text-center text-700 font-medium" pTooltip="Obtained Marks"
+                                                tooltipPosition="top">
+                                                <!-- <i class="pi pi-bookmark-fill mr-1"></i> -->
+                                                Marks
+                                            </th>
+                                            <th class="text-center text-700 font-medium">
+                                                <!-- <i class="pi pi-dollar mr-1"></i> -->
+                                                Credits
+                                            </th>
+                                            <th class="text-center text-700 font-medium">
+                                                <!-- <i class="pi pi-star mr-1"></i> -->
+                                                Grade
+                                                <i class="pi pi-info-circle ml-1 cursor-pointer text-blue-500"
+                                                    [pTooltip]="gradeTooltipText" tooltipPosition="top"
+                                                    [escape]="false">
+                                                </i>
+                                            </th>
+                                            <th class="text-center text-700 font-medium">
+                                                <!-- <i class="pi pi-gift mr-1"></i> -->
+                                                Grace
+                                            </th>
+                                            <th class="text-center text-700 font-medium ">
+                                                <!-- <i class="pi pi-chart-bar mr-1"></i> -->
+                                                GP
+                                                <i class="pi pi-info-circle ml-1 cursor-pointer text-blue-500"
+                                                    [pTooltip]="gradePointTooltipText" tooltipPosition="top"
+                                                    [escape]="false">
+                                                </i>
+                                            </th>
+                                            <th class="text-center text-700 font-medium border-right-2 border-300">
+                                                <!-- <i class="pi pi-question-circle mr-1"></i> -->
+                                                Scrutiny
+                                            </th>
+                                        </ng-container>
+                                    </tr>
+                                </ng-template>
+
+                                <ng-template pTemplate="body" let-row let-rowIndex="rowIndex">
+                                    <tr [class]="rowIndex % 2 === 0 ? 'surface-0' : 'surface-50'">
+                                        <td pFrozenColumn [frozen]="true"
+                                            class="font-medium text-800 border-right-2 border-300">
+                                            <span>{{ row.paperCode }}</span>
+                                        </td>
+                                        <td pFrozenColumn [frozen]="true"
+                                            class="font-medium text-800 border-right-2 border-300">
+                                            {{ getSubjectName(row.paperCode) }}
+                                        </td>
+                                        <td class="text-center">
+                                            <span class="font-semibold text-700">{{ row.totalMarks || '-' }}</span>
+                                        </td>
+                                        <td class="text-center">
+                                            <span class="font-semibold"
+                                                [class]="(row.obtainedMarks / row.totalMarks) >= 0.8 ? 'text-green-600' : 
+                                                    (row.obtainedMarks / row.totalMarks) >= 0.6 ? 'text-orange-600' : 'text-red-600'">
+                                                {{ row.obtainedMarks || '-' }}
+                                            </span>
+                                        </td>
+                                        <td class="text-center border-right-2 border-300">
+                                            <span class="font-medium text-600">{{ row.marksWeightage || '-' }}</span>
+                                        </td>
+
+                                        <ng-container *ngFor="let endData of row.endSemesterData">
+                                            <td class="text-center"
+                                                [class]="endData.grade === 'D' || endData.grade === 'F' ? 'bg-red-100' : 'none'">
+                                                <span class="font-semibold"
+                                                    [class]="endData.grade === 'A+' || endData.grade === 'A' ? 'text-green-600' :
+                                                        endData.grade === 'B+' || endData.grade === 'B' ? 'text-blue-600' :
+                                                        endData.grade === 'C+' || endData.grade === 'C' ? 'text-orange-600' :
+                                                        endData.grade === 'D' || endData.grade === 'F' ? 'text-red-600' : 'p-tag-secondary'">
+                                                    {{ endData.obtainedMarks || '-' }}
+                                                </span>
+                                            </td>
+                                            <td class="text-center"
+                                                [class]="endData.grade === 'D' || endData.grade === 'F' ? 'bg-red-100' : 'none'">
+                                                <span>
+                                                    {{ endData.credits || '-' }}
+                                                </span>
+                                            </td>
+
+                                            <td class="text-center"
+                                                [class]="endData.grade === 'D' || endData.grade === 'F' ? 'bg-red-100' : 'none'">
+                                                <span class="p-tag p-tag-rounded font-semibold"
+                                                    [class]="endData.grade === 'A+' || endData.grade === 'A' ? 'p-tag-success' :
+                                                        endData.grade === 'B+' || endData.grade === 'B' ? 'p-tag-info' :
+                                                        endData.grade === 'C+' || endData.grade === 'C' ? 'p-tag-warning' :
+                                                        endData.grade === 'D' || endData.grade === 'F' ? 'p-tag-danger' : 'p-tag-secondary'">
+                                                    {{ endData.grade || '-' }}
+                                                </span>
+
+                                            </td>
+                                            <td class="text-center"
+                                                [class]="endData.grade === 'D' || endData.grade === 'F' ? 'bg-red-100' : 'none'">
+                                                <span>
+                                                    {{ endData.grace || "-"}}
+                                                </span>
+                                            </td>
+                                            <td class="text-center"
+                                                [pTooltip]="endData.gradePoint + ' x ' + endData.credits"
+                                                [class]="endData.grade === 'D' || endData.grade === 'F' ? 'bg-red-100' : 'none'">
+                                                <span class="font-semibold">
+                                                    {{
+                                                    (endData.gradePoint && endData.credits &&
+                                                    endData.gradePoint >= 0 || endData.credits >= 0)
+                                                    ? (endData.gradePoint * endData.credits)
+                                                    : '-'
+                                                    }}
+                                                </span>
+                                            </td>
+                                            <td class="text-center border-right-2 border-300"
+                                                [class]="endData.grade === 'D' || endData.grade === 'F' ? 'bg-red-100' : 'none'">
+                                                <span>
+                                                    {{ endData.isSubmittedForScrutiny == null ? '-' :
+                                                    endData.isSubmittedForScrutiny ? 'Yes' : 'No' }}
+                                                </span>
+                                            </td>
+                                        </ng-container>
+                                    </tr>
+
+
+                                </ng-template>
+                                <ng-template pTemplate="footer">
+                                    <tr class="surface-100">
+                                        <td pFrozenColumn [frozen]="true"
+                                            class="font-semibold text-800 border-right-2 border-300 p-2 text-center"
+                                            colspan="2"><i class="pi pi-book mr-2"></i>End Semester Records &#8594;</td>
+                                        <td colspan="3" class="font-semibold text-800 border-right-2 border-300"></td>
+                                        <!-- Spacer for mid-semester columns -->
+
+                                        <ng-container
+                                            *ngFor="let endExam of studentExaminationResultOperationalVertical?.endSemesterExams || [], index as i">
+                                            <td></td>
+                                            <td class="text-center font-semibold text-700">
+                                                <div class="flex flex-column align-items-center">
+                                                    <span class="text-600 font-medium text-sm">Max Cr.</span>
+                                                    <span class="text-l font-bold text-primary">
+                                                        {{calculateTotalCredits(endExam.records) }}
+                                                    </span>
+                                                </div>
+                                            </td>
+
+                                            <td class="text-center">
+                                                <div class="flex flex-column align-items-center">
+                                                    <span class="text-600 font-medium text-sm">Earned Cr.</span>
+                                                    <span class="text-l font-bold text-primary">
+                                                        {{ calculateEarnedCredits(endExam.records) }}
+                                                    </span>
+                                                </div>
+                                            </td>
+                                            <td class="text-center font-semibold text-700">
+                                                <!-- <div class="flex flex-column align-items-center">
+                                                <span class="text-600 font-medium text-sm">SGPA</span>
+                                                <span class="text-l font-bold text-orange-500">
+                                                    {{ (studentExaminationResultOperationalVertical.studentEndExaminations[i].studentSubjectPaperCodeEndExamMarksConsolidated?.sgpa) }}
+                                                </span>
+                                            </div> -->
+                                            </td>
+                                            <td class="text-center font-semibold text-700">
+                                                <div class="flex flex-column align-items-center">
+                                                    <span class="text-600 font-medium text-sm">EGP</span>
+                                                    <span class="text-l font-bold text-primary">
+                                                        {{ getGradePointExamAndSemesterWise(endExam.examinationId,
+                                                        studentExaminationResultOperationalVertical.operationalVerticalId)
+                                                        }}
+                                                    </span>
+                                                </div>
+                                            </td>
+                                            <td class="text-center font-semibold text-700 border-right-2 border-300">
+                                                <!-- <div class="flex flex-column align-items-center" pTooltip="Progressive Semester Earned Grade Points" tooltipPosition="top">
+                                                <span class="text-600 font-medium text-sm">SEGP</span>
+                                                <span class="text-l font-bold text-orange-500">
+                                                    {{  getCumulativeGradePointsExamAndSemesterWise(endExam.examinationId, studentExaminationResultOperationalVertical.operationalVerticalId) }}
+                                                </span>
+                                            </div> -->
+                                            </td>
+                                        </ng-container>
+                                    </tr>
+                                    <tr class="surface-100">
+                                        <td pFrozenColumn [frozen]="true" colspan="2" class="border-right-2 border-300">
+                                        </td>
+                                        <td colspan="3" class="border-right-2 border-300"></td>
+                                        <ng-container
+                                            *ngFor="let endExam of studentExaminationResultOperationalVertical?.studentEndExaminations || []">
+                                            <td colspan="6"
+                                                class="text-center font-semibold text-700 border-right-2 border-300">
+                                                <div class="flex flex-wrap gap-5 justify-content-center">
+                                                    <div class="flex flex-column align-items-center">
+                                                        <span class="text-800 font-medium text-sm">SGPA</span>
+                                                        <span class="text-l font-bold text-orange-500">
+                                                            {{
+                                                            endExam.studentSubjectPaperCodeEndExamMarksConsolidated?.sgpa
+                                                            }}
+                                                        </span>
+                                                    </div>
+                                                    <div class="flex flex-column align-items-center">
+                                                        <span class="text-800 font-medium text-sm">CGPA</span>
+                                                        <span class="text-l font-bold text-orange-500">
+                                                            {{
+                                                            endExam.studentSubjectPaperCodeEndExamMarksConsolidated?.cgpa
+                                                            }}
+                                                        </span>
+                                                    </div>
+                                                    <div class="flex flex-column align-items-center"
+                                                        pTooltip="Semester Earned Grade Points" tooltipPosition="top">
+                                                        <span class="text-800 font-medium text-sm">SEGP</span>
+                                                        <span class="text-l font-bold text-orange-500">
+                                                            {{
+                                                            getCumulativeGradePointsExamAndSemesterWise(endExam.studentSubjectPaperCodeEndExamMarksConsolidated?.examinationId,
+                                                            endExam.studentSubjectPaperCodeEndExamMarksConsolidated?.operationalVerticalId)
+                                                            }}
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </ng-container>
+                                    </tr>
+                                </ng-template>
+
+                                <ng-template pTemplate="summary">
+
+                                    <div class="flex flex-wrap gap-4 justify-content-between align-items-center p-3">
+                                        <div class="flex flex-column align-items-center">
+                                            <span class="text-600 font-medium text-sm">SGPA</span>
+                                            <span class="text-2xl font-bold text-primary">
+                                                {{
+                                                studentExaminationResultOperationalVertical?.studentExaminationResultOperationalVerticalFinalPointAverages?.[0]?.sgpa
+                                                || "-"
+                                                }}
+                                            </span>
+                                        </div>
+                                        <div class="flex flex-column align-items-center">
+                                            <span class="text-600 font-medium text-sm">CGPA</span>
+                                            <span class="text-2xl font-bold text-primary">
+                                                {{
+                                                studentExaminationResultOperationalVertical?.studentExaminationResultOperationalVerticalFinalPointAverages?.[0]?.cgpa
+                                                || "-"
+                                                }}
+                                            </span>
+                                        </div>
+                                        <div class="flex flex-column align-items-center">
+                                            <span class="text-600 font-medium text-sm">Total Available Credits</span>
+                                            <span class="text-xl font-semibold text-700">
+                                                {{
+                                                calculateTotalCredits(studentExaminationResultOperationalVertical?.studentEndExaminations?.[0]?.studentSubjectPaperCodeEndExamMarks
+                                                ?? []) }}
+                                            </span>
+                                        </div>
+                                        <div class="flex flex-column align-items-center">
+                                            <span class="text-600 font-medium text-sm">Total Earned Credits</span>
+                                            <span class="text-xl font-semibold text-green-600">
+                                                {{
+                                                (studentExaminationResultOperationalVertical?.studentEndExaminations &&
+                                                studentExaminationResultOperationalVertical.studentEndExaminations.length
+                                                > 0
+                                                ?
+                                                studentExaminationResultOperationalVertical.studentEndExaminations[studentExaminationResultOperationalVertical.studentEndExaminations.length
+                                                - 1].studentSubjectPaperCodeEndExamMarksConsolidated?.totalCredits
+                                                : null) ||
+                                                (studentExaminationResultOperationalVertical?.studentEndExaminations &&
+                                                studentExaminationResultOperationalVertical.studentEndExaminations.length
+                                                >= 2
+                                                ?
+                                                studentExaminationResultOperationalVertical.studentEndExaminations[studentExaminationResultOperationalVertical.studentEndExaminations.length
+                                                - 2].studentSubjectPaperCodeEndExamMarksConsolidated?.totalCredits
+                                                : null) || "-"
+                                                }}
+                                            </span>
+                                        </div>
+                                        <!-- <div class="flex flex-column align-items-center">
+                                        <span class="text-600 font-medium text-sm">Cumulative Credits</span>
+                                        <span class="text-xl font-semibold text-blue-600">
+                                            {{ studentExaminationResultOperationalVertical?.studentEndExaminations?.[0]?.studentSubjectPaperCodeEndExamMarksConsolidated?.commulativeCredits || '-' }}
+                                        </span>
+                                    </div> -->
+                                        <div class="flex flex-column align-items-center">
+                                            <span class="text-600 font-medium text-sm">Total Grade Points</span>
+                                            <span class="text-xl font-semibold text-700">
+                                                {{
+                                                studentExaminationResultOperationalVertical?.studentEndExaminations?.[0]?.studentSubjectPaperCodeEndExamMarksConsolidated?.totalGradePoints
+                                                || '-' }}
+                                            </span>
+                                        </div>
+                                        <div class="flex flex-column align-items-center"
+                                            pTooltip="Semester Earned Grade Points" tooltipPosition="top">
+                                            <span class="text-600 font-medium text-sm">SEGP</span>
+                                            <span class="text-xl font-semibold text-purple-600">
+
+                                                {{ getCumulativeGradePointsExamAndSemesterWise(
+                                                (studentExaminationResultOperationalVertical?.studentEndExaminations &&
+                                                studentExaminationResultOperationalVertical.studentEndExaminations.length
+                                                > 0)
+                                                ?
+                                                studentExaminationResultOperationalVertical.studentEndExaminations[studentExaminationResultOperationalVertical.studentEndExaminations.length
+                                                - 1].examinationId
+                                                : null,
+                                                (studentExaminationResultOperationalVertical?.studentEndExaminations &&
+                                                studentExaminationResultOperationalVertical.studentEndExaminations.length
+                                                > 0)
+                                                ?
+                                                studentExaminationResultOperationalVertical.studentEndExaminations[studentExaminationResultOperationalVertical.studentEndExaminations.length
+                                                - 1].operationalVerticalId
+                                                : null) || '-'
+                                                }}
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                </ng-template>
+                            </p-table>
+                        </div>
+                    </p-tabPanel>
+                </ng-container>
+            </ng-container>
+
+            <!-- -----Marks Statement Tab----- -->
+            <p-tabPanel *ngIf="(examinationResultExpandoResponse?.studentExaminationResultPrograms?.length ?? 0) > 0"
+                header="Marks Statement">
+                <ng-container *ngFor="let studentExaminationResultProgram of 
+            examinationResultExpandoResponse?.studentExaminationResultPrograms">
+                    <div class="field col-12"
+                        *ngFor="let studentExaminationResultOperationalVertical of studentExaminationResultProgram?.studentExaminationResultOperationalVerticals">
+
+                        <!-- Section Header -->
+                        <div class="surface-100 border-round-md p-3 mb-3 border-left-3 border-primary">
+                            <h5 class="m-0 text-900 font-semibold">
+                                <i class="pi pi-graduation-cap mr-2 text-primary"></i>
+                                {{ studentExaminationResultOperationalVertical?.operationalVerticalName ?? '' }}
+                            </h5>
+                        </div>
+
+                        <!-- Mid Semester Table -->
+                        <p-table
+                            *ngIf="studentExaminationResultOperationalVertical && studentExaminationResultOperationalVertical.midSemester && studentExaminationResultOperationalVertical.midSemester.length > 0"
+                            [value]="studentExaminationResultOperationalVertical?.examinationData ?? []"
+                            [resizableColumns]="true" [rowHover]="true"
+                            styleClass="p-datatable-customers p-datatable-sm p-datatable-striped p-datatable-gridlines mb-4">
+
+                            <ng-template pTemplate="header">
+                                <tr class="surface-50">
+                                    <th colspan="2" class="text-left">
+                                        <div class="flex align-items-center">
+                                            <i class="pi pi-calendar mr-2 text-primary"></i>
+                                            <span class="font-semibold text-900">Examination:</span>
+                                            <span class="ml-2 text-primary font-semibold">
+                                                {{
+                                                studentExaminationResultOperationalVertical?.midSemester?.[0]?.examinationName
+                                                ?? 'Mid Semester' }}
+                                            </span>
+                                        </div>
+                                    </th>
+
+                                    <th colspan="3" class="text-center">
+                                        <div class="flex align-items-center justify-content-center">
+                                            <i class="pi pi-clock mr-2 text-600"></i>
+                                            <span class="font-semibold text-900">Start Date:</span>
+                                            <span class="ml-2 text-600 font-semibold">
+                                                {{
+                                                studentExaminationResultOperationalVertical?.midSemester?.[0]?.startDate
+                                                | date: 'MMM dd, yyyy' }}
+                                            </span>
+                                        </div>
+                                    </th>
+
+                                    <th colspan="2" class="text-right">
+                                        <div class="flex align-items-center justify-content-center">
+                                            <i class="pi pi-bookmark mr-2 text-orange-500"></i>
+                                            <span class="font-semibold text-900">Semester:</span>
+                                            <span class="ml-2 text-orange-500 font-semibold">
+                                                {{ studentExaminationResultOperationalVertical?.operationalVerticalName
+                                                }}
+                                            </span>
+                                        </div>
+                                    </th>
+                                </tr>
+                                <tr class="surface-100">
+                                    <th class="text-700 font-semibold">
+                                        <i class="pi pi-bookmark mr-1"></i>Paper Code
+                                    </th>
+                                    <th class="text-700 font-semibold">
+                                        <i class="pi pi-book mr-1"></i>Subject
+                                    </th>
+                                    <th class="text-center text-700 font-semibold">
+                                        <i class="pi pi-bookmark-fill mr-1"></i>Credits
+                                    </th>
+                                    <th class="text-center text-700 font-semibold">
+                                        <i class="pi pi-trophy mr-1"></i>Grade
+                                    </th>
+                                    <th class="text-center text-700 font-semibold">
+                                        <i class="pi pi-star-fill mr-1"></i>Grade Point
+                                    </th>
+                                    <th class="text-center text-700 font-semibold">
+                                        <i class="pi pi-chart-bar mr-1"></i>Total Marks
+                                    </th>
+                                    <th class="text-center text-700 font-semibold">
+                                        <i class="pi pi-star mr-1"></i>Marks Obtained
+                                    </th>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-row let-rowIndex="rowIndex">
+                                <tr [class]="rowIndex % 2 === 0 ? 'surface-0' : 'surface-50'">
+                                    <td>
+                                        <span>{{ row.paperCode }}</span>
+                                    </td>
+                                    <td class="font-medium text-800">{{ getSubjectName(row.paperCode) }}</td>
+                                    <td class="text-center">
+                                        <span>{{ row.credits || '-' }}</span>
+                                    </td>
+                                    <td class="text-center">
+                                        <span class="p-tag p-tag-rounded font-semibold"
+                                            [class]="row.grade === 'A+' || row.grade === 'A' ? 'p-tag-success' :
+                                                row.grade === 'B+' || row.grade === 'B' ? 'p-tag-info' :
+                                                row.grade === 'C+' || row.grade === 'C' ? 'p-tag-warning' :
+                                                row.grade === 'D' || row.grade === 'F' ? 'p-tag-danger' : 'p-tag-secondary'">
+                                            {{ row.grade || '-' }}
+                                        </span>
+                                    </td>
+                                    <td class="text-center">
+                                        <span class="font-semibold" [class]="row.gradePoint >= 9 ? 'text-green-600' :
+                                                row.gradePoint >= 7 ? 'text-blue-600' :
+                                                row.gradePoint >= 5 ? 'text-orange-600' : 'text-red-600'">
+                                            {{ row.gradePoint || '-' }}
+                                        </span>
+                                    </td>
+                                    <td class="text-center">
+                                        <span class="font-semibold text-700">{{ row.totalMarks || '-' }}</span>
+                                    </td>
+                                    <td class="text-center">
+                                        <span class="font-semibold"
+                                            [class]="(row.obtainedMarks / row.totalMarks) >= 0.8 ? 'text-green-600' : 
+                                                (row.obtainedMarks / row.totalMarks) >= 0.6 ? 'text-orange-600' : 'text-red-600'">
+                                            {{ row.obtainedMarks || '-' }}
+                                        </span>
+                                    </td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+
+                        <!-- End Semester Tables -->
+                        <ng-container
+                            *ngFor="let endExam of studentExaminationResultOperationalVertical?.studentEndExaminations, index as i">
+                            <p-table [value]="endExam.studentSubjectPaperCodeEndExamMarks" [resizableColumns]="true"
+                                [rowHover]="true"
+                                styleClass="p-datatable-sm p-datatable-striped p-datatable-gridlines mb-4">
+
+                                <ng-template pTemplate="header">
+                                    <tr class="surface-50">
+                                        <th colspan="2" class="text-left">
+                                            <div class="flex align-items-center">
+                                                <i class="pi pi-calendar-plus mr-2 text-primary"></i>
+                                                <span class="font-semibold text-900">Examination:</span>
+                                                <span class="ml-2 text-primary font-semibold">{{
+                                                    getExamName(endExam?.examinationId) }}</span>
+                                            </div>
+                                        </th>
+
+                                        <th colspan="6" class="text-center">
+                                            <div class="flex align-items-center justify-content-evenly">
+                                                <div class="flex align-items-center justify-content-center">
+                                                    <i class="pi pi-clock mr-2 text-600"></i>
+                                                    <span class="font-semibold text-900">Start Date:</span>
+                                                    <span class="ml-2 text-600 font-semibold">{{ endExam?.startDate |
+                                                        date: 'MMM dd, yyyy' }}</span>
+                                                </div>
+                                                <div class="flex align-items-center justify-content-center">
+                                                    <i class="pi pi-bookmark mr-2 text-orange-500"></i>
+                                                    <span class="font-semibold text-900">Semester:</span>
+                                                    <span class="ml-2 text-orange-500 font-semibold">
+                                                        {{
+                                                        studentExaminationResultOperationalVertical?.operationalVerticalName
+                                                        }}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </th>
+
+                                        <!-- <th colspan="3" class="text-right">
+                                        <div class="flex align-items-center justify-content-center">
+                                            <i class="pi pi-bookmark mr-2 text-orange-500"></i>
+                                            <span class="font-semibold text-900">Semester:</span>
+                                            <span class="ml-2 text-orange-500 font-semibold">
+                                                {{ studentExaminationResultOperationalVertical?.operationalVerticalName }}
+                                            </span>
+                                        </div>
+                                    </th> -->
+                                    </tr>
+                                    <tr class="surface-100">
+                                        <th class="text-700 font-semibold">
+                                            <i class="pi pi-bookmark mr-1"></i>Paper Code
+                                        </th>
+                                        <th class="text-700 font-semibold">
+                                            <i class="pi pi-book mr-1"></i>Subject
+                                        </th>
+                                        <th class="text-center text-700 font-semibold">
+                                            <i class="pi pi-book mr-1"></i>Marks Obtained
+                                        </th>
+                                        <th class="text-center text-700 font-semibold">
+                                            <i class="pi pi-bookmark-fill mr-1"></i>Credits
+                                        </th>
+                                        <th class="text-center text-700 font-semibold">
+                                            <i class="pi pi-trophy mr-1"></i>Grade
+                                        </th>
+                                        <th class="text-center text-700 font-semibold">
+                                            <i class="pi pi-star-fill mr-1"></i>Grade Point
+                                        </th>
+                                        <th class="text-center text-700 font-semibold">
+                                            <i class="pi pi-book mr-1"></i>Grace
+                                        </th>
+                                        <th class="text-center text-700 font-semibold">
+                                            <i class="pi pi-star mr-1"></i>Scrutiny
+                                        </th>
+                                    </tr>
+                                </ng-template>
+                                <ng-template pTemplate="body" let-row let-rowIndex="rowIndex">
+                                    <tr [class]="rowIndex % 2 === 0 ? 'surface-0' : 'surface-50'">
+                                        <td style="height: 35px;">
+                                            <span>{{ row.subjectPaperCodeName }}</span>
+                                        </td>
+                                        <td class="font-medium text-800">{{ row.subjectName }}</td>
+                                        <td class="text-center">
+                                            <span class="p-tag p-tag-rounded font-semibold"
+                                                [class]="row.grade === 'A+' || row.grade === 'A' ? 'p-tag-success' :
+                                                    row.grade === 'B+' || row.grade === 'B' ? 'p-tag-info' :
+                                                    row.grade === 'C+' || row.grade === 'C' ? 'p-tag-warning' :
+                                                    row.grade === 'D' || row.grade === 'F' ? 'p-tag-danger' : 'p-tag-secondary'">
+                                                {{ row.obtainedMarks || '-' }}
+                                            </span>
+                                        </td>
+                                        <td class="text-center">
+                                            <span>{{ row.credits || '-' }}</span>
+                                        </td>
+                                        <td class="text-center">
+                                            <span class="p-tag p-tag-rounded font-semibold"
+                                                [class]="row.grade === 'A+' || row.grade === 'A' ? 'p-tag-success' :
+                                                    row.grade === 'B+' || row.grade === 'B' ? 'p-tag-info' :
+                                                    row.grade === 'C+' || row.grade === 'C' ? 'p-tag-warning' :
+                                                    row.grade === 'D' || row.grade === 'F' ? 'p-tag-danger' : 'p-tag-secondary'">
+                                                {{ row.grade || '-' }}
+                                            </span>
+                                        </td>
+                                        <td class="text-center">
+                                            <span class="font-semibold" [class]="row.gradePoint >= 9 ? 'text-green-600' :
+                                                    row.gradePoint >= 7 ? 'text-blue-600' :
+                                                    row.gradePoint >= 5 ? 'text-orange-600' : 'text-red-600'">
+                                                {{ row.gradePoint || '-' }}
+                                            </span>
+                                        </td>
+                                        <td class="text-center">
+                                            <span class="p-tag p-tag-rounded font-semibold">
+                                                {{ row.grace || '-' }}
+                                            </span>
+                                        </td>
+                                        <td class="text-center">
+                                            <span class="font-semibold text-500">{{ row.isSubmittedForScrutiny == null ?
+                                                '-' : (row.isSubmittedForScrutiny ? 'Yes' : 'No') }}</span>
+                                        </td>
+                                    </tr>
+                                </ng-template>
+                                <ng-template pTemplate="footer">
+                                    <tr class="surface-100">
+                                        <td colspan="8">
+                                            <div
+                                                class="flex flex-wrap gap-4 justify-content-between align-items-center p-3">
+                                                <div class="flex flex-column align-items-center">
+                                                    <span class="text-600 font-medium text-sm">CGPA</span>
+                                                    <span class="text-2xl font-bold text-primary">
+                                                        {{ endExam.studentSubjectPaperCodeEndExamMarksConsolidated?.cgpa
+                                                        || '-' }}
+                                                    </span>
+                                                </div>
+                                                <div class="flex flex-column align-items-center">
+                                                    <span class="text-600 font-medium text-sm">SGPA</span>
+                                                    <span class="text-2xl font-bold text-primary">
+                                                        {{ endExam.studentSubjectPaperCodeEndExamMarksConsolidated?.sgpa
+                                                        || '-' }}
+                                                    </span>
+                                                </div>
+                                                <div class="flex flex-column align-items-center">
+                                                    <span class="text-600 font-medium text-sm">Available Credits</span>
+                                                    <span class="text-xl font-semibold text-green-600">
+                                                        {{
+                                                        calculateTotalCredits(endExam.studentSubjectPaperCodeEndExamMarks)
+                                                        }}
+                                                    </span>
+                                                </div>
+                                                <div class="flex flex-column align-items-center">
+                                                    <span class="text-600 font-medium text-sm">Earned Credits</span>
+                                                    <span class="text-xl font-semibold text-green-600">
+                                                        {{
+                                                        calculateEarnedCredits(endExam.studentSubjectPaperCodeEndExamMarks)
+                                                        }}
+                                                    </span>
+                                                </div>
+                                                <div class="flex flex-column align-items-center">
+                                                    <span class="text-600 font-medium text-sm">Total Available
+                                                        Credits</span>
+                                                    <span class="text-xl font-semibold text-700">
+                                                        {{ grandTotalCredits(endExam.operationalVerticalId) }}
+                                                    </span>
+                                                </div>
+                                                <div class="flex flex-column align-items-center">
+                                                    <span class="text-600 font-medium text-sm">Total Earned
+                                                        Credits</span>
+                                                    <span class="text-xl font-semibold text-green-600">
+                                                        {{
+                                                        endExam.studentSubjectPaperCodeEndExamMarksConsolidated?.totalCredits
+                                                        || '-' }}
+                                                    </span>
+                                                </div>
+
+                                                <div class="flex flex-column align-items-center"
+                                                    pToolTip="Semester Earned Grade Points" tooltipPosition="top">
+                                                    <span class="text-600 font-medium text-sm">SEGP</span>
+                                                    <span class="text-xl font-semibold text-purple-600">
+                                                        {{
+                                                        getCumulativeGradePointsExamAndSemesterWise(endExam.examinationId,
+                                                        endExam.operationalVerticalId) }}
+                                                    </span>
+                                                </div>
+                                                <div class="flex flex-column align-items-center">
+                                                    <span class="text-600 font-medium text-sm">Total Grade Points</span>
+                                                    <span class="text-xl font-semibold text-700">
+                                                        {{
+                                                        endExam.studentSubjectPaperCodeEndExamMarksConsolidated?.totalGradePoints
+                                                        || '-' }}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </ng-template>
+                            </p-table>
+            </p-tabpanel>
+            </ng-container>
+            </ng-container>
+        </p-tabpanels>
+    </p-tabs>
+</div>

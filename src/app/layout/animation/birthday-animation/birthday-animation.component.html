@@ -1,0 +1,27 @@
+<div class="cake-container" (click)="onCakeClick()">
+  <div class="cake">
+    <div class="plate"></div>
+    <div class="layer layer-bottom" [class.animate]="animateBottom">
+      <span>{{userName}}</span>
+    </div>
+    <div class="layer layer-middle" [class.animate]="animateMiddle">
+      <span>Birthday</span>
+    </div>
+    <div class="layer layer-top" [class.animate]="animateTop">
+        <span>Happy</span>
+    </div>
+    <div class="icing"></div>
+    <div class="candles">
+      <div class="candle">
+        <div class="flame"></div>
+        <div class="wick"></div>
+        <div class="wax"></div>
+      </div>
+      <div class="candle">
+        <div class="flame"></div>
+        <div class="wick"></div>
+        <div class="wax"></div>
+      </div>
+    </div>
+  </div>
+</div>

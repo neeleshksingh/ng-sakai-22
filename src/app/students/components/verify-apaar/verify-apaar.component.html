@@ -1,0 +1,64 @@
+<div class="pb-6 verify-apaar-page">
+    <p-toast></p-toast>
+
+    <div class="grid">
+        <div class="col-12">
+            <div class="card p-3 md:p-4">
+                <div class="flex flex-column sm:flex-row align-items-start sm:align-items-center justify-content-between gap-3 mb-3">
+                    <div class="flex align-items-center gap-2">
+                        <i class="pi pi-verified text-primary text-2xl"></i>
+                        <h5 class="m-0 text-xl">Verify ABC ID (APAAR)</h5>
+                    </div>
+                    <p-tag value="New Feature" severity="success" icon="pi pi-star-fill"></p-tag>
+                </div>
+
+                <p class="m-0 text-600 mb-4 line-height-3">
+                    Verify a student's ABC ID by calling the CRM verification endpoint.
+                </p>
+
+                <form [formGroup]="verifyForm" (ngSubmit)="verifyApaar()">
+                    <div class="grid">
+                        <div class="field col-12 md:col-6 lg:col-6">
+                            <label for="abcId" class="font-medium">ABC ID</label>
+                            <input pInputText id="abcId" type="text" formControlName="abcId" class="w-full"
+                                placeholder="Enter ABC ID" />
+                            <small class="p-error"
+                                *ngIf="verifyForm.controls.abcId.touched && verifyForm.controls.abcId.invalid">
+                                ABC ID is required.
+                            </small>
+                        </div>
+
+                        <div class="field col-12 md:col-6 lg:col-6">
+                            <label for="studentId" class="font-medium">Student ID</label>
+                            <input pInputText id="studentId" type="text" formControlName="studentId" class="w-full"
+                                placeholder="Enter Student ID" />
+                            <small class="p-error"
+                                *ngIf="verifyForm.controls.studentId.touched && verifyForm.controls.studentId.invalid">
+                                Student ID is required.
+                            </small>
+                        </div>
+                    </div>
+
+                    <div class="mt-2 flex gap-2">
+                        <button pButton type="submit" label="Verify" icon="pi pi-check-circle"
+                            styleClass="w-full sm:w-auto" [loading]="isLoading"></button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="col-12" *ngIf="verificationResponse !== null">
+            <div class="card p-3 md:p-4">
+                <div class="flex align-items-center justify-content-between flex-wrap gap-2 mb-3">
+                    <h6 class="m-0">Verification Response</h6>
+                    <p-tag
+                        [severity]="verificationSucceeded === true ? 'success' : verificationSucceeded === false ? 'danger' : 'info'"
+                        [value]="verificationSucceeded === true ? 'Verified' : verificationSucceeded === false ? 'Not Verified' : 'Received'">
+                    </p-tag>
+                </div>
+
+                <pre class="response-block m-0">{{ verificationResponse | json }}</pre>
+            </div>
+        </div>
+    </div>
+</div>

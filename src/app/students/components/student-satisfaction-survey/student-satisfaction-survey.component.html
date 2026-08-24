@@ -1,0 +1,212 @@
+<div class="pb-6">
+    <div class="grid">
+        <div class="col-12">
+            <div class="toolbar-demo card">
+                <p-toolbar>
+                    <div class="p-toolbar-group-left">
+                        <div class="header-left-div">
+                            <div class="header-div1">
+                                <i class="fa-brands fa-docker" style="font-size: 40px;"></i>
+                            </div>
+                            <div class="header-div2">
+                                <h5>{{componentName}}</h5>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-toolbar-group-right"></div>
+                </p-toolbar>
+            </div>
+        </div>
+
+        @if (isFeedbackSubmitted) {
+        <div class="col-12">
+            <div class="flex align-items-start gap-3 p-3 border-round-lg notice-banner-success">
+                <i class="pi pi-check-circle mt-1 notice-icon-success"></i>
+                <div>
+                    <span class="font-bold text-800" style="font-size: 0.95rem;">Thank You for Your Response! </span>
+                    <span class="text-700" style="font-size: 0.95rem;">
+                        Your feedback has been submitted successfully. You may now continue using all CRM modules
+                        without any restrictions.
+                    </span>
+                </div>
+            </div>
+        </div>
+        } @else {
+        <div class="col-12">
+            <div class="flex align-items-start gap-3 p-3 border-round-lg notice-banner-warning">
+                <i class="pi pi-exclamation-triangle mt-1 notice-icon-warning"></i>
+                <div>
+                    <span class="font-bold text-800" style="font-size: 0.95rem;">Action Required: </span>
+                    <span class="text-700" style="font-size: 0.95rem;">
+                        You must complete and submit your feedback to continue using the CRM. Pending feedback must
+                        be filled before accessing other modules or performing further actions.
+                    </span>
+                </div>
+            </div>
+        </div>
+        }
+
+        @if (feedbackAnnouncementsLoaded && questions.length === 0 && !isFeedbackSubmitted) {
+        <div class="col-12">
+            <div class="card">
+                <div class="flex flex-column align-items-center justify-content-center py-7 px-4 text-center">
+                    <div class="relative mb-5">
+                        <div class="w-8rem h-8rem border-circle flex align-items-center justify-content-center"
+                            style="background: var(--surface-ground); border: 2px dashed var(--surface-400); box-shadow: 0 4px 24px rgba(0,0,0,0.06);">
+                            <i class="pi pi-calendar-times"
+                                style="font-size: 3rem; color: var(--text-color-secondary);"></i>
+                        </div>
+                    </div>
+                    <h3 class="text-2xl font-bold m-0 mb-2" style="color: var(--text-color);">No Feedback Announcements
+                    </h3>
+                    <p class="text-color-secondary text-base mb-4 mt-1 max-w-25rem line-height-3 m-0">
+                        There are no active feedback announcements available at the moment.<br>
+                        Please check back later or contact your administrator.
+                    </p>
+                    <span class="inline-flex align-items-center gap-2 px-4 py-2 border-round-3xl text-sm font-medium"
+                        style="background: var(--surface-ground); border: 1.5px solid var(--surface-400); color: var(--text-color-secondary);">
+                        <i class="pi pi-clock"></i>
+                        Please come back later
+                    </span>
+                </div>
+            </div>
+        </div>
+        }
+
+        @if (questions.length > 0 && !isFeedbackSubmitted) {
+        <div class="col-12">
+            <div class="card p-fluid">
+
+                <div class="feedback-container max-w-70rem mx-auto p-2 md:p-4">
+
+                    <div
+                        class="intro-banner flex align-items-start gap-3 p-4 mb-5 border-round-xl border-left-3 border-primary surface-50">
+                        <i class="pi pi-info-circle text-primary mt-1" style="font-size: 1.4rem; flex-shrink: 0;"></i>
+                        <div>
+                            <p class="text-900 font-semibold text-xl m-0 mb-1">Your Honest Feedback Matters</p>
+                            <p class="text-600 text-lg line-height-3 m-0">
+                                Please take a moment to thoughtfully evaluate each statement below. Your responses help
+                                us understand what is working well and where we can improve. There are no right or wrong
+                                answers — we value your genuine perspective. All feedback is treated with the utmost
+                                confidentiality and used solely for the purpose of continuous improvement.
+                            </p>
+                        </div>
+                    </div>
+
+                    @for (q of questions; track q.id; let i = $index) {
+
+                    <div
+                        class="question-card-surface surface-ground p-4 md:p-5 mb-5 border-round-2xl border-1 surface-border">
+
+                        <div class="text-xl font-medium text-900 mb-4 line-height-3">
+                            <span class="text-primary font-bold mr-2 text-2xl">{{ i + 1 }}.</span>
+                            {{ q.text }}
+                        </div>
+
+                        @if (isSubjectiveQuestion(q)) {
+                        <div class="subjective-response-container">
+                            <label [for]="'q' + q.id + '_remarks'" class="block text-700 font-medium mb-2">Your
+                                response</label>
+                            <textarea pInputTextarea [id]="'q' + q.id + '_remarks'" [(ngModel)]="q.remarks" [rows]="5"
+                                [autoResize]="true" class="w-full" placeholder="Enter your feedback here"></textarea>
+                        </div>
+                        } @else {
+                        <div class="flex flex-column lg:flex-row gap-3">
+                            @for (opt of q.options; track opt.value) {
+
+                            <div class="flex-1 flex align-items-center p-3 border-round-xl border-2 cursor-pointer transition-all transition-duration-200"
+                                [ngClass]="getCardColor(q.answer, opt.value)" (click)="q.answer = opt.value">
+
+                                <p-radioButton [name]="'question_' + q.id" [value]="opt.value" [(ngModel)]="q.answer"
+                                    [inputId]="'q' + q.id + '_opt' + opt.value">
+                                </p-radioButton>
+
+                                <label [for]="'q' + q.id + '_opt' + opt.value"
+                                    class="ml-3 cursor-pointer flex flex-column w-full mt-1">
+                                    <span class="font-bold text-base mb-1">{{ opt.engLabel }}</span>
+                                    <span class="text-sm font-medium opacity-80">{{ opt.hinLabel }}</span>
+                                </label>
+                            </div>
+                            }
+                        </div>
+                        }
+                    </div>
+                    }
+
+                    <div class="flex justify-content-end mt-4">
+                        <p-button label="Submit Feedback" icon="pi pi-send" size="large" (onClick)="submitFeedback()"
+                            [disabled]="!isFormValid()" styleClass="p-button-success">
+                        </p-button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        }
+
+        @if (isFeedbackSubmitted) {
+        <div class="col-12">
+            <div class="card">
+                <div class="flex flex-column align-items-center justify-content-center py-7 px-4 text-center">
+
+                    <!-- Animated check ring -->
+                    <div class="relative mb-5">
+                        <div class="w-8rem h-8rem border-circle flex align-items-center justify-content-center"
+                            style="background: radial-gradient(circle, #d4f5e2 0%, #a7f3c4 60%, #6ee7a0 100%); box-shadow: 0 0 0 12px #e6faf0, 0 8px 32px rgba(34,197,94,0.18);">
+                            <i class="pi pi-check text-green-600" style="font-size: 3.2rem; font-weight: 900;"></i>
+                        </div>
+                    </div>
+
+                    <!-- Heading -->
+                    <h2 class="text-4xl font-bold text-900 mb-2 mt-0" style="letter-spacing: -0.5px;">Thank You for Your
+                        Feedback!</h2>
+                    <p class="text-600 text-lg mb-5 mt-1 max-w-30rem line-height-3">
+                        Your response has already been submitted for this announcement.<br>
+                        We truly appreciate your valuable input.
+                    </p>
+
+                    <!-- Status badge row -->
+                    <div class="flex align-items-center gap-3 mb-5">
+                        <span
+                            class="inline-flex align-items-center gap-2 px-4 py-2 border-round-3xl font-semibold text-green-700"
+                            style="background: #dcfce7; border: 1.5px solid #86efac; font-size: 0.95rem;">
+                            <i class="pi pi-verified text-green-600"></i>
+                            Response Submitted
+                        </span>
+                    </div>
+
+                    <!-- Divider -->
+                    <div class="w-4rem border-top-2 border-300 mb-5"></div>
+
+                    <!-- Sub-message -->
+                    <p class="text-500 text-sm m-0">
+                        <i class="pi pi-info-circle mr-1"></i>
+                        If you believe this is a mistake, please contact your administrator.
+                    </p>
+                </div>
+            </div>
+        </div>
+        }
+    </div>
+    <p-dialog header="Review Your Responses" [(visible)]="showConfirmDialog" [style]="{width: '60vw'}"
+        [baseZIndex]="10000" [modal]="true" [draggable]="false" [resizable]="false">
+        <p class="text-700 mb-4">Please review your responses below before final submission:</p>
+        <div class="flex flex-column gap-2">
+            @for (q of questions; track q.id; let i = $index) {
+            <div class="flex align-items-start gap-3 p-3 surface-ground border-round-xl border-1 surface-border">
+                <span class="text-primary font-bold min-w-2rem">{{ i + 1 }}.</span>
+                <div class="flex-1">
+                    <div class="font-medium text-900 mb-1">{{ q.text }}</div>
+                    <span class="text-sm font-semibold text-primary response-preview">{{ getQuestionResponseLabel(q)
+                        }}</span>
+                </div>
+            </div>
+            }
+        </div>
+        <ng-template pTemplate="footer">
+            <p-button label="Cancel" icon="pi pi-times" styleClass="p-button-text"
+                (onClick)="showConfirmDialog = false"></p-button>
+            <p-button label="Submit" icon="pi pi-check" styleClass="p-button-success"
+                (onClick)="confirmSubmit()"></p-button>
+        </ng-template>
+    </p-dialog>
+</div>

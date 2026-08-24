@@ -1,0 +1,177 @@
+:host {
+    display: block;
+}
+
+/* ── Feed Wrapper ── */
+.feed-wrapper {
+    width: 100%;
+}
+
+/* ── Section Header ── */
+.feed-section-header {
+    background: var(--surface-card);
+}
+
+.feed-icon-badge {
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 0.75rem;
+    background: var(--primary-color);
+    color: var(--primary-color-text, #fff);
+    flex-shrink: 0;
+    box-shadow: 0 2px 8px rgba(var(--primary-color-rgb, 99, 102, 241), 0.25);
+}
+
+.feed-filter-btn {
+    width: 2.25rem !important;
+    height: 2.25rem !important;
+}
+
+.feed-new-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.4rem 0.7rem;
+    border-radius: 999px;
+    background: linear-gradient(135deg, #f97316 0%, #ef4444 100%);
+    color: #fff;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    box-shadow: 0 6px 18px rgba(239, 68, 68, 0.28);
+    animation: newBadgePulse 1.8s ease-in-out infinite;
+}
+
+/* ── Feed Cards ── */
+.feed-card {
+    border-color: var(--surface-200) !important;
+    transition:
+        box-shadow 0.2s ease,
+        transform 0.15s ease;
+
+    &:hover {
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+    }
+}
+
+/* ── Text Clamp ── */
+.line-clamp-3 {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* ── Media Section ── */
+.feed-media-section {
+    background: var(--surface-50);
+    border-top: 1px solid var(--surface-200);
+    border-bottom: 1px solid var(--surface-200);
+}
+
+/* ── Link Image Hover Overlay ── */
+.link-image-container {
+    text-decoration: none;
+
+    .link-overlay {
+        background: linear-gradient(
+            to top,
+            rgba(0, 0, 0, 0.6) 0%,
+            rgba(0, 0, 0, 0.15) 40%,
+            transparent 100%
+        );
+        pointer-events: none;
+        padding-bottom: 1.25rem;
+    }
+
+    &:hover .link-overlay {
+        opacity: 1 !important;
+    }
+}
+
+.link-overlay-badge {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    color: #fff;
+    padding: 0.6rem 1.25rem;
+    border-radius: 2rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    transition:
+        transform 0.2s ease,
+        background 0.2s ease;
+
+    i {
+        font-size: 1.1rem;
+    }
+
+    .link-image-container:hover & {
+        transform: translateY(-2px);
+        background: rgba(255, 255, 255, 0.22);
+    }
+}
+
+/* ── Card Footer ── */
+.feed-card-footer {
+    background: var(--surface-ground, var(--surface-50));
+}
+
+/* ── PrimeNG Image Override ── */
+::ng-deep p-image {
+    display: flex !important;
+    justify-content: center;
+    width: 100%;
+
+    img {
+        display: block;
+        width: 100%;
+        max-height: 480px;
+        object-fit: contain;
+        background-color: var(--surface-50);
+    }
+}
+
+/* ── Like Animation ── */
+.like-icon-anim {
+    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.pi-heart-fill.like-icon-anim {
+    animation: heartBeat 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes heartBeat {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.35);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+@keyframes newBadgePulse {
+    0% {
+        transform: scale(1);
+        box-shadow: 0 6px 18px rgba(239, 68, 68, 0.28);
+    }
+    50% {
+        transform: scale(1.04);
+        box-shadow: 0 10px 22px rgba(249, 115, 22, 0.36);
+    }
+    100% {
+        transform: scale(1);
+        box-shadow: 0 6px 18px rgba(239, 68, 68, 0.28);
+    }
+}

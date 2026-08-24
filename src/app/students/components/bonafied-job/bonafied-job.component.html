@@ -1,0 +1,70 @@
+<div class="pb-6">
+    <div class="grid">
+        <p-toast></p-toast>
+        <div class="col-12">
+            <div class="toolbar-demo card">
+                <p-toolbar>
+                    <div class="p-toolbar-group-left">
+                        <div class="header-left-div">
+                            <div class="header-div1">
+                                <i class="fa-brands fa-docker" style="font-size: 40px;"></i>
+                            </div>
+                            <div class="header-div2">
+                                <h5>Bonafide Job</h5>
+                            </div>
+                        </div>
+                    </div>
+                </p-toolbar>
+            </div>
+        </div>
+        <div class="col-12">
+            <form [formGroup]="eKalyanBonafideFormGroup">
+                <div class="card p-3">
+                    <div class="p-fluid formgrid grid">
+                        <div class="field col-12 sm:col-6 md:col-6 lg:col-3">
+                            <label for="programId">Program</label>
+                            <p-select [filter]="true" inputId="programId" [options]="programList"
+                                formControlName="programId" placeholder="Select Program"
+                                (onChange)="onProgamChanged($event)"></p-select>
+                        </div>
+                        <div class="field col-12 sm:col-6 md:col-6 lg:col-3">
+                            <label for="operationalVerticalId">Semester</label>
+                            <p-select [filter]="true" inputId="operationalVerticalId"
+                                [options]="operationalVerticalList" formControlName="operationalVerticalId"
+                                placeholder="Select Semester"
+                                (onChange)="onOperationalVerticalChanged($event)"></p-select>
+                        </div>
+                        <div class="field col-12 sm:col-6 md:col-6 lg:col-2">
+                            <label> &nbsp;</label>
+                            <button pButton type="button" icon="pi pi-search" label="View"
+                                [disabled]="!eKalyanBonafideFormGroup.valid" (click)="SearchResult()"></button>
+                        </div>
+                        <div class="field col-12 sm:col-6 md:col-6 lg:col-4">
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="col-12">
+
+
+            @if(!isLoading){
+            <div class="card" *ngIf="downloadEKalyanBonafideLink">
+                <div class="card" style="overflow:auto;">
+                    <iframe [src]="downloadEKalyanBonafideLink | safe" width="100%" height="1500"
+                        loading="lazy"></iframe>
+                </div>
+            </div>
+            } @else {
+            <div>
+                <div>
+                    <p-skeleton height="100" width="100%"></p-skeleton>
+                </div>
+            </div>
+            }
+
+
+        </div>
+
+    </div>
+</div>

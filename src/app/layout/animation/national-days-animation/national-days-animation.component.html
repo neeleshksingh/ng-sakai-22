@@ -1,0 +1,74 @@
+ <div *ngIf="republicDayConfig.show" 
+      class="overlay-container republic-day-theme"
+      [@slideIn]>
+      <div class="animation-content">
+        <div class="flag-container">
+          <div class="flag">
+            <div class="saffron"></div>
+            <div class="white">
+              <div class="chakra">
+                <div class="chakra-spokes"></div>
+              </div>
+            </div>
+            <div class="green"></div>
+          </div>
+        </div>
+        
+        <div class="content-text">
+          <h1 class="main-title">
+            Happy {{ republicDayConfig.ordinal }} {{ republicDayConfig.title }}
+          </h1>
+          <p class="subtitle">26th January {{ republicDayConfig.year }}</p>
+          <div class="decorative-elements">
+            <span class="dove">🕊️</span>
+            <span class="flag-emoji">🇮🇳</span>
+            <span class="dove">🕊️</span>
+          </div>
+        </div>
+        
+        <div class="floating-elements">
+          <div class="particle particle-1"></div>
+          <div class="particle particle-2"></div>
+          <div class="particle particle-3"></div>
+          <div class="particle particle-4"></div>
+        </div>
+      </div>
+  </div>
+
+    <!-- Independence Day Animation -->
+  <div *ngIf="independenceDayConfig.show" 
+    class="overlay-container independence-day-theme"
+    [@slideIn]
+  >
+    <div class="animation-content">
+      <div class="flag-container">
+        <div class="flag waving">
+          <div class="saffron"></div>
+          <div class="white">
+            <div class="chakra rotating">
+              <div class="chakra-spokes"></div>
+            </div>
+          </div>
+          <div class="green"></div>
+        </div>
+      </div>
+      
+      <div class="content-text">
+        <h1 class="main-title">
+          Happy {{ independenceDayConfig.ordinal }} {{ independenceDayConfig.title }}
+        </h1>
+        <p class="subtitle">15th August {{ independenceDayConfig.year }}</p>
+        <div class="decorative-elements">
+          <span class="dove">🕊️</span>
+          <span class="flag-emoji">🇮🇳</span>
+          <span class="dove">🕊️</span>
+        </div>
+      </div>
+      
+      <div class="fireworks">
+        <div class="firework firework-1"></div>
+        <div class="firework firework-2"></div>
+        <div class="firework firework-3"></div>
+      </div>
+    </div>
+  </div>

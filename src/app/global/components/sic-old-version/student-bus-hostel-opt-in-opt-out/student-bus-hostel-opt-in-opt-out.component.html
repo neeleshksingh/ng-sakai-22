@@ -1,0 +1,57 @@
+<div class="col-12">
+    <p-table [value]="studentProgramList" sortField="operationalVertical.name" sortMode="single"
+        [resizableColumns]="true" [rowHover]="true" [rows]="10"
+        [rowsPerPageOptions]="[ 10, 20, 30, 40, 50, { showAll: 'All' } ]" [paginator]="true"
+        styleClass="datatable-customers datatable-gridlines datatable-striped datatable-sm">
+        <ng-template pTemplate="header">
+            <tr>
+                <th>Sr no</th>
+                <th>OperationalVertical</th>
+                <th>IsBusOptIn</th>
+                <th>BusStartDate</th>
+                <th>BusEndDate</th>
+                <th>IsHostelOptIn</th>
+                <th>HostelStartDate</th>
+                <th>HostelEndDate</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-studentProgram let-rowIndex="rowIndex">
+            <tr>
+                <td>{{rowIndex+1}}</td>
+                <td><span class="p-column-title">OperationalVertical</span>
+                    {{studentProgram?.operationalVerticalName}}
+                </td>
+                <td>
+                    <span class="p-column-title">IsBusOptIn</span>
+                    <!-- {{studentProgram?.isBusOptIn === false ? 'No' : 'Yes'}} -->
+                    <p-checkbox *ngIf="studentProgram?.isBusOptIn === true" [binary]="true" [disabled]="true"
+                        [ngModel]="studentProgram?.isBusOptIn">
+                    </p-checkbox>
+                </td>
+                <td>
+                    <span class="p-column-title">BusStartDate</span>
+                    {{studentProgram?.busStartDate}}
+                </td>
+                <td>
+                    <span class="p-column-title">BusEndDate</span>
+                    {{studentProgram?.busEndDate}}
+                </td>
+                <td>
+                    <span class="p-column-title">IsHostelOptIn</span>
+                    <!-- {{studentProgram?.isHostelOptIn === false ? 'No' : 'Yes'}} -->
+                    <p-checkbox *ngIf="studentProgram?.isHostelOptIn === true" [binary]="true" [disabled]="true"
+                        [ngModel]="studentProgram?.isHostelOptIn">
+                    </p-checkbox>
+                </td>
+                <td>
+                    <span class="p-column-title">HostelStartDate</span>
+                    {{studentProgram?.hostelStartDate}}
+                </td>
+                <td>
+                    <span class="p-column-title">HostelEndDate</span>
+                    {{studentProgram?.hostelEndDate}}
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+</div>

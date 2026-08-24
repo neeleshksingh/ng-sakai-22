@@ -1,0 +1,56 @@
+<form [formGroup]="examinationProgramSearchFormGroup">
+    <div class="p-col-12">
+        <div class="p-fluid p-formgrid p-grid">
+            <div class="p-field p-col-12 p-md-3">
+                <label for="examinationIds">Examinations</label>
+                <p-select [filter]="true" inputId="examinationId" [options]="examinationSelectItemList"
+                    [(ngModel)]="examinationProgramSearchFormGroup.value.examinationId" formControlName="examinationId"
+                    placeholder="Select" (onChange)="onExaminationChanged($event)">
+                </p-select>
+                <p-multiSelect id="examinationIds" formControlName="examinationIds"
+                    [options]="examinationSelectItemList"
+                    [(ngModel)]="examinationProgramSearchFormGroup.value.examinationIds" optionLabel="label"
+                    defaultLabel="Select" (onChange)="onMultiExaminationChanged($event)"></p-multiSelect>
+            </div>
+            <div class="p-field p-col-12 p-md-2">
+                <label for="academicSessionIds">Academic Batch</label>
+                <p-select [filter]="true" inputId="academicSessionId" [options]="examinationSelectItemList"
+                    [(ngModel)]="examinationProgramSearchFormGroup.value.academicSessionId"
+                    formControlName="academicSessionId" placeholder="Select"
+                    (onChange)="onAcademicSessionIdChanged($event)">
+                </p-select>
+                <p-multiSelect id="academicSessionIds" formControlName="academicSessionIds"
+                    [options]="academicSessionSelectItemList"
+                    [(ngModel)]="examinationProgramSearchFormGroup.value.academicSessionIds" optionLabel="label"
+                    defaultLabel="Select" (onChange)="onMultiAcademicSessionIdChanged($event)"></p-multiSelect>
+            </div>
+            <div class="p-field p-col-12 p-md-3">
+                <label for="programIds">Program</label>
+                <p-select [filter]="true" inputId="programId" [options]="examinationSelectItemList"
+                    [(ngModel)]="examinationProgramSearchFormGroup.value.programId" formControlName="programId"
+                    placeholder="Select" (onChange)="onProgramChanged($event)">
+                </p-select>
+                <p-multiSelect id="programIds" formControlName="programIds" [options]="programNameSelectItemList"
+                    [(ngModel)]="examinationProgramSearchFormGroup.value.programIds" optionLabel="label"
+                    defaultLabel="Select" (onChange)="onMultiProgramChanged($event)">
+                </p-multiSelect>
+            </div>
+            <div class="p-field p-col-12 p-md-3">
+                <label for="operationalVerticalIds">Operational Vertical</label>
+                <p-select [filter]="true" inputId="operationalVerticalId" [options]="examinationSelectItemList"
+                    [(ngModel)]="examinationProgramSearchFormGroup.value.operationalVerticalId"
+                    formControlName="operationalVerticalId" placeholder="Select"
+                    (onChange)="onOperationalVerticalChanged($event)">
+                </p-select>
+                <p-multiSelect id="operationalVerticalIds" formControlName="operationalVerticalIds"
+                    [options]="operationalVerticalSelectItemList"
+                    [(ngModel)]="examinationProgramSearchFormGroup.value.operationalVerticalIds" optionLabel="label"
+                    defaultLabel="Select" (onChange)="onMultiOperationalVerticalChanged($event)"></p-multiSelect>
+            </div>
+            <div class="p-field p-col-12 p-md-1" style="padding-top: 22px; text-align: center;">
+                <button pButton type="button" [disabled]="!examinationProgramSearchFormGroup.valid" icon="pi pi-search"
+                    #newItem (click)="searchList()"></button>
+            </div>
+        </div>
+    </div>
+</form>

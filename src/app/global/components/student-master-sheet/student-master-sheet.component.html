@@ -1,0 +1,47 @@
+<div class="pb-6">
+    <p-toast></p-toast>
+    <div class="grid">
+        <div class="col-12">
+            <div class="toolbar-demo card">
+                <p-toolbar>
+                    <div class="p-toolbar-group-left">
+                        <div class="header-left-div">
+                            <div class="header-div1">
+                                <i [class]="icon" style="font-size: 40px;"></i>
+                            </div>
+                            <div class="header-div2">
+                                <h5>Student Master Sheet</h5>
+                            </div>
+                        </div>
+                    </div>
+                    <ng-template pTemplate="right">
+                        <div class="p-d-flex">
+                            <button type="button" pButton pRipple icon="pi pi-file-o" (click)="exportCSV()"
+                                class="p-button-info mr-2 p-button-raised" pTooltip="CSV"
+                                tooltipPosition="top"></button>
+                            <button type="button" pButton pRipple icon="pi pi-file-excel" (click)="exportExcel()"
+                                class="p-button-success mr-2 p-button-raised" pTooltip="XLS"
+                                tooltipPosition="top"></button>
+                            <button type="button" pButton pRipple icon="pi pi-file-pdf" (click)="exportPdf()"
+                                class="p-button-warning mr-2 p-button-raised" pTooltip="PDF"
+                                tooltipPosition="top"></button>
+                        </div>
+                    </ng-template>
+                </p-toolbar>
+            </div>
+        </div>
+        <div class="col-12 md:col-12 lg:col-12">
+            <div class="card">
+                <app-generic-table [value]="studentMasterSheet" [cols]="cols" [rows]="10" [paginator]="true"
+                    [rowsPerPageOptions]="[10, 20, 30, 40, 50, 100, { showAll: 'All' }]" selectionMode="multiple"
+                    [resizableColumns]="true" [isLoading]="isLoading"
+                    [globalFilterFields]="['studentId','rollNumber','abcid','studentName', 'academicSessionName', 'programName', 'operationalVerticalName', 'programSpecializationName','cgpa']"
+                    styleClass="p-datatable-customers p-datatable-gridlines p-datatable-striped p-datatable-sm"
+                    currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+                    [showCurrentPageReport]="true" entries="record(s)">
+                </app-generic-table>
+            </div>
+        </div>
+    </div>
+    <p-confirm-dialog [style]="{ width: '450px' }"></p-confirm-dialog>
+</div>

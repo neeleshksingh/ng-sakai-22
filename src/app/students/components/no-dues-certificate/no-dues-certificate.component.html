@@ -1,0 +1,463 @@
+<div class="pb-6">
+    <div class="grid">
+        <p-toast></p-toast>
+        <div class="col-12">
+            <div class="toolbar-demo card">
+                <p-toolbar>
+                    <div class="p-toolbar-group-left">
+                        <div class="header-left-div">
+                            <div class="header-div1">
+                                <i
+                                    class="fa-brands fa-docker"
+                                    style="font-size: 40px"
+                                ></i>
+                            </div>
+                            <div class="header-div2">
+                                <h5>{{ componentName }}</h5>
+                            </div>
+                        </div>
+                    </div>
+                    <div
+                        class="p-toolbar-group-right"
+                        *ngIf="canShowCertificate"
+                    >
+                        <button
+                            pButton
+                            type="button"
+                            icon="pi pi-download"
+                            label="Download PDF"
+                            (click)="downloadPDF()"
+                        ></button>
+                    </div>
+                </p-toolbar>
+            </div>
+        </div>
+        <ng-container *ngIf="canShowCertificate; else noDuesUnavailable">
+            <div
+                #certificateWrapper
+                class="certificate-wrapper"
+                style="
+                    display: flex;
+                    justify-content: center;
+                    flex-direction: column;
+                "
+            >
+                <div
+                    #certificate
+                    id="certificate"
+                    class="certificate no-dues-page"
+                    style="position: relative; margin-bottom: 10px"
+                >
+                    <div class="watermark">
+                        <img
+                            src="../../../../assets/partner-images/P10002/sbu-logo.jpg"
+                            style="opacity: 0.07; width: 500px"
+                        />
+                    </div>
+                    <div class="header">
+                        <img
+                            src="../../../../assets/partner-images/P10002/sbu-full-logo.webp"
+                            alt="College Logo"
+                            style="max-height: 15mm; background-color: #fff"
+                        />
+                    </div>
+                    <div class="univ-address">
+                        Birla Knowledge City, PO - Mahilong, Purulia Rd, Ranchi,
+                        Jharkhand 835103
+                    </div>
+                    <div class="title">No Dues Certificate for Students</div>
+                    <hr />
+                    <table class="info-table">
+                        <tr>
+                            <td class="label">Name of the student</td>
+                            <td class="value">{{ studentForm.value.name }}</td>
+                        </tr>
+                        <tr>
+                            <td class="label">Registration Number</td>
+                            <td class="value">
+                                {{ studentForm.value.registration }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="label">Father's Name</td>
+                            <td class="value">
+                                {{ studentForm.value.fatherName }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="label">Mother's Name</td>
+                            <td class="value">
+                                {{ studentForm.value.motherName }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="label">Student DOB</td>
+                            <td class="value">
+                                {{ studentForm.value.studentDob }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="label">Session</td>
+                            <td class="value">
+                                {{ studentForm.value.session }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="label">Programme & Department</td>
+                            <td class="value">
+                                {{ studentForm.value.programme }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="label">Mobile/Email</td>
+                            <td class="value">
+                                {{ studentForm.value.mobileEmail }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="label">
+                                Probable Date of Leaving
+                                <div class="subtext">
+                                    To be filled by student
+                                </div>
+                            </td>
+                            <td class="value"></td>
+                        </tr>
+                        <tr>
+                            <td class="label">
+                                Reason
+                                <div class="subtext">
+                                    To be filled by student
+                                </div>
+                            </td>
+                            <td class="value"></td>
+                        </tr>
+                    </table>
+
+                    <table class="accounts">
+                        <tr>
+                            <td
+                                rowspan="2"
+                                class="label"
+                                style="
+                                    width: 30%;
+                                    background-color: #f3f2f2;
+                                    text-align: center;
+                                    vertical-align: middle;
+                                "
+                            >
+                                Accounts
+                            </td>
+                            <td
+                                style="
+                                    width: 17.5%;
+                                    font-weight: bold;
+                                    background-color: #f3f2f2;
+                                "
+                            >
+                                Fee Generated
+                            </td>
+                            <td
+                                style="
+                                    width: 17.5%;
+                                    font-weight: bold;
+                                    background-color: #f3f2f2;
+                                "
+                            >
+                                Fee Paid
+                            </td>
+                            <td
+                                style="
+                                    width: 35%;
+                                    font-weight: bold;
+                                    background-color: #f3f2f2;
+                                "
+                            >
+                                Signature & Date
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>{{ studentForm.value.feeGenerated }}</td>
+                            <td>{{ studentForm.value.feePaid }}</td>
+                            <td></td>
+                        </tr>
+                    </table>
+
+                    <div class="accounts-info">
+                        *Fee status till date. Additional charges (such as
+                        fines) may be applicable and must be cleared to complete
+                        your NOC process.
+                    </div>
+                    <table class="dues-table">
+                        <thead>
+                            <tr style="background-color: #f3f2f2">
+                                <th>Dept/Unit/Lab</th>
+                                <th>Remark</th>
+                                <th>Signature & Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Examination</td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div>
+                                        Submission of Admission Related
+                                        Documents (PAO)
+                                    </div>
+                                    <hr />
+                                    <div
+                                        class="checkbox-container"
+                                        style="position: relative"
+                                    >
+                                        <span style="position: absolute"
+                                            ><Strong>Originals:</Strong>
+                                        </span>
+                                        <div
+                                            class="checkbox-item"
+                                            style="text-align: right"
+                                        >
+                                            <label for="transfer-cert"
+                                                >Transfer Certificate :
+                                                &nbsp;&nbsp;&nbsp;</label
+                                            >
+                                            <div class="custom-checkbox"></div>
+                                        </div>
+                                        <div
+                                            class="checkbox-item"
+                                            style="text-align: right"
+                                        >
+                                            <label for="character-cert"
+                                                >Character Certificate :
+                                            </label>
+                                            <div class="custom-checkbox"></div>
+                                        </div>
+                                        <div
+                                            class="checkbox-item"
+                                            style="text-align: right"
+                                        >
+                                            <label for="migration-cert"
+                                                >Migration Certificate :
+                                            </label>
+                                            <div class="custom-checkbox"></div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="declaration">
+                        <div style="text-align: center">
+                            <strong>Declaration</strong>
+                        </div>
+                        <div class="declaration-row">
+                            <span class="checkbox-box"></span>
+                            <span
+                                >I certify that the information above is correct
+                                to the best of my knowledge.</span
+                            >
+                        </div>
+                        <div class="declaration-row declaration-row-spaced">
+                            <span class="checkbox-box"></span>
+                            <span
+                                >I understand that post-printing modifications
+                                will incur charges as per university
+                                norms.</span
+                            >
+                        </div>
+                        <div class="declaration-row declaration-row-spaced">
+                            <span class="checkbox-box"></span>
+                            <span
+                                >I have no dues towards the University as on the
+                                date of leaving. In case of any dues found
+                                later, I hereby consent to pay it
+                                immediately.</span
+                            >
+                        </div>
+                    </div>
+
+                    <table class="signatures" style="margin-top: 5mm">
+                        <tr>
+                            <td>Place: ____________</td>
+                            <td>Date: ____________</td>
+                            <td>Signature of the Student: ____________</td>
+                        </tr>
+                    </table>
+
+                    <div class="section-title" style="margin-bottom: 5mm">
+                        For Office Use Only
+                    </div>
+                    <table class="signatures">
+                        <tr>
+                            <td>
+                                Signature of PAO: ____________<br /><br />Remarks:
+                                ____________
+                            </td>
+                            <td>
+                                Signature of Registrar: ____________<br /><br />Remarks:
+                                ____________
+                            </td>
+                        </tr>
+                    </table>
+
+                    <div class="footer-note">
+                        <hr style="margin-top: 6mm" />
+                        *This is a computer generated NOC, its authenticity is
+                        subject to verification from concerned departments.
+                    </div>
+                </div>
+
+                <div class="certificate page-break" style="position: relative">
+                    <div class="watermark">
+                        <img
+                            src="../../../../assets/partner-images/P10002/sbu-logo.jpg"
+                            style="opacity: 0.07; width: 500px"
+                        />
+                    </div>
+                    <div class="header">
+                        <img
+                            src="../../../../assets/partner-images/P10002/sbu-full-logo.webp"
+                            alt="College Logo"
+                            style="max-height: 15mm; background-color: #fff"
+                        />
+                    </div>
+                    <div class="univ-address">
+                        Birla Knowledge City, PO - Mahilong, Purulia Rd, Ranchi,
+                        Jharkhand 835103
+                    </div>
+                    <div class="title">Caution Money Refund form</div>
+                    <hr />
+
+                    <div class="section-title" style="margin-top: 4mm">
+                        Student Details
+                    </div>
+                    <table class="info-table" style="margin-bottom: 6mm">
+                        <tr>
+                            <td class="label">Name of the student</td>
+                            <td class="value">{{ studentForm.value.name }}</td>
+                        </tr>
+                        <tr>
+                            <td class="label">Registration Number</td>
+                            <td class="value">
+                                {{ studentForm.value.registration }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="label">Session</td>
+                            <td class="value">
+                                {{ studentForm.value.session }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="label">Programme & Department</td>
+                            <td class="value">
+                                {{ studentForm.value.programme }}
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td class="label">Mobile No.</td>
+                            <td class="value">
+                                {{ studentForm.value.mobileEmail }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="label">Email ID</td>
+                            <td class="value">{{ studentForm.value.email }}</td>
+                        </tr>
+                    </table>
+
+                    <div class="section-title">
+                        Student BANK ACCOUNT Details
+                    </div>
+                    <table class="info-table" style="margin-bottom: 8mm">
+                        <tr>
+                            <td class="label">Name of Bank</td>
+                            <td class="value"></td>
+                        </tr>
+                        <tr>
+                            <td class="label">Name of A/C Holder</td>
+                            <td class="value"></td>
+                        </tr>
+                        <tr>
+                            <td class="label">A/C No.</td>
+                            <td class="value"></td>
+                        </tr>
+                        <tr>
+                            <td class="label">IFSC Code</td>
+                            <td class="value"></td>
+                        </tr>
+                        <tr>
+                            <td class="label">Branch Name</td>
+                            <td class="value"></td>
+                        </tr>
+                    </table>
+
+                    <div
+                        style="
+                            display: flex;
+                            align-items: center;
+                            font-size: 14px;
+                            margin-bottom: 4mm;
+                        "
+                    >
+                        <span
+                            style="
+                                font-weight: bold;
+                                white-space: nowrap;
+                                margin-right: 18mm;
+                            "
+                            >Is your NOC Approved ?</span
+                        >
+                        <span style="margin: 0 10mm 0 4mm"
+                            >YES <span class="checkbox-box"></span
+                        ></span>
+                        <span>NO <span class="checkbox-box"></span></span>
+                    </div>
+                    <span class="accounts-info">
+                        *Note: Attach a copy of your Bank Account
+                        Passbook/cancelled cheque.
+                    </span>
+                    <table
+                        class="signatures"
+                        style="width: auto; float: right; margin-top: 10mm"
+                    >
+                        <tr>
+                            <td style="padding-bottom: 12px; width: 80mm">
+                                Signature of the Student:____________________
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="padding-bottom: 2px; width: 70mm">
+                                Date:____________________
+                            </td>
+                        </tr>
+                    </table>
+                    <div class="footer-note" style="margin-top: 78mm">
+                        <hr />
+                        *This is a computer generated Refund form, its
+                        authenticity is subject to verification from concerned
+                        departments.
+                    </div>
+                </div>
+            </div>
+        </ng-container>
+        <ng-template #noDuesUnavailable>
+            <div class="col-12">
+                <p-message
+                    severity="warn"
+                    [text]="
+                        'No Objection Certificates (NOCs) are issued exclusively in the final academic semester. Please ensure your outstanding payments are settled to facilitate the NOC download.'
+                    "
+                >
+                </p-message>
+            </div>
+        </ng-template>
+    </div>
+</div>

@@ -1,0 +1,50 @@
+export class StudentComponentFee {
+    id?: number;
+    academicSessionId?: number;
+    academicSessionName?: string;
+    programId?: number;
+    programName?: string;
+    operationalVerticalId?: number;
+    operationalVerticalName?: string;
+    feeComponentId?: number;
+    feeComponentName?: string;
+    registrationNumber?: string;
+    studentName?: string;
+    effectiveFrom?: any;
+    dueDate?: string;
+    generalFee?: number;
+    obcFee?: number;
+    stscFee?: number;
+    feeMode?: number;
+    isAdjustmentAllowed?: boolean;
+    canStudentAdjust?: boolean;
+    createdDate?: Date;
+    modifiedDate?: Date;
+    remarks?: string;
+    status?: string;
+}
+export class StudentComponentFeeUpdate {
+    id?: number;
+    academicSessionId?: number;
+    academicSessionName?: string;
+    programId?: number;
+    programName?: string;
+    operationalVerticalId?: number;
+    operationalVerticalName?: string;
+    feeComponentId?: number;
+    feeComponentName?: string;
+    registrationNumber?: string;
+    studentName?: string;
+    effectiveFrom?: any;
+    dueDate?: string;
+    generalFee?: number;
+    obcFee?: number;
+    stscFee?: number;
+    feeMode?: number;
+    isAdjustmentAllowed?: boolean;
+    canStudentAdjust?: boolean;
+    createdDate?: Date;
+    modifiedDate?: Date;
+    remarks?: string;
+    status?: string;
+}

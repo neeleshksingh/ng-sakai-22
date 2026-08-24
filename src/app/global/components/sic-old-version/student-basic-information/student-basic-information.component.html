@@ -1,0 +1,33 @@
+<div class="col-12" *ngIf="student?.studentId">
+    <div class="fluid formgrid grid align-items-end">
+        <div class="field col-12 sm:col-12 md:col-4 lg:col-4 align-items-center" style="margin: 0;">
+            <div class="profile-img">
+                <div class="image-upload">
+                    <p-image [src]="student.identityImagePath" alt="Image" [preview]="true">
+                        <ng-template pTemplate="indicator">
+                            <p class="view-img">👁️</p>
+                        </ng-template>
+                    </p-image>
+                </div>
+            </div>
+        </div>
+        <div class="field col-12 sm:col-12 md:col-8 lg:col-8 align-items-center profileDetils">
+            <div class="profile-head">
+                <h5>
+                    <span style="color: red;font-weight: bold;padding-right: 5px;" class="pi pi-user"></span>
+                    {{student.firstName}} {{student.middleName}} {{student.lastName}}
+                </h5>
+                <h6>
+                    <span style="color: red;font-weight: bold;padding-right: 5px;" class="pi pi-user"></span>
+                    {{student.studentId}} - <span
+                        [ngStyle]="{'color': student.statusDescription?.toUpperCase() === 'ACTIVE' ? '#4CBB17' : 'red'}">{{student.statusDescription}}</span>
+                </h6>
+                <h6> <span style="color: red;font-weight: bold;padding-right: 5px;" class="pi pi-mobile"></span>
+                    {{student.phoneNumber}} &nbsp;&nbsp;&nbsp; <span
+                        style="color: red;font-weight: bold;padding-right: 5px;" class="pi pi-envelope"></span>
+                    {{student.email | lowercase}}</h6>
+
+            </div>
+        </div>
+    </div>
+</div>

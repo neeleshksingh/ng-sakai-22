@@ -1,0 +1,351 @@
+.overlay-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      backdrop-filter: blur(2px);
+      animation: fadeIn 0.8s ease-in-out;
+    }
+    
+    .animation-content {
+      text-align: center;
+      position: relative;
+      max-width: 90vw;
+      padding: 2rem;
+    }
+
+    .flag-container {
+      margin-bottom: 2rem;
+      display: flex;
+      justify-content: center;
+    }
+
+    .flag {
+      width: 200px;
+      height: 133px;
+      border: 2px solid #333;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+      transform-origin: left center;
+    }
+
+    .flag.waving {
+      animation: wave 2s ease-in-out infinite;
+    }
+
+    .saffron, .white, .green {
+      height: 33.33%;
+      position: relative;
+    }
+
+    .saffron {
+      background: #FF9933;
+    }
+
+    .white {
+      background: #FFFFFF;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .green {
+      background: #138808;
+    }
+
+    .chakra {
+      width: 24px;
+      height: 24px;
+      border: 2px solid #000080;
+      border-radius: 50%;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .chakra.rotating {
+      animation: rotate 4s linear infinite;
+    }
+
+    .chakra-spokes {
+      width: 20px;
+      height: 20px;
+      background: 
+        /* Center dot */
+        radial-gradient(circle, #000080 15%, transparent 15%),
+        /* 24 spokes */
+        repeating-conic-gradient(
+          from 7.5deg,
+          #000080 0deg 7.5deg,
+          transparent 7.5deg 15deg
+        );
+      border-radius: 50%;
+    }
+
+    @keyframes rotate {
+      from {
+        transform: rotate(0deg);
+      }
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    .main-title {
+      font-size: clamp(1.8rem, 5vw, 3.5rem);
+      font-weight: bold;
+      margin: 0 0 0.5rem 0;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+      animation: titleGlow 2s ease-in-out infinite alternate;
+    }
+
+    .republic-day-theme .main-title {
+      background: linear-gradient(45deg, #FF9933, #138808, #000080);
+      background-size: 200% 200%;
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: titleGlow 2s ease-in-out infinite alternate, gradientShift 3s ease-in-out infinite;
+    }
+
+    .independence-day-theme .main-title {
+      color: #000080;
+    }
+
+    .subtitle {
+      font-size: clamp(1rem, 3vw, 1.5rem);
+      margin: 0 0 1rem 0;
+      font-weight: 600;
+      color: #333;
+      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+    }
+
+    .decorative-elements {
+      font-size: clamp(1.5rem, 4vw, 2.5rem);
+      margin: 1rem 0;
+      animation: bounce 2s ease-in-out infinite;
+    }
+
+    .decorative-elements span {
+      margin: 0 0.5rem;
+      display: inline-block;
+    }
+
+    .floating-elements {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+    }
+
+    .particle {
+      position: absolute;
+      width: 8px;
+      height: 8px;
+      background: radial-gradient(circle, #FFD700, #FFA500);
+      border-radius: 50%;
+      animation: float 3s ease-in-out infinite;
+    }
+
+    .particle-1 { top: 10%; left: 10%; animation-delay: 0s; }
+    .particle-2 { top: 20%; right: 10%; animation-delay: 0.5s; }
+    .particle-3 { bottom: 30%; left: 15%; animation-delay: 1s; }
+    .particle-4 { bottom: 20%; right: 15%; animation-delay: 1.5s; }
+
+    .fireworks {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+    }
+
+    .firework {
+      position: absolute;
+      width: 4px;
+      height: 4px;
+      background: #FFD700;
+      border-radius: 50%;
+      animation: explode 2s ease-out infinite;
+    }
+
+    .firework-1 { top: 15%; left: 20%; animation-delay: 0s; }
+    .firework-2 { top: 25%; right: 20%; animation-delay: 0.7s; }
+    .firework-3 { top: 35%; left: 50%; animation-delay: 1.4s; }
+
+    /* Animations */
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes wave {
+      0%, 100% { transform: perspective(400px) rotateY(0deg); }
+      25% { transform: perspective(400px) rotateY(-5deg); }
+      75% { transform: perspective(400px) rotateY(5deg); }
+    }
+
+    @keyframes rotate {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    @keyframes titleGlow {
+      from { text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3); }
+      to { text-shadow: 2px 2px 20px rgba(255, 215, 0, 0.6); }
+    }
+
+    @keyframes gradientShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0) rotate(0deg); opacity: 0.7; }
+      50% { transform: translateY(-20px) rotate(180deg); opacity: 1; }
+    }
+
+    @keyframes explode {
+      0% {
+        transform: scale(0);
+        opacity: 1;
+        box-shadow: 0 0 0 0 currentColor;
+      }
+      50% {
+        transform: scale(1);
+        opacity: 0.8;
+        box-shadow: 0 0 0 10px transparent;
+      }
+      100% {
+        transform: scale(1.5);
+        opacity: 0;
+        box-shadow: 0 0 0 20px transparent;
+      }
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .animation-content {
+        padding: 1rem;
+      }
+      
+      .flag {
+        width: 150px;
+        height: 100px;
+      }
+      
+      .chakra {
+        width: 18px;
+        height: 18px;
+      }
+      
+      .chakra-spokes {
+        width: 14px;
+        height: 14px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .flag {
+        width: 120px;
+        height: 80px;
+      }
+      
+      .chakra {
+        width: 14px;
+        height: 14px;
+      }
+      
+      .chakra-spokes {
+        width: 10px;
+        height: 10px;
+      }
+    }
+
+    /* Angular Animations */
+    @keyframes slideIn {
+      from {
+        transform: scale(0.8);
+        opacity: 0;
+      }
+      to {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+/* Party Poppers Styles */
+.party-poppers {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.popper {
+  position: absolute;
+  font-size: 24px;
+  opacity: 0;
+  animation: popper-pop 3s ease-out infinite;
+}
+
+.popper-1 {
+  left: 20%;
+  top: 30%;
+  animation-delay: 0.5s;
+}
+
+.popper-2 {
+  left: 70%;
+  top: 40%;
+  animation-delay: 1.5s;
+}
+
+.popper-3 {
+  left: 50%;
+  top: 60%;
+  animation-delay: 2.5s;
+}
+
+@keyframes popper-pop {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  20% {
+    transform: scale(1.2);
+    opacity: 1;
+  }
+  40% {
+    transform: scale(0.9);
+  }
+  60% {
+    transform: scale(1.1);
+  }
+  80% {
+    transform: scale(0.95);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 0;
+  }
+}

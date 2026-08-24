@@ -1,0 +1,41 @@
+.menu-loading-pure {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 30px;
+    background: linear-gradient(90deg, #f8f9fa 25%, #e9ecef 50%, #f8f9fa 75%);
+    background-size: 200% 100%;
+    animation: gentleShimmer 4s ease-in-out infinite;
+    font-size: 0.95rem;
+    color: #495057;
+    letter-spacing: 0.5px;
+}
+
+.loading-message {
+    font-weight: 500;
+    color: #343a40;
+}
+
+.loading-ellipsis {
+    margin-left: 4px;
+    animation: fade 2s infinite;
+}
+
+@keyframes gentleShimmer {
+    0% {
+        background-position: 200% 0;
+    }
+    100% {
+        background-position: -200% 0;
+    }
+}
+
+@keyframes fade {
+    0%,
+    100% {
+        opacity: 0.4;
+    }
+    50% {
+        opacity: 1;
+    }
+}

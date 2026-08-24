@@ -1,0 +1,242 @@
+<div class="pb-6">
+    <div class="grid">
+        <p-toast></p-toast>
+        <div class="col-12">
+            <div class="card shadow-3 border-round-xl overflow-hidden">
+                <p-toolbar>
+                    <div class="p-toolbar-group-left">
+                        <div class="header-left-div">
+                            <div class="header-div1">
+                                <i class="fa-brands fa-docker" style="font-size: 40px;"></i>
+                            </div>
+                            <div class="header-div2">
+                                <h5>{{componentName}}</h5>
+                            </div>
+                        </div>
+                    </div>
+                </p-toolbar>
+            </div>
+        </div>
+
+        <div class="col-12" *ngIf="isLoading">
+            <div class="card skeleton-card">
+                <div class="skeleton-grid">
+                    <p-skeleton height="1rem" width="45%"></p-skeleton>
+                    <p-skeleton height="2.6rem" width="100%" borderRadius="8px"></p-skeleton>
+
+                    <p-skeleton height="1rem" width="50%"></p-skeleton>
+                    <p-skeleton height="2.6rem" width="100%" borderRadius="8px"></p-skeleton>
+
+                    <p-skeleton height="1rem" width="48%"></p-skeleton>
+                    <p-skeleton height="2.6rem" width="100%" borderRadius="8px"></p-skeleton>
+
+                    <p-skeleton height="1rem" width="52%"></p-skeleton>
+                    <p-skeleton height="2.6rem" width="100%" borderRadius="8px"></p-skeleton>
+
+                    <p-skeleton height="1rem" width="42%"></p-skeleton>
+                    <p-skeleton height="7rem" width="100%" borderRadius="10px"></p-skeleton>
+
+                    <p-skeleton height="1rem" width="40%"></p-skeleton>
+                    <p-skeleton height="6rem" width="100%" borderRadius="8px"></p-skeleton>
+                </div>
+
+                <div class="skeleton-actions">
+                    <p-skeleton height="2.8rem" width="8rem" borderRadius="8px"></p-skeleton>
+                    <p-skeleton height="2.8rem" width="8rem" borderRadius="8px"></p-skeleton>
+                </div>
+            </div>
+        </div>
+
+        <ng-container *ngIf="!isLoading && isProgramChangeEligible; else notEligibleCard">
+            <div class="col-12" *ngIf="showCompletionAnimation">
+                <div class="card completion-animation-card" role="status" aria-label="Program change completed">
+                    <div #completionAnimationContainer class="completion-animation-player" aria-hidden="true"></div>
+                </div>
+            </div>
+
+            <div class="col-12" *ngIf="showSuccessCard">
+                <div class="card workflow-success-card" role="status" aria-live="polite">
+                    <div class="workflow-success-icon" aria-hidden="true">
+                        <i class="pi pi-check"></i>
+                    </div>
+                    <div class="workflow-success-content">
+                        <h6 class="workflow-success-title">Program Changed Successfully</h6>
+                        <p class="workflow-success-message">The student's program change workflow has been completed
+                            successfully.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12" *ngIf="hasExistingProgramChangeRequest">
+                <div class="card progress-card">
+                    <div class="progress-header flex align-items-center justify-content-between">
+                        <div>
+                            <h6 class="progress-title">Application Status</h6>
+                            <span class="progress-subtitle">Registration No:
+                                {{ latestProgramChangeRequest?.registrationNumber }}</span>
+                        </div>
+                        <div>
+                            <button pButton icon="pi pi-refresh" rounded raised severity="success"
+                                (click)="getStudentProfile()"></button>
+                        </div>
+                    </div>
+
+                    <div class="progress-summary">
+                        <div class="progress-summary-item">
+                            <span class="progress-summary-label">Current Program</span>
+                            <span class="progress-summary-value">{{ latestProgramChangeRequest?.currentProgramName }}
+                                &middot; {{ latestProgramChangeRequest?.currentSemesterName }}</span>
+                        </div>
+                        <i class="pi pi-arrow-right progress-summary-arrow"></i>
+                        <div class="progress-summary-item">
+                            <span class="progress-summary-label">New Program</span>
+                            <span class="progress-summary-value">{{ latestProgramChangeRequest?.newProgramName }}
+                                &middot; {{ latestProgramChangeRequest?.newSemesterName }}</span>
+                        </div>
+                    </div>
+
+                    <div class="progress-stepper">
+                        <div class="progress-track">
+                            <div class="progress-track-fill" [class.rejected]="isProgramChangeRequestRejected"
+                                [style.width.%]="progressPercentage"></div>
+                        </div>
+                        <div class="progress-steps">
+                            <div class="progress-step" *ngFor="let step of progressSteps"
+                                [class.completed]="step.completed" [class.active]="step.active"
+                                [class.rejected]="step.rejected">
+                                <div class="progress-step-icon">
+                                    <i class="pi"
+                                        [ngClass]="step.rejected ? 'pi-times' : (step.completed ? 'pi-check' : step.icon)"></i>
+                                </div>
+                                <div class="progress-step-label">{{ step.label }}</div>
+                                <div class="progress-step-date" *ngIf="step.dateTime">
+                                    {{ step.dateTime | date:'dd MMM yyyy' }}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12">
+                <div class="card">
+                    <form [formGroup]="studentProgramChangeRequestForm" style="width: 100%;"
+                        [class.form-readonly]="isSubmittedRequestReadonly">
+                        <div class="fluid formgrid grid align-items-end px-2">
+                            <div class="field col-12 md:col-6 lg:col-4 xl:col-3">
+                                <label for="registrationNumber">Registration Number</label>
+                                <span class="text-red-500">*</span>
+                                <p-select inputId="registrationNumber" [options]="registrationNumberList"
+                                    readonly="true" [filter]="true" formControlName="registrationNumber"
+                                    placeholder="Select"
+                                    styleClass="text-base text-color surface-overlay border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full">
+                                </p-select>
+                            </div>
+
+                            <div class="field col-12 md:col-6 lg:col-4 xl:col-3">
+                                <label for="currentAcademicSessionId">Current Academic Session</label>
+                                <span class="text-red-500">*</span>
+                                <p-select inputId="currentAcademicSessionId" [options]="currentAcademicSessionList"
+                                    readonly="true" [filter]="true" formControlName="currentAcademicSessionId"
+                                    placeholder="Select"
+                                    styleClass="text-base text-color surface-overlay border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full">
+                                </p-select>
+                            </div>
+
+                            <div class="field col-12 md:col-6 lg:col-4 xl:col-3">
+                                <label for="currentProgramId">Current Program</label>
+                                <span class="text-red-500">*</span>
+                                <p-select inputId="currentProgramId" [options]="currentProgramList" [filter]="true"
+                                    readonly="true" formControlName="currentProgramId" placeholder="Select"
+                                    styleClass="text-base text-color surface-overlay border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full">
+                                </p-select>
+                            </div>
+
+                            <div class="field col-12 md:col-6 lg:col-4 xl:col-3">
+                                <label for="currentSemesterId">Current Semester</label>
+                                <span class="text-red-500">*</span>
+                                <p-select inputId="currentSemesterId" [options]="currentSemesterList" [filter]="true"
+                                    readonly="true" formControlName="currentSemesterId" placeholder="Select"
+                                    styleClass="text-base text-color surface-overlay border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full">
+                                </p-select>
+                            </div>
+
+                            <div class="field col-12 md:col-6 lg:col-4 xl:col-3">
+                                <label for="newAcademicSessionId">New Academic Session</label>
+                                <span class="text-red-500">*</span>
+                                <p-select inputId="newAcademicSessionId" [options]="newAcademicSessionList"
+                                    [filter]="true" formControlName="newAcademicSessionId" placeholder="Select"
+                                    (onChange)="onChangeNewAcademicSession($event)"
+                                    styleClass="text-base text-color surface-overlay border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full">
+                                </p-select>
+                            </div>
+
+                            <div class="field col-12 md:col-6 lg:col-4 xl:col-3">
+                                <label for="newProgramId">New Program</label>
+                                <span class="text-red-500">*</span>
+                                <p-select inputId="newProgramId" [options]="newProgramList" [filter]="true"
+                                    formControlName="newProgramId" placeholder="Select"
+                                    (onChange)="onChangeNewProgram($event)"
+                                    styleClass="text-base text-color surface-overlay border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full">
+                                </p-select>
+                            </div>
+
+                            <div class="field col-12 md:col-6 lg:col-4 xl:col-3">
+                                <label for="newSemesterId">New Semester</label>
+                                <span class="text-red-500">*</span>
+                                <p-select inputId="newSemesterId" [options]="newSemesterList" [filter]="true"
+                                    formControlName="newSemesterId" placeholder="Select"
+                                    styleClass="text-base text-color surface-overlay border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full">
+                                </p-select>
+                            </div>
+
+                            <div class="field col-12">
+                                <label for="reasonForChange">Reason for Change</label>
+                                <span class="text-red-500">*</span>
+                                <textarea pInputTextarea id="reasonForChange" rows="5"
+                                    class="text-base text-color surface-overlay border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full"
+                                    formControlName="reasonForChange"></textarea>
+                            </div>
+
+                            <div class="field col-12 md:col-6 lg:col-4 xl:col-3">
+                                <label for="supportingDocuments" class="supporting-documents-label">Supporting
+                                    Documents</label>
+                                <div class="supporting-documents-uploader">
+                                    <div class="supporting-documents-header">
+                                        <i class="pi pi-upload"></i>
+                                        <span>Upload file</span>
+                                    </div>
+                                    <input type="file" id="supportingDocuments" class="supporting-documents-input"
+                                        formControlName="supportingDocuments">
+                                    <small class="supporting-documents-hint">Accepted formats: PDF, DOC, DOCX</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex flex-row md:flex-row align-items-center justify-content-center gap-3"
+                            *ngIf="!isSubmittedRequestReadonly">
+                            <button pButton pRipple type="button" label="Clear" class="p-button-raised p-button-warning"
+                                icon="pi pi-times" (click)="onClear()"></button>
+                            <button pButton pRipple type="button" label="Save" (click)="submit()"
+                                class="p-button-success p-button-raised"
+                                [disabled]="!studentProgramChangeRequestForm.valid" icon="pi pi-save"></button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </ng-container>
+
+        <ng-template #notEligibleCard>
+            <div class="col-12" *ngIf="!isLoading">
+                <div class="card eligibility-card">
+                    <div class="eligibility-card-content">
+                        <i class="pi pi-info-circle eligibility-icon"></i>
+                        <h6 class="eligibility-title">Program Change Not Available</h6>
+                        <p class="eligibility-message">{{ eligibilityMessage }}</p>
+                    </div>
+                </div>
+            </div>
+        </ng-template>
+
+        <p-confirm-dialog [style]="{ width: '450px' }"></p-confirm-dialog>
+    </div>
+</div>

@@ -1,0 +1,29 @@
+<div class="col-12">
+    <div class="card">
+        <div *ngIf="tableArrayGeneralDetails.length>0">
+            <p-table #dt [value]="tableArrayGeneralDetails" [rowHover]="true" dataKey="id" autoLayout="true"
+                resizableColumns="true"
+                styleClass="p-datatable-customers p-datatable-gridlines p-datatable-striped p-datatable-lg">
+                <ng-template pTemplate="caption">
+                    <h5>General Details</h5>
+                </ng-template>
+                <ng-template pTemplate="body" let-student>
+                    <tr>
+                        <td style="width: 25%; padding: 8px !important;">
+                            {{student?.col1}}
+                        </td>
+                        <td style="width: 25%;">
+                            <b>{{student?.col2}}</b>
+                        </td>
+                        <td style="width: 25%;">
+                            {{student?.col3}}
+                        </td>
+                        <td style="width: 25%;">
+                            <b>{{student?.col4}}</b>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+    </div>
+</div>

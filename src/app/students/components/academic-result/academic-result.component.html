@@ -1,0 +1,77 @@
+<div class="pb-6">
+    <div class="grid">
+        <p-toast></p-toast>
+        <div class="col-12">
+            <div class="toolbar-demo card">
+                <p-toolbar>
+                    <div class="p-toolbar-group-left">
+                        <div class="header-left-div">
+                            <div class="header-div1">
+                                <i class="fas fa-book-open" style="font-size: 40px;"></i>
+                            </div>
+                            <div class="header-div2">
+                                <h5>{{componentName}}</h5>
+                            </div>
+                        </div>
+                    </div>
+                    <ng-template pTemplate="right">
+                        <div class="d-flex">
+                        </div>
+                    </ng-template>
+                </p-toolbar>
+            </div>
+        </div>
+        <div class="col-12 md:col-12 lg:col-12">
+            <div class="card">
+                <form [formGroup]="academicResultFormGroup">
+                    <div class="grid align-items-end">
+                        <div class="col-12 md:col-6 lg:col-3 p-4">
+                            <label for="programId">Program</label>
+                            <p-select [filter]="true" inputId="programId" [options]="programList"
+                                formControlName="programId" [style]="{'width':'100%'}" placeholder="Select Program"
+                                (onChange)="onProgamChanged($event)"></p-select>
+                        </div>
+                        <div class="col-12 md:col-6 lg:col-2 p-4">
+                            <label for="operationalVerticalId">Semester</label>
+                            <p-select [filter]="true" inputId="operationalVerticalId"
+                                [options]="operationalVerticalList" [style]="{'width':'100%'}"
+                                formControlName="operationalVerticalId" placeholder="Select Semester"
+                                (onChange)="onOperationalVerticalChanged($event)"></p-select>
+                        </div>
+                        <div class="col-12 md:col-6 lg:col-3 p-4">
+                            <label for="examinationTypeId">Examination Type</label>
+                            <p-select [filter]="true" inputId="examinationTypeId" [options]="examinationTypeList"
+                                [style]="{'width':'100%'}" formControlName="examinationTypeId"
+                                placeholder="Select Examination Type" (onChange)="onExaminationTypeChanged($event)">
+                            </p-select>
+                        </div>
+                        <div class="col-12 md:col-6 lg:col-2 p-4">
+                            <label for="examinationId">Examination</label>
+                            <p-select [filter]="true" inputId="examinationId" [options]="examinationList"
+                                [style]="{'width':'100%'}" formControlName="examinationId"
+                                placeholder="Select Examination" (onChange)="onExaminationChanged($event)"></p-select>
+                        </div>
+                        <div class="col-12 md:col-6 lg:col-2 p-4">
+                            <button pButton type="button" [disabled]="!academicResultFormGroup.valid"
+                                label="View Result" #newItem (click)="SearchResult()" style="margin-top: 6px;"></button>
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+            <div class="card" *ngIf="downloadByExaminationResultLink">
+                <div class="card" style="overflow:auto;">
+                    <iframe [src]="downloadByExaminationResultLink | safe" width="100%" height="1500"
+                        loading="lazy"></iframe>
+                </div>
+            </div>
+
+            <div class="card" *ngIf="hasError">
+                <div style="color: red; text-align: center; font-size: 25px;">
+                    {{resultMessage}}
+                </div>
+            </div>
+        </div>
+        <p-confirm-dialog [style]="{ width: '450px' }"></p-confirm-dialog>
+    </div>
+</div>

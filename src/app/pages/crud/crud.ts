@@ -214,7 +214,7 @@ interface ExportColumn {
             </ng-template>
         </p-dialog>
 
-        <p-confirmdialog [style]="{ width: '450px' }" />
+        <p-confirm-dialog [style]="{ width: '450px' }" />
     `,
     changeDetection: ChangeDetectionStrategy.OnPush,
     providers: [MessageService, ProductService, ConfirmationService]

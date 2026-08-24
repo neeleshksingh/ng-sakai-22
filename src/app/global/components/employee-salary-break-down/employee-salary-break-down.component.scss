@@ -1,0 +1,284 @@
+.salary-breakdown-container {
+    max-width: 1000px;
+    margin: 0 auto;
+    font-family: Arial, sans-serif;
+    background-color: white;
+    border-radius: 8px;
+    padding: 5px;
+}
+
+.salary-breakdown-container .company-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 0;
+    border-bottom: 1px solid #ddd;
+    margin-bottom: 20px;
+    position: relative;
+}
+
+.salary-breakdown-container .company-header .logo {
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 140px;
+}
+
+.salary-breakdown-container .company-header .logo img {
+    width: 100%;
+    max-height: 60px;
+    object-fit: contain;
+}
+
+.salary-breakdown-container .company-header .company-details {
+    text-align: center;
+}
+
+.salary-breakdown-container .company-header .company-details h1 {
+    font-size: 20px;
+    color: #333;
+    margin: 0;
+}
+
+.salary-breakdown-container .company-header .company-details p {
+    font-size: 14px;
+    color: #555;
+    margin: 5px 0 0;
+    line-height: 1.4;
+}
+
+.salary-breakdown-container .header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.salary-breakdown-container .header h2 {
+    font-size: 24px;
+    color: #333;
+}
+
+.salary-breakdown-container .header p {
+    font-size: 16px;
+    color: #777;
+}
+
+.salary-breakdown-container .breakdown-tables {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.salary-breakdown-container .breakdown-tables .table-section {
+    background: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 10px;
+}
+
+.salary-breakdown-container .breakdown-tables .table-section h3 {
+    font-size: 18px;
+    color: #555;
+    margin-bottom: 10px;
+}
+
+.salary-breakdown-container .breakdown-tables .table-section table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.salary-breakdown-container .breakdown-tables .table-section th,
+.salary-breakdown-container .breakdown-tables .table-section td {
+    padding: 8px;
+    text-align: left;
+}
+
+.salary-breakdown-container .breakdown-tables .table-section th {
+    background: #4c63b6;
+    color: white;
+}
+
+.salary-breakdown-container .breakdown-tables .table-section td {
+    color: #555;
+}
+
+.salary-breakdown-container .breakdown-tables .table-section tr {
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.salary-breakdown-container .breakdown-tables .table-section tr:hover {
+    background-color: #f1f9ff;
+    transform: scale(1.02);
+}
+
+.salary-breakdown-container
+    .breakdown-tables
+    .table-section
+    tr:nth-child(even) {
+    background: #f2f2f2;
+}
+
+.salary-breakdown-container .summary-section {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.salary-breakdown-container .details-table {
+    border-collapse: collapse;
+    table-layout: fixed;
+    width: 33.3%;
+}
+
+.salary-breakdown-container .details-table td {
+    padding: 5px;
+    text-align: left;
+    vertical-align: middle;
+}
+
+.salary-breakdown-container .details-table .label {
+    font-weight: bold;
+    color: #333;
+}
+
+.salary-breakdown-container .details-table .value {
+    color: #555;
+}
+
+.salary-breakdown-container .summary-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.salary-breakdown-container .summary-table td {
+    padding: 8px;
+    text-align: left;
+    vertical-align: middle;
+    color: #333;
+    width: 25%;
+}
+
+.salary-breakdown-container .summary-table .label {
+    font-weight: bold;
+    color: #555;
+}
+
+.salary-breakdown-container .summary-table .value {
+    color: #000;
+}
+
+.salary-breakdown-container .summary-table .val-1 {
+    padding-right: 28px;
+}
+
+.salary-breakdown-container .summary-table .val-2 {
+    padding-left: 35px;
+}
+
+.table-2 {
+    tr {
+        height: 2rem;
+    }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .salary-breakdown-container .breakdown-tables {
+        grid-template-columns: 1fr;
+    }
+
+    .salary-breakdown-container .header h2 {
+        font-size: 20px;
+    }
+
+    .salary-breakdown-container .header p {
+        font-size: 14px;
+    }
+
+    .salary-breakdown-container .breakdown-tables .table-section {
+        padding: 8px;
+    }
+
+    .salary-breakdown-container .breakdown-tables .table-section h3 {
+        font-size: 16px;
+    }
+
+    .salary-breakdown-container .breakdown-tables .table-section th,
+    .salary-breakdown-container .breakdown-tables .table-section td {
+        padding: 6px;
+    }
+
+    .salary-breakdown-container .summary-section {
+        flex-direction: column;
+    }
+
+    .salary-breakdown-container .details-table {
+        width: 100%;
+    }
+
+    .salary-breakdown-container .company-header {
+        flex-direction: column;
+        position: relative;
+    }
+
+    .salary-breakdown-container .company-header .logo {
+        position: static;
+        transform: none;
+        margin-bottom: 10px;
+    }
+
+    .salary-breakdown-container .company-header .company-details h1 {
+        font-size: 18px;
+    }
+
+    .salary-breakdown-container .company-header .company-details p {
+        font-size: 12px;
+    }
+
+    .salary-breakdown-container .summary-table tbody tr {
+        display: block;
+    }
+
+    .salary-breakdown-container .summary-table td {
+        display: block;
+        width: 50%;
+        text-align: left;
+    }
+
+    .salary-breakdown-container .summary-table .label {
+        display: inline-block;
+        font-weight: bold;
+    }
+
+    .salary-breakdown-container .summary-table .value {
+        display: inline-block;
+        padding-right: 8px;
+    }
+
+    .salary-breakdown-container .summary-table .val-3 {
+        text-align: right;
+        width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    .salary-breakdown-container .header h2 {
+        font-size: 18px;
+    }
+
+    .salary-breakdown-container .header p {
+        font-size: 12px;
+    }
+
+    .salary-breakdown-container .details-table .label,
+    .salary-breakdown-container .details-table .value {
+        font-size: 14px;
+    }
+
+    .salary-breakdown-container .company-header .company-details h1 {
+        font-size: 16px;
+    }
+
+    .salary-breakdown-container .company-header .company-details p {
+        font-size: 12px;
+    }
+}

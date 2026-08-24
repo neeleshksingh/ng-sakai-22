@@ -1,0 +1,146 @@
+<div class="pb-6">
+    <p-toast></p-toast>
+    <div class="grid">
+        <div class="col-12">
+            <div class="toolbar-demo card">
+                <p-toolbar>
+                    <div class="p-toolbar-group-left">
+                        <div class="header-left-div">
+                            <div class="header-div1">
+                                <i class="fa-brands fa-docker" style="font-size: 40px;"></i>
+                            </div>
+                            <div class="header-div2">
+                                <h5>{{componentName}}</h5>
+                            </div>
+                        </div>
+                    </div>
+                    <ng-template pTemplate="right">
+                        <div class="d-flex">
+                            <div class="p-toolbar-group-right">
+                                <button pButton type="submit" label="Raise Request" (click)="raiseRequest()"
+                                    [disabled]="!serviceRequestFormGroup.valid" icon="pi pi-check"></button>
+                            </div>
+                        </div>
+                    </ng-template>
+                </p-toolbar>
+            </div>
+        </div>
+        <div class="col-12 md:col-12 lg:col-12">
+            <div class="card ">
+                <form [formGroup]="serviceRequestFormGroup" style="width: 100%;">
+                    <div class="formgrid grid align-items-end">
+                        <div class="field col-12 sm:col-6 md:col-4 lg:col-3 pl-4 pr-4">
+                            <label for="serviceRequestDepartmentId">Department*</label>
+                            <p-select [filter]="true" inputId="serviceRequestDepartmentId"
+                                [options]="serviceRequestDepartmentLists"
+                                [(ngModel)]="serviceRequestFormGroup.value.serviceRequestDepartmentId"
+                                formControlName="serviceRequestDepartmentId" [style]="{'width':'100%'}"
+                                (onChange)="onServiceRequestDepartmentChanged($event)" placeholder="Select" required
+                                [showClear]="true"></p-select>
+                        </div>
+                        <div class="field col-12 sm:col-6 md:col-4 lg:col-3 pl-4 pr-4">
+                            <label for="serviceRequestWorkgroupId">WorkGroup*</label>
+                            <p-select [filter]="true" inputId="serviceRequestWorkgroupId"
+                                [options]="serviceRequestWorkgroupLists"
+                                [(ngModel)]="serviceRequestFormGroup.value.serviceRequestWorkgroupId"
+                                formControlName="serviceRequestWorkgroupId" [style]="{'width':'100%'}"
+                                (onChange)="onServiceRequestWorkgroupChanged($event)" placeholder="Select"
+                                [showClear]="true"></p-select>
+                        </div>
+                        <div class="field col-12 sm:col-6 md:col-4 lg:col-3 pl-4 pr-4">
+                            <label for="serviceRequestCategoryId">Category*</label>
+                            <p-select [filter]="true" inputId="serviceRequestCategoryId"
+                                [options]="serviceRequestCategoryLists"
+                                [(ngModel)]="serviceRequestFormGroup.value.serviceRequestCategoryId"
+                                formControlName="serviceRequestCategoryId" placeholder="Select"
+                                [style]="{'width':'100%'}" (onChange)="onServiceRequestCategoryChanged($event)"
+                                [showClear]="true"></p-select>
+                        </div>
+                        <div class="field col-12 sm:col-6 md:col-4 lg:col-3 pl-4 pr-4">
+                            <label for="serviceRequestSubCategoryId">Sub Category*</label>
+                            <p-select [filter]="true" inputId="serviceRequestSubCategoryId"
+                                [options]="serviceRequestSubCategoryLists"
+                                [(ngModel)]="serviceRequestFormGroup.value.serviceRequestSubCategoryId"
+                                (onChange)="onServiceRequestSubCategoryChanged($event)" [style]="{'width':'100%'}"
+                                formControlName="serviceRequestSubCategoryId" placeholder="Select" [showClear]="true">
+                            </p-select>
+                        </div>
+                        <div class="field col-12 sm:col-6 md:col-4 lg:col-3 pl-4 pr-4">
+                            <label for="isRequestedForOther">Is Request For Other*</label>
+                            <p-select [filter]="true" inputId="isRequestedForOther" [options]="isRequestForOtherLists"
+                                [(ngModel)]="serviceRequestFormGroup.value.isRequestedForOther"
+                                [style]="{'width':'100%'}" (onChange)="onIsRequestForOther($event)"
+                                formControlName="isRequestedForOther" placeholder="Select" [showClear]="true">
+                            </p-select>
+                        </div>
+                        <div class="field col-12 sm:col-6 md:col-4 lg:col-3 pl-4 pr-4">
+                            <label for="requestedForId">RequestFor(Reg. No.)</label>
+                            <input pInputText type="text" id="requestedForId" [style]="{'width':'100%'}"
+                                [(ngModel)]="serviceRequestFormGroup.value.requestedForId"
+                                formControlName="requestedForId">
+                        </div>
+                        <div class="field col-12 sm:col-6 md:col-4 lg:col-3 pl-4 pr-4">
+                            <label for="priority">Priority</label>
+                            <p-select [filter]="true" inputId="priority" [options]="priorityLists"
+                                [style]="{'width':'100%'}" [(ngModel)]="serviceRequestFormGroup.value.priority"
+                                formControlName="priority" placeholder="Select" [showClear]="true">
+                            </p-select>
+                        </div>
+                        <div class="field col-12 sm:col-6 md:col-4 lg:col-3 pl-4 pr-4">
+                            <label for="location">Location</label>
+                            <input pInputText type="text" id="location"
+                                [(ngModel)]="serviceRequestFormGroup.value.location" formControlName="location"
+                                [style]="{'width':'100%'}">
+                        </div>
+                        <div class="field col-12 sm:col-6 md:col-4 lg:col-3 pl-4 pr-4">
+                            <label for="contactNumber">Contact Number</label>
+                            <input pInputText type="text" id="contactNumber" [style]="{'width':'100%'}"
+                                [(ngModel)]="serviceRequestFormGroup.value.contactNumber"
+                                formControlName="contactNumber">
+                        </div>
+                        <div class="field col-12 sm:col-6 md:col-4 lg:col-3 pl-4 pr-4">
+                            <label for="extensionNumber">Extension Number</label>
+                            <input pInputText type="text" id="extensionNumber" [style]="{'width':'100%'}"
+                                [(ngModel)]="serviceRequestFormGroup.value.extensionNumber"
+                                formControlName="extensionNumber">
+                        </div>
+
+                        <div class="field col-12 sm:col-6 md:col-4 lg:col-3 pl-4 pr-4">
+                            <label for="title">Title*</label>
+                            <p-select [filter]="true" inputId="title" [options]="titleLists" [style]="{'width':'100%'}"
+                                [(ngModel)]="serviceRequestFormGroup.value.title" formControlName="title"
+                                placeholder="Select" required [showClear]="true"></p-select>
+                        </div>
+                        <div class="field col-12 sm:col-6 md:col-4 lg:col-3 pl-4 pr-4"
+                            [ngStyle]="{'pointer-events': disableField ? 'none' : 'auto'}">
+                            <label for="name">Requester Name</label>
+                            <input pInputText type="text" id="name" [(ngModel)]="serviceRequestFormGroup.value.name"
+                                [disabled]="false" formControlName="name" [style]="{'width':'100%'}">
+                        </div>
+                        <div class="field col-12 pl-4 pr-4">
+                            <label for="symptom">Symptom*</label>
+                            <input id="symptom" pInputText [(ngModel)]="serviceRequestFormGroup.value.symptom" required
+                                formControlName="symptom" [style]="{'width':'100%'}" />
+                        </div>
+                        <div class="field col-12 sm:col-6 md:col-4 lg:col-3 pl-4 pr-4"
+                            style="text-align: center; padding-top: 6px;">
+                            <label> </label>
+                            <p-fileupload #fileUpload mode="basic" (onSelect)="documentUpload($event, fileUpload)"
+                                chooseLabel="Upload" pTooltip="PDF File" [style]="{'width':'100%'}">
+                            </p-fileupload>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <p-confirm-dialog [style]="{ width: '450px' }"></p-confirm-dialog>
+    </div>
+    <p-dialog header="Warning!" [(visible)]="messageDialog" [style]="{ width: '30vw' }" [modal]="true">
+        <p>Please enter registration number in RequestFor field.</p>
+        <ng-template pTemplate="footer">
+            <div style="text-align: center;">
+                <button pButton icon="pi pi-check" (click)="messageDialog = false" label="Ok"
+                    styleClass="p-button-text"></button>
+            </div>
+        </ng-template>
+    </p-dialog>

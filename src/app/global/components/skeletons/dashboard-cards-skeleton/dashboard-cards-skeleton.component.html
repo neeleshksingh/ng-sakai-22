@@ -1,11 +1,9 @@
-<div class="dashboard-card-skeleton" aria-label="Loading dashboard cards">
-    @for (card of [1, 2, 3, 4]; track card) {
-        <div class="card">
-            <p-skeleton shape="circle" size="3.5rem" />
-            <div class="flex-1">
-                <p-skeleton width="55%" height="0.8rem" styleClass="mb-3" />
-                <p-skeleton width="80%" height="1.5rem" />
-            </div>
-        </div>
-    }
-</div>
+@if(!data){
+    <span class="text-blue-500 block white-space-nowrap"><p-skeleton width="7rem" /></span><br>
+    <span class="text-blue-500 block text-4xl font-bold"><p-skeleton width="15rem" height="1.5rem" /></span>
+}
+@else {
+    <span class="text-blue-500 block white-space-nowrap mb-1"><p-skeleton width="7rem" height="1.2rem"/></span>
+    <span class="text-blue-500 block text-4xl font-bold mb-1"><p-skeleton width="15rem" height="1.3rem"/></span>
+    <span class="text-blue-500 block text-xl font-semibold mb-1"><p-skeleton width="7rem" height="1.2rem"/></span>
+}

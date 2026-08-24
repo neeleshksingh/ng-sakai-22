@@ -1,0 +1,119 @@
+<div class="pb-6">
+    <p-toast></p-toast>
+    <div class="grid">
+        <div class="col-12">
+            <div class="toolbar-demo card">
+                <p-toolbar>
+                    <div class="p-toolbar-group-left">
+                        <div class="header-left-div">
+                            <div class="header-div1">
+                                <i class="fa-brands fa-docker" style="font-size: 40px;"></i>
+                            </div>
+                            <div class="header-div2">
+                                <h5>{{componentName}}</h5>
+                            </div>
+                        </div>
+                    </div>
+                    <ng-template pTemplate="right">
+                        <div class="d-flex">
+                            <button pButton type="button" pTooltip="New Request"
+                                tooltipPosition="bottom" routerLink="/home/students/student-profile-update">New Request</button>
+                        </div>
+                    </ng-template>
+                </p-toolbar>
+            </div>
+        </div>
+        <div class="col-12 md:col-12 lg:col-12">
+            <div class="card ">
+
+                <p-tabs value="0" (valueChange)="onTabChange($event)">
+                    <p-tablist>
+                        <p-tab value="0">Details</p-tab>
+                        <p-tab value="1">Documents</p-tab>
+                        <p-tab value="2">Workflow</p-tab>
+                        <p-tab value="3">Response</p-tab>
+                    </p-tablist>
+                    <p-tabpanels>
+                        <p-tabpanel value="0">
+                            <app-generic-view [data]="serviceRequestReviewFormGroup.value" [fields]="cols"
+                                [iconClass]="'view-icon'"></app-generic-view>
+                        </p-tabpanel>
+
+                        <p-tabpanel value="1">
+                            <div *ngFor="let serviceRequestAttachment of serviceRequestAttachmentList">
+                                <div class="formgrid grid align-items-end">
+                                    <div class="field col-12 sm:col-12 md:col-12 lg:col-12 pl-4 pr-4">
+                                        <a style="font-size: 20px" target="_blank"
+                                            href={{serviceRequestAttachment.attachmentUrl}}>
+                                            {{serviceRequestAttachment.name}} </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </p-tabpanel>
+                        <p-tabpanel value="2">
+                            <p-table #dt [value]="serviceRequestWorkflowList" [rows]="10" [paginator]="true"
+                                [resizableColumns]="true" [rowHover]="true" dataKey="id"
+                                [rowsPerPageOptions]="[10, 20, 50, 100, 200, 500, { showAll: 'All' }]"
+                                styleClass="p-datatable-customers p-datatable-gridlines p-datatable-striped p-datatable-sm"
+                                [showCurrentPageReport]="true">
+                                <ng-template pTemplate="header">
+                                    <tr>
+                                        <th> UserName </th>
+                                        <th> Message </th>
+                                        <th> Status </th>
+                                        <th> CreatedDate </th>
+                                    </tr>
+                                </ng-template>
+                                <ng-template pTemplate="body" let-serviceRequestWorkflow>
+                                    <tr>
+                                        <td><span class="p-column-title">UserName</span>
+                                            {{serviceRequestWorkflow?.userName}} </td>
+                                        <td><span class="p-column-title">Message</span>
+                                            {{serviceRequestWorkflow?.resolutionMessage}} </td>
+                                        <td><span class="p-column-title">Status</span>
+                                            {{serviceRequestWorkflow?.status}} </td>
+                                        <td><span class="p-column-title">CreatedDate</span>
+                                            {{serviceRequestWorkflow?.createdDate | date : "MMM d, y, hh:mm"}} </td>
+                                    </tr>
+                                </ng-template>
+                            </p-table>
+                        </p-tabpanel>
+                        <p-tabpanel value="3">
+                            <form [formGroup]="serviceRequestReplyFormGroup">
+                                <div class="p-fluid p-formgrid p-grid">
+                                    <div class="p-field p-col-12 p-md-10">
+                                        <label for="replyMessage">Reply Message*</label>
+                                        <textarea id="replyMessage" pInputTextarea
+                                            [(ngModel)]="serviceRequestReplyFormGroup.value.replyMessage" required
+                                            rows="5" cols="20" formControlName="replyMessage"></textarea>
+                                    </div>
+                                    <div class="p-field p-col-12 p-md-2" style=" padding-top: 6px;">
+
+                                        <p-fileupload #fileUpload mode="basic"
+                                            (onSelect)="documentUpload($event, fileUpload)" chooseLabel="Upload*">
+                                        </p-fileupload>
+                                    </div>
+                                    <div class="p-field p-col-12 p-md-12"
+                                        style="text-align: center; width: 100px; margin-top: 5px;">
+                                        <button pButton type="button"
+                                            [disabled]="!serviceRequestReplyFormGroup.valid"
+                                            (click)="SubmitReply()">Submit</button> &nbsp;
+                                    </div>
+                                </div>
+                            </form>
+                        </p-tabpanel>
+                    </p-tabpanels>
+                </p-tabs>
+
+                <!-- <app-generic-table [value]="serviceRequestList" [cols]="cols" [rows]="10" [paginator]="true"
+                        [rowsPerPageOptions]="[10, 20, 30, 40, 50, 100, { showAll: 'All' }]" selectionMode="multiple"
+                        [(selection)]="selectedServiceRequest" [resizableColumns]="true" [isLoading]="isLoading"
+                        [globalFilterFields]="globalFilterFields" [dataKey]="dataKey" 
+                        styleClass="p-datatable-customers p-datatable-gridlines p-datatable-striped p-datatable-sm"
+                        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+                        [showCurrentPageReport]="true" [actions]="actions" entries="data(s)"
+                        (onAction)="handleAction($event)">
+                    </app-generic-table> -->
+            </div>
+        </div>
+    </div>

@@ -1,0 +1,122 @@
+<div class="pb-6">
+    <p-toast></p-toast>
+    <div class="grid">
+        <div class="col-12">
+            <div class="toolbar-demo card">
+                <p-toolbar>
+                    <div class="p-toolbar-group-left">
+                        <div class="header-left-div">
+                            <div class="header-div1">
+                                <i [ngClass]="iconClass" style="font-size: 40px;"></i>
+                            </div>
+                            <div class="header-div2">
+                                <h5>{{componentName}}</h5>
+                            </div>
+                        </div>
+                    </div>
+                    <ng-template pTemplate="right">
+                        <div class="p-d-flex">
+                            <button type="button" pButton pRipple icon="pi pi-file-excel" (click)="exportExcel()"
+                                class="p-button-success mr-2 p-button-raised" pTooltip="XLS"
+                                tooltipPosition="top"></button>
+                        </div>
+                    </ng-template>
+                </p-toolbar>
+            </div>
+        </div>
+        <div class="col-12 md:col-12 lg:col-12">
+            <div class="card">
+                <p-table #dt [value]="studentOnBoardingWithdrawalList" [rows]="10" [paginator]="true" [rowHover]="true"
+                    dataKey="id" [globalFilterFields]="['provisionalNumber', 'withdrawalStatus', 'createdDate']"
+                    [rowsPerPageOptions]="[10, 20, 50, 100, 500, { showAll: 'All' }]" autoLayout="true"
+                    resizableColumns="true"
+                    styleClass="p-datatable-customers p-datatable-gridlines p-datatable-striped p-datatable-sm"
+                    currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+                    [showCurrentPageReport]="true">
+                    <ng-template pTemplate="caption">
+                        <div class="flex flex-row flex-md-row md:justify-content-between table-header">
+                            <button pButton label="Reset" class="p-button-outlined" icon="pi pi-filter-slash"
+                                (click)="clear(dt)" style="width: 84px;"></button>
+                            <span class="p-input-icon-left">
+                                <i class="pi pi-search"></i>
+                                <input #searchInput pInputText type="text"
+                                    (input)="dt.filterGlobal((searchInput.value || ''), 'contains')"
+                                    placeholder="Search keyword" />
+                            </span>
+                        </div>
+                    </ng-template>
+                    <ng-template pTemplate="header">
+                        <tr [pSelectableRow]="true">
+                            <th>S.No</th>
+                            <th pSortableColumn="provisionalNumber">
+                                AdmissionNumber
+                                <p-sort-icon field="provisionalNumber">
+                                </p-sort-icon>
+                                <p-column-filter type="text" field="provisionalNumber" display="menu"></p-column-filter>
+                            </th>
+                            <!-- <th pSortableColumn="studentName">
+                                    StudentName
+                                    <p-sort-icon field="studentName"> </p-sort-icon>
+                                    <p-column-filter type="text" field="studentName" display="menu"></p-column-filter>
+                                </th> -->
+                            <!-- <th style="text-align: center" pSortableColumn="programName">
+                                    ProgramName
+                                    <p-sort-icon field="programName">
+                                    </p-sort-icon>
+                                    <p-column-filter type="text" field="programName"
+                                        display="menu"></p-column-filter>
+                                </th> -->
+                            <th pSortableColumn="withdrawalStatus">
+                                WithdrawalStatus
+                                <p-sort-icon field="withdrawalStatus"> </p-sort-icon>
+                                <p-column-filter type="text" field="withdrawalStatus" display="menu"></p-column-filter>
+                            </th>
+                            <th pSortableColumn="createdDate">
+                                CreatedDate
+                                <p-sort-icon field="createdDate"> </p-sort-icon>
+                                <p-column-filter type="text" field="createdDate" display="menu"></p-column-filter>
+                            </th>
+                            <th>Action</th>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-studentOnBoardingWithdrawal let-rowIndex="rowIndex">
+                        <tr>
+                            <td>{{ rowIndex + 1 }}</td>
+                            <td>
+                                <span class="p-column-title">AdmissionNumber</span>
+                                {{ studentOnBoardingWithdrawal.provisionalNumber }}
+                            </td>
+                            <!-- <td>
+                                    <span class="p-column-title">StudentName</span>
+                                    {{ studentOnBoardingWithdrawal.studentName }}
+                                </td> -->
+                            <!-- <td style="text-align: center">
+                                    <span class="p-column-title">ProgramName</span>
+                                    {{ studentOnBoardingWithdrawal.programName }}
+                                </td> -->
+                            <td>
+                                <span class="p-column-title">WithdrawalStatus</span>
+                                {{ studentOnBoardingWithdrawal.withdrawalStatus }}
+                            </td>
+                            <td>
+                                <span class="p-column-title">CreatedDate</span>
+                                {{ studentOnBoardingWithdrawal.createdDate | date: 'dd-MMMM-yyyy' }}
+                            </td>
+                            <td class="flex gap-1">
+                                <button pButton pRipple icon="pi pi-eye"
+                                    class="p-button-rounded p-button p-mr-2 w-2rem h-2rem"
+                                    (click)="viewStudentOnboardingWithdrawalDetail(studentOnBoardingWithdrawal)"></button>
+                            </td>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="summary">
+                        <div class="flex align-items-center justify-content-between">
+                            Total
+                            {{ studentOnBoardingWithdrawalList.length }} record found
+                        </div>
+                    </ng-template>
+                </p-table>
+            </div>
+        </div>
+    </div>
+</div>

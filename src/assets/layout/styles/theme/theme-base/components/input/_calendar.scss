@@ -1,8 +1,8 @@
-p-calendar.ng-dirty.ng-invalid > .p-calendar > .p-inputtext {
+p-datepicker.ng-dirty.ng-invalid > .p-datepicker > .p-inputtext {
     @include invalid-input();
 }
 
-.p-calendar:not(.p-calendar-disabled).p-focus > .p-inputtext {
+.p-datepicker:not(.p-datepicker-disabled).p-focus > .p-inputtext {
     @include focused-input();
 }
 
@@ -238,19 +238,19 @@ p-calendar.ng-dirty.ng-invalid > .p-calendar > .p-inputtext {
 
 }
 
-p-calendar.p-calendar-clearable {
+p-datepicker.p-datepicker-clearable {
     .p-inputtext {
         padding-right: nth($inputPadding, 2) * 2 + $primeIconFontSize;
     }
     
-    .p-calendar-clear-icon {
+    .p-datepicker-clear-icon {
         color: $inputIconColor;
         right: nth($inputPadding, 2);
     }
 }
 
-p-calendar.p-calendar-clearable .p-calendar-w-btn {
-    .p-calendar-clear-icon {
+p-datepicker.p-datepicker-clearable .p-datepicker-w-btn {
+    .p-datepicker-clear-icon {
         color: $inputIconColor;
         right: $buttonIconOnlyWidth + nth($inputPadding, 2);
     }

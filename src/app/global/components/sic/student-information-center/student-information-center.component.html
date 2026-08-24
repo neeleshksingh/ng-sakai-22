@@ -1,0 +1,70 @@
+<div class="pb-6">
+    <p-toast></p-toast>
+    <div class="grid">
+        <div class="col-12">
+            <div class="toolbar-demo card">
+                <p-toolbar>
+                    <div class="p-toolbar-group-left">
+                        <div class="header-left-div">
+                            <div class="header-div1">
+                                <i [ngClass]="iconClass" style="font-size: 40px;"></i>
+                            </div>
+                            <div class="header-div2">
+                                <label class="header-label">{{componentName}}</label>
+                                <h4 class="header-heading">{{studentId}}</h4>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-toolbar-group-right">
+                        <div class="flex flex-column md:flex-row justify-content-between w-full" style="gap:10px">
+                            <input pInputText type="text" id="employeeCodeInput" [(ngModel)]="studentId"
+                                placeholder="Student Id" class="text-base text-color surface-overlay border-1 border-solid 
+                                 surface-border border-round appearance-none outline-none focus:border-primary w-full"
+                                (input)="onSearchInputChange()">
+                            <button pButton pRipple type="button" icon="pi pi-search"
+                                class="p-button p-button-raised w-10rem"
+                                [label]="(activeComponent === 'backlog' && backlogDataState.isEmpty && !hasSearchInputChanged) ? 'Retry' : 'Search'"
+                                [class.p-button-warning]="(activeComponent === 'backlog' && backlogDataState.isEmpty && !hasSearchInputChanged)"
+                                (click)="onStudentSearch()"></button>
+                            <button pButton pRipple type="button" icon="pi pi-refresh"
+                                class="p-button-warning p-button-raised w-10rem" label="Recent"
+                                (click)="onRecentSearch()"></button>
+                        </div>
+                    </div>
+                </p-toolbar>
+            </div>
+        </div>
+
+        <div class="col-12">
+            <app-student-basic-information [studentId]="studentId"></app-student-basic-information>
+        </div>
+
+        <div class="col-12" *ngIf="showMenu">
+            <div class="card">
+                <p-menubar [model]="items"></p-menubar>
+                <div p animateOnScroll enterClass="scalein" leaveClass="fadeout" class="animation-duration-8000">
+                    <app-student-general-information *ngIf="activeComponent === 'general'"
+                        [studentId]="studentId"></app-student-general-information>
+                    <app-student-academic-report *ngIf="activeComponent === 'academic'"
+                        [studentId]="studentId"></app-student-academic-report>
+                    <app-student-examination-report *ngIf="activeComponent === 'examination' "
+                        [studentId]="studentId"></app-student-examination-report>
+                    <app-student-backlog *ngIf="activeComponent === 'backlog'" [studentId]="studentId"
+                        [forceRefresh]="forceRefreshBacklog"
+                        (dataStateChange)="onBacklogDataStateChange($event)"></app-student-backlog>
+                    <app-verify-student-abcid *ngIf="activeComponent === 'verify'"
+                        [studentId]="studentId"></app-verify-student-abcid>
+                    <app-bus-hostel-opt-in-opt-out *ngIf="activeComponent === 'bus-hostel-opt-in-out'"
+                        [studentId]="studentId"></app-bus-hostel-opt-in-opt-out>
+                    <app-student-fee-ledger *ngIf="activeComponent === 'fee-ledger'"
+                        [studentId]="studentId"></app-student-fee-ledger>
+                </div>
+            </div>
+        </div>
+    </div>
+    <p-confirm-dialog [style]="{ width: '450px' }"></p-confirm-dialog>
+    <p-dialog header="Recent Students" [(visible)]="displayRecent" [style]="{width: '1200px'}" [modal]="true">
+        <app-recent-student-search [recentStudents]="recentStudents"
+            (displayRecent)="displayRecent = $event"></app-recent-student-search>
+    </p-dialog>
+</div>

@@ -1,5 +1,79 @@
-<div class="bar-graph-skeleton" aria-label="Loading chart">
-    @for (height of ['45%', '72%', '58%', '88%', '66%', '80%']; track height) {
-        <p-skeleton width="2.5rem" [height]="height" />
-    }
-</div>
+@if (!data) {
+    <div class="h-full">
+        <div class="flex flex-column align-items-center justify-content-end relative h-25rem">
+            <div class="y-axis absolute flex flex-column justify-content-end gap-5 h-full pr-2 left-0" style="top: -9px;">
+                <p-skeleton shape="circle" size="1rem" />
+                <p-skeleton shape="circle" size="1rem" />
+                <p-skeleton shape="circle" size="1rem" />
+                <p-skeleton shape="circle" size="1rem" />
+                <p-skeleton shape="circle" size="1rem" />
+                <p-skeleton shape="circle" size="1rem" />
+                <p-skeleton shape="circle" size="1rem" />
+                <p-skeleton shape="circle" size="1rem" />
+            </div>
+    
+            <div class="flex justify-content-between align-items-end h-full w-full gap-2 pl-5">
+                <p-skeleton height="5rem" class="barskeleton"></p-skeleton>
+                <p-skeleton height="12rem" class="barskeleton"></p-skeleton>
+                <p-skeleton height="10rem" class="barskeleton"></p-skeleton>
+                <p-skeleton height="20rem" class="barskeleton"></p-skeleton>
+                <p-skeleton height="15rem" class="barskeleton"></p-skeleton>
+                <p-skeleton height="11rem" class="barskeleton"></p-skeleton>
+                <p-skeleton height="7rem" class="barskeleton"></p-skeleton>
+            </div>
+    
+            <div class="w-full border-dotted border-1 border-400"></div>
+    
+            <div class="x-axis flex justify-content-between w-full pt-2 pl-5">
+                <p-skeleton height="0.5rem" class="barskeleton" borderRadius="16px" />
+                <p-skeleton height="0.5rem" class="barskeleton" borderRadius="16px" />
+                <p-skeleton height="0.5rem" class="barskeleton" borderRadius="16px" />
+                <p-skeleton height="0.5rem" class="barskeleton" borderRadius="16px" />
+                <p-skeleton height="0.5rem" class="barskeleton" borderRadius="16px" />
+                <p-skeleton height="0.5rem" class="barskeleton" borderRadius="16px" />
+                <p-skeleton height="0.5rem" class="barskeleton" borderRadius="16px" />
+            </div>
+        </div>
+    </div>
+}  @else {
+    <div class="h-full">
+        <div class="flex flex-column align-items-center justify-content-end relative h-25rem">
+            <div class="y-axis absolute flex flex-column justify-content-end gap-5 h-full pr-2 left-0" style="bottom: 45px;">
+                <p-skeleton shape="circle" size="1rem" />
+                <p-skeleton shape="circle" size="1rem" />
+                <p-skeleton shape="circle" size="1rem" />
+                <p-skeleton shape="circle" size="1rem" />
+                <p-skeleton shape="circle" size="1rem" />
+                <p-skeleton shape="circle" size="1rem" />
+                <p-skeleton shape="circle" size="1rem" />
+                <p-skeleton shape="circle" size="1rem" />
+            </div>
+    
+            <div class="flex justify-content-evenly align-items-end h-full w-full gap-2 pl-5">
+                <p-skeleton height="5rem" width="1rem" styleClass="mr-2" />
+                <p-skeleton height="10rem" width="1rem" styleClass="mr-2" />
+                <p-skeleton height="7rem" width="1rem" styleClass="mr-2" />
+                <p-skeleton height="9rem" width="1rem" styleClass="mr-2" />
+                <p-skeleton height="9rem" width="1rem" styleClass="mr-2" />
+                <p-skeleton height="10rem" width="1rem" styleClass="mr-2" />
+                <p-skeleton height="7rem" width="1rem" styleClass="mr-2" />                
+                <p-skeleton height="8rem" width="1rem" styleClass="mr-2" />                
+                <p-skeleton height="6rem" width="1rem" styleClass="mr-2" />                
+            </div>
+    
+            <div class="w-full border-dotted border-1 border-400"></div>
+    
+            <div class="x-axis flex justify-content-evenly w-full pt-2 pl-5">
+                <p-skeleton height="0.5rem" width="4vw" borderRadius="16px" />
+                <p-skeleton height="0.5rem" width="4vw" borderRadius="16px" />
+                <p-skeleton height="0.5rem" width="4vw" borderRadius="16px" />
+                <p-skeleton height="0.5rem" width="4vw" borderRadius="16px" />
+                <p-skeleton height="0.5rem" width="4vw" borderRadius="16px" />
+                <p-skeleton height="0.5rem" width="4vw" borderRadius="16px" />
+                <p-skeleton height="0.5rem" width="4vw" borderRadius="16px" />
+                <p-skeleton height="0.5rem" width="4vw" borderRadius="16px" />
+                <p-skeleton height="0.5rem" width="4vw" borderRadius="16px" />
+            </div>
+        </div>
+    </div>
+}

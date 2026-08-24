@@ -1,0 +1,13 @@
+::ng-deep .p-dialog .p-dialog-header {
+    position: relative;
+}
+
+::ng-deep .p-dialog .p-dialog-header .p-dialog-title {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+::ng-deep .p-dialog .p-dialog-header .p-dialog-header-icons {
+    margin-left: auto;
+}

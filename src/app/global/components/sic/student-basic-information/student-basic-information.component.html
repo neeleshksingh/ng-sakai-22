@@ -1,0 +1,100 @@
+<div class="card student-profile-card" *ngIf="student.studentId">
+    <div class="profile-container grid p-2" style="margin-bottom: -1rem;">
+        <!-- Profile Image Section -->
+        <div class="profile-image-section col-12 md:col-2 flex align-items-center justify-content-center">
+            <div class="profile-img">
+                <p-image [src]="student.studentImageUrl" alt="Student Profile Image" [preview]="true">
+                    <ng-template pTemplate="indicator">
+                        <div class="view-img-indicator flex flex-column align-items-center gap-1 p-1">
+                            <i class="pi pi-eye"></i>
+                            <span class="text-xs">View</span>
+                        </div>
+                    </ng-template>
+                </p-image>
+            </div>
+        </div>
+
+        <!-- Profile Details Section -->
+        <div class="profile-details-section col-12 md:col-10 flex align-items-center justify-content-center">
+            <div class="profile-header flex flex-column gap-2 w-full">
+                <!-- Student Name -->
+                <div class="profile-item name-section flex align-items-center gap-2 p-2">
+                    <i class="pi pi-user profile-icon"></i>
+                    <h3 class="student-name font-bold m-0" style="font-size: 1.5rem;">
+                        {{ student.firstName }} {{ student.middleName }} {{ student.lastName }}
+                    </h3>
+                </div>
+
+                <!-- Contact Information -->
+                <div class="contact-info flex flex-wrap align-items-center gap-2 p-2">
+                    <div class="profile-item contact-item flex align-items-center gap-2">
+                        <i class="pi pi-id-card profile-icon"></i>
+                        <span class="contact-text text-sm">{{ student.studentId }}</span>
+                    </div>
+                    <div class="profile-item contact-item flex align-items-center gap-2">
+                        <i class="pi pi-phone profile-icon"></i>
+                        <span class="contact-text text-sm">{{ student.phoneNumber }}</span>
+                    </div>
+                    <div class="profile-item contact-item flex align-items-center gap-2">
+                        <i class="pi pi-envelope profile-icon"></i>
+                        <span class="contact-text text-sm">{{ student.email | lowercase }}</span>
+                    </div>
+                    <div class="profile-item contact-item flex align-items-center gap-2">
+                        <span class="status-separator">•</span>
+                        <span class="student-status font-bold text-xs" [ngStyle]="{
+                                                    'color': student.statusDescription?.toUpperCase() === 'ACTIVE' ? 'rgb(76 181 27)' : '#dc3545'
+                                                }">
+                            {{ student.statusDescription }}
+                        </span>
+                    </div>
+                    <div class="profile-item contact-item flex align-items-center gap-2">
+                        <span class="status-separator">•</span>
+                        <span class="abc-id-label font-medium text-xs text-gray-600">ABC ID:</span>
+                        <span class="student-status font-bold text-xs" [ngStyle]="{
+                            'color': isABCIDVerified ? 'rgb(76 181 27)' : '#dc3545'
+                        }">
+                            {{ student.abcid || 'Not Assigned' }}
+                        </span>
+
+                        <!-- Verification Icon -->
+                        <i *ngIf="!isABCIDVerified" class="pi pi-exclamation-triangle text-warning"
+                            style="font-size: 0.75rem; color: #dc3545;" pTooltip="Not Verified" tooltipPosition="top">
+                        </i>
+
+                        <i *ngIf="isABCIDVerified" class="pi pi-check-circle text-success"
+                            style="font-size: 0.75rem; color: rgb(76, 181, 27);" pTooltip="Verified"
+                            tooltipPosition="top">
+                        </i>
+                    </div>
+                    <div class="profile-item contact-item flex align-items-center gap-2" *ngIf="student.studentGroupName">
+                        <span class="status-separator">•</span>
+                        <i class="pi pi-users profile-icon" pTooltip="Student Group"></i>
+                        <span class="student-status font-bold text-lg" [ngStyle]="{ 'color': student.studentGroupColor || 'inherit' }">
+                            {{ student.studentGroupName }}
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Academic Information -->
+                <div class="academic-info flex flex-wrap gap-3 p-2" *ngIf="studentProgram && studentProgram.length > 0">
+                    <div class="profile-item flex align-items-center gap-2">
+                        <i class="pi pi-building profile-icon"></i>
+                        <span class="academic-text text-sm">{{ studentProgram[0].operationalVerticalName }}</span>
+                    </div>
+                    <div class="profile-item flex align-items-center gap-2">
+                        <i class="pi pi-book profile-icon"></i>
+                        <span class="academic-text text-sm">{{ studentProgram[0].programName }}</span>
+                    </div>
+                    <div class="profile-item flex align-items-center gap-2">
+                        <i class="pi pi-calendar profile-icon"></i>
+                        <span class="academic-text text-sm">{{ studentProgram[0].academicSessionName }}</span>
+                    </div>
+                    <div class="profile-item flex align-items-center gap-2">
+                        <i class="pi pi-bookmark profile-icon"></i>
+                        <span class="academic-text text-sm">Section - {{ studentProgram[0].section }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

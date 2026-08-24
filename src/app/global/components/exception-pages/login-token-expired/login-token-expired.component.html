@@ -1,0 +1,37 @@
+<div class="p-grid" style="display: flex; justify-content: center">
+    <div class="p-col-6 accsessdenied-container" style="margin-top: 10%">
+        <div style="
+                box-shadow: 0px 1px 10px rgba(0, 0, 0, 0.12),
+                    0px 4px 5px rgba(0, 0, 0, 0.14),
+                    0px 2px 4px -1px rgba(0, 0, 0, 0.2);
+            ">
+            <p-panel>
+                <ng-template pTemplate="header">
+                    <span class="text-primary font-semibold text-xl">Unauthorized Access!!</span>
+                </ng-template>
+                <ng-template pTemplate="body">
+                    <div style="color: red; font-size: large">
+                        Authentication failed. Your login/session token has expired or no longer active. Please
+                        re-login.
+                    </div>
+                </ng-template>
+                <ng-template pTemplate="footer">
+                    <div class="p-fluid p-formgrid p-grid" style="
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;
+                        ">
+                        <div class="p-field p-col-3 p-md-3" style="
+                                display: flex;
+                                justify-content: center;
+                                align-items: center;
+                            ">
+                            <button pButton type="submit" label="Continue" [routerLink]="['/Home/Landing']"
+                                class="p-button-secondary"></button>
+                        </div>
+                    </div>
+                </ng-template>
+            </p-panel>
+        </div>
+    </div>
+</div>

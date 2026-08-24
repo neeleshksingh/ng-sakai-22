@@ -1,0 +1,561 @@
+<div class="vertical-tabs-container grid">
+  <p-toast></p-toast>
+  <div class="col-12 md:col-2 tabs-section">
+    <div class="tabs-header mb-3">
+      <h3>Program Overview</h3>
+    </div>
+    <ul class="vertical-tab-list p-0">
+      <li [ngClass]="{'active-tab': activeTabIndex === 0}" (click)="setActiveTab(0)">
+        <i class="pi pi-book p-mr-2"></i>
+        Program
+      </li>
+      <li [ngClass]="{'active-tab': activeTabIndex === 1}" (click)="setActiveTab(1)">
+        <i class="pi pi-money-bill mr-2"></i>
+        Fees
+      </li>
+      <li [ngClass]="{'active-tab': activeTabIndex === 2}" (click)="setActiveTab(2)">
+        <i class="pi pi-credit-card mr-2"></i>
+        Challan
+      </li>
+      <ul class="vertical-tab-list p-0">
+        <li [ngClass]="{'active-tab': activeTabIndex === 3}">
+          <div (click)="setActiveTab(3)">
+            <i class="pi pi-backward mr-2"></i>
+            Admission Withdrawal
+          </div>
+          <ul class="sub-menu">
+            <li [ngClass]="{'active-tab': activeTabIndex === 4}" (click)="setActiveTab(4)">
+              <i class="pi pi-file mr-2"></i>
+              Refund Policy
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </ul>
+  </div>
+
+  <div class="col-12 md:col-10 content-section">
+    <div *ngIf="isLoading" class="loader-container">
+      <p-progressSpinner styleClass="custom-spinner"></p-progressSpinner>
+      <p>Loading data, please wait...</p>
+    </div>
+
+    <div class="col-12 flex flex-row-reverse">
+      <button pButton pRipple label="Logout" class="p-button-raised" icon="pi pi-sign-out" (click)="logout()"></button>
+    </div>
+    <div *ngIf="activeTabIndex === 0 && studentProgramProvisional?.studentName" class="tab-content">
+      <p-panel [header]="studentProgramProvisional.studentName + '\'s Program Details' | titlecase"
+        [toggleable]="false">
+        <div class="panel-content">
+          <div class="grid m-0">
+            <div class="col-12 md:col-6">
+              <div class="info-card">
+                <h3>Student Information</h3>
+                <p-table [value]="studentInfoPairs" [responsive]="true" styleClass="student-info-table">
+                  <ng-template pTemplate="body" let-pair>
+                    <tr style="background-color: #f8f9fa;">
+                      <td class="p-text-bold">{{ pair.label1 }}</td>
+                      <td>{{ pair.label1 === 'Student Name' || pair.label1 === 'Father\'s Name' || pair.label1 ===
+                        'Mother\'s Name' ? (pair.value1 | titlecase) : pair.value1 }}</td>
+                      <td class="p-text-bold">{{ pair.label2 }}</td>
+                      <td>{{ pair.label2 === 'Student Name' || pair.label2 === 'Father\'s Name' || pair.label2 ===
+                        'Mother\'s Name' ? (pair.value2 | titlecase) : pair.value2 }}</td>
+                    </tr>
+                  </ng-template>
+                </p-table>
+              </div>
+            </div>
+            <div class="col-12 md:col-6">
+              <div class="info-card">
+                <div *ngIf="studentId && password">
+                  <h3>Student's Credentials</h3>
+                  <div class="info-row">
+                    <span class="label">URL:</span>
+                    <span class="value"><span routerLink="/"
+                        class="cursor-pointer text-blue-500">https://sbu.ncorepro.com</span></span>
+                  </div>
+                  <div class="info-row">
+                    <span class="label">Username:</span>
+                    <span class="value">{{ studentId }}</span>
+                  </div>
+                  <div class="info-row">
+                    <span class="label">Password:</span>
+                    <span class="value">{{password}}</span>
+                  </div>
+                </div>
+
+                <br>
+                <h3>Program Information</h3>
+                <div class="info-row">
+                  <span class="label">Academic Session:</span>
+                  <span class="value">{{ studentProgramProvisional.academicSessionName }}</span>
+                </div>
+                <div class="info-row">
+                  <span class="label">Program Name:</span>
+                  <span class="value">{{ studentProgramProvisional.programName }}</span>
+                </div>
+                <!-- <div class="info-row">
+                  <span class="label">Start Date:</span>
+                  <span class="value">August 15, 2025</span>
+                </div> -->
+              </div>
+            </div>
+          </div>
+          <div class="grid mt-3 mb-0 mr-0 ml-0 course-structure-table">
+            <div class="col-12">
+              <h3>Course Structure</h3>
+              <p-table [value]="courseStructure">
+                <ng-template pTemplate="header">
+                  <tr>
+                    <th>Year</th>
+                    <th>Semester</th>
+                    <th style="width: 40%;">Subjects</th>
+                    <th style="text-align: center;">Credits</th>
+                  </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-course>
+                  <tr>
+                    <td><span class="p-column-title">Year</span>{{course?.year}}</td>
+                    <td><span class="p-column-title">Semester</span>{{course?.semester}}</td>
+                    <td class="truncate-text" pTooltip="{{course?.subjects}}" tooltipPosition="top"
+                      (click)="showSubjects($event, course, op)"><span
+                        class="p-column-title">Subjects</span>{{course?.subjects}}</td>
+                    <td style="text-align: center;"><span class="p-column-title">Credits</span>{{course?.credits}}</td>
+                  </tr>
+                </ng-template>
+                <ng-template pTemplate="footer">
+                  <tr>
+                    <td colspan="3"><span class="p-column-title"></span>Total Credits</td>
+                    <td style="text-align: center;"><span class="p-column-title"></span>{{ totalCredits }}</td>
+                  </tr>
+                </ng-template>
+              </p-table>
+            </div>
+          </div>
+        </div>
+      </p-panel>
+    </div>
+
+    <div *ngIf="activeTabIndex === 1 && studentProgramProvisional?.studentName" class="tab-content">
+      <p-panel [header]="studentProgramProvisional.studentName + '\'s Fees Structure' | titlecase" [toggleable]="true">
+        <form #form [formGroup]="paymentFormGroup" style="width: 100%;" method="POST"
+          action="https://api.razorpay.com/v1/checkout/embedded" *ngIf="getTotalDueAmount() > 0">
+          <div class="panel-content">
+            <div class="grid m-0">
+              <div class="col-12">
+                <div class="info-card">
+                  <h3>Fee Details</h3>
+                  <div class="info-row highlight">
+                    <span class="label">Total Semester Fee:</span>
+                    <span class="value">Rs. {{getTotalComponentFee()}}</span>
+                  </div>
+                  <div class="info-row">
+                    <span class="label">Per Semester:</span>
+                    <span class="value">Rs. {{getPerSemesterFee()}}</span>
+                  </div>
+                  <div class="info-row">
+                    <span class="label">Provisional Admission Fee:</span>
+                    <span class="value">Rs. {{getRegistrationFee()}} (one-time) <span
+                        class="text-green-500 font-bold">PAID</span></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="grid mt-3 mb-0 mr-0 ml-0">
+              <div class="col-12">
+                <h3>Fee Breakdown</h3>
+                <p-table [value]="studentProvisionalFee" styleClass="p-datatable-sm">
+                  <ng-template pTemplate="header">
+                    <tr>
+                      <th>Fee Type</th>
+                      <th>Fee Amount</th>
+                      <th>Paid Amount</th>
+                      <th>Due Amount</th>
+                    </tr>
+                  </ng-template>
+                  <ng-template pTemplate="body" let-fee>
+                    <tr *ngIf="fee.dueAmount !== 0">
+                      <td><span class="p-column-title">Fee Type</span>{{fee.feeComponentName}}</td>
+                      <td><span class="p-column-title">Fee Amount</span>{{fee.feeAmount}}</td>
+                      <td><span class="p-column-title">Paid Amount</span>{{fee.paidAmount}}</td>
+                      <td><span class="p-column-title">Due Amount</span>{{fee.dueAmount}}</td>
+                    </tr>
+                  </ng-template>
+                  <ng-template pTemplate="footer">
+                    <tr>
+                      <td colspan="3" style="text-align: right"><strong>Total Due:</strong></td>
+                      <td>
+                        {{ getTotalDueAmount() }}
+                      </td>
+                    </tr>
+                  </ng-template>
+                </p-table>
+                <div class="mt-2 mb-1 mobile-total-due">
+                  <p>Total Due Amount: Rs. <strong>{{ getTotalDueAmount() | currency: 'INR':true }}</strong></p>
+                </div>
+              </div>
+            </div>
+            <div class="grid mt-3 mr-0 ml-0 mb-0">
+              <div class="col-12">
+                <div class="fluid formgrid grid m-0">
+                  <div class="field col-12 md:col-4">
+                    <input type="hidden" name="key_id" value={{razorPayCheckOutRequest.keyId}}>
+                    <input type="hidden" name="order_id" value={{razorPayCheckOutRequest.razorpayOrderId}}>
+                    <input type="hidden" name="amount" value={{razorPayCheckOutRequest.orderAmount}}>
+                    <input type="hidden" name="name" value={{razorPayCheckOutRequest.studentName}}>
+                    <input type="hidden" name="description" value={{razorPayCheckOutRequest.description}}>
+                    <input type="hidden" name="prefill[email]" value={{razorPayCheckOutRequest.email}}>
+                    <input type="hidden" name="prefill[contact]" value={{razorPayCheckOutRequest.phoneNumber}}>
+                    <input type="hidden" name="notes[transaction_id]" value={{razorPayCheckOutRequest.transactionId}}>
+                    <input type="hidden" name="callback_url" value={{razorPayCheckOutRequest.callbackUrl}}>
+                    <div *ngIf="getTotalDueAmount() > 0">
+                      <button *ngIf="isMakePaymentBtnVisible" pButton pRipple icon="pi pi-credit-card"
+                        label="Make Payment" class="p-button-raised" (click)="createOrder()"
+                        [loading]="isButtonLoading"></button>
+                      <button *ngIf="isContinuePaymentBtnVisible" pButton pRipple icon="pi pi-caret-right"
+                        label="Continue" class="p-button-raised p-button-success" (click)="form.submit()"
+                        [loading]="isButtonLoading"></button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="grid mt-3 ml-0 mr-0 mb-0">
+              <div class="col-12">
+                <div class="alert-box">
+                  <i class="pi pi-info-circle"></i>
+                  <p>All fees are subject to change based on university policy. Students will be notified of any changes
+                    in advance.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+        <div>
+          <app-payment-success *ngIf="getTotalDueAmount() === 0" [paymentResponseId]="paymentResponseId"
+            [referenceNumber]="referenceNumber"></app-payment-success>
+
+        </div>
+      </p-panel>
+    </div>
+    <div *ngIf="activeTabIndex === 2 && studentProgramProvisional?.studentName" class="tab-content">
+      <p-panel [header]="studentProgramProvisional.studentName + '\'s Fees Structure' | titlecase" [toggleable]="true">
+        <form #form [formGroup]="paymentFormGroup" style="width: 100%;" method="POST"
+          action="https://api.razorpay.com/v1/checkout/embedded" *ngIf="getTotalDueAmount() > 0">
+          <div class="panel-content">
+            <div class="grid mt-3 mb-0 mr-0 ml-0">
+              <div class="col-12">
+                <h3>Fee Breakdown</h3>
+                <p-table [value]="studentProvisionalFee" styleClass="p-datatable-sm">
+                  <ng-template pTemplate="header">
+                    <tr>
+                      <th>Fee Type</th>
+                      <th>Fee Amount</th>
+                      <th>Paid Amount</th>
+                      <th>Due Amount</th>
+                    </tr>
+                  </ng-template>
+                  <ng-template pTemplate="body" let-fee>
+                    <tr *ngIf="fee.dueAmount !== 0">
+                      <td><span class="p-column-title">Fee Type</span>{{fee.feeComponentName}}</td>
+                      <td><span class="p-column-title">Fee Amount</span>{{fee.feeAmount}}</td>
+                      <td><span class="p-column-title">Paid Amount</span>{{fee.paidAmount}}</td>
+                      <td><span class="p-column-title">Due Amount</span>{{fee.dueAmount}}</td>
+                    </tr>
+                  </ng-template>
+                  <ng-template pTemplate="footer">
+                    <tr>
+                      <td colspan="3" style="text-align: right"><strong>Total Due:</strong></td>
+                      <td>
+                        {{ getTotalDueAmount() }}
+                      </td>
+                    </tr>
+                  </ng-template>
+                </p-table>
+                <div class="mt-2 mb-1 mobile-total-due">
+                  <p>Total Due Amount: Rs. <strong>{{ getTotalDueAmount() | currency: 'INR':true }}</strong></p>
+                </div>
+              </div>
+            </div>
+            <div class="grid mt-3 mr-0 ml-0 mb-0">
+              <div class="col-12">
+                <div class="fluid formgrid grid m-0">
+                  <div class="field col-12 md:col-4">
+                    <div *ngIf="getTotalDueAmount() > 0">
+                      <button pButton pRipple icon="pi pi-credit-card" label="Generate Challan" class="p-button-raised"
+                        (click)="generateChallan()" [loading]="isButtonLoading"></button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="grid mt-3 ml-0 mr-0 mb-0">
+              <div class="col-12">
+                <div class="alert-box">
+                  <i class="pi pi-info-circle"></i>
+                  <p>All fees are subject to change based on university policy. Students will be notified of any changes
+                    in advance.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+      </p-panel>
+    </div>
+
+    <div *ngIf="activeTabIndex === 3 && studentProgramProvisional?.studentName" class="tab-content">
+      <p-panel [header]="studentProgramProvisional.studentName +'\' admission withdrawal request' | titlecase"
+        [toggleable]="true">
+        <div class="panel-content">
+          <div class="grid m-0">
+            <div class="col-12 md:col-8">
+              <form #form [formGroup]="withdrawalFormGroup" style="width: 100%;">
+                <div class="info-card">
+                  <div class="flex align-items-center justify-content-between">
+                    <h3 class="m-0">Withdrawal Information</h3>
+                  </div>
+                  <hr>
+                  <div class="fluid formgrid grid">
+                    <div class="field col-12 sm:col-12 md:col-6" [class.disabled-div]="isWithdrawalDisabled">
+                      <label for="accountHolderName">Account Holder Name*</label>
+                      <input pInputText type="text" id="accountHolderName"
+                        [(ngModel)]="withdrawalFormGroup.value.accountHolderName" formControlName="accountHolderName"
+                        class="text-base text-color surface-overlay border-1 border-solid 
+                                                          surface-border border-round appearance-none outline-none focus:border-primary w-full">
+                    </div>
+                    <div class="field col-12 sm:col-12 md:col-6" [class.disabled-div]="isWithdrawalDisabled">
+                      <label for="accountNumber">Account Number*</label>
+                      <input pInputText type="text" id="accountNumber"
+                        [(ngModel)]="withdrawalFormGroup.value.accountNumber" formControlName="accountNumber"
+                        class="text-base text-color surface-overlay border-1 border-solid 
+                                    surface-border border-round appearance-none outline-none focus:border-primary w-full" (input)="onAccountNumberInput($event)">
+
+                    </div>
+                    <div class="field col-12 sm:col-12 md:col-6" [class.disabled-div]="isWithdrawalDisabled">
+                      <label for="ifscCode">IFSC Code*</label>
+                      <input pInputText type="text" id="ifscCode" [(ngModel)]="withdrawalFormGroup.value.ifscCode"
+                        formControlName="ifscCode"
+                        class="text-base text-color surface-overlay border-1 border-solid 
+                                                            surface-border border-round appearance-none outline-none focus:border-primary w-full">
+                    </div>
+                    <div class="field col-12 sm:col-12 md:col-6" [class.disabled-div]="isWithdrawalDisabled">
+                      <label for="bankName">Bank Name*</label>
+                      <input pInputText type="text" id="bankName" [(ngModel)]="withdrawalFormGroup.value.bankName"
+                        formControlName="bankName"
+                        class="text-base text-color surface-overlay border-1 border-solid 
+                                        surface-border border-round appearance-none outline-none focus:border-primary w-full">
+                    </div>
+                    <div class="field col-12 sm:col-12 md:col-6" [class.disabled-div]="isWithdrawalDisabled">
+                      <label for="branchName">Branch Name*</label>
+                      <input pInputText type="text" id="branchName" [(ngModel)]="withdrawalFormGroup.value.branchName"
+                        formControlName="branchName"
+                        class="text-base text-color surface-overlay border-1 border-solid 
+                                        surface-border border-round appearance-none outline-none focus:border-primary w-full">
+                    </div>
+                    <div class="field col-12 sm:col-12 md:col-12" [class.disabled-div]="isWithdrawalDisabled">
+                      <label for="withdrawalReason">Withdrawal Reason*</label>
+                      <textarea id="withdrawalReason" pInputTextarea
+                        [(ngModel)]="withdrawalFormGroup.value.withdrawalReason" rows="3"
+                        formControlName="withdrawalReason"
+                        class="text-base text-color surface-overlay border-1 border-solid 
+                                        surface-border border-round appearance-none outline-none focus:border-primary w-full"></textarea>
+                    </div>
+                    <div class="field col-12 sm:col-12 md:col-12" [class.disabled-div]="isWithdrawalDisabled">
+                      <label>Uploaded Cheque book / Passbook must be in <b>jpeg/jpg</b> format and less than 1MB in
+                        size. <br> The account number provided should belong to either the student or their parent.
+                        Refunds will be declined if any other
+                        account number is submitted.</label>
+                      <p-fileupload #fileUpload mode="basic" (onSelect)="documentUpload($event, fileUpload)"
+                        chooseLabel="Browse">
+                      </p-fileupload>
+                      <label> {{fileName}}</label>
+                      <div *ngIf="isFileError" class="text-red-500 text-sm">{{fileError}}</div>
+                    </div>
+                    <div class="field col-12 sm:col-12 md:col-12" style="text-align: center;">
+                      <button pButton type="submit" label="Submit Request" (click)="onSubmitWithdrawalRequest()"
+                        class="p-button-raised  p-button-secondary"
+                        [disabled]="!withdrawalFormGroup.valid || (!fileName && isWithdrawalRequestButtonDisabled)"></button>
+                    </div>
+                  </div>
+                </div>
+              </form>
+            </div>
+            <div class="col-12 md:col-4">
+              <div class="info-card">
+                <h3>Request Status</h3>
+                <div *ngFor="let item of withdrawalStatusList" class="status-card">
+                  <div class="status-icon">
+                    <i [ngClass]="[item.icon, item.colorClass]"></i>
+                  </div>
+                  <div class="status-content">
+                    <div class="status-label">{{ item.status }}</div>
+                    <div class="status-date">{{ item.statusDate | date: 'dd MMM yyyy, h:mm a' }}</div>
+                  </div>
+                </div>
+                <div *ngIf="withdrawalFormGroup.value.holdReason"
+                  style="font-weight: 600; font-size: 1.3rem; padding: 12px; background-color: #fff8e1; border-left: 4px solid #fbc02d; border-radius: 6px; margin-bottom: 10px; color: #795548;">
+                  ⚠️ <span style="color: #f57f17;">Hold Reason:</span> {{ withdrawalFormGroup.value.holdReason }}
+                </div>
+                <div *ngIf="withdrawalFormGroup.value.refundDescription"
+                  style="font-weight: 600; font-size: 1.3rem; padding: 12px; background-color: #f0f4ff; border-left: 4px solid #3f51b5; border-radius: 6px; margin-bottom: 10px; color: #333;">
+                  <span style="color: #3f51b5;">💬 Refund Description:</span> {{
+                  withdrawalFormGroup.value.refundDescription }}
+                </div>
+                <div class="field col-6 sm:col-6 md:col-6" *ngIf="isCancelRequest">
+                  <div style="display: flex; align-items: center; justify-content: center; gap: 0.5rem;">
+                    <p-checkbox [binary]="true" formControlName="isCanceledRequest"
+                      (onChange)="cancelRequestChange($event)" inputId="review-consent"></p-checkbox>
+                    <label style="font-size: 1.2rem; font-weight: bold;">Cancel Request</label>
+                  </div>
+                </div>
+                <div class="field col-6 sm:col-6 md:col-6"></div>
+                <div *ngIf="totalRefund"
+                  style="font-weight: 600; font-size: 1.3rem; padding: 12px; background-color: #e7f5e9; border-left: 4px solid #388e3c; border-radius: 6px; color: #2e7d32;">
+                  💰 <span style="color: #2e7d32;">Total Refund Amount:</span> ₹{{ totalRefund | number:'1.2-2' }}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </p-panel>
+
+      <p-dialog header="Confirmation?" [(visible)]="withdrawalRequestConfirmationBox" [modal]="true"
+        [breakpoints]="{ '768px': '75vw' }" [style]="{ width: '550px'}" [draggable]="false" [resizable]="false">
+        <div class="card">
+          <h3>Please review carefully</h3>
+          <p>Details furnished in this withdrawal must match with the uploaded copy of the chequebook/passbook attached.
+          </p>
+          <p>In case of a mismatch, withdrawal request will be rejected.</p>
+          <div class="field col-12 sm:col-12 md:col-12"><label>Bank Name: {{withdrawalFormGroup.value.bankName}}</label>
+          </div>
+          <div class="field col-12 sm:col-12 md:col-12"><label>Branch Name:
+              {{withdrawalFormGroup.value.branchName}}</label></div>
+          <div class="field col-12 sm:col-12 md:col-12"><label>Account Number:
+              {{withdrawalFormGroup.value.accountNumber}}</label></div>
+          <div class="field col-12 sm:col-12 md:col-12"><label>IFSC Code: {{withdrawalFormGroup.value.ifscCode}}</label>
+          </div>
+          <div class="field col-12 sm:col-12 md:col-12"><label>Account Holder Name:
+              {{withdrawalFormGroup.value.accountHolderName}}</label></div>
+          <div class="field col-12 sm:col-12 md:col-12"><label>Withdrawal Reason:
+              {{withdrawalFormGroup.value.withdrawalReason}}</label></div>
+          <div class="flex flex-row-reverse gap-2" style="text-align: center;">
+            <button pButton pRipple type="button" label="No" icon="pi pi-times" class="p-button-danger p-button-raised"
+              (click)="withdrawalRequestConfirmationBox = false"> </button>
+            <button pButton pRipple type="button" label="Yes" icon="pi pi-check"
+              class="p-button-primary p-button-raised" (click)="withdrawalRequestConfirmation()">
+            </button>
+          </div>
+        </div>
+      </p-dialog>
+
+    </div>
+
+    <div *ngIf="activeTabIndex === 4" class="tab-content">
+      <p-panel header='Withdrawal Refund Policy' [toggleable]="true">
+        <div class="refund-policy">
+          <h4>Sarala Birla University (SBU), Ranchi</h4>
+          <h5>Fee Refund Policy - Academic Year 2025-26 </h5>
+          <h5>(In reference to UGC Circular No. F.2-71/2022 (CPP-II) (C-114546), dated 12th June 2024) </h5>
+          <hr>
+          <div class="section-title"> 1. Notification to Student </div>
+          <p>In reference to the University Grants Commission (UGC) Circular No. F.2-71/2022 (CPP-II) (C-114546) dated
+            12th
+            June 2024, issued for the academic year 2024-25, all Student are hereby informed that the new UGC Refund
+            Circular for 2025-26 is awaited.</p>
+          <p>Accordingly, the refund policy from the previous academic year shall continue to remain in force until
+            further
+            notification from UGC. Please note that the last dates mentioned may be subject to change based on
+            forthcoming
+            UGC updates.</p>
+          <hr>
+          <div class="section-title"> 2. Refund Provisions (As per UGC Guidelines) </div>
+          <p>Students cancelling their admission will be entitled to refunds as per the timeline and deductions below:
+          </p>
+          <table>
+            <thead>
+              <tr>
+                <th style="padding: 8px;">Sl. No</th>
+                <th style="padding: 8px;">Date of Admission Withdrawal</th>
+                <th style="padding: 8px;">Refund Amount</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td style="padding: 8px;">1</td>
+                <td style="padding: 8px;">15 days or more before the last date of admission</td>
+                <td style="padding: 8px;">100% of fees paid</td>
+              </tr>
+              <tr>
+                <td style="padding: 8px;">2</td>
+                <td style="padding: 8px;">Less than 15 days before the last date of admission</td>
+                <td style="padding: 8px;">90% of fees paid</td>
+              </tr>
+              <tr>
+                <td style="padding: 8px;">3</td>
+                <td style="padding: 8px;">Within 15 days after the last date of admission</td>
+                <td style="padding: 8px;">80% of fees paid</td>
+              </tr>
+              <tr>
+                <td style="padding: 8px;">4</td>
+                <td style="padding: 8px;">Between 16 to 30 days after the last date of admission</td>
+                <td style="padding: 8px;">50% of fees paid</td>
+              </tr>
+              <tr>
+                <td style="padding: 8px;">5</td>
+                <td style="padding: 8px;">After 30 days from the last date of admission</td>
+                <td style="padding: 8px;">No refund applicable</td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="notes">Note: </div>
+          <p>1. For all cancellations up to 30th September 2025, a full refund shall be provided.</p>
+          <p>2. Cancellations between 1st October and 31st October 2025 will be eligible for a refund with ₹1,000
+            deduction.</p>
+          <p>3. No refund shall be applicable from 1st November 2025 onwards.</p>
+          <hr>
+          <div class="section-title">3. Mode of Refund </div>
+          <p>All refunds shall be processed through bank transfer to the account of the student or parent/guardian, as
+            per
+            the admission records.</p>
+          <hr>
+          <div class="section-title">4. Ancillary Charges (Hostel, Transport, etc.) </div>
+          <p>Fees related to hostel, mess, and transportation services will be refunded on a pro-rata basis, based on
+            the
+            duration of availed services, and as per the specific department's policy.</p>
+          <hr>
+          <div class="section-title">5. Review Clause </div>
+          <p>This policy will remain in effect until the release of the updated UGC Refund Guidelines for 2025-26. Any
+            changes
+            to the refund structure or last dates will be communicated as and when the new UGC circular is issued.</p>
+        </div>
+      </p-panel>
+    </div>
+
+    <p-confirm-dialog [style]="{ width: '450px' }"></p-confirm-dialog>
+    <p-overlayPanel #op [style]="{ width: '450px' }" [showCloseIcon]="true">
+      <ng-template pTemplate="content">
+        <p-table [value]="selectedSemesterSubjects" responsiveLayout="scroll">
+          <ng-template pTemplate="header">
+            <tr>
+              <th pSortableColumn="name">Subject</th>
+              <th>Credit</th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-subject>
+            <tr>
+              <td>{{ subject.name }}</td>
+              <td>{{ subject.credit }}</td>
+            </tr>
+          </ng-template>
+        </p-table>
+      </ng-template>
+    </p-overlayPanel>
+
+    <div *ngIf="studentProgramProvisional?.studentName">
+      <p-dialog [(visible)]="isWelcomeLetterDialogVisible" header="Welcome Letter" [modal]="true" [closable]="true">
+        <ng-template pTemplate="content">
+          <app-welcome-letter [studentName]="studentProgramProvisional.studentName ?? ''"></app-welcome-letter>
+        </ng-template>
+      </p-dialog>
+    </div>
+  </div>

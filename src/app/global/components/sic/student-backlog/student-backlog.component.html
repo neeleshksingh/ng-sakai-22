@@ -1,0 +1,63 @@
+<div class="col-12">
+    <div class="flex justify-content-end align-items-center mb-3">
+        <button pButton type="button" label="Refresh" icon="pi pi-refresh" iconPos="left"
+            class="p-button-sm p-button-success" (click)="refreshData()"></button>
+    </div>
+
+    <div *ngIf="backlogHistoryList.length === 0" style="color: green; text-align: center; padding: 1rem;">
+        THE STUDENT HAS NO HISTORY OF BACKLOGS.
+    </div>
+
+    <p-table *ngIf="backlogHistoryList.length > 0" [value]="backlogHistoryList" rowGroupMode="rowspan"
+        groupRowsBy="operationalVerticalName" sortField="operationalVerticalId" sortMode="single"
+        [resizableColumns]="true" [rowHover]="true"
+        styleClass="p-datatable-customers p-datatable-gridlines p-datatable-striped p-datatable-sm">
+
+        <ng-template pTemplate="header">
+            <tr>
+                <th>Operational Vertical</th>
+                <th class="text-center">Sr No</th>
+                <th>Academic Session</th>
+                <th>Program</th>
+                <th>Examination</th>
+                <th>Subject</th>
+                <th class="text-center">Attempted Count</th>
+                <th class="text-center">Total Marks</th>
+            </tr>
+        </ng-template>
+
+        <ng-template pTemplate="body" let-backlogHistory let-rowIndex="rowIndex" let-rowgroup="rowgroup"
+            let-rowspan="rowspan">
+            <tr>
+                <td *ngIf="rowgroup" [attr.rowspan]="rowspan" style="vertical-align: middle; font-weight: 600;">
+                    {{ backlogHistory.operationalVerticalName }}
+                </td>
+                <td class="text-center">{{ rowIndex + 1 }}</td>
+                <td>
+                    <span class="p-column-title">Academic Session</span>
+                    {{ backlogHistory.academicSessionName }}
+                </td>
+                <td>
+                    <span class="p-column-title">Program</span>
+                    {{ backlogHistory.programName }}
+                </td>
+                <td>
+                    <span class="p-column-title">Examination</span>
+                    {{ backlogHistory.examinationName }}
+                </td>
+                <td>
+                    <span class="p-column-title">Subject</span>
+                    {{ backlogHistory.subjectPaperCodeName }} - {{ backlogHistory.subjectName }}
+                </td>
+                <td class="text-center">
+                    <span class="p-column-title">Attempted Count</span>
+                    {{ backlogHistory.attemptedCount }}
+                </td>
+                <td class="text-center">
+                    <span class="p-column-title">Total Marks</span>
+                    {{ backlogHistory.total }}
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+</div>

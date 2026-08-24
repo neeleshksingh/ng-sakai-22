@@ -1,18 +1,66 @@
-.generic-view dl {
-    display: grid;
-    gap: 0.75rem;
+.list-view ul {
+    list-style-type: none;
+    padding: 0;
+    i {
+        font-size: 1rem;
+        padding-right: 5px;
+    }
 }
-.generic-view dl > div {
-    display: grid;
-    grid-template-columns: minmax(8rem, 0.4fr) 1fr;
-    gap: 1rem;
-    padding-bottom: 0.75rem;
-    border-bottom: 1px solid var(--surface-border);
+
+.list-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 0;
+    border-bottom: 1px solid #e0e0e0;
 }
-dt {
-    color: var(--text-color-secondary);
-    font-weight: 600;
+
+.list-label {
+    font-weight: bold;
 }
-dd {
-    margin: 0;
+
+.list-value {
+    font-style: italic;
+}
+
+.comapct-view {
+    i {
+        font-size: 1.5rem;
+    }
+}
+
+.minimal-button {
+    background: transparent;
+    border: none;
+    font-size: 1rem;
+    cursor: pointer;
+    padding: 0.5rem 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: background-color 0.3s;
+
+    i {
+        font-size: 1rem;
+    }
+}
+
+.minimal-button:hover {
+    background-color: #f0f0f0;
+    border-radius: 5px;
+}
+
+.selected-view {
+    background-color: #e0e0e0;
+    font-weight: bold;
+    border-radius: 5px;
+}
+
+hr {
+    margin: 0.5rem 0;
+}
+
+.view-value1, .view-value, .list-value {
+    word-wrap: break-word;
+    white-space: normal;
+    overflow-wrap: anywhere;
 }

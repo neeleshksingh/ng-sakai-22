@@ -1,0 +1,110 @@
+.anniversary-container {
+  width: 180px;
+  height: 90px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+@keyframes shine {
+  0% {
+    left: -50%;
+  }
+  100% {
+    left: 150%;
+  }
+}
+
+.content-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  animation: pulse 2s ease-in-out infinite;
+  position: relative;
+  z-index: 1;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+.anniversary-badge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 5px 5px;
+  border-radius: 50%;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  flex-shrink: 0;
+  width: 60px;
+  height: 60px;
+  border: 2px solid rgba(255, 255, 255, 0.5);
+}
+
+.anniversary-badge span {
+  text-align: center;
+}
+
+.anniversary-badge span:first-child {
+  font-size: 12px;
+  color: #ff6b6b;
+  font-family: 'Brush Script MT', cursive, 'Dancing Script', cursive;
+  font-style: italic;
+  font-weight: 500;
+}
+
+.year-number {
+  font-size: 24px;
+  font-weight: 900;
+  background: linear-gradient(135deg, #ff6b6b, #feca57);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  line-height: 1;
+}
+
+.year-suffix {
+  font-size: 12px;
+  color: #097088;
+  font-family: 'Brush Script MT', cursive, 'Dancing Script', cursive;
+  font-style: italic;
+}
+
+.text-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  color: white;
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.title {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  line-height: 1.2;
+  color: #1e3a8a;
+}
+
+.subtitle {
+  font-size: 10px;
+  font-weight: 600;
+  line-height: 1.2;
+  color: #3b82f6;
+}
+
+.date {
+  font-size: 8px;
+  font-weight: 500;
+  margin-top: 2px;
+  line-height: 1.2;
+  color: #64748b;
+}

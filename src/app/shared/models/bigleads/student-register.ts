@@ -1,0 +1,57 @@
+import { AuditModel } from "../commons/audit-model"
+
+export class StudentRegister extends AuditModel {
+    id?: number
+    provisionalNumber?: string
+    applicantNumber?: string
+    studentId?: string
+    academicSessionId?: number
+    academicSessionName?: string
+    programId?: number
+    programName?: string
+    operationalVerticalId?: number
+    operationalVerticalName?: string
+    dateOfAdmission?: Date
+    studentName?: string
+    category?: string
+    bloodGroup?: string
+    dateOfBirth?: Date
+    gender?: string
+    religion?: string
+    nationality?: string
+    fatherFirstName?: string
+    fatherMiddleName?: string
+    fatherLastName?: string
+    fatherMobileNumber?: string
+    fatherEmail?: string
+    fatherOccupation?: string
+    motherFirstName?: string
+    motherMiddleName?: string
+    motherLastName?: string
+    motherMobileNumber?: string
+    address1?: string
+    address2?: string
+    city?: string
+    state?: string
+    emailAddress?: string
+    phoneNumber?: string
+    aadharNumber?: string
+    minimumQualification?: string
+    lastBoardUniversity?: string
+    concessionCategoryId?: number
+    concessionCategoryName?: string
+    ovfcAmount?: number
+    concessionUnit?: string
+    concessionValue?: number
+    concessionAmount?: number
+    feeAmount?: number
+    paidAmount?: number
+    dueAmount?: number
+    isAdmissionFeePaid?: boolean
+    registrationFee?: number
+    password?: string
+    registrationFeeTransactionId?: string
+    isWelcomeEmailSent?: boolean
+    welcomeEmailSentDate?: Date
+    status?: string
+}

@@ -1,1 +1,3 @@
-<p-tag [value]="role()" [severity]="severity()" />
+<span class="role-tag" [class.role-tag-outline]="variant === 'outline'">
+    {{ role }}
+</span>

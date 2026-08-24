@@ -1,8 +1,9 @@
-.bar-graph-skeleton {
-    height: 18rem;
-    display: flex;
-    align-items: flex-end;
-    justify-content: space-around;
-    gap: 1rem;
-    padding: 1rem;
+.barskeleton{
+    width: 3vw;
+}
+
+@media screen and (max-width: 900px) {
+    .barskeleton{
+        width: 7vw;
+    }
 }

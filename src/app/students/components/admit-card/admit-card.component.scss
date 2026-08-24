@@ -1,0 +1,16 @@
+/* Minimal styles - we rely mainly on PrimeFlex/PrimeNG utility classes
+	 Keep a tiny rule for subject list height to keep dialog compact */
+:host {
+	.subjects-list-min {
+		max-height: 6.5rem;
+		overflow: auto;
+		white-space: normal;
+		word-break: break-word;
+	}
+
+	/* Dark theme tweak for surface-border backgrounds (optional) */
+	:host ::ng-deep [data-theme='dark'] .subjects-list-min {
+		background: rgba(255,255,255,0.02);
+	}
+}
+

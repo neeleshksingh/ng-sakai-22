@@ -1,0 +1,29 @@
+<div class="col-12">
+    <div class="card" *ngFor="let familyArray of tableArrayFamilyDetailsList">
+        <br>
+        <p-table #dt2 [value]="familyArray" [rowHover]="true" dataKey="id" autoLayout="true" resizableColumns="true"
+            styleClass="p-datatable-customers p-datatable-gridlines p-datatable-striped p-datatable-lg">
+            <ng-template pTemplate="caption">
+                <h5>{{familyArray[0].col2}} Details</h5>
+            </ng-template>
+
+            <ng-template pTemplate="body" let-family>
+                <tr>
+                    <td style="width: 25%; padding: 8px !important;">
+                        {{family?.col1}}
+                    </td>
+                    <td style="width: 25%;">
+                        <b>{{family?.col2}}</b>
+                    </td>
+                    <td style="width: 25%;">
+                        {{family?.col3}}
+                    </td>
+                    <td style="width: 25%;">
+                        <b>{{family?.col4}}</b>
+                    </td>
+                </tr>
+            </ng-template>
+
+        </p-table>
+    </div>
+</div>

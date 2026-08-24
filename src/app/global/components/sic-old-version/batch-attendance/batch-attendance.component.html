@@ -1,0 +1,262 @@
+<div class="card">
+    <p-accordion>
+        <div *ngFor="let attendanceSummaryRegistrationNumberWise of 
+                    studentBatchAttendanceSummaryRegistrationNumberWise">
+            <p-accordionTab [selected]="true"
+                header="{{attendanceSummaryRegistrationNumberWise.programNameWithRegistrationNumber}}">
+                <div *ngFor="let attendanceSummaryOperationalVerticalWise of 
+                        attendanceSummaryRegistrationNumberWise.studentBatchAttendanceSummaryOperationalVerticalWise">
+                    <div class="col-12">
+                        <p-table [value]="attendanceSummaryOperationalVerticalWise.studentBatchAttendanceReport"
+                            sortField="operationalVertical.name" sortMode="single" [resizableColumns]="true"
+                            [rowHover]="true"
+                            styleClass="datatable-customers datatable-gridlines datatable-striped datatable-sm">
+
+                            <ng-template pTemplate="caption">
+                                <div class="fluid formgrid grid align-items-end">
+                                    <div class="field col-9" style="text-align: left;">
+                                        {{attendanceSummaryOperationalVerticalWise.operationalVertical}}
+                                    </div>
+                                    <div class="field col-3" style="text-align: right;">
+                                        Cumulative Attendance -
+                                        {{attendanceSummaryOperationalVerticalWise.aggregateAttendance|
+                                        number: '1.2-2'}}%
+                                    </div>
+                                </div>
+                            </ng-template>
+
+                            <ng-template pTemplate="header">
+                                <tr>
+                                    <th>S/N.</th>
+                                    <th>PaperCode</th>
+                                    <th>Subject</th>
+                                    <th style="text-align: center;">Credit Unit</th>
+                                    <th style="text-align: center;">Batch Code</th>
+                                    <th *ngIf="attendanceSummaryOperationalVerticalWise.isRecentAttendanceDisplay">
+                                        RecentAttendance</th>
+                                    <th style="text-align: center;">Scheduled</th>
+                                    <th style="text-align: center;">Conducted</th>
+                                    <th style="text-align: center;">Present</th>
+                                    <th style="text-align: center;">Absent</th>
+                                    <th style="text-align: center;">Attendance(%)</th>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-batchAttendance let-rowIndex="rowIndex">
+                                <tr>
+                                    <td style="text-align: center;">{{rowIndex+1}}</td>
+                                    <td><span class="p-column-title">PaperCode</span>
+                                        {{batchAttendance.subjectPaperCodeName}}
+                                    </td>
+                                    <td pTooltip={{batchAttendance.teacherName}} tooltipPosition="right">
+                                        <span class="p-column-title">Subject</span>
+                                        {{batchAttendance.subjectName}}
+                                    </td>
+                                    <td style="text-align:center">
+                                        <span class="p-column-title">Credit Unit</span>
+                                        {{batchAttendance.creditUnit}}
+                                    </td>
+                                    <td style="text-align: center;">
+                                        <span class="p-column-title">BatchCode</span>
+                                        <a (click)="onBatchCodeClick(batchAttendance.batchCode)"
+                                            style="cursor: pointer;" pTooltip="Click to view details">
+                                            {{batchAttendance.batchCode}}
+                                        </a>
+                                    </td>
+                                    <td *ngIf="attendanceSummaryOperationalVerticalWise.isRecentAttendanceDisplay"
+                                        style="display: flex;">
+                                        <span class="p-column-title">RecentAttendance</span>
+                                        <div *ngFor="let recentAtten of batchAttendance.recentAttendance">
+                                            <div *ngIf="recentAtten==true">
+                                                <p-button icon="pi pi-check" styleClass="check-icon-size"></p-button>
+                                            </div>
+                                            <div *ngIf="recentAtten==false">
+                                                <p-button icon="pi pi-times"
+                                                    styleClass="p-button-danger check-icon-size"></p-button>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td style="text-align:center">
+                                        <span class="p-column-title">Scheduled</span>
+                                        {{batchAttendance.totalScheduled}}
+                                    </td>
+                                    <td style="text-align:center"><span class="p-column-title">Conducted</span>
+                                        {{batchAttendance.totalClassConducted}}
+                                    </td>
+                                    <td style="text-align:center"><span class="p-column-title">Present</span>
+                                        {{batchAttendance.totalPresent}}
+                                    </td>
+                                    <td style="text-align:center"><span class="p-column-title">Absent</span>
+                                        {{batchAttendance.totalAbsent}}
+                                    </td>
+                                    <td style="text-align:center"><span class="p-column-title">Attendance(%)</span>
+                                        {{batchAttendance.attendancePercentage}}
+                                    </td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                    </div>
+                </div>
+            </p-accordionTab>
+        </div>
+    </p-accordion>
+</div>
+<p-dialog [(visible)]="isBatchCodeDetailsViewDialog" [style]="{width: '900px'}" [modal]="true">
+    <div>
+        <div class="col-12">
+            <div class="card toolbar-demo">
+                <div class="header-left-div">
+                    <div class="header-div1">
+                        <img class="header-icon" src="../../../../../assets/Dashboard-icons/knowledge.png" alt="">
+                    </div>
+                    <div class="header-div2">
+                        <h4 class="header-heading" style="margin-top: 20px;">{{batch?.batchCode}}-
+                            {{batch?.subjectPaperCodeName}}-
+                            {{batch?.subjectName}}</h4>
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="fluid formgrid grid">
+                    <div class="field col-12 md-4">
+                        <label for="academicSessionName">Academic Session: </label>
+                        <br />
+                        <label style="font-weight: bold">
+                            {{batch?.academicSessionName}}
+                        </label>
+                    </div>
+                    <div class="field col-12 md-4">
+                        <label for="programName">Program: </label><br />
+                        <label style="font-weight: bold">
+                            {{batch?.programName}}
+                        </label>
+                    </div>
+                    <div class="field col-12 md-4">
+                        <label for="operationalVerticalName">Operational Vertical: </label>
+                        <br />
+                        <label style="font-weight: bold">
+                            {{batch?.operationalVerticalName}}
+                        </label>
+                    </div>
+                    <div class="field col-12 md-4">
+                        <label for="subjectPaperCodeName">Subject Paper Code: </label><br />
+                        <label style="font-weight: bold">
+                            {{batch?.subjectPaperCodeName}} - {{batch?.subjectName}}
+                        </label>
+                    </div>
+                    <div class="field col-12 md-4">
+                        <label for="version">Version: </label><br />
+                        <label style="font-weight: bold">
+                            {{batch?.version}}
+                        </label>
+                    </div>
+                    <div class="field col-12 md-4">
+                        <label for="primaryFacultyCode">Primary Faculty: </label>
+                        <br />
+                        <label style="font-weight: bold">
+                            {{batch?.primaryFacultyCode}} - {{batch?.primaryFacultyName}}
+                        </label>
+                    </div>
+                    <div class="field col-12 md-4">
+                        <label for="secondaryFacultyCode">Secondary Faculty: </label>
+                        <br />
+                        <label style="font-weight: bold">
+                            {{batch?.secondaryFacultyCode}} - {{batch?.secondaryFacultyName}}
+                        </label>
+                    </div>
+                    <div class="field col-12 md-4">
+                        <label for="parentBatchCode">Parent Batch Code: </label>
+                        <br />
+                        <label style="font-weight: bold">
+                            {{batch?.parentBatchCode}}
+                        </label>
+                    </div>
+                    <div class="field col-12 md-4">
+                        <label for="batchCode">Batch Code: </label>
+                        <br />
+                        <label style="font-weight: bold">
+                            {{batch?.batchCode}}
+                        </label>
+                    </div>
+                    <div class="field col-12 md-4">
+                        <label for="startDate">Start Date: </label>
+                        <br />
+                        <label style="font-weight: bold">
+                            {{batch?.startDate | date}}
+                        </label>
+                    </div>
+                    <div class="field col-12 md-4">
+                        <label for="batchCapacity">Batch Capacity: </label>
+                        <br />
+                        <label style="font-weight: bold">
+                            {{batch?.batchCapacity}}
+                        </label>
+                    </div>
+                    <div class="field col-12 md-4">
+                        <label for="batchScheduleMasterName">Batch Schedule Master: </label>
+                        <br />
+                        <label style="font-weight: bold">
+                            {{batch?.batchScheduleMasterName}}
+                        </label>
+                    </div>
+
+                    <div class="field col-12 md-4">
+                        <label for="isScheduleGenerated">Is Schedule Generated: </label>
+                        <br />
+                        <label [style.color]="batch?.isScheduleGenerated ? 'green' : 'red'" style="font-weight: bold">
+                            {{batch?.isScheduleGenerated ? 'Yes' : 'No'}}
+                        </label>
+                    </div>
+                    <div class="field col-12 md-4">
+                        <label for="cycle">Cycle: </label>
+                        <br />
+                        <label style="font-weight: bold">
+                            {{batch?.cycle}}
+                        </label>
+                    </div>
+                    <div class="field col-12 md-4">
+                        <label for="isClosed">IsClosed: </label>
+                        <br />
+                        <label [style.color]="batch?.isClosed ? 'green' : 'red'" style="font-weight: bold;">
+                            {{batch?.isClosed ? 'Yes' : 'No'}}
+                        </label>
+                    </div>
+                    <div class="field col-12 md-4" [hidden]="!batch?.isClosed">
+                        <label for="closedDate">ClosedDate: </label>
+                        <br />
+                        <label style="font-weight: bold;color:red">
+                            {{batch?.closedDate}}
+                        </label>
+                    </div>
+                    <div class="field col-12 md-4" [hidden]="!batch?.isClosed">
+                        <label for="closedBy">ClosedBy: </label>
+                        <br />
+                        <label style="font-weight: bold;color:red">
+                            {{batch?.closedBy}}
+                        </label>
+                    </div>
+                    <div class="field col-12 md-4" [hidden]="!batch?.isClosed">
+                        <label for="closedReason">ClosedReason: </label>
+                        <br />
+                        <label style="font-weight: bold;color:red">
+                            {{batch?.closedReason}}
+                        </label>
+                    </div>
+                    <div class="field col-12 md-4">
+                        <label for="status">Status: </label>
+                        <br />
+                        <label style="font-weight: bold">
+                            {{batch?.status}}
+                        </label>
+                    </div>
+                    <div class="field col-12 md-4">
+                        <label for="description">Description: </label>
+                        <br />
+                        <label style="font-weight: bold">
+                            {{batch?.description}}
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</p-dialog>

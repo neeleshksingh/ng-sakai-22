@@ -1,19 +1,221 @@
-<div class="card">
-    <h2>{{ title() }}</h2>
-    <p-table [value]="rows()" [paginator]="true" [rows]="10" responsiveLayout="scroll">
-        <ng-template #header
-            ><tr>
-                @for (column of columns(); track column.field) {
-                    <th>{{ column.header }}</th>
+@if (!isLoading) {
+<p-table #dt [value]="displayedValue" [columns]="cols" [rows]="rows" [paginator]="paginator"
+    [rowsPerPageOptions]="rowsPerPageOptions" [selectionMode]="isSelectionEnabled ? selectionMode : undefined"
+    [selection]="isSelectionEnabled ? selection : undefined" (onSelectionChange)="onSelectionChange($event)"
+    [globalFilterFields]="globalFilterFields" [rowHover]="true" [dataKey]="dataKey"
+    [resizableColumns]="resizableColumns" [class]="styleClass" (onRowSelect)="handleRowSelect($event)"
+    [currentPageReportTemplate]="currentPageReportTemplate" [showCurrentPageReport]="showCurrentPageReport">
+    <ng-template pTemplate="caption">
+        <div class="flex flex-row justify-content-between align-items-center table-header">
+            @if (showReload) {
+            <div>
+                <button pButton outlined severity="secondary" (click)="triggerReload()"
+                    pTooltip="Reload Table Data" tooltipPosition="top">
+                    <i class="pi pi-sync"></i>
+                </button>
+            </div>
+            } @else {
+            <div></div>
+            }
+
+            <div class="flex align-items-center gap-2">
+                <button pButton outlined (click)="clear(dt)" style="width: 84px">
+                    <i class="pi pi-filter-slash"></i>
+                    <span>Reset</span>
+                </button>
+                <span class="p-input-icon-left">
+                    <i class="pi pi-search"></i>
+                    <input #searchInput pInputText type="text" (input)="onGlobalQueryInput(searchInput.value)"
+                        placeholder="Search keyword" />
+                </span>
+            </div>
+        </div>
+    </ng-template>
+
+    <ng-template pTemplate="header">
+        <tr>
+            <!-- Serial Number Header -->
+            <th class="text-center" style="width: 80px">S.No.</th>
+
+            <th [ngClass]="[getColumnClass(col)]" *ngFor="let col of cols"
+                [pSortableColumn]="isSorting && col.sortable !== false ? col.field : null">
+                {{ col.header }}
+                <p-sort-icon *ngIf="isSorting && col.sortable !== false" [field]="col.field">
+                </p-sort-icon>
+
+                <p-column-filter *ngIf="isFiltering && col.filterable !== false" [type]="col.filterType"
+                    [field]="col.field" display="menu">
+                </p-column-filter>
+
+            </th>
+            <th class="text-center" *ngIf="actions && actions.length">
+                Actions
+            </th>
+        </tr>
+    </ng-template>
+
+    <ng-template pTemplate="body" let-rowData let-rowIndex="rowIndex">
+        <tr [pSelectableRow]="isSelectionEnabled ? rowData : null"
+            [pSelectableRowDisabled]="!isSelectionEnabled || !rowData[dataKey]" [ngStyle]="rowStyle(rowData)">
+            <!-- Serial Number Column -->
+            <td class="text-center">{{ rowIndex + 1 }}.</td>
+
+            @for (col of cols; track $index) {
+            @if (shouldRenderCell(col, rowData)) {
+            <td [attr.rowspan]="getRowspan(col, rowData)"
+                [ngStyle]="{color: col.field === 'status' && rowData[col.field] === 'DELETED' ? 'red' : 'inherit'}"
+                class="text-center" [ngClass]="[getColumnClass(col)]">
+                <ng-container [ngSwitch]="col.type">
+                    <ng-container *ngSwitchDefault>
+                        <span class="p-column-title"><b>{{ col.header }}</b></span>
+                        {{ rowData?.[col.field] }}
+                    </ng-container>
+
+                    <ng-container *ngSwitchCase="'image'">
+                        <p-image [src]="rowData[col.field]" width="75px" height="75px" class="shadow-4"
+                            [preview]="true"></p-image>
+                    </ng-container>
+
+                    <ng-container *ngSwitchCase="'date'">
+                        <span class="p-column-title"><b>{{ col.header }}</b></span>
+                        {{ rowData?.[col.field] | date }}
+                    </ng-container>
+
+                    <ng-container *ngSwitchCase="'dateTime'">
+                        <span class="p-column-title"><b>{{ col.header }}</b></span>
+                        {{
+                        rowData?.[col.field]
+                        | date: "MMM d, y, h:mm:ss a"
+                        }}
+                    </ng-container>
+
+                    <ng-container *ngSwitchCase="'boolean-checkbox'">
+                        <span class="p-column-title"><b>{{ col.header }}</b></span>
+                        <input type="checkbox" [checked]="rowData[col.field] === true" disabled />
+                    </ng-container>
+
+                    <ng-container *ngSwitchCase="'boolean'">
+                        <span class="p-column-title"><b>{{col.header}}</b></span>
+                        <span>{{ rowData[col.field] ? '✅' : '❌' }}</span>
+                    </ng-container>
+
+                    <ng-container *ngSwitchCase="'number'">
+                        <span class="p-column-title"><b>{{ col.header }}</b></span>
+                        {{ formatNumberCell(rowData?.[col.field]) }}
+                    </ng-container>
+
+                    <ng-container *ngSwitchCase="'externalLinkButton'">
+                        <button *ngIf="rowData?.[col.field]" pButton outlined size="small"
+                            (click)="openExternalLink(rowData[col.field])">
+                            <i class="pi pi-external-link"></i>
+                            <span>{{ col.buttonLabel || 'View' }}</span>
+                        </button>
+                    </ng-container>
+
+                    <ng-container *ngSwitchCase="'booleanTerms'">
+                        <span class="p-column-title"><b>{{ col.header }}</b></span>
+                        <span>{{
+                            rowData[col.field]
+                            ? "Approved"
+                            : "Rejected"
+                            }}</span>
+                    </ng-container>
+                </ng-container>
+            </td>
+            }
+            }
+
+            @if (actions && actions.length) {
+            <td *ngIf="actions && actions.length" style="text-align: center !important">
+                @for (action of getRowActions(rowData); track $index) {
+                @if (action.permission) {
+                <button pButton pRipple [ngClass]="getButtonClass(action)"
+                    [rounded]="true" [raised]="true" [iconOnly]="true" class="mr-2" [pTooltip]="action.tooltip" tooltipPosition="top"
+                    (click)="triggerAction(action.name, rowData)" style="width: 2rem; height: 2rem"
+                    *ngIf="action.permission | hasPermission | async">
+                    <i [class]="action.icon"></i>
+                </button>
+
+                } @else {
+                <button pButton pRipple [ngClass]="getButtonClass(action)"
+                    [rounded]="true" [raised]="true" [iconOnly]="true" class="mr-2" [pTooltip]="action.tooltip" tooltipPosition="top"
+                    (click)="triggerAction(action.name, rowData)" style="width: 2rem; height: 2rem">
+                    <i [class]="action.icon"></i>
+                </button>
                 }
-            </tr></ng-template
-        >
-        <ng-template #body let-row
-            ><tr>
-                @for (column of columns(); track column.field) {
-                    <td>{{ row[column.field] }}</td>
                 }
-            </tr></ng-template
-        >
-    </p-table>
-</div>
+            </td>
+            }
+        </tr>
+    </ng-template>
+
+    <ng-template pTemplate="summary">
+        <div class="p-d-flex p-ai-center p-jc-between">
+            In total there are {{ value ? value.length : 0 }} {{ entries }}.
+        </div>
+    </ng-template>
+</p-table>
+} @else {
+<p-table [value]="skeletonValue" [columns]="cols" [rows]="10" [paginator]="true"
+    [rowsPerPageOptions]="[10, 20, 30, 40, 50, 100, { showAll: 'All' }]" autoLayout="true" resizableColumns="true"
+    styleClass="p-datatable-customers p-datatable-gridlines p-datatable-striped p-datatable-sm"
+    currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [showCurrentPageReport]="true"
+    entries="Academic Session(s)">
+    <ng-template pTemplate="caption">
+        <div class="flex flex-row justify-content-between align-items-center table-header">
+            @if (showReload) {
+            <div>
+                <button pButton outlined severity="secondary" (click)="triggerReload()"
+                    pTooltip="Reload Table Data" tooltipPosition="top">
+                    <i class="pi pi-sync"></i>
+                </button>
+            </div>
+            } @else {
+            <div></div>
+            }
+            <div class="flex align-items-center gap-2">
+                <button pButton outlined style="width: 84px" [disabled]="true">
+                    <i class="pi pi-filter-slash"></i>
+                    <span>Reset</span>
+                </button>
+                <span class="p-input-icon-left">
+                    <i class="pi pi-search"></i>
+                    <input #searchInput pInputText type="text" placeholder="Search keyword" disabled />
+                </span>
+            </div>
+        </div>
+    </ng-template>
+    <ng-template pTemplate="header">
+        <tr>
+            <th class="text-center" style="width: 80px">S.No.</th>
+            @for (col of cols; track $index) {
+            <th>
+                {{ col.header }}
+                <p-sort-icon field="{{ col.field }}"></p-sort-icon>
+                <p-column-filter [type]="col.filterType" [field]="col.field" display="menu"></p-column-filter>
+            </th>
+            }
+            @if (actions.length) {
+            <th>Actions</th>
+            }
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body">
+        @for (item of skeletonValue; track $index) {
+        <tr>
+            <td>
+                <p-skeleton />
+            </td>
+            @for (col of cols; track $index) {
+            <td><p-skeleton /></td>
+            }
+            @if (actions && actions.length) {
+            <td *ngIf="actions && actions.length">
+                <p-skeleton />
+            </td>
+            }
+        </tr>
+        }
+    </ng-template>
+</p-table>
+}

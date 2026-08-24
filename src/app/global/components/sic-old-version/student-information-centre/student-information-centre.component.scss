@@ -1,0 +1,38 @@
+.fixed-header {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background-color: inherit;
+}
+
+.student-info {
+    position: sticky;
+    z-index: 10;
+    top: 55px;
+}
+
+@media (max-width: 790px) {
+    .student-info {
+        top: 11%;
+    }
+}
+
+.top-right-icon {
+    position: absolute;
+    right: 0px;
+    color: #000;
+    z-index: 1000;
+    background: transparent;
+}
+
+.search-button {
+    position: relative;
+    right: 40px;
+    top: 30px;
+}
+
+.scrollable-content {
+    max-height: calc(100vh - 200px);
+    overflow-y: auto;
+    padding: 1rem;
+}

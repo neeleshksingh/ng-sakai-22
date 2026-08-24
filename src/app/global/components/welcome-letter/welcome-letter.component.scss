@@ -1,0 +1,115 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+
+.welcome-letter-container {
+    background: url("../../../../assets/images/welcome-letter.jpg") no-repeat center center;
+    background-size: cover;
+    font-family: "Poppins", sans-serif;
+    font-weight: 500;
+    font-style: normal;
+    position: relative;
+    width: 210mm;
+    height: 297mm;
+    padding: 40px;
+    box-sizing: border-box;
+}
+
+.content-wrapper {
+    padding: 30px;
+    border-radius: 10px;
+    margin-top: 9rem;
+    margin-left: 1rem;
+    margin-right: 1rem;
+    font-size: 12px;
+    text-align: justify;
+    max-height: calc(297mm - 9rem - 80px);
+    overflow-y: auto;
+    word-wrap: break-word;
+}
+
+.from-label {
+    margin-bottom: 0;
+    font-weight: bold;
+}
+
+.address-block {
+    margin: 0;
+}
+
+.greeting {
+    margin-top: 30px;
+}
+
+.signature {
+    margin-top: 20px;
+}
+
+/* Mobile view adjustments */
+@media screen and (max-width: 768px) {
+    .welcome-letter-container {
+        width: 100%;
+        max-width: 300px;
+        height: calc(300px * 1.414);
+        padding: 20px;
+        background-size: cover;
+        background-position: center;
+        margin: 0 auto;
+    }
+
+    .content-wrapper {
+        margin-top: 4rem;
+        margin-left: 0.5rem;
+        margin-right: 0.5rem;
+        padding: 15px;
+        font-size: 9px;
+        border-radius: 8px;
+        max-height: calc(300px * 1.414 - 4rem - 40px);
+        overflow-y: auto;
+        word-wrap: break-word;
+    }
+
+    .greeting {
+        margin-top: 15px;
+    }
+
+    .signature {
+        margin-top: 12px;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .welcome-letter-container {
+        max-width: 250px;
+        height: calc(250px * 1.414);
+        padding: 10px;
+    }
+
+    .content-wrapper {
+        margin-top: 2.5rem;
+        margin-left: 0.3rem;
+        margin-right: 0.3rem;
+        padding: 10px;
+        font-size: 8px;
+        border-radius: 6px;
+        max-height: calc(250px * 1.414 - 2.5rem - 20px);
+        overflow-y: auto;
+        word-wrap: break-word;
+    }
+
+    .from-label {
+        font-size: 8px;
+    }
+
+    .address-block {
+        font-size: 7px;
+    }
+
+    .greeting {
+        font-size: 8px;
+        margin-top: 10px;
+    }
+
+    .signature {
+        font-size: 8px;
+        margin-top: 10px;
+    }
+}

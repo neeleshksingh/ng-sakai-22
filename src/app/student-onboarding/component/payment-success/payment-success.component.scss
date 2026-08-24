@@ -1,0 +1,254 @@
+:host ::ng-deep {
+    .payment-container {
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 2rem 1rem;
+        --primary-hue: 210;
+        --success-hue: 145;
+        --warning-hue: 45;
+        --danger-hue: 0;
+    }
+
+    .status-wrapper {
+        width: 100%;
+        position: relative;
+    }
+
+    .header {
+        position: relative;
+        z-index: 2;
+    }
+
+    .header h2 {
+        color: var(--text-color, #343a40);
+        font-weight: 700;
+        letter-spacing: 2px;
+        font-size: 1.5rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .header-accent {
+        width: 60px;
+        height: 4px;
+        background: linear-gradient(
+            90deg,
+            hsl(var(--primary-hue), 100%, 65%),
+            hsl(var(--primary-hue), 80%, 45%)
+        );
+        border-radius: 2px;
+        margin: 0 auto;
+    }
+
+    .glass-card {
+        background: rgba(255, 255, 255, 0.9) !important;
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border-radius: 16px !important;
+        box-shadow: 0 12px 20px rgba(0, 0, 0, 0.07),
+            0 4px 80px rgba(0, 0, 0, 0.04) !important;
+        overflow: hidden;
+        position: relative;
+        border: 1px solid rgba(255, 255, 255, 0.6);
+        padding: 0;
+    }
+
+    .status-indicator-container {
+        padding: 1.5rem 1rem;
+        background: linear-gradient(
+            135deg,
+            rgba(245, 247, 250, 0.7),
+            rgba(240, 242, 245, 0.5)
+        );
+        border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    }
+
+    .status-indicator {
+        padding: 0.75rem 1.75rem;
+        border-radius: 100px;
+        font-weight: 600;
+        letter-spacing: 0.5px;
+        text-transform: uppercase;
+        background-color: inherit !important;
+    }
+
+    .status-indicator i {
+        font-size: 1.25rem;
+        margin-bottom: 0.25rem;
+    }
+
+    .status-text {
+        font-size: 0.85rem;
+    }
+
+    .status-success {
+        background-color: hsla(var(--success-hue), 90%, 95%, 0.8);
+        color: hsl(var(--success-hue), 70%, 35%);
+        box-shadow: 0 4px 12px hsla(var(--success-hue), 70%, 60%, 0.2);
+    }
+
+    .status-pending {
+        background-color: hsla(var(--warning-hue), 90%, 95%, 0.8);
+        color: hsl(var(--warning-hue), 90%, 35%);
+        box-shadow: 0 4px 12px hsla(var(--warning-hue), 90%, 60%, 0.2);
+    }
+
+    .status-failed {
+        background-color: hsla(var(--danger-hue), 90%, 95%, 0.8);
+        color: hsl(var(--danger-hue), 70%, 45%);
+        box-shadow: 0 4px 12px hsla(var(--danger-hue), 70%, 60%, 0.2);
+    }
+
+    .data-row {
+        padding: 1rem 1.5rem;
+        display: flex;
+        border-bottom: 1px dashed rgba(0, 0, 0, 0.06);
+        transition: background-color 0.2s ease;
+    }
+
+    .data-row:hover {
+        background-color: rgba(0, 0, 0, 0.01);
+    }
+
+    .data-row:last-child {
+        border-bottom: none;
+    }
+
+    .highlight-row {
+        background-color: rgba(0, 0, 0, 0.02);
+    }
+
+    .data-label {
+        width: 40%;
+        font-weight: 500;
+        color: var(--text-color-secondary, #6c757d);
+        font-size: 0.9rem;
+    }
+
+    .data-value {
+        width: 60%;
+        font-weight: 600;
+        color: var(--text-color, #343a40);
+        font-size: 0.95rem;
+    }
+
+    .data-value.amount {
+        font-size: 1.1rem;
+        color: hsl(var(--primary-hue), 70%, 40%);
+    }
+
+    .actions {
+        padding: 1.5rem;
+        background: linear-gradient(
+            135deg,
+            rgba(250, 251, 253, 0.8),
+            rgba(245, 247, 250, 0.6)
+        );
+        border-top: 1px solid rgba(0, 0, 0, 0.05);
+        gap: 1rem;
+    }
+
+    .primary-button,
+    .secondary-button {
+        border-radius: 8px;
+        font-weight: 500;
+        padding: 0.75rem 1.5rem;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        border: none;
+    }
+
+    .primary-button {
+        background: linear-gradient(
+            135deg,
+            hsl(var(--primary-hue), 90%, 60%),
+            hsl(var(--primary-hue), 80%, 45%)
+        ) !important;
+    }
+
+    .secondary-button {
+        background: linear-gradient(
+            135deg,
+            hsl(var(--primary-hue), 15%, 95%),
+            hsl(var(--primary-hue), 10%, 85%)
+        ) !important;
+        color: hsl(var(--primary-hue), 30%, 30%) !important;
+    }
+
+    .primary-button:hover,
+    .secondary-button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+    }
+
+    .primary-button:active,
+    .secondary-button:active {
+        transform: translateY(0px);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .bottom-decoration {
+        display: flex;
+        justify-content: center;
+        margin-top: 1.5rem;
+    }
+
+    .decoration-circle {
+        width: 4rem;
+        height: 0.5rem;
+        background-color: rgba(0, 0, 0, 0.05);
+        border-radius: 100px;
+    }
+
+    @keyframes pulse {
+        0% {
+            opacity: 0.85;
+        }
+        50% {
+            opacity: 1;
+        }
+        100% {
+            opacity: 0.85;
+        }
+    }
+
+    .status-indicator {
+        animation: pulse 3s infinite ease-in-out;
+    }
+
+    @media screen and (max-width: 576px) {
+        .data-row {
+            flex-direction: column;
+            padding: 0.75rem 1.25rem;
+        }
+
+        .data-label,
+        .data-value {
+            width: 100%;
+        }
+
+        .data-label {
+            margin-bottom: 0.25rem;
+            font-size: 0.8rem;
+        }
+
+        .actions {
+            flex-direction: column;
+        }
+
+        .primary-button,
+        .secondary-button {
+            width: 100%;
+        }
+    }
+}
+.credentials-message {
+    margin-top: 20px;
+    padding: 15px;
+    border: 1px solid #d4edda;
+    background-color: #f8f9fa;
+    border-radius: 5px;
+}
+
+.credentials-info p {
+    margin: 5px 0;
+}

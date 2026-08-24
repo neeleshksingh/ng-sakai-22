@@ -1,0 +1,36 @@
+<form [formGroup]="gstForm" style="width: 100%;">
+    <div class="fluid formgrid grid align-items-end">
+        <div class="field col-12 sm:col-6 md:col-4 lg:col-3">
+            <label for="gstNumber" class="font-bold">
+                <i class="pi pi-user" style="margin-right: 3px;"></i> GST Number
+            </label>
+            <input pInputText type="hidden" id="id" formControlName="id">
+            <input pInputText type="text" id="gstNumber" formControlName="gstNumber"
+                class="text-base text-color surface-overlay border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full">
+        </div>
+        <div class="field col-12 sm:col-6 md:col-4 lg:col-3">
+            <label for="stateCode" class="font-bold">
+                <i class="pi pi-tag" style="margin-right: 3px;"></i> State Code
+            </label>
+            <input pInputText type="text" id="stateCode" formControlName="stateCode"
+                class="text-base text-color surface-overlay border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full">
+        </div>
+        <div class="field col-12 sm:col-6 md:col-4 lg:col-3">
+            <label for="gstRegistrationType" class="font-bold">
+                <i class="pi pi-money-bill" style="margin-right: 3px;"></i> GST Registration
+                Type
+            </label>
+            <p-select [filter]="true" inputId="gstRegistrationType" [options]="gstRegistrationTypeList"
+                formControlName="gstRegistrationType" placeholder="Select"
+                styleClass="text-base text-color surface-overlay border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full"></p-select>
+        </div>
+        <div class="field col-12 sm:col-6 md:col-4 lg:col-3">
+            <label for="status" class="font-bold">
+                <i class="pi pi-verified" style="margin-right: 3px;"></i> Status
+            </label>
+            <p-select [filter]="true" inputId="status" [options]="statusList" formControlName="status"
+                placeholder="Select"
+                styleClass="text-base text-color surface-overlay border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full"></p-select>
+        </div>
+    </div>
+</form>

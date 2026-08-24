@@ -1,0 +1,85 @@
+<div class="pb-6">
+    <div class="grid">
+        <p-toast></p-toast>
+        <div class="col-12">
+            <div class="toolbar-demo card">
+                <p-toolbar>
+                    <div class="p-toolbar-group-left">
+                        <div class="header-left-div">
+                            <div class="header-div1">
+                                <i class="fas fa-book-open" style="font-size: 40px;"></i>
+                            </div>
+                            <div class="header-div2">
+                                <h5>{{componentName}}</h5>
+                            </div>
+                        </div>
+                    </div>
+                    <ng-template pTemplate="right">
+                        <div class="d-flex">
+                        </div>
+                    </ng-template>
+                </p-toolbar>
+            </div>
+        </div>
+        <div class="col-12">
+            <div class="card p-4">
+                <form [formGroup]="hallTicketFormGroup">
+                    <div class="grid formgrid fluid">
+                        <div class="field col-12 md:col-2 lg:col-2">
+                            <label for="academicSessionId">Academic Session</label>
+                            <p-select [filter]="true" inputId="academicSessionId" [options]="academicSessionList"
+                                (onChange)="onAcademicChanged($event)" formControlName="academicSessionId"
+                                [style]="{'width':'100%'}" placeholder="Select Academic Session">
+                            </p-select>
+                        </div>
+                        <div class="field col-12 md:col-2 lg:col-2">
+                            <label for="programId">Program</label>
+                            <p-select [filter]="true" inputId="programId" [options]="programList"
+                                [style]="{'width':'100%'}" formControlName="programId" placeholder="Select Program"
+                                (onChange)="onProgramChanged($event)">
+                            </p-select>
+                        </div>
+                        <div class="field col-12 md:col-2 lg:col-2">
+                            <label for="operationalVerticalId">Semester</label>
+                            <p-select [filter]="true" inputId="operationalVerticalId"
+                                [options]="operationalVerticalList" [style]="{'width':'100%'}"
+                                (onChange)="onOperationalVerticalChanged($event)"
+                                formControlName="operationalVerticalId" placeholder="Select Semester">
+                            </p-select>
+                        </div>
+                        <div class="field col-12 md:col-2 lg:col-2">
+                            <label for="examinationId">Examination</label>
+                            <p-select [filter]="true" inputId="examinationId" [options]="examinationList"
+                                (onChange)="onExaminationChanged($event)" formControlName="examinationId"
+                                placeholder="Select Examination" [style]="{'width':'100%'}"></p-select>
+                        </div>
+                        <div class="field col-12 md:col-2 lg:col-2">
+                            <button pButton type="button" [disabled]="!hallTicketFormGroup.valid" label="View" #newItem
+                                (click)="viewHallTicket()" style="margin-top: 23px;"></button>
+                        </div>
+                        <div class="field col-12 md:col-2 lg:col-2"
+                            *ngIf="safeHtmlContents?.length && safeHtmlContents.length > 0">
+                            <button pButton type="button" icon="pi pi-print" label="Print" #newItem
+                                (click)="printAdmitCard()" style="margin-top: 23px;"></button>
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+            <div class="col-12" *ngIf="safeHtmlContents?.length && safeHtmlContents.length > 0"
+                style="margin-left: auto; margin-right: auto;">
+                <div class="card" style="overflow: auto">
+                    <p-card *ngFor="let content of safeHtmlContents; let i = index" styleClass="mb-3">
+                        <div [innerHTML]="content" class="transcript-table mb-3"></div>
+                    </p-card>
+                </div>
+            </div>
+            <div class="card" *ngIf="isAdmitCardPublished==false">
+                <div style="color: red; text-align: center; font-size: 20px;">
+                    {{resultMessage}}
+                </div>
+            </div>
+        </div>
+        <p-confirm-dialog [style]="{ width: '450px' }"></p-confirm-dialog>
+    </div>
+</div>
