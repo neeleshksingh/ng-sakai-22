@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MessageService } from 'primeng/api';
-import { SidebarModule } from 'primeng/sidebar';
+import { DrawerModule } from 'primeng/drawer';
 import { BehaviorSubject } from 'rxjs';
 import { AuthenticationService } from '@/app/idp/services/authentication-service.service';
 import { LoginResponse } from '@/app/shared/models/idp/login';
@@ -12,7 +12,7 @@ import { RoleTagComponent } from '@/app/global/components/role-tag/role-tag.comp
 @Component({
     selector: 'app-footer',
     standalone: true,
-    imports: [CommonModule, SidebarModule, RoleTagComponent],
+    imports: [CommonModule, DrawerModule, RoleTagComponent],
     templateUrl: './app.footer.html',
     styleUrl: './app.footer.scss',
     providers: [MessageService]

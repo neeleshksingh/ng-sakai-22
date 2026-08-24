@@ -29,8 +29,8 @@
     </div>
 
     <!-- User Information Sidebar -->
-    <!-- <p-sidebar [(visible)]="userPanelVisible" position="left" [baseZIndex]="1000" styleClass="user-info-sidebar w-80 md:w-96" [showCloseIcon]="true">
-        <ng-template pTemplate="header">
+    <p-drawer [(visible)]="userPanelVisible" position="left" [baseZIndex]="1000" styleClass="user-info-sidebar w-80 md:w-96" [showCloseIcon]="true">
+        <ng-template #header>
             <div class="flex items-center gap-3">
                 <i class="pi pi-user text-primary text-2xl"></i>
                 <div>
@@ -68,5 +68,5 @@
                 <p class="mt-1 text-surface-900 dark:text-surface-100">{{ publicIp }}</p>
             </div>
         </div>
-    </p-sidebar> -->
+    </p-drawer>
 </footer>
