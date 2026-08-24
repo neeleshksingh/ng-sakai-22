@@ -1,59 +1,73 @@
 <!doctype html>
 <html lang="en">
-    <head>
-        <meta charset="utf-8" />
-        <title>NCorePro</title>
-        <base href="/" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <link href="https://fonts.cdnfonts.com/css/lato" rel="stylesheet" />
-        <style>
-            .splash-screen {
-                position: fixed;
-                inset: 0;
-                z-index: 999999;
-                display: grid;
-                place-items: center;
-                background: #f8fafc;
-            }
-            .splash-loader {
-                width: 4rem;
-                height: 4rem;
-                display: grid;
-                grid-template-columns: 1fr 1fr;
-                gap: 0.35rem;
-                transform: rotate(45deg);
-            }
-            .splash-loader span {
-                background: #10b981;
-                border-radius: 0.3rem;
-                animation: splash-cube 1.2s ease-in-out infinite alternate;
-            }
-            .splash-loader span:nth-child(2) {
-                animation-delay: 0.2s;
-            }
-            .splash-loader span:nth-child(3) {
-                animation-delay: 0.4s;
-            }
-            .splash-loader span:nth-child(4) {
-                animation-delay: 0.6s;
-            }
-            @keyframes splash-cube {
-                from {
-                    transform: scale(0.55);
-                    opacity: 0.35;
-                }
-                to {
-                    transform: scale(1);
-                    opacity: 1;
-                }
-            }
-        </style>
-    </head>
 
-    <body>
-        <app-root
-            ><div class="splash-screen">
-                <div class="splash-loader"><span></span><span></span><span></span><span></span></div></div
-        ></app-root>
-    </body>
+<head>
+    <meta charset="utf-8" />
+    <title>NCorePro</title>
+    <base href="/" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <link rel="icon" type="image/x-icon" href="favicon.ico" />
+    <link href="https://fonts.cdnfonts.com/css/lato" rel="stylesheet" />
+    <style>
+        .splash-screen {
+            position: fixed;
+            inset: 0;
+            z-index: 999999;
+            display: grid;
+            place-items: center;
+            background: #f8fafc;
+        }
+
+        .splash-loader {
+            width: 4rem;
+            height: 4rem;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.35rem;
+            transform: rotate(45deg);
+        }
+
+        .splash-loader span {
+            background: #10b981;
+            border-radius: 0.3rem;
+            animation: splash-cube 1.2s ease-in-out infinite alternate;
+        }
+
+        .splash-loader span:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .splash-loader span:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        .splash-loader span:nth-child(4) {
+            animation-delay: 0.6s;
+        }
+
+        @keyframes splash-cube {
+            from {
+                transform: scale(0.55);
+                opacity: 0.35;
+            }
+
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <app-root>
+        <div class="splash-screen">
+            <div class="splash-loader"><span></span><span></span><span></span><span></span></div>
+        </div>
+    </app-root>
+</body>
+
 </html>

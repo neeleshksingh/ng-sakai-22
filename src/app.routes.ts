@@ -10,7 +10,7 @@ export const appsRoutes: Routes = [
         children: [
             { path: '', loadChildren: () => import('./app/idp/idp.module').then(m => m.IdpModule) },
             { path: 'login', loadComponent: () => import('./app/idp/components/login/login.component').then(m => m.LoginComponent), title: 'Login' },
-            // { path: 'home', loadComponent: () => import('./home/components/home/home.component').then(m => m.HomeComponent), title: 'Home' },
+            { path: 'home', loadComponent: () => import('./app/home/components/home/home.component').then(m => m.HomeComponent), title: 'Home' },
             // { path: 'career', loadChildren: () => import('./career/career.module').then(mod => mod.CareerModule) },
             // { path: 'admissions/student-onboarding', loadChildren: () => import('./student-onboarding/student-onboarding.module').then(mod => mod.StudentOnboardingModule) },
         ]
