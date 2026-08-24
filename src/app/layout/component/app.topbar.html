@@ -1,19 +1,49 @@
 <header class="layout-topbar">
     <div class="layout-topbar-logo-container topbar-start">
-        <button class="layout-menu-button layout-topbar-action" type="button" aria-label="Toggle navigation" (click)="layoutService.onMenuToggle()">
+        <button #menubutton class="layout-menu-button layout-topbar-action" type="button" aria-label="Toggle navigation" (click)="onMenuButtonClick()">
             <i class="pi pi-bars"></i>
         </button>
-        <a class="layout-topbar-logo" routerLink="/home/dashboard" aria-label="NCorePro dashboard">
-            <span class="brand-mark">NC</span>
-            <span class="brand-name">NCorePro</span>
+        <a class="app-logo layout-topbar-logo" [routerLink]="topBarRouterLink || '/home/dashboard'" aria-label="NCorePro dashboard">
+            <div class="logo-container flex flex-column align-items-center">
+                <img alt="app logo" [src]="currentLogo || logo" class="university-logo" [ngClass]="{'flip': isFlipped}">
+                <div *ngIf="foundationDay" class="greeting-text" [ngClass]="{'hidden': isFlipped}">
+                    <p>Happy Foundation Day!</p>
+                </div>
+            </div>
+            <span class="brand-name app-name">NCorePro.UI.Client</span>
         </a>
     </div>
 
     <app-breadcrumb class="topbar-breadcrumb" />
 
-    <div class="topbar-search">
-        <i class="pi pi-search"></i>
-        <input pInputText [(ngModel)]="searchQuery" placeholder="Search modules" aria-label="Search modules" />
+    <ul *ngIf="tabs && tabs.length > 0" class="topbar-menu">
+        <li *ngFor="let item of tabs; let i = index">
+            <a [routerLink]="item.routerLink" routerLinkActive="active-route"
+                [routerLinkActiveOptions]="item.routerLinkActiveOptions||{paths: 'exact', queryParams: 'ignored', fragment: 'ignored', matrixParams: 'ignored'}"
+                [fragment]="item.fragment" [queryParamsHandling]="item.queryParamsHandling"
+                [preserveFragment]="item.preserveFragment!" [skipLocationChange]="item.skipLocationChange!"
+                [replaceUrl]="item.replaceUrl!" [state]="item.state" [queryParams]="item.queryParams">
+                <span>{{item.label}}</span>
+            </a>
+            <i class="pi pi-times" (click)="removeTab($event, item, i)"></i>
+        </li>
+    </ul>
+
+    <div class="topbar-search" [ngClass]="{'topbar-search-active': searchActive}">
+        <div class="flex flex-column" *ngIf="isBirthday">
+            <app-birthday-animation></app-birthday-animation>
+        </div>
+        <div>
+            <app-new-year></app-new-year>
+        </div>
+        <div *ngIf="isJharkhandFoundationDay">
+            <app-foundation-day></app-foundation-day>
+        </div>
+        <div class="event-animation-container mr-4" *ngIf="animationGifPath">
+            <img (click)="onLogoClick()" [src]="animationGifPath" alt="Event Animation" class="event-animation">
+        </div>
+        <i class="pi pi-search" (click)="activateSearch()"></i>
+        <input #searchinput pInputText [(ngModel)]="searchQuery" placeholder="Search" aria-label="Search modules" (blur)="deactivateSearch()" (keydown.escape)="deactivateSearch()" />
         <kbd>⌘ K</kbd>
     </div>
 
@@ -48,16 +78,21 @@
             <div class="layout-topbar-menu-content">
                 <button type="button" class="layout-topbar-action" aria-label="Notifications"><i class="pi pi-bell"></i><span>Notifications</span><b class="notification-dot"></b></button>
                 <button type="button" class="profile-button" pStyleClass="@next" enterFromClass="hidden" enterActiveClass="animate-scalein" leaveToClass="hidden" leaveActiveClass="animate-fadeout" [hideOnOutsideClick]="true">
-                    <span class="profile-avatar">JD</span>
-                    <span class="profile-details"><strong>John Doe</strong><small>Admin · Faculty</small></span>
+                    <img alt="avatar" [src]="displayImageUrl || defaultImage" (error)="onImageError($event)" style="border-radius: 50%;" height="36px" width="36px">
+                    <span class="profile-details">
+                        <strong class="profile-name">{{UserName || 'User'}}</strong>
+                        <small class="profile-job">{{UserRole || 'Role'}}</small>
+                    </span>
                     <i class="pi pi-angle-down"></i>
                 </button>
                 <div class="profile-menu hidden">
-                    <a routerLink="/home/settings"><i class="pi pi-user"></i><span>Profile</span></a>
-                    <a routerLink="/home/settings"><i class="pi pi-cog"></i><span>Settings</span></a>
-                    <a routerLink="/login"><i class="pi pi-sign-out"></i><span>Log out</span></a>
+                    <a (click)="onProfileClick()" class="cursor-pointer flex align-items-center gap-2"><i class="pi pi-user mr-2"></i><span>Profile</span></a>
+                    <a *ngIf="UserRole !== 'Student'" (click)="Developers()" class="cursor-pointer flex align-items-center gap-2"><i class="pi pi-desktop mr-2"></i><span>Developers</span></a>
+                    <a (click)="onSettingsClick()" class="cursor-pointer flex align-items-center gap-2"><i class="pi pi-cog mr-2"></i><span>Settings</span></a>
+                    <a (click)="logOut()" class="cursor-pointer flex align-items-center gap-2"><i class="pi pi-power-off mr-2"></i><span>Log Out</span></a>
                 </div>
             </div>
         </div>
     </div>
 </header>
+

@@ -5,22 +5,26 @@ import { AppTopbar } from './app.topbar';
 import { AppSidebar } from './app.sidebar';
 import { AppFooter } from './app.footer';
 import { LayoutService } from '@/app/layout/service/layout.service';
+import { ProgressBarComponent } from "@/app/global/components/progress-bar/progress-bar.component";
 
 @Component({
     selector: 'app-layout',
     standalone: true,
-    imports: [CommonModule, AppTopbar, AppSidebar, RouterModule, AppFooter],
+    imports: [CommonModule, AppTopbar, AppSidebar, RouterModule, AppFooter, ProgressBarComponent],
     changeDetection: ChangeDetectionStrategy.OnPush,
     template: `<div class="layout-wrapper layout-container" [ngClass]="containerClass()">
         <app-topbar></app-topbar>
         <app-sidebar></app-sidebar>
         <div class="layout-main-container layout-content-wrapper">
+            <div class="global-progress-bar-inner">
+                <app-progress-bar></app-progress-bar>
+            </div>
             <div class="layout-main layout-content">
                 <div class="layout-content-inner">
                     <router-outlet></router-outlet>
+                    <app-footer></app-footer>
                 </div>
             </div>
-            <app-footer></app-footer>
         </div>
         <div class="layout-mask"></div>
     </div> `

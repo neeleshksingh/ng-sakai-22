@@ -2,6 +2,158 @@
     display: contents;
 }
 
+/* Ensure logo container and logo image stay visible in all menu modes including slim and slim-plus */
+.layout-topbar-logo-container {
+    display: flex;
+    align-items: center;
+}
+
+.layout-topbar-logo,
+.app-logo {
+    display: inline-flex;
+    align-items: center;
+    text-decoration: none;
+    color: inherit;
+
+    .logo-container,
+    .university-logo,
+    .brand-mark {
+        display: flex !important;
+    }
+}
+
+/* Fix for slim & slim-plus menu modes where .layout-topbar-logo span / .app-logo span was hidden by theme styles */
+:host-context(.layout-slim),
+:host-context(.layout-slim-plus),
+.layout-slim,
+.layout-slim-plus {
+    .layout-topbar-logo-container {
+        width: auto !important;
+        min-width: 5rem;
+    }
+
+    .app-logo,
+    .layout-topbar-logo {
+        .logo-container,
+        .university-logo,
+        .brand-mark {
+            display: flex !important;
+        }
+
+        .brand-name,
+        .app-name {
+            display: inline-block !important;
+        }
+    }
+}
+
+.logo-container {
+    background: linear-gradient(
+        135deg,
+        rgba(255, 255, 255, 0.3),
+        rgba(255, 255, 255, 0.15)
+    );
+    border-radius: 50%;
+    padding: 3px;
+    perspective: 1000px;
+    align-items: center;
+}
+
+.university-logo {
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid rgba(255, 255, 255, 0.4);
+    transition: transform 0.6s ease-in-out;
+    transform-style: preserve-3d;
+    height: 36px;
+    width: 36px;
+}
+
+.university-logo.flip {
+    transition: transform 0.6s ease-in-out;
+    transform: rotateY(360deg);
+    scale: 1.5;
+}
+
+.greeting-text {
+    margin-top: 2px;
+    text-align: center;
+}
+
+.greeting-text p {
+    margin: 0;
+    font-size: 8px;
+    font-weight: 600;
+    color: #FF5C00;
+    animation: pulseGrow 2.5s ease-in-out infinite;
+    transform-origin: center;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    white-space: nowrap;
+}
+
+@keyframes pulseGrow {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.15); }
+    100% { transform: scale(1); }
+}
+
+.app-name,
+.brand-name {
+    margin-left: 10px;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+}
+
+.event-animation-container {
+    height: 90px;
+    display: flex;
+    align-items: center;
+}
+
+.event-animation {
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+
+    &:hover {
+        scale: 1.1;
+        transition: scale 0.3s ease-in-out;
+    }
+}
+
+.event-animation-2 {
+    margin-top: 15px;
+    margin-left: 5px;
+    width: 80%;
+    height: 50%;
+    cursor: pointer;
+    animation: pulse 3s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0% { transform: scale(0.95); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(0.95); }
+}
+
+.janmashtami-text {
+    font-family: 'Arial', sans-serif;
+    font-size: 0.7rem;
+    color: #ff8000;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    animation: 
+        colorChange 5s infinite alternate,
+        float 3s ease-in-out infinite;
+}
+
+@keyframes colorChange {
+    0% { color: #ffcc00; }
+    25% { color: #ff6699; }
+    50% { color: #6691ff; }
+    75% { color: #ffba66; }
+    100% { color: #ff9933; }
+}
+
 .brand-mark,
 .profile-avatar {
     display: grid;
@@ -20,18 +172,13 @@
     box-shadow: 0 0 0 4px color-mix(in srgb, var(--primary-color) 12%, transparent);
 }
 
-.brand-name {
-    font-weight: 800;
-    letter-spacing: -0.02em;
-}
-
 .topbar-breadcrumb {
     min-width: 0;
     color: var(--text-color-secondary);
 }
 
 .topbar-search {
-    width: min(20rem, 24vw);
+    width: min(24rem, 30vw);
     height: 2.6rem;
     display: flex;
     align-items: center;
@@ -79,10 +226,12 @@
     height: 2.3rem;
     font-size: 0.72rem;
 }
+
 .profile-details {
     display: grid;
     text-align: left;
 }
+
 .profile-details small {
     color: var(--text-color-secondary);
     font-size: 0.68rem;
@@ -118,6 +267,7 @@
         color: var(--text-color);
         border-radius: var(--content-border-radius);
     }
+
     a:hover {
         background: var(--surface-hover);
     }
@@ -129,9 +279,20 @@
     }
 }
 
-@media (max-width: 767px) {
-    .topbar-search,
+@media (max-width: 990px) {
+    .app-name,
     .brand-name {
         display: none;
     }
+
+    .breadcrumb-container {
+        display: none;
+    }
 }
+
+@media (max-width: 767px) {
+    .topbar-search {
+        display: none;
+    }
+}
+

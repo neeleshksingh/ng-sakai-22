@@ -48,7 +48,7 @@
         <div class="col-span-1 cursor-pointer scalein animation-duration-400 dashboard-cards">
             <div class="card h-full overflow-hidden flex flex-col">
                 <div class="flex items-center p-3 flex-1">
-                    <i class="pi pi-id-card text-6xl text-amber-500 shrink-0"></i>
+                    <i class="pi pi-id-card text-amber-500 shrink-0" style="font-size: 3rem;"></i>
                     <div class="ml-3 flex flex-col min-w-0 w-full">
                         <span class="text-amber-500 dark:text-amber-400 block whitespace-nowrap font-bold mb-2">System
                             Roles</span>
@@ -72,7 +72,7 @@
         <div class="col-span-1 cursor-pointer scalein animation-duration-500 dashboard-cards">
             <div class="card h-full overflow-hidden flex flex-col">
                 <div class="flex items-center p-3 flex-1 z-1">
-                    <i class="pi pi-calendar-plus text-6xl text-emerald-500 shrink-0"></i>
+                    <i class="pi pi-calendar-plus text-6xl text-emerald-500 shrink-0" style="font-size: 3rem;"></i>
 
                     <div class="ml-3 flex flex-col min-w-0 w-full">
                         <span
@@ -117,7 +117,7 @@
         <div class="col-span-1 cursor-pointer scalein animation-duration-1000 dashboard-cards">
             <div class="card h-full overflow-hidden flex flex-col">
                 <div class="flex items-center p-3 flex-1 z-1">
-                    <i class="pi pi-link text-6xl text-purple-500 shrink-0"></i>
+                    <i class="pi pi-link text-6xl text-purple-500 shrink-0" style="font-size: 3rem;"></i>
                     <div class="ml-3 flex flex-col min-w-0 w-full">
                         <span class="text-purple-500 dark:text-purple-400 block whitespace-nowrap font-bold mb-2">Quick
                             Links</span>
@@ -411,12 +411,16 @@
                             <h5 class="m-0 font-semibold text-xl text-white">My To Do List</h5>
                         </div>
                         <div class="flex items-center gap-2">
-                            <button pButton aria-label="Add Task" 
-                                class="p-button-info p-button-sm shadow-sm" (click)="addTask()">
-                                <svg data-p-icon="user"></svg>
-                                Add Task</button>
-                            <button pButton aria-label="Save Task" class="p-button-success p-button-sm shadow-sm"
-                                (click)="saveTasks()">Save Task</button>
+                            <button pButton severity="info" size="small"
+                                class="shadow-sm" (click)="addTask()">
+                                <i class="pi pi-plus"></i>
+                                Add Task
+                            </button>
+                            <button pButton severity="success" size="small"
+                                class="shadow-sm" (click)="saveTasks()">
+                                <i class="pi pi-check"></i>
+                                Save Task
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -489,8 +493,10 @@
 
                                 <td class="text-center">
                                     
-                                    <button pButton iconOnly="true" class="p-button-text p-button-danger p-button-sm"
-                                        (click)="deleteTask(task.id)"><svg data-p-icon="trash"></svg></button>
+                                    <button pButton severity="danger" text [iconOnly]="true" size="small"
+                                        (click)="deleteTask(task.id)">
+                                        <i class="pi pi-trash"></i>
+                                    </button>
                                 </td>
                             </tr>
                         </ng-template>

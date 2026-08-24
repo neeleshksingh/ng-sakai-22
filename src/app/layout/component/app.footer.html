@@ -1,8 +1,72 @@
-<footer class="layout-footer">
-    <div class="footer-user">
-        <span class="footer-avatar">JD</span>
-        <div><strong>Have a productive day, John!</strong><span>Admin · Faculty</span></div>
+<footer
+    class="card fixed bottom-0 left-0 right-0 z-50 bg-surface-card border-t border-surface-border shadow-md text-xs sm:text-sm text-surface-700 dark:text-surface-200"
+    style="z-index: 1000;">
+    <!-- Desktop View -->
+    <div class="hidden md:grid md:grid-cols-3 items-center w-full px-4 py-2">
+        <div class="flex items-center justify-start">
+            <span (click)="userPanelVisible = true" (keydown.enter)="userPanelVisible = true" role="button" tabindex="0"
+                class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-surface-100 dark:bg-surface-800 hover:bg-surface-200 dark:hover:bg-surface-700 text-surface-800 dark:text-surface-100 cursor-pointer transition-colors text-xs font-medium focus:outline-none focus:ring-2 focus:ring-primary">
+                <i class="pi pi-user text-primary text-xs"></i>
+                <span>{{ getGreeting() }}!</span>
+                <b class="font-bold">{{ displayName }}</b>
+                <span *ngIf="totalRoles > 0" class="text-surface-500 dark:text-surface-400 font-normal">
+                    ({{ totalRoles }} {{ totalRoles === 1 ? 'role' : 'roles' }})
+                </span>
+                <i class="pi pi-angle-right text-xs opacity-75"></i>
+            </span>
+        </div>
+        <div class="text-center font-bold text-surface-800 dark:text-surface-100">
+            © Copyright 2024. All Rights Reserved
+        </div>
+        <div class="text-right font-medium text-surface-800 dark:text-surface-100">
+            <b class="font-bold">IP Address:</b> {{ publicIp }}
+        </div>
     </div>
-    <div class="footer-copyright">© 2026 <a routerLink="/home/dashboard">NCorePro</a>. Demonstration workspace.</div>
-    <div class="footer-ip"><i class="pi pi-wifi"></i><span>192.168.1.1</span></div>
+
+    <!-- Mobile View -->
+    <div class="block md:hidden text-center py-2 px-4 font-bold text-xs text-surface-800 dark:text-surface-100">
+        © Copyright 2024. All Rights Reserved.
+    </div>
+
+    <!-- User Information Sidebar -->
+    <!-- <p-sidebar [(visible)]="userPanelVisible" position="left" [baseZIndex]="1000" styleClass="user-info-sidebar w-80 md:w-96" [showCloseIcon]="true">
+        <ng-template pTemplate="header">
+            <div class="flex items-center gap-3">
+                <i class="pi pi-user text-primary text-2xl"></i>
+                <div>
+                    <div class="text-lg font-bold text-surface-900 dark:text-surface-0">User Information</div>
+                    <div class="text-sm text-surface-500 dark:text-surface-400">{{ getGreeting() }}!</div>
+                </div>
+            </div>
+        </ng-template>
+
+        <div class="p-4 space-y-4">
+            <div>
+                <label class="block font-semibold text-surface-800 dark:text-surface-200">Username</label>
+                <p class="mt-1 text-surface-900 dark:text-surface-100">{{ username.toUpperCase() }}</p>
+            </div>
+
+            <div>
+                <label class="block font-semibold text-surface-800 dark:text-surface-200">Full Name</label>
+                <p class="mt-1 text-surface-900 dark:text-surface-100">{{ displayName }}</p>
+            </div>
+
+            <div>
+                <label class="block font-semibold text-surface-800 dark:text-surface-200">Roles ({{ totalRoles }})</label>
+                <div class="mt-3 flex flex-wrap gap-2">
+                    <app-role-tag *ngFor="let role of allRolesSorted" [role]="role"></app-role-tag>
+                    <span *ngIf="totalRoles === 0" class="text-surface-500 dark:text-surface-400 text-sm italic">
+                        No roles assigned
+                    </span>
+                </div>
+            </div>
+
+            <hr class="my-4 border-surface-200 dark:border-surface-700">
+
+            <div>
+                <label class="block font-semibold text-surface-800 dark:text-surface-200">IP Address</label>
+                <p class="mt-1 text-surface-900 dark:text-surface-100">{{ publicIp }}</p>
+            </div>
+        </div>
+    </p-sidebar> -->
 </footer>
