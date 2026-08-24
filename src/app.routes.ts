@@ -13,7 +13,13 @@ export const appsRoutes: Routes = [
         canActivateChild: [SurveyPendingGuard],
         children: [
             { path: '', pathMatch: 'full', redirectTo: 'dashboard' },
-            { path: 'dashboard', loadComponent: () => import('./app/dashboard/components/dashboard/dashboard.component').then(m => m.DashboardComponent) },
+            {
+                path: 'dashboard',
+                loadComponent: () => import('./app/dashboard/components/dashboard/dashboard.component').then(m => m.DashboardComponent),
+                data: {
+                    breadcrumb: 'Dashboard'
+                }
+            },
             {
                 path: 'cloudbytes',
                 loadChildren: () => import('./app/cloud-bytes/cloud-bytes.module').then(m => m.CloudBytesModule),
