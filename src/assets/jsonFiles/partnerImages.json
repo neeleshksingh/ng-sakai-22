@@ -1,0 +1,17 @@
+{
+    "colleges": [
+      {
+        "name": "College 1",
+        "backgroundImageUrl": "../sbu-logo.jpg"
+      },
+      {
+        "name": "College 2",
+        "backgroundImageUrl": "path/to/college2-image.jpg"
+      },
+      {
+        "name": "College 3",
+        "backgroundImageUrl": "path/to/college3-image.jpg"
+      }
+    ]
+  }
+  

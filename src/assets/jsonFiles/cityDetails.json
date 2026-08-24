@@ -1,0 +1,16 @@
+{
+    "states": [
+        {
+            "name": "Bihar",
+            "cities": ["Patna", "Gaya", "Muzaffarpur", "Bhagalpur"]
+        },
+        {
+            "name": "Jharkhand",
+            "cities": ["Ranchi", "Jamshedpur", "Dhanbad", "Bokaro"]
+        },
+        {
+            "name": "Odisha",
+            "cities": ["Bhubaneswar", "Cuttack", "Rourkela", "Puri"]
+        }
+    ]
+}

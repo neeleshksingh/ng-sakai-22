@@ -1,0 +1,77 @@
+{
+  "xAPIKey": "cd3509e4-9848-4f70-9047-ce26bdd367ag",
+  "partners": [
+    {
+      "id": 1,
+      "name": "LOCALHOST",
+      "shortName": "localhost",
+      "title": "DEMO UNIVERSITY",
+      "city": "INDIA",
+      "description": "",
+      "partnerCode": "P10001",
+      "logo_url": "https://api.ncorepro.com/FileServer/Production/P10001//Resources//Images//Websites//LoginPagePartnerImage/EOuocPi75Grkcinc94VXd9xyzCISzg80uWWY7bplus3771uUequals.png",
+      "sloganText": "Transforming Global Leaders for Social and Economic Change",
+      "supportEmailId": "itsupport@pyxisblu.com",
+      "alertMessage": "We're performing some maintenance at the moment. We'll be back up shortly!",
+      "razorPay": {
+        "apiKey": "rzp_live_po7wN0jhXBqYvO",
+        "aPISecretKey": "DXWeBVME5z87xZ3DKvqC2nfp",
+        "callbackUrl": "https://api-dev-students.ncorepro.com/Payment/HandleRazorpayPaymentResponse"
+      }
+    },
+    {
+      "id": 2,
+      "name": "DEMO UNIVERSITY",
+      "shortName": "test",
+      "title": "DEMO UNIVERSITY",
+      "city": "INDIA",
+      "description": "DEMO UNIVERSITY",
+      "partnerCode": "P10001",
+      "logo_url": "https://api.ncorepro.com/FileServer/Production/P10001//Resources//Images//Websites//LoginPagePartnerImage/EOuocPi75Grkcinc94VXd9xyzCISzg80uWWY7bplus3771uUequals.png",
+      "sloganText": "Transforming Global Leaders for Social and Economic Change",
+      "supportEmailId": "itsupport@pyxisblu.com",
+      "alertMessage": "We're performing some maintenance at the moment. We'll be back up shortly!",
+      "razorPay": {
+        "apiKey": "rzp_live_po7wN0jhXBqYvO",
+        "aPISecretKey": "DXWeBVME5z87xZ3DKvqC2nfp",
+        "callbackUrl": "https://api-dev-students.ncorepro.com/Payment/HandleRazorpayPaymentResponse"
+      }
+    },
+    {
+      "id": 3,
+      "name": "SARALA BIRLA UNIVERSITY",
+      "shortName": "sbu",
+      "title": "SARALA BIRLA UNIVERSITY",
+      "city": "RANCHI",
+      "description": "SARALA BIRLA UNIVERSITY",
+      "partnerCode": "P10002",
+      "logo_url": "https://api.ncorepro.com/FileServer/Production/P10002//Resources//Images//Websites//LoginPagePartnerImage/EOuocPi75Grkcinc94VXd9xyzCISzg80uWWY7bplus3771uUequals.jpg",
+      "sloganText": "Transforming Global Leaders for Social and Economic Change",
+      "supportEmailId": "itsupport@sbu.ac.in",
+      "alertMessage": "",
+      "razorPay": {
+        "apiKey": "rzp_live_po7wN0jhXBqYvO",
+        "aPISecretKey": "DXWeBVME5z87xZ3DKvqC2nfp",
+        "callbackUrl": "https://api-sbu-students.ncorepro.com/Payment/HandleRazorpayPaymentResponse"
+      }
+    },
+    {
+      "id": 4,
+      "name": "SAI NATH UNIVERSITY",
+      "shortName": "sainath",
+      "title": "SAI NATH UNIVERSITY",
+      "city": "RANCHI",
+      "description": "SAI NATH UNIVERSITY",
+      "partnerCode": "P10003",
+      "logo_url": "https://api.ncorepro.com/FileServer/Production/P10003//Resources//Images//Websites//LoginPagePartnerImage/EOuocPi75Grkcinc94VXd9xyzCISzg80uWWY7bplus3771uUequals.jpg",
+      "sloganText": "Transforming Global Leaders for Social and Economic Change",
+      "supportEmailId": "itsupport@pyxisblu.com",
+      "alertMessage": "",
+      "razorPay": {
+        "apiKey": "rzp_live_po7wN0jhXBqYvO",
+        "aPISecretKey": "DXWeBVME5z87xZ3DKvqC2nfp",
+        "callbackUrl": "https://api.ncorepro.com/students/Payment/HandleRazorpayPaymentResponse"
+      }
+    }
+  ]
+}
