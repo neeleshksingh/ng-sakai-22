@@ -4,70 +4,117 @@ import { AuthGuard } from './app/shared/guard/auth-guard.guard';
 import { SurveyPendingGuard } from './app/shared/guard/survey-pending.guard';
 import { Roles } from './app/shared/models/commons/user-roles';
 
-export const appRoutes: Routes = [
+export const appsRoutes: Routes = [
     { path: '', pathMatch: 'full', redirectTo: 'login' },
-    // { path: 'welcome', loadComponent: () => import('./app/home/components/home/home.component').then((m) => m.HomeComponent), title: 'NCorePro' },
-    { path: 'login', loadComponent: () => import('./app/idp/components/login/login.component').then((m) => m.LoginComponent), title: 'Login' },
-    // { path: 'career', loadComponent: () => import('./app/shared/components/placeholder-page/placeholder-page.component').then((m) => m.PlaceholderPageComponent), data: { title: 'Career Portal' } },
-    // { path: 'admissions/student-onboarding', loadComponent: () => import('./app/shared/components/placeholder-page/placeholder-page.component').then((m) => m.PlaceholderPageComponent), data: { title: 'Student Onboarding' } },
+    { path: 'login', loadComponent: () => import('./app/idp/components/login/login.component').then(m => m.LoginComponent), title: 'Login' },
     {
-        path: 'home',
-        component: AppLayout,
+        path: 'home', component: AppLayout,
         canActivate: [AuthGuard],
         canActivateChild: [SurveyPendingGuard],
         children: [
             { path: '', pathMatch: 'full', redirectTo: 'dashboard' },
-            { path: 'dashboard', loadComponent: () => import('./app/dashboard/components/dashboard/dashboard.component').then((m) => m.DashboardComponent), title: 'Dashboard' },
-            // { path: 'cloudbytes', loadChildren: () => import('./app/cloud-bytes/cloud-bytes.routes').then((m) => m.CLOUD_BYTES_ROUTES) },
+            { path: 'dashboard', loadComponent: () => import('./app/dashboard/components/dashboard/dashboard.component').then(m => m.DashboardComponent) },
+            {
+                path: 'cloudbytes',
+                loadChildren: () => import('./app/cloud-bytes/cloud-bytes.module').then(m => m.CloudBytesModule),
+                data: {
+                    breadcrumb: 'CloudBytes',
+                    userRoles: [Roles.MASTERS, Roles.MASTERSADMIN, Roles.MASTERSSUPERADMIN, Roles.ITSUPPORTS, Roles.SUPERADMIN, Roles.ADMINISTRATION],
+                }
+            },
+            // {
+            //     path: 'finpro',
+            //     loadChildren: () => import('./finance-Pro/finance-pro.module').then(m => m.FinanceProModule),
+            //     data: {
+            //         breadcrumb: 'FinPro',
+            //         userRoles: [Roles.ACCOUNTS, Roles.ACCOUNTSADMIN, Roles.ACCOUNTSSUPERADMIN, Roles.ITSUPPORTS, Roles.ITSUPPORTSSUPERADMIN, Roles.SUPERADMIN, Roles.ADMINISTRATION],
+            //     }
+            // },
+            // {
+            //     path: 'smallbizgurus',
+            //     loadChildren: () => import('./smallbiz-gurus/smallbiz-gurus/smallbiz-gurus.module').then(m => m.SmallbizGurusModule),
+            //     data: {
+            //         breadcrumb: 'SmallBizGurus',
+            //         userRoles: [Roles.HR, Roles.HRAdmin, Roles.HRReadWriteAccess, Roles.ITSUPPORTS, Roles.HRSuperAdmin, Roles.SUPERADMIN, Roles.ADMINISTRATION],
+            //     }
+            // },
             {
                 path: 'bigleads',
-                loadChildren: () => import('./app/big-leads/big-leads.module').then((m) => m.BigLeadsModule),
+                loadChildren: () => import('./app/big-leads/big-leads.module').then(m => m.BigLeadsModule),
                 data: {
                     breadcrumb: 'BigLeads',
                     userRoles: [Roles.LEADS, Roles.LEADSADMIN, Roles.FACULTY, Roles.HR, Roles.ACADEMICS, Roles.ACADEMICSADMIN, Roles.ITSUPPORTS, Roles.SUPERADMIN, Roles.ADMINISTRATION],
                 }
             },
-            // { path: 'mindspark', loadChildren: () => import('./app/mind-spark/mind-spark.routes').then((m) => m.MIND_SPARK_ROUTES) },
-            // { path: 'knowledgestand', loadChildren: () => import('./app/knowledge-stand/knowledge-stand.routes').then((m) => m.KNOWLEDGE_STAND_ROUTES) },
-            // { path: 'finpro', loadChildren: () => import('./app/finance-Pro/finance-pro.routes').then((m) => m.FINANCE_PRO_ROUTES) },
-            // { path: 'smallbizgurus', loadChildren: () => import('./app/smallbiz-gurus/smallbiz-gurus.routes').then((m) => m.SMALLBIZ_GURUS_ROUTES) },
-            // { path: 'executiveedge', loadChildren: () => import('./app/executive-edge/executive-edge.routes').then((m) => m.EXECUTIVE_EDGE_ROUTES) },
-            // { path: 'digitalfingers', loadChildren: () => import('./app/digital-fingers/digital-fingers.routes').then((m) => m.DIGITAL_FINGERS_ROUTES) },
-            // { path: 'timeclockplus', loadChildren: () => import('./app/time-clock-plus/time-clock-plus.routes').then((m) => m.TIME_CLOCK_PLUS_ROUTES) },
-            // { path: 'virtuallearn', loadChildren: () => import('./app/virtual-learn/virtual-learn.routes').then((m) => m.VIRTUAL_LEARN_ROUTES) },
-            // { path: 'developers', loadChildren: () => import('./app/developers/developers.routes').then((m) => m.DEVELOPERS_ROUTES) },
-            // { path: 'students', loadComponent: () => import('./app/students/dashboard/dashboard.component').then((m) => m.StudentDashboardComponent), title: 'Student Portal' },
-            // { path: 'settings', loadComponent: () => import('./app/shared/components/placeholder-page/placeholder-page.component').then((m) => m.PlaceholderPageComponent), data: { title: 'Settings' } }
+            // {
+            //     path: 'mindspark',
+            //     loadChildren: () => import('./mind-spark/mind-spark/mind-spark.module').then(m => m.MindSparkModule),
+            //     data: {
+            //         breadcrumb: 'MindSpark',
+            //         userRoles: [Roles.ACADEMICS, Roles.ACADEMICSADMIN, Roles.FACULTY, Roles.ITSUPPORTS, Roles.MASTERS, Roles.MASTERSADMIN, Roles.SUPERADMIN, Roles.ADMINISTRATION],
+            //     }
+            // },
+            // {
+            //     path: 'digitalfingers',
+            //     loadChildren: () => import('./digital-fingers/digital-fingers/digital-fingers.module').then(m => m.DigitalFingersModule),
+            //     data: {
+            //         breadcrumb: 'DigitalFingers',
+            //         userRoles: [Roles.ITSUPPORTS, Roles.ITSUPPORTSSUPERADMIN, Roles.SUPERADMIN, Roles.ADMINISTRATION],
+            //     }
+            // },
+            // {
+            //     path: 'knowledgestand',
+            //     loadChildren: () => import('./knowledge-stand/knowledge-stand/knowledge-stand.module').then(m => m.KnowledgeStandModule),
+            //     data: {
+            //         breadcrumb: 'KnowledgeStand',
+            //         userRoles: [Roles.EXAMINATIONS, Roles.EXAMINATIONSADMIN, Roles.FACULTY, Roles.ITSUPPORTS, Roles.ITSUPPORTSSUPERADMIN, Roles.SUPERADMIN, Roles.ADMINISTRATION],
+            //     }
+            // },
+            // {
+            //     path: 'executiveedge',
+            //     loadChildren: () => import('./executive-edge/executive-edge/executive-edge.module').then(m => m.ExecutiveEdgeModule),
+            //     data: {
+            //         breadcrumb: 'ExecutiveEdge',
+            //         userRoles: [Roles.FACULTY, Roles.ITSUPPORTS, Roles.ITSUPPORTSSUPERADMIN, Roles.SUPERADMIN, Roles.ADMINISTRATION],
+            //     }
+            // },
+            // {
+            //     path: 'timeclockplus',
+            //     loadChildren: () => import('./time-clock-plus/time-clock-plus/time-clock-plus.module').then(mod => mod.TimeClockPlusModule),
+            //     data: {
+            //         breadcrumb: 'TimeClock Plus',
+            //         userRoles: [Roles.ACADEMICS, Roles.EXAMINATIONS, Roles.FACULTY, Roles.ACCOUNTS, Roles.HR, Roles.DEVELOPERS, Roles.ITSUPPORTS, Roles.LEADS, Roles.MASTERS, Roles.SUPERADMIN, Roles.ADMINISTRATION]
+            //     },
+            // },
+            // {
+            //     path: 'virtuallearn',
+            //     loadChildren: () => import('./virtual-learn/virtual-learn/virtual-learn.module').then(mod => mod.VirtualLearnModule),
+            //     data: {
+            //         breadcrumb: 'Virtual Learn',
+            //         userRoles: [Roles.VIRTUALLEARN, Roles.VIRTUALLEARNSUPERADMIN, Roles.VIRTUALLEARNADMIN, Roles.ACADEMICS, Roles.EXAMINATIONS, Roles.FACULTY, Roles.ACCOUNTS, Roles.HR, Roles.DEVELOPERS, Roles.ITSUPPORTS, Roles.LEADS, Roles.MASTERS, Roles.SUPERADMIN, Roles.ADMINISTRATION]
+            //     },
+            // },
+            // {
+            //     path: 'students',
+            //     loadChildren: () => import('./students/students.module').then(mod => mod.StudentsModule),
+            //     data: {
+            //         breadcrumb: 'Students',
+            //         userRoles: [Roles.STUDENT]
+            //     }
+            // },
+            // {
+            //     path: 'developers',
+            //     loadChildren: () => import('./developers/developers.module').then(mod => mod.DevelopersModule),
+            //     data: {
+            //         breadcrumb: 'Developers',
+            //         userRoles: [Roles.DEVELOPERS]
+            //     }
+            // },
+            // {
+            //     path: 'settings', loadChildren: () => import('./settings/settings/settings.module').then(mod => mod.SettingsModule)
+            // },
         ]
     },
-    {
-        path: 'access-denied',
-        loadComponent: () => import('./app/global/components/exception-pages/exception-page/exception-page.component').then((m) => m.ExceptionPageComponent),
-        data: { code: '403', title: 'Access denied', description: 'You do not have permission to access this workspace.', icon: 'pi pi-lock' }
-    },
-    {
-        path: 'forbidden',
-        loadComponent: () => import('./app/global/components/exception-pages/exception-page/exception-page.component').then((m) => m.ExceptionPageComponent),
-        data: { code: '403', title: 'Forbidden access', description: 'This resource is restricted for your current role.', icon: 'pi pi-shield' }
-    },
-    {
-        path: 'server-error',
-        loadComponent: () => import('./app/global/components/exception-pages/exception-page/exception-page.component').then((m) => m.ExceptionPageComponent),
-        data: { code: '500', title: 'Internal server error', description: 'A demonstration error occurred. Please return to the dashboard.', icon: 'pi pi-exclamation-triangle' }
-    },
-    {
-        path: 'token-expired',
-        loadComponent: () => import('./app/global/components/exception-pages/exception-page/exception-page.component').then((m) => m.ExceptionPageComponent),
-        data: { code: '401', title: 'Session expired', description: 'Your demonstration login token has expired.', icon: 'pi pi-clock' }
-    },
-    {
-        path: 'under-progress',
-        loadComponent: () => import('./app/global/components/exception-pages/exception-page/exception-page.component').then((m) => m.ExceptionPageComponent),
-        data: { code: 'WIP', title: 'Under construction', description: 'This module shell is ready and its detailed workflow is under development.', icon: 'pi pi-wrench' }
-    },
-    {
-        path: '**',
-        loadComponent: () => import('./app/global/components/exception-pages/exception-page/exception-page.component').then((m) => m.ExceptionPageComponent),
-        data: { code: '404', title: 'Page not found', description: 'The page you requested does not exist.', icon: 'pi pi-compass' }
-    }
+
+    // { path: '**', loadComponent: () => import('./global/components/exception-pages/not-found/not-found.component').then(m => m.NotFoundComponent), data: { title: 'NotFound' } },
 ];

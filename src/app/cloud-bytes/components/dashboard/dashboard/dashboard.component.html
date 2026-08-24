@@ -1,1 +1,382 @@
-<app-module-dashboard title="Cloud Bytes" subtitle="Partner, academic structure, and configuration overview" [kpis]="kpis" />
+<div class="grid grid-cols-12 gap-4 pb-6">
+    <!-- Partner Code Card -->
+    <div class="col-span-12 lg:col-span-6 xl:col-span-3 cursor-pointer scalein animation-duration-300 dashboard-cards"
+        (click)="onPartnerCodeClick()">
+        <div class="card h-full p-0 overflow-hidden flex flex-col" style="padding: 0!important;">
+            <div class="flex items-center p-3 flex-1">
+                <i class="pi pi-users text-6xl text-blue-500 shrink-0" style="font-size: 3rem;"></i>
+                <div class="ml-3 flex-1 min-w-0">
+                    @if (loadingPartner) {
+                    <app-dashboard-cards-skeleton></app-dashboard-cards-skeleton>
+                    } @else {
+                    <span class="text-blue-500 dark:text-blue-400 block whitespace-nowrap truncate">Partner Code</span>
+                    <span class="text-blue-500 dark:text-blue-400 block text-4xl font-bold truncate">{{ partnerCode ||
+                        '-' }}</span>
+                    }
+                </div>
+            </div>
+            <img [src]="'assets/demo/images/dashboard/users' + (colorScheme === 'light' ? '' : '-dark') + '.svg'"
+                class="w-full mt-auto" alt="users">
+        </div>
+    </div>
+
+    <!-- Departments Card -->
+    <div class="col-span-12 lg:col-span-6 xl:col-span-3 cursor-pointer scalein animation-duration-400 dashboard-cards"
+        (click)="onDepartmentClick()">
+        <div class="card h-full p-0 overflow-hidden flex flex-col" style="padding: 0!important;">
+            <div class="flex items-center p-3 flex-1">
+                <i class="pi pi-map text-6xl text-amber-500 shrink-0" style="font-size: 3rem;"></i>
+                <div class="ml-3 flex-1 min-w-0">
+                    @if (loadingDepartments) {
+                    <app-dashboard-cards-skeleton></app-dashboard-cards-skeleton>
+                    } @else {
+                    <span class="text-amber-500 dark:text-amber-400 block whitespace-nowrap truncate">Total
+                        Departments</span>
+                    <span class="text-amber-500 dark:text-amber-400 block text-4xl font-bold truncate">{{
+                        departmentCount }} Departments</span>
+                    }
+                </div>
+            </div>
+            <img [src]="'assets/demo/images/dashboard/locations' + (colorScheme === 'light' ? '' : '-dark') + '.svg'"
+                class="w-full mt-auto" alt="locations">
+        </div>
+    </div>
+
+    <!-- Programs Card -->
+    <div class="col-span-12 lg:col-span-6 xl:col-span-3 cursor-pointer scalein animation-duration-500 dashboard-cards"
+        (click)="onProgramClick()">
+        <div class="card h-full p-0 overflow-hidden flex flex-col" style="padding: 0!important;">
+            <div class="flex items-center p-3 flex-1">
+                <i class="pi pi-book text-6xl text-emerald-500 shrink-0" style="font-size: 3rem;"></i>
+                <div class="ml-3 flex-1 min-w-0">
+                    @if (loadingPrograms) {
+                    <app-dashboard-cards-skeleton></app-dashboard-cards-skeleton>
+                    } @else {
+                    <span class="text-emerald-500 dark:text-emerald-400 block whitespace-nowrap truncate">Total Programs
+                        Offering</span>
+                    <span class="text-emerald-500 dark:text-emerald-400 block text-4xl font-bold truncate">{{
+                        programCount }} Programs</span>
+                    }
+                </div>
+            </div>
+            <img [src]="'assets/demo/images/dashboard/rate' + (colorScheme === 'light' ? '' : '-dark') + '.svg'"
+                class="w-full mt-auto" alt="conversion">
+        </div>
+    </div>
+
+    <!-- Subjects Card -->
+    <div class="col-span-12 lg:col-span-6 xl:col-span-3 cursor-pointer scalein animation-duration-1000 dashboard-cards"
+        (click)="onSubjectClick()">
+        <div class="card h-full p-0 overflow-hidden flex flex-col" style="padding: 0!important;">
+            <div class="flex items-center p-3 flex-1">
+                <i class="pi pi-comments text-6xl text-purple-500 shrink-0" style="font-size: 3rem;"></i>
+                <div class="ml-3 flex-1 min-w-0">
+                    @if (loadingSubjects) {
+                    <app-dashboard-cards-skeleton></app-dashboard-cards-skeleton>
+                    } @else {
+                    <span class="text-purple-500 dark:text-purple-400 block whitespace-nowrap truncate">Total
+                        Subjects</span>
+                    <span class="text-purple-500 dark:text-purple-400 block text-4xl font-bold truncate">{{ subjectCount
+                        }} Subjects</span>
+                    }
+                </div>
+            </div>
+            <img [src]="'assets/demo/images/dashboard/interactions' + (colorScheme === 'light' ? '' : '-dark') + '.svg'"
+                class="w-full mt-auto" alt="interactions">
+        </div>
+    </div>
+
+    <!-- Program Distribution -->
+    <div class="col-span-12 lg:col-span-6 xl:col-span-4">
+        <div class="card h-full p-4 flex flex-col">
+            <div class="flex justify-between items-center mb-3">
+                <h5 class="m-0 text-xl font-bold">Program Distribution by Academic Sessions</h5>
+            </div>
+            <div class="graph flex-1">
+                @if (loadingAcademicSession) {
+                <app-bar-graph-skeleton></app-bar-graph-skeleton>
+                } @else if (overviewChartData) {
+                <p-chart #overviewchart type="bar" [data]="overviewChartData" [options]="overviewChartOptions"
+                    height="400px"></p-chart>
+                } @else {
+                <div class="flex flex-col items-center justify-center h-[300px] text-slate-500 dark:text-slate-400">
+                    <i class="pi pi-info-circle text-3xl mb-2"></i>
+                    <span>No program distribution data available</span>
+                </div>
+                }
+            </div>
+        </div>
+    </div>
+
+    <!-- Upcoming Holidays -->
+    <div class="col-span-12 lg:col-span-6 xl:col-span-4">
+        <div class="card p-4 overflow-y-auto" style="height: 516px; scrollbar-width: none;">
+            <h5 class="text-xl font-bold mb-4">Upcoming Holidays</h5>
+
+            @if (loadingHolidays) {
+            <div class="w-full overflow-x-auto">
+                <table class="w-full border-separate border-spacing-y-2">
+                    <tbody>
+                        @for (item of [1, 2, 3, 4, 5, 6, 7, 8]; track $index) {
+                        <tr [ngClass]="getColorClass($index)">
+                            <td class="py-3 px-3">
+                                <span class="flex items-center"><i
+                                        class="pi pi-calendar mr-2 text-slate-300"></i><p-skeleton width="6rem"
+                                        height="1.5rem"></p-skeleton></span>
+                            </td>
+                            <td class="py-3 px-3"><p-skeleton width="10rem" height="1.5rem"></p-skeleton></td>
+                        </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            } @else if (organizationalHolidays.length === 0) {
+            <div
+                class="no-holidays-container flex flex-col items-center justify-center text-center h-full text-slate-500 dark:text-slate-400">
+                <i class="pi pi-calendar-times text-5xl mb-3"></i>
+                <h1 class="text-xl font-semibold mb-2">No Upcoming Holidays</h1>
+                <p class="text-sm">Enjoy your time at work! We’ll let you know when there’s a holiday around the corner.
+                </p>
+            </div>
+            } @else {
+            <div class="w-full overflow-x-auto">
+                <table class="w-full border-separate border-spacing-y-2">
+                    <thead>
+                        <tr>
+                            <th
+                                class="py-2 px-3 text-left text-slate-700 dark:text-slate-300 font-bold border-b border-slate-200 dark:border-slate-700">
+                                Date</th>
+                            <th
+                                class="py-2 px-3 text-left text-slate-700 dark:text-slate-300 font-bold border-b border-slate-200 dark:border-slate-700">
+                                Holiday</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for (holiday of organizationalHolidays; track $index) {
+                        <tr [ngClass]="getColorClass($index)"
+                            class="bg-slate-50 dark:bg-slate-800/50 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+                            <td
+                                class="py-3 px-3 rounded-l-md whitespace-nowrap text-slate-700 dark:text-slate-300 font-medium">
+                                <i class="pi pi-calendar mr-2 text-slate-400"></i>{{ holiday.date | date: 'dd MMM' }}
+                            </td>
+                            <td class="py-3 px-3 rounded-r-md text-slate-600 dark:text-slate-400">{{ holiday.nameLocal
+                                }}</td>
+                        </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            }
+        </div>
+    </div>
+
+    <!-- Degree Type Distribution -->
+    <div class="col-span-12 xl:col-span-4">
+        <div class="card h-full p-4 flex flex-col">
+            <h5 class="text-xl font-bold mb-4">Degree Type Distribution Chart</h5>
+            <div class="graph flex-1">
+                @if (loadingDegrees) {
+                <app-bar-graph-skeleton></app-bar-graph-skeleton>
+                } @else if (degrees) {
+                <p-chart type="bar" [data]="degrees" [options]="degreeOptions"></p-chart>
+                <div class="flex justify-end mt-4">
+                    <button pButton pRipple (click)="toggleLegend()" class="p-button-raised p-button-sm"
+                        label="Toggle Legend"></button>
+                </div>
+                } @else {
+                <div class="flex flex-col items-center justify-center h-[300px] text-slate-500 dark:text-slate-400">
+                    <i class="pi pi-info-circle text-3xl mb-2"></i>
+                    <span>No degree distribution data available</span>
+                </div>
+                }
+            </div>
+        </div>
+    </div>
+
+    <!-- Buildings & Floors -->
+    <div class="col-span-12 lg:col-span-6 xl:col-span-4">
+        @if (loadingRooms) {
+        <div class="card h-full p-4 overflow-y-auto" style="scrollbar-width: none;">
+            <h5 class="text-xl font-bold mb-4">
+                <p-skeleton width="10rem" height="2rem"></p-skeleton>
+            </h5>
+            <ul class="list-none p-0 m-0 flex flex-col gap-3">
+                @for (item of [1, 2, 3, 4, 5, 6]; track $index) {
+                <li
+                    class="flex items-center p-3 border border-slate-200 dark:border-slate-700 rounded-lg justify-between">
+                    <p-avatar
+                        [style]="{'background-color':'rgba(39, 171, 131, 0.1)', 'color': '#27AB83', 'border': '1px solid #65D6AD', 'font-size': '0.8rem'}"
+                        class="mr-4 shrink-0">
+                        <p-skeleton shape="circle" size="large"></p-skeleton>
+                    </p-avatar>
+                    <div class="flex flex-col items-start w-full gap-2">
+                        <p-skeleton width="8rem" height="1.5rem"></p-skeleton>
+                        <p-skeleton width="6rem" height="1.5rem"></p-skeleton>
+                    </div>
+                </li>
+                }
+            </ul>
+        </div>
+        } @else if (buildings && buildings.length > 0) {
+        @for (building of buildings; track building.name) {
+        <div class="card h-full p-4 overflow-y-auto mb-4" style="scrollbar-width: none;">
+            <h5 class="text-xl font-bold mb-4 text-slate-900 dark:text-slate-100">{{ building.name }}</h5>
+            <ul class="list-none p-0 m-0 flex flex-col gap-3">
+                @for (floor of building.floors; track floor.floorNumber) {
+                <li
+                    class="flex items-center p-3 border border-slate-200 dark:border-slate-700 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors justify-between">
+                    <p-avatar label="Floor {{ floor.floorNumber }}" size="large" shape="square"
+                        pTooltip="{{ getRoomTooltip(floor.rooms) }}" tooltipPosition="top"
+                        [style]="{'background-color':'rgba(39, 171, 131, 0.1)', 'color': '#27AB83', 'border': '1px solid #65D6AD', 'font-size': '0.8rem', 'padding':'2px'}"
+                        class="mr-4 shrink-0"></p-avatar>
+                    <div class="flex flex-col items-start w-full">
+                        <span class="block text-lg font-semibold mb-1 text-slate-800 dark:text-slate-200"
+                            pTooltip="{{ getRoomTooltip(floor.rooms) }}" tooltipPosition="top">
+                            Floor {{ floor.floorNumber }}
+                        </span>
+                        <span class="text-slate-500 dark:text-slate-400 text-sm"
+                            pTooltip="{{ getRoomTooltip(floor.rooms) }}" tooltipPosition="top">
+                            Rooms: {{ floor.rooms.length }}
+                        </span>
+                    </div>
+                </li>
+                }
+            </ul>
+        </div>
+        }
+        } @else {
+        <div class="card h-full p-4 flex flex-col items-center justify-center text-slate-500 dark:text-slate-400">
+            <i class="pi pi-building text-3xl mb-2"></i>
+            <span>No building details available</span>
+        </div>
+        }
+    </div>
+
+    <!-- System Controls & Configuration -->
+    <div class="col-span-12 lg:col-span-6 xl:col-span-4">
+        <div class="card h-full p-4">
+            <div class="text-center mb-6">
+                <form [formGroup]="storageForm" class="flex flex-col items-center">
+                    <p-knob formControlName="value" [min]="0" [max]="100" [size]="150" [readonly]="true"></p-knob>
+                    <p class="mt-4 font-medium text-slate-700 dark:text-slate-300">Used: {{ totalKeys }} keys</p>
+                    <p [ngClass]="{
+                        'text-emerald-500 dark:text-emerald-400 font-medium': remainingCapacity >= 0,
+                        'text-red-500 dark:text-red-400 font-bold': remainingCapacity < 0
+                      }" class="mt-1 text-sm">
+                        Localstorage Remaining Capacity: {{ remainingCapacity >= 0 ? remainingCapacity + ' bytes' :
+                        'Capacity exceeded' }}
+                    </p>
+                </form>
+            </div>
+
+            <ul class="list-none p-0 m-0 flex flex-col gap-4">
+                <li
+                    class="flex items-center justify-start p-2 rounded hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">
+                    <p-avatar icon="pi pi-user-edit" size="large" shape="circle"
+                        styleClass="text-base font-bold shrink-0"
+                        [style]="{'background-color':'rgba(222, 145, 29, 0.1)', 'color': '#DE911D', 'border': '1px solid #FADB5F'}"></p-avatar>
+                    <div class="ml-4 w-full">
+                        <span class="block text-slate-700 dark:text-slate-300">Add/View your Partner</span>
+                        <span
+                            class="text-blue-500 dark:text-blue-400 hover:underline cursor-pointer block font-bold text-sm mt-1"
+                            (click)="onPartnerCodeClick()">Go to Partner Edit</span>
+                    </div>
+                </li>
+
+                <li
+                    class="flex items-center justify-start p-2 rounded hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">
+                    <p-avatar icon="pi pi-image" size="large" shape="circle" styleClass="text-base font-bold shrink-0"
+                        [style]="{'background-color':'rgba(222, 145, 29, 0.1)', 'color': '#DE911D', 'border': '1px solid #FADB5F'}"></p-avatar>
+                    <div class="ml-4 w-full">
+                        <span class="block text-slate-700 dark:text-slate-300">Manage Partner Images</span>
+                        <span
+                            class="text-blue-500 dark:text-blue-400 hover:underline cursor-pointer block font-bold text-sm mt-1"
+                            (click)="onPartnerImageClick()">Go to Partner Image</span>
+                    </div>
+                </li>
+
+                <li
+                    class="flex items-center justify-start p-2 rounded hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">
+                    <p-avatar icon="pi pi-calculator" size="large" shape="circle"
+                        styleClass="text-base font-bold shrink-0"
+                        [style]="{'background-color':'rgba(222, 145, 29, 0.1)', 'color': '#DE911D', 'border': '1px solid #FADB5F'}"></p-avatar>
+                    <div class="ml-4 w-full">
+                        <span class="block text-slate-700 dark:text-slate-300">Configure Operational Vertical
+                            Subject</span>
+                        <span
+                            class="text-blue-500 dark:text-blue-400 hover:underline cursor-pointer block font-bold text-sm mt-1"
+                            (click)="onOVSConfigurationClick()">OVS Configuration</span>
+                    </div>
+                </li>
+
+                <li
+                    class="flex items-center justify-start p-2 rounded hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">
+                    <p-avatar icon="pi pi-refresh" size="large" shape="circle" styleClass="text-base font-bold shrink-0"
+                        [style]="{'background-color':'rgba(222, 145, 29, 0.1)', 'color': '#DE911D', 'border': '1px solid #FADB5F'}"></p-avatar>
+                    <div class="ml-4 w-full">
+                        <span class="block text-slate-700 dark:text-slate-300">Refresh Cache Data</span>
+                        <span
+                            class="text-blue-500 dark:text-blue-400 hover:underline cursor-pointer block font-bold text-sm mt-1"
+                            (click)="onRefreshCacheClick()">Refresh</span>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Recent Configurations Timeline -->
+    <div class="col-span-12 lg:col-span-6 xl:col-span-4">
+        <div class="card h-full p-4 overflow-y-auto" style="height: 516px; scrollbar-width: none;">
+            <div class="flex justify-between items-center mb-6">
+                <h5 class="m-0 text-xl font-bold">Recent Configurations</h5>
+                <button pButton pRipple type="button" icon="pi pi-refresh"
+                    class="p-button-rounded p-button-text p-button-plain text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800"
+                    pTooltip="Refresh" tooltipPosition="left" (click)="getAcademicSessionProgram()">
+                </button>
+            </div>
+
+            @if (loadingTimeline) {
+            <div class="flex flex-col gap-5 mt-4">
+                @for (item of [1, 2, 3, 4]; track $index) {
+                <div class="flex items-start">
+                    <p-skeleton shape="circle" size="2rem" class="mr-3 shrink-0"></p-skeleton>
+                    <div class="flex flex-col gap-2 flex-1 w-full mt-1">
+                        <p-skeleton width="70%"></p-skeleton>
+                        <p-skeleton width="90%"></p-skeleton>
+                        <p-skeleton width="40%" height=".5rem"></p-skeleton>
+                    </div>
+                </div>
+                }
+            </div>
+            } @else if (recentEvents && recentEvents.length > 0) {
+            <p-timeline [value]="recentEvents">
+                <ng-template pTemplate="opposite" let-event>
+                    <span class="text-xs text-slate-500 dark:text-slate-400 font-medium block mt-1">
+                        {{ event.date | date:'MMM dd, yyyy' }}<br>
+                        {{ event.date | date:'h:mm a' }}
+                    </span>
+                </ng-template>
+
+                <ng-template pTemplate="marker" let-event>
+                    <span class="flex w-8 h-8 items-center justify-center text-white rounded-full z-1 shadow-sm"
+                        [style.backgroundColor]="event.color">
+                        <i [class]="event.icon + ' text-sm'"></i>
+                    </span>
+                </ng-template>
+
+                <ng-template pTemplate="content" let-event>
+                    <div class="flex flex-col mb-6 text-sm">
+                        <span class="text-slate-900 dark:text-slate-100 font-medium mb-1">{{ event.title }}</span>
+                        <span class="text-slate-500 dark:text-slate-400 leading-relaxed">{{ event.description }}</span>
+                    </div>
+                </ng-template>
+            </p-timeline>
+            } @else {
+            <div class="flex flex-col items-center justify-center h-[300px] text-slate-500 dark:text-slate-400">
+                <i class="pi pi-history text-3xl mb-2"></i>
+                <span>No recent configurations</span>
+            </div>
+            }
+        </div>
+    </div>
+</div>

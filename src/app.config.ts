@@ -4,16 +4,16 @@ import { provideRouter, withEnabledBlockingInitialNavigation, withHashLocation, 
 import Aura from '@primeuix/themes/aura';
 import { providePrimeNG } from 'primeng/config';
 import { ConfirmationService, MessageService } from 'primeng/api';
-import { appRoutes } from './app.routes';
 import { authInterceptor } from './app/shared/interceptors/auth.interceptor';
 import { environment } from './environments/environment';
 import { provideAppStore } from './app/store/provider';
 import { progressBarInterceptor } from './app/shared/interceptors/progress-bar.interceptor';
 import { errorInterceptor } from './app/shared/interceptors/error.interceptor';
+import { appsRoutes } from './app.routes';
 
 export const appConfig: ApplicationConfig = {
     providers: [
-        provideRouter(appRoutes, withHashLocation(), withInMemoryScrolling({ anchorScrolling: 'enabled', scrollPositionRestoration: 'enabled' }), withEnabledBlockingInitialNavigation()),
+        provideRouter(appsRoutes, withHashLocation(), withInMemoryScrolling({ anchorScrolling: 'enabled', scrollPositionRestoration: 'enabled' }), withEnabledBlockingInitialNavigation()),
         provideHttpClient(withFetch(), withInterceptors([authInterceptor, progressBarInterceptor, errorInterceptor])),
         provideZonelessChangeDetection(),
         providePrimeNG({

@@ -1,3 +1,85 @@
-:host {
-    display: block;
+/* Define your light color classes */
+.color-light-blue {
+    background-color: #e0f7fa;
+} /* Light blue */
+.color-light-green {
+    background-color: #e8f5e9;
+} /* Light green */
+.color-light-yellow {
+    background-color: #fffde7;
+} /* Light yellow */
+.color-light-pink {
+    background-color: #fce4ec;
+} /* Light pink */
+.color-light-orange {
+    background-color: #fff3e0;
+} /* Light orange */
+
+.dashboard-cards {
+    transition: transform 0.2s;
+}
+.dashboard-cards:hover {
+    transform: scale(1.01);
+}
+
+.no-holidays-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    animation: fadeIn 0.8s ease-in;
+    height: 30vh;
+    justify-content: center;
+}
+
+.holiday-icon {
+    font-size: 3rem;
+    color: #d32f2f;
+    margin-bottom: 10px;
+}
+
+.holiday-title {
+    font-family: "Segoe UI", Tahoma, Geneva, sans-serif;
+    font-weight: 600;
+    font-size: 1.5rem;
+    color: #555;
+    margin: 0;
+}
+
+.holiday-subtext {
+    font-size: 1rem;
+    color: #777;
+    text-align: center;
+    max-width: 300px;
+    margin-top: 8px;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Dark mode overrides for holiday table rows */
+:host-context(.layout-dark) {
+    .color-light-blue {
+        background-color: rgba(0, 188, 212, 0.15);
+    }
+    .color-light-green {
+        background-color: rgba(76, 175, 80, 0.15);
+    }
+    .color-light-yellow {
+        background-color: rgba(255, 193, 7, 0.12);
+    }
+    .color-light-pink {
+        background-color: rgba(233, 30, 99, 0.15);
+    }
+    .color-light-orange {
+        background-color: rgba(255, 152, 0, 0.15);
+    }
 }
