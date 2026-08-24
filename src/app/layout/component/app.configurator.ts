@@ -90,7 +90,38 @@ declare type SurfacesType = {
             </div>
             <div class="flex flex-col gap-2">
                 <span class="text-sm text-muted-color font-semibold">Scale</span>
-                <p-selectbutton [ngModel]="scale()" (ngModelChange)="onScaleChange($event)" [options]="scaleOptions" [allowEmpty]="false" size="small" />
+                <div class="flex items-center gap-3">
+                    <button
+                        type="button"
+                        class="cursor-pointer text-primary hover:opacity-80 disabled:opacity-30 disabled:cursor-not-allowed bg-transparent border-0 p-1 flex items-center justify-center transition-colors"
+                        (click)="decrementScale()"
+                        [disabled]="scale() === scaleOptions[0]"
+                        aria-label="Decrease Scale">
+                        <i class="pi pi-minus text-base"></i>
+                    </button>
+                    <div class="flex items-center gap-2.5">
+                        @for (s of scaleOptions; track s) {
+                            <button
+                                type="button"
+                                (click)="onScaleChange(s)"
+                                class="w-3.5 h-3.5 rounded-full cursor-pointer transition-all duration-200 p-0 border-0 outline-none"
+                                [ngClass]="{
+                                    'bg-primary scale-110 shadow-sm': s === scale(),
+                                    'bg-surface-300 dark:bg-surface-600 hover:bg-surface-400 dark:hover:bg-surface-500': s !== scale()
+                                }"
+                                [title]="s + 'px'">
+                            </button>
+                        }
+                    </div>
+                    <button
+                        type="button"
+                        class="cursor-pointer text-primary hover:opacity-80 disabled:opacity-30 disabled:cursor-not-allowed bg-transparent border-0 p-1 flex items-center justify-center transition-colors"
+                        (click)="incrementScale()"
+                        [disabled]="scale() === scaleOptions[scaleOptions.length - 1]"
+                        aria-label="Increase Scale">
+                        <i class="pi pi-plus text-base"></i>
+                    </button>
+                </div>
             </div>
             <div class="flex flex-col gap-2">
                 <span class="text-sm text-muted-color font-semibold">Input Style</span>
@@ -489,6 +520,20 @@ export class AppConfigurator {
 
     onScaleChange(event: number) {
         this.layoutService.layoutConfig.update((prev) => ({ ...prev, scale: event }));
+    }
+
+    decrementScale() {
+        const currentIndex = this.scaleOptions.indexOf(this.scale());
+        if (currentIndex > 0) {
+            this.onScaleChange(this.scaleOptions[currentIndex - 1]);
+        }
+    }
+
+    incrementScale() {
+        const currentIndex = this.scaleOptions.indexOf(this.scale());
+        if (currentIndex < this.scaleOptions.length - 1) {
+            this.onScaleChange(this.scaleOptions[currentIndex + 1]);
+        }
     }
 
     onInputStyleChange(event: InputStyle) {
