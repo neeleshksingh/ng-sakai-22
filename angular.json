@@ -39,6 +39,7 @@
                             "quill-delta"
                         ],
                         "assets": [
+                            "src/favicon.ico",
                             {
                                 "glob": "**/*",
                                 "input": "public"
