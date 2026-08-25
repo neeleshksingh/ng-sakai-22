@@ -1,0 +1,128 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Playfair+Display:wght@600&display=swap');
+
+.dashboard-container {
+  padding: 1.5rem;
+  font-family: 'DM Sans', sans-serif;
+}
+
+.header {
+  border-bottom: 1px solid #e5e7eb;
+  padding-bottom: 1.25rem;
+  margin-bottom: 1.75rem;
+
+  h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    font-weight: 600;
+    letter-spacing: -0.3px;
+    color: #111827;
+  }
+
+  p {
+    font-size: 13px;
+    color: #6b7280;
+    margin-top: 4px;
+  }
+}
+
+.feedback-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 16px;
+}
+
+.feedback-card {
+  background: #fff;
+  border: 0.5px solid #e5e7eb;
+  border-radius: 12px;
+  overflow: hidden;
+  transition: border-color 0.2s ease;
+
+  &:hover { border-color: #d1d5db; }
+}
+
+.card-accent {
+  height: 3px;
+
+  &.accent-default { background: linear-gradient(90deg, #1D9E75, #5DCAA5); }
+  &.accent-warn    { background: linear-gradient(90deg, #EF9F27, #FAC775); }
+}
+
+.card-body { padding: 1.25rem; }
+
+.card-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 16px;
+  font-weight: 600;
+  color: #111827;
+  margin-bottom: 8px;
+}
+
+.badge-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.status-badge {
+  background: #E1F5EE;
+  color: #0F6E56;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 3px 8px;
+  border-radius: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.id-tag {
+  font-size: 12px;
+  color: #9ca3af;
+  font-family: monospace;
+}
+
+.description {
+  font-size: 13px;
+  color: #6b7280;
+  line-height: 1.55;
+  margin-bottom: 1rem;
+}
+
+.divider {
+  height: 0.5px;
+  background: #f3f4f6;
+  margin-bottom: 1rem;
+}
+
+.meta-row {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.meta-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+
+  i { font-size: 13px; color: #9ca3af; }
+
+  .meta-label { font-size: 11px; color: #9ca3af; display: block; }
+  .meta-value { font-size: 13px; font-weight: 500; color: #374151; display: block; }
+}
+
+.days-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  border-radius: 20px;
+  padding: 4px 10px;
+
+  i { font-size: 11px; }
+  span { font-size: 12px; font-weight: 600; }
+
+  &.chip-ok  { background: #E1F5EE; i, span { color: #0F6E56; } }
+  &.chip-warn { background: #FAEEDA; i, span { color: #854F0B; } }
+}
+

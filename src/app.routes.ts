@@ -83,14 +83,14 @@ export const appsRoutes: Routes = [
             //         userRoles: [Roles.EXAMINATIONS, Roles.EXAMINATIONSADMIN, Roles.FACULTY, Roles.ITSUPPORTS, Roles.ITSUPPORTSSUPERADMIN, Roles.SUPERADMIN, Roles.ADMINISTRATION],
             //     }
             // },
-            // {
-            //     path: 'executiveedge',
-            //     loadChildren: () => import('./executive-edge/executive-edge/executive-edge.module').then(m => m.ExecutiveEdgeModule),
-            //     data: {
-            //         breadcrumb: 'ExecutiveEdge',
-            //         userRoles: [Roles.FACULTY, Roles.ITSUPPORTS, Roles.ITSUPPORTSSUPERADMIN, Roles.SUPERADMIN, Roles.ADMINISTRATION],
-            //     }
-            // },
+            {
+                path: 'executiveedge',
+                loadChildren: () => import('./app/executive-edge/executive-edge.module').then(m => m.ExecutiveEdgeModule),
+                data: {
+                    breadcrumb: 'ExecutiveEdge',
+                    userRoles: [Roles.FACULTY, Roles.ITSUPPORTS, Roles.ITSUPPORTSSUPERADMIN, Roles.SUPERADMIN, Roles.ADMINISTRATION],
+                }
+            },
             // {
             //     path: 'timeclockplus',
             //     loadChildren: () => import('./time-clock-plus/time-clock-plus/time-clock-plus.module').then(mod => mod.TimeClockPlusModule),

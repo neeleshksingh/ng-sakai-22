@@ -118,8 +118,8 @@
                 @if (loading) {
                 <p-skeleton width="100%" height="320px"></p-skeleton>
                 } @else {
-                <p-chart type="line" [data]="monthlyAdmissionsChartData" [options]="monthlyAdmissionsChartOptions"
-                    height="320px"></p-chart>
+                <div echarts [options]="monthlyAdmissionsChartOptions"
+                    [theme]="colorScheme === 'dark' ? 'dark' : ''" class="w-full" style="height: 320px;"></div>
                 }
             </div>
         </div>
@@ -131,8 +131,8 @@
                 @if (loading) {
                 <p-skeleton shape="circle" width="280px" height="280px" styleClass="m-auto"></p-skeleton>
                 } @else {
-                <p-chart type="doughnut" [data]="genderChartData" [options]="genderChartOptions"
-                    height="320px"></p-chart>
+                <div echarts [options]="genderChartOptions" [theme]="colorScheme === 'dark' ? 'dark' : ''"
+                    class="w-full" style="height: 320px;"></div>
                 }
             </div>
         </div>
@@ -144,7 +144,8 @@
                 @if (loading) {
                 <p-skeleton width="100%" height="340px"></p-skeleton>
                 } @else {
-                <p-chart type="bar" [data]="programChartData" [options]="programChartOptions" height="340px"></p-chart>
+                <div echarts [options]="programChartOptions" [theme]="colorScheme === 'dark' ? 'dark' : ''"
+                    class="w-full" style="height: 340px;"></div>
                 }
             </div>
         </div>
@@ -156,16 +157,14 @@
             <div class="chart-shell w-full">
                 @if (loading) {
                 <p-skeleton width="100%" height="320px"></p-skeleton>
-                } @else {
-                @if (concessionChartData) {
-                <p-chart type="bar" [data]="concessionChartData" [options]="concessionChartOptions"
-                    height="320px"></p-chart>
+                } @else if (hasConcessionData) {
+                <div echarts [options]="concessionChartOptions" [theme]="colorScheme === 'dark' ? 'dark' : ''"
+                    class="w-full" style="height: 320px;"></div>
                 } @else {
                 <div class="flex flex-col items-center justify-center h-[280px]">
                     <i class="pi pi-info-circle text-3xl text-slate-500 dark:text-slate-400 mb-2"></i>
                     <span class="text-slate-500 dark:text-slate-400">No concession data available</span>
                 </div>
-                }
                 }
             </div>
         </div>
@@ -177,7 +176,8 @@
                 @if (loading) {
                 <p-skeleton width="100%" height="320px"></p-skeleton>
                 } @else {
-                <p-chart type="bar" [data]="sessionChartData" [options]="sessionChartOptions" height="320px"></p-chart>
+                <div echarts [options]="sessionChartOptions" [theme]="colorScheme === 'dark' ? 'dark' : ''"
+                    class="w-full" style="height: 320px;"></div>
                 }
             </div>
         </div>
@@ -189,8 +189,8 @@
                 @if (loading) {
                 <p-skeleton shape="circle" width="280px" height="280px" styleClass="m-auto"></p-skeleton>
                 } @else {
-                <p-chart type="doughnut" [data]="categoryChartData" [options]="categoryChartOptions"
-                    height="320px"></p-chart>
+                <div echarts [options]="categoryChartOptions" [theme]="colorScheme === 'dark' ? 'dark' : ''"
+                    class="w-full" style="height: 320px;"></div>
                 }
             </div>
         </div>
@@ -202,7 +202,8 @@
                 @if (loading) {
                 <p-skeleton width="100%" height="340px"></p-skeleton>
                 } @else {
-                <p-chart type="bar" [data]="stateChartData" [options]="stateChartOptions" height="340px"></p-chart>
+                <div echarts [options]="stateChartOptions" [theme]="colorScheme === 'dark' ? 'dark' : ''"
+                    class="w-full" style="height: 340px;"></div>
                 }
             </div>
         </div>

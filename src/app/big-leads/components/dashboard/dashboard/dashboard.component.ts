@@ -6,6 +6,7 @@ import { debounceTime, Subscription } from 'rxjs';
 import { StudentRegisterService } from 'src/app/big-leads/services/student-register.service';
 import { StudentRegister } from 'src/app/shared/models/bigleads/student-register';
 import { ProgramShortCodesModel } from 'src/app/shared/models/cloudbytes/program-short-codes';
+import type { EChartsOption } from 'echarts';
 
 @Component({
     selector: 'app-dashboard',
@@ -15,20 +16,15 @@ import { ProgramShortCodesModel } from 'src/app/shared/models/cloudbytes/program
     imports: [SharedModule],
 })
 export class DashboardComponent implements OnInit, OnDestroy {
-    monthlyAdmissionsChartData: any;
-    monthlyAdmissionsChartOptions: any;
-    genderChartData: any;
-    genderChartOptions: any;
-    stateChartData: any;
-    stateChartOptions: any;
-    programChartData: any;
-    programChartOptions: any;
-    sessionChartData: any;
-    sessionChartOptions: any;
-    categoryChartData: any;
-    categoryChartOptions: any;
-    concessionChartData: any;
-    concessionChartOptions: any;
+    monthlyAdmissionsChartOptions: EChartsOption = {};
+    genderChartOptions: EChartsOption = {};
+    stateChartOptions: EChartsOption = {};
+    programChartOptions: EChartsOption = {};
+    sessionChartOptions: EChartsOption = {};
+    categoryChartOptions: EChartsOption = {};
+    concessionChartOptions: EChartsOption = {};
+    hasConcessionData: boolean = false;
+
     loading: boolean = true;
     subscription!: Subscription;
     rawStudents: StudentRegister[] = [];
@@ -69,7 +65,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
     ) {
         effect(() => {
             this.layoutService.layoutConfig().darkTheme;
-            this.initCharts();
             if (this.rawStudents.length > 0) {
                 this.applyDashboardFilters();
             }
@@ -77,7 +72,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
-        this.initCharts();
         this.getStudentRegister();
     }
 
@@ -299,8 +293,15 @@ export class DashboardComponent implements OnInit, OnDestroy {
     }
 
     updateCharts(students: StudentRegister[]) {
-        const canvas = document.createElement('canvas');
-        const ctx = canvas.getContext('2d');
+        const isDark = this.colorScheme === 'dark';
+        const textColor = isDark ? '#cbd5e1' : '#64748b';
+        const borderColor = isDark ? '#334155' : '#e2e8f0';
+
+        const palette = [
+            '#2563eb', '#0ea5e9', '#10b981', '#f59e0b',
+            '#ef4444', '#8b5cf6', '#14b8a6', '#f97316',
+        ];
+        const genderColors = ['#ec4899', '#2563eb', '#14b8a6'];
 
         const genderEntries = this.getSortedEntries(
             this.buildCountMap(students, (student) =>
@@ -326,18 +327,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
         const programEntries = this.getSortedEntries(
             students.reduce(
                 (acc, student) => {
-                    const programName = this.getDisplayValue(
-                        student.programName,
-                    );
-                    if (!programName) {
-                        return acc;
-                    }
-
-                    const programKey =
-                        programName as keyof typeof ProgramShortCodesModel;
-                    const shortCode =
-                        ProgramShortCodesModel[programKey]?.shortCode ||
-                        programName;
+                    const programName = this.getDisplayValue(student.programName);
+                    if (!programName) return acc;
+                    const programKey = programName as keyof typeof ProgramShortCodesModel;
+                    const shortCode = ProgramShortCodesModel[programKey]?.shortCode || programName;
                     acc[shortCode] = (acc[shortCode] || 0) + 1;
                     return acc;
                 },
@@ -347,130 +340,240 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
         const monthlyTrend = this.buildMonthlyAdmissionsTrend(students);
 
-        const palette = [
-            '#2563eb',
-            '#0ea5e9',
-            '#10b981',
-            '#f59e0b',
-            '#ef4444',
-            '#8b5cf6',
-            '#14b8a6',
-            '#f97316',
-        ];
-        const genderGradients = [
-            this.createGradient(ctx, '#ec4899', '#f9a8d4'),
-            this.createGradient(ctx, '#2563eb', '#7dd3fc'),
-            this.createGradient(ctx, '#14b8a6', '#5eead4'),
-        ];
-
-        this.monthlyAdmissionsChartData = {
-            labels: monthlyTrend.labels,
-            datasets: [
-                {
-                    label: 'Admissions',
-                    data: monthlyTrend.values,
-                    fill: true,
-                    tension: 0.35,
-                    borderWidth: 3,
-                    borderColor: '#2563eb',
-                    backgroundColor: this.createGradient(
-                        ctx,
-                        'rgba(37, 99, 235, 0.35)',
-                        'rgba(37, 99, 235, 0.04)',
-                    ),
-                    pointBackgroundColor: '#2563eb',
-                    pointBorderColor: '#ffffff',
-                    pointBorderWidth: 2,
-                    pointRadius: 4,
-                },
-            ],
+        // ── Monthly Admissions Line Chart ──
+        this.monthlyAdmissionsChartOptions = {
+            backgroundColor: 'transparent',
+            title: {
+                text: 'Admissions Trend (Last 12 Months)',
+                left: 'center',
+                textStyle: { fontSize: 16, fontWeight: 'bold', color: textColor }
+            },
+            tooltip: {
+                trigger: 'axis',
+                backgroundColor: isDark ? 'rgba(15,23,42,0.95)' : 'rgba(255,255,255,0.96)',
+                textStyle: { color: isDark ? '#e5e7eb' : '#374151', fontSize: 12 },
+                borderWidth: 0, padding: 12, borderRadius: 10
+            },
+            grid: { left: '3%', right: '4%', bottom: '10%', top: '15%', containLabel: true },
+            xAxis: {
+                type: 'category',
+                data: monthlyTrend.labels,
+                axisLabel: { color: textColor },
+                axisLine: { lineStyle: { color: borderColor } },
+                axisTick: { show: false }
+            },
+            yAxis: {
+                type: 'value',
+                minInterval: 1,
+                axisLabel: { color: textColor },
+                splitLine: { lineStyle: { color: borderColor, type: 'dashed' } }
+            },
+            series: [{
+                name: 'Admissions',
+                type: 'line',
+                data: monthlyTrend.values,
+                smooth: true,
+                symbol: 'circle',
+                symbolSize: 8,
+                lineStyle: { color: '#2563eb', width: 3 },
+                itemStyle: { color: '#2563eb', borderColor: '#ffffff', borderWidth: 2 },
+                areaStyle: {
+                    color: {
+                        type: 'linear', x: 0, y: 0, x2: 0, y2: 1,
+                        colorStops: [
+                            { offset: 0, color: 'rgba(37, 99, 235, 0.35)' },
+                            { offset: 1, color: 'rgba(37, 99, 235, 0.04)' }
+                        ]
+                    }
+                }
+            }]
         };
 
-        this.genderChartData = {
-            labels: genderEntries.map(([label]) => label),
-            datasets: [
-                {
-                    data: genderEntries.map(([, value]) => value),
-                    backgroundColor: genderGradients.slice(
-                        0,
-                        Math.max(genderEntries.length, 1),
-                    ),
-                    borderColor: '#ffffff',
-                    borderWidth: 2,
-                    hoverOffset: 12,
-                },
-            ],
+        // ── Gender Doughnut Chart ──
+        this.genderChartOptions = {
+            backgroundColor: 'transparent',
+            title: {
+                text: 'Gender Distribution',
+                left: 'center',
+                textStyle: { fontSize: 16, fontWeight: 'bold', color: textColor }
+            },
+            tooltip: {
+                trigger: 'item',
+                formatter: '{b}: {c} ({d}%)',
+                backgroundColor: isDark ? 'rgba(15,23,42,0.95)' : 'rgba(255,255,255,0.96)',
+                textStyle: { color: isDark ? '#e5e7eb' : '#374151', fontSize: 12 },
+                borderWidth: 0, padding: 12, borderRadius: 10
+            },
+            legend: {
+                bottom: 0,
+                textStyle: { color: textColor },
+                icon: 'circle',
+                itemGap: 18
+            },
+            series: [{
+                type: 'pie',
+                radius: ['42%', '70%'],
+                center: ['50%', '48%'],
+                avoidLabelOverlap: false,
+                label: { show: true, position: 'inside', formatter: '{d}%', fontSize: 11, fontWeight: 'bold', color: '#fff' },
+                labelLine: { show: false },
+                data: genderEntries.map(([label, value], i) => ({
+                    value, name: label,
+                    itemStyle: { color: genderColors[i % genderColors.length], borderColor: '#ffffff', borderWidth: 2 }
+                }))
+            }]
         };
 
-        this.stateChartData = {
-            labels: stateEntries.map(([label]) => label),
-            datasets: [
-                {
-                    label: 'Students',
-                    data: stateEntries.map(([, value]) => value),
-                    backgroundColor: this.createGradient(
-                        ctx,
-                        '#14b8a6',
-                        '#67e8f9',
-                    ),
-                    borderRadius: 10,
-                    borderSkipped: false,
-                    maxBarThickness: 28,
+        // ── State Bar Chart (vertical) ──
+        this.stateChartOptions = {
+            backgroundColor: 'transparent',
+            title: {
+                text: 'Students by State',
+                left: 'center',
+                textStyle: { fontSize: 16, fontWeight: 'bold', color: textColor }
+            },
+            tooltip: {
+                trigger: 'axis', axisPointer: { type: 'shadow' },
+                backgroundColor: isDark ? 'rgba(15,23,42,0.95)' : 'rgba(255,255,255,0.96)',
+                textStyle: { color: isDark ? '#e5e7eb' : '#374151', fontSize: 12 },
+                borderWidth: 0, padding: 12, borderRadius: 10
+            },
+            grid: { left: '3%', right: '4%', bottom: '10%', top: '15%', containLabel: true },
+            xAxis: {
+                type: 'category',
+                data: stateEntries.map(([label]) => label),
+                axisLabel: { color: textColor, rotate: 30, fontSize: 10 },
+                axisLine: { lineStyle: { color: borderColor } },
+                axisTick: { show: false }
+            },
+            yAxis: {
+                type: 'value', minInterval: 1,
+                axisLabel: { color: textColor },
+                splitLine: { lineStyle: { color: borderColor, type: 'dashed' } }
+            },
+            series: [{
+                name: 'Students', type: 'bar',
+                data: stateEntries.map(([, value]) => value),
+                itemStyle: {
+                    color: { type: 'linear', x: 0, y: 0, x2: 0, y2: 1, colorStops: [{ offset: 0, color: '#14b8a6' }, { offset: 1, color: '#67e8f9' }] },
+                    borderRadius: [10, 10, 0, 0]
                 },
-            ],
+                barMaxWidth: 28
+            }]
         };
 
-        this.programChartData = {
-            labels: programEntries.map(([label]) => label),
-            datasets: [
-                {
-                    label: 'Students',
-                    data: programEntries.map(([, value]) => value),
-                    backgroundColor: this.createGradient(
-                        ctx,
-                        '#7c3aed',
-                        '#c4b5fd',
-                    ),
-                    borderRadius: 10,
-                    borderSkipped: false,
-                    maxBarThickness: 22,
+        // ── Program Bar Chart (horizontal) ──
+        this.programChartOptions = {
+            backgroundColor: 'transparent',
+            title: {
+                text: 'Top Programs by Enrollment',
+                left: 'center',
+                textStyle: { fontSize: 16, fontWeight: 'bold', color: textColor }
+            },
+            tooltip: {
+                trigger: 'axis', axisPointer: { type: 'shadow' },
+                backgroundColor: isDark ? 'rgba(15,23,42,0.95)' : 'rgba(255,255,255,0.96)',
+                textStyle: { color: isDark ? '#e5e7eb' : '#374151', fontSize: 12 },
+                borderWidth: 0, padding: 12, borderRadius: 10
+            },
+            grid: { left: '3%', right: '8%', bottom: '5%', top: '15%', containLabel: true },
+            yAxis: {
+                type: 'category',
+                data: programEntries.map(([label]) => label),
+                inverse: true,
+                axisLabel: { color: textColor, fontSize: 11 },
+                axisLine: { show: false }, axisTick: { show: false }
+            },
+            xAxis: {
+                type: 'value', minInterval: 1,
+                axisLabel: { color: textColor },
+                splitLine: { lineStyle: { color: borderColor, type: 'dashed' } }
+            },
+            series: [{
+                name: 'Students', type: 'bar',
+                data: programEntries.map(([, value]) => value),
+                itemStyle: {
+                    color: { type: 'linear', x: 0, y: 0, x2: 1, y2: 0, colorStops: [{ offset: 0, color: '#7c3aed' }, { offset: 1, color: '#c4b5fd' }] },
+                    borderRadius: [0, 10, 10, 0]
                 },
-            ],
+                barMaxWidth: 22
+            }]
         };
 
-        this.sessionChartData = {
-            labels: sessionEntries.map(([label]) => label),
-            datasets: [
-                {
-                    label: 'Students',
-                    data: sessionEntries.map(([, value]) => value),
-                    backgroundColor: this.createGradient(
-                        ctx,
-                        '#f59e0b',
-                        '#fde68a',
-                    ),
-                    borderRadius: 10,
-                    borderSkipped: false,
-                    maxBarThickness: 30,
+        // ── Session Bar Chart (vertical) ──
+        this.sessionChartOptions = {
+            backgroundColor: 'transparent',
+            title: {
+                text: 'Students by Academic Session',
+                left: 'center',
+                textStyle: { fontSize: 16, fontWeight: 'bold', color: textColor }
+            },
+            tooltip: {
+                trigger: 'axis', axisPointer: { type: 'shadow' },
+                backgroundColor: isDark ? 'rgba(15,23,42,0.95)' : 'rgba(255,255,255,0.96)',
+                textStyle: { color: isDark ? '#e5e7eb' : '#374151', fontSize: 12 },
+                borderWidth: 0, padding: 12, borderRadius: 10
+            },
+            grid: { left: '3%', right: '4%', bottom: '10%', top: '15%', containLabel: true },
+            xAxis: {
+                type: 'category',
+                data: sessionEntries.map(([label]) => label),
+                axisLabel: { color: textColor, rotate: 20, fontSize: 10 },
+                axisLine: { lineStyle: { color: borderColor } },
+                axisTick: { show: false }
+            },
+            yAxis: {
+                type: 'value', minInterval: 1,
+                axisLabel: { color: textColor },
+                splitLine: { lineStyle: { color: borderColor, type: 'dashed' } }
+            },
+            series: [{
+                name: 'Students', type: 'bar',
+                data: sessionEntries.map(([, value]) => value),
+                itemStyle: {
+                    color: { type: 'linear', x: 0, y: 0, x2: 0, y2: 1, colorStops: [{ offset: 0, color: '#f59e0b' }, { offset: 1, color: '#fde68a' }] },
+                    borderRadius: [10, 10, 0, 0]
                 },
-            ],
+                barMaxWidth: 30
+            }]
         };
 
-        this.categoryChartData = {
-            labels: categoryEntries.map(([label]) => label),
-            datasets: [
-                {
-                    data: categoryEntries.map(([, value]) => value),
-                    backgroundColor: categoryEntries.map(
-                        (_, index) => palette[index % palette.length],
-                    ),
-                    borderColor: '#ffffff',
-                    borderWidth: 2,
-                    hoverOffset: 10,
-                },
-            ],
+        // ── Category Doughnut Chart ──
+        this.categoryChartOptions = {
+            backgroundColor: 'transparent',
+            title: {
+                text: 'Category Mix',
+                left: 'center',
+                textStyle: { fontSize: 16, fontWeight: 'bold', color: textColor }
+            },
+            tooltip: {
+                trigger: 'item',
+                formatter: '{b}: {c} ({d}%)',
+                backgroundColor: isDark ? 'rgba(15,23,42,0.95)' : 'rgba(255,255,255,0.96)',
+                textStyle: { color: isDark ? '#e5e7eb' : '#374151', fontSize: 12 },
+                borderWidth: 0, padding: 12, borderRadius: 10
+            },
+            legend: {
+                bottom: 0,
+                textStyle: { color: textColor },
+                icon: 'circle',
+                itemGap: 18
+            },
+            series: [{
+                type: 'pie',
+                radius: ['42%', '70%'],
+                center: ['50%', '48%'],
+                avoidLabelOverlap: false,
+                label: { show: true, position: 'inside', formatter: '{d}%', fontSize: 11, fontWeight: 'bold', color: '#fff' },
+                labelLine: { show: false },
+                data: categoryEntries.map(([label, value], i) => ({
+                    value, name: label,
+                    itemStyle: { color: palette[i % palette.length], borderColor: '#ffffff', borderWidth: 2 }
+                }))
+            }]
         };
 
+        // ── Concession Bar Chart (horizontal) ──
         const concessionStudents = students.filter(
             (s) =>
                 (s.concessionCategoryId ?? 0) > 0 ||
@@ -481,73 +584,47 @@ export class DashboardComponent implements OnInit, OnDestroy {
                 this.getDisplayValue(s.concessionCategoryName),
             ),
         );
-        this.concessionChartData =
-            concessionEntries.length > 0
-                ? {
-                    labels: concessionEntries.map(([label]) => label),
-                    datasets: [
-                        {
-                            label: 'Students',
-                            data: concessionEntries.map(([, value]) => value),
-                            backgroundColor: concessionEntries.map(
-                                (_, index) => palette[index % palette.length],
-                            ),
-                            borderRadius: 10,
-                            borderSkipped: false,
-                            maxBarThickness: 28,
-                        },
-                    ],
-                }
-                : null;
-    }
 
-    initCharts() {
-        const documentStyle = getComputedStyle(document.documentElement);
-        const textColorSecondary = documentStyle.getPropertyValue(
-            '--text-color-secondary',
-        );
-        const borderColor = documentStyle.getPropertyValue('--surface-border');
-
-        this.monthlyAdmissionsChartOptions = this.getLineChartOptions(
-            'Admissions Trend (Last 12 Months)',
-            textColorSecondary,
-            borderColor,
-        );
-        this.genderChartOptions = this.getDoughnutChartOptions(
-            'Gender Distribution',
-            textColorSecondary,
-        );
-        this.stateChartOptions = this.getBarChartOptions(
-            'Students by State',
-            textColorSecondary,
-            borderColor,
-            false,
-        );
-        this.programChartOptions = this.getBarChartOptions(
-            'Top Programs by Enrollment',
-            textColorSecondary,
-            borderColor,
-            true,
-        );
-        this.sessionChartOptions = this.getBarChartOptions(
-            'Students by Academic Session',
-            textColorSecondary,
-            borderColor,
-            false,
-        );
-        this.categoryChartOptions = this.getDoughnutChartOptions(
-            'Category Mix',
-            textColorSecondary,
-        );
-        this.concessionChartOptions = this.getBarChartOptions(
-            'Concessions by Category',
-            textColorSecondary,
-            borderColor,
-            true,
-        );
-
-        if (this.rawStudents.length > 0) {
-            this.applyDashboardFilters();
+        if (concessionEntries.length > 0) {
+            this.hasConcessionData = true;
+            this.concessionChartOptions = {
+                backgroundColor: 'transparent',
+                title: {
+                    text: 'Concessions by Category',
+                    left: 'center',
+                    textStyle: { fontSize: 16, fontWeight: 'bold', color: textColor }
+                },
+                tooltip: {
+                    trigger: 'axis', axisPointer: { type: 'shadow' },
+                    backgroundColor: isDark ? 'rgba(15,23,42,0.95)' : 'rgba(255,255,255,0.96)',
+                    textStyle: { color: isDark ? '#e5e7eb' : '#374151', fontSize: 12 },
+                    borderWidth: 0, padding: 12, borderRadius: 10
+                },
+                grid: { left: '3%', right: '8%', bottom: '5%', top: '15%', containLabel: true },
+                yAxis: {
+                    type: 'category',
+                    data: concessionEntries.map(([label]) => label),
+                    inverse: true,
+                    axisLabel: { color: textColor, fontSize: 11 },
+                    axisLine: { show: false }, axisTick: { show: false }
+                },
+                xAxis: {
+                    type: 'value', minInterval: 1,
+                    axisLabel: { color: textColor },
+                    splitLine: { lineStyle: { color: borderColor, type: 'dashed' } }
+                },
+                series: [{
+                    name: 'Students', type: 'bar',
+                    data: concessionEntries.map(([, value], i) => ({
+                        value,
+                        itemStyle: { color: palette[i % palette.length], borderRadius: [0, 10, 10, 0] }
+                    })),
+                    barMaxWidth: 28
+                }]
+            };
+        } else {
+            this.hasConcessionData = false;
+            this.concessionChartOptions = {};
         }
     }
 
@@ -634,152 +711,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
         return {
             labels: months.map((month) => month.label),
             values: months.map((month) => month.count),
-        };
-    }
-
-    createGradient(
-        context: CanvasRenderingContext2D | null,
-        fromColor: string,
-        toColor: string,
-    ) {
-        if (!context) {
-            return fromColor;
-        }
-
-        const gradient = context.createLinearGradient(0, 0, 0, 300);
-        gradient.addColorStop(0, fromColor);
-        gradient.addColorStop(1, toColor);
-        return gradient;
-    }
-
-    getTooltipOptions() {
-        const isDark = this.layoutService.isDarkTheme() ? '#879AAF' : '#E4E7EB'
-
-        return {
-            backgroundColor: isDark
-                ? 'rgba(15, 23, 42, 0.95)'
-                : 'rgba(255, 255, 255, 0.96)',
-            titleColor: isDark ? '#ffffff' : '#111827',
-            bodyColor: isDark ? '#e5e7eb' : '#374151',
-            titleFont: { size: 13, weight: 'bold' },
-            bodyFont: { size: 12 },
-            padding: 12,
-            cornerRadius: 10,
-            displayColors: true,
-        };
-    }
-
-    getLineChartOptions(title: string, textColor: string, borderColor: string) {
-        return {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-                legend: {
-                    display: false,
-                },
-                title: {
-                    display: true,
-                    text: title,
-                    color: textColor,
-                    font: { size: 16, weight: 'bold' },
-                },
-                tooltip: this.getTooltipOptions(),
-            },
-            scales: {
-                y: {
-                    beginAtZero: true,
-                    ticks: {
-                        precision: 0,
-                        color: textColor,
-                    },
-                    grid: {
-                        color: borderColor,
-                        drawBorder: false,
-                    },
-                },
-                x: {
-                    ticks: {
-                        color: textColor,
-                    },
-                    grid: {
-                        display: false,
-                    },
-                },
-            },
-        };
-    }
-
-    getBarChartOptions(
-        title: string,
-        textColor: string,
-        borderColor: string,
-        horizontal: boolean,
-    ) {
-        return {
-            responsive: true,
-            maintainAspectRatio: false,
-            indexAxis: horizontal ? 'y' : 'x',
-            plugins: {
-                legend: {
-                    display: false,
-                },
-                title: {
-                    display: true,
-                    text: title,
-                    color: textColor,
-                    font: { size: 16, weight: 'bold' },
-                },
-                tooltip: this.getTooltipOptions(),
-            },
-            scales: {
-                y: {
-                    beginAtZero: true,
-                    ticks: {
-                        precision: 0,
-                        color: textColor,
-                    },
-                    grid: {
-                        color: borderColor,
-                        drawBorder: false,
-                    },
-                },
-                x: {
-                    ticks: {
-                        precision: 0,
-                        color: textColor,
-                    },
-                    grid: {
-                        display: !horizontal,
-                        color: horizontal ? borderColor : 'transparent',
-                    },
-                },
-            },
-        };
-    }
-
-    getDoughnutChartOptions(title: string, textColor: string) {
-        return {
-            responsive: true,
-            maintainAspectRatio: false,
-            cutout: '58%',
-            plugins: {
-                legend: {
-                    position: 'bottom',
-                    labels: {
-                        color: textColor,
-                        usePointStyle: true,
-                        pointStyle: 'circle',
-                        padding: 18,
-                    },
-                },
-                title: {
-                    display: true,
-                    text: title,
-                    color: textColor,
-                    font: { size: 16, weight: 'bold' },
-                },
-                tooltip: this.getTooltipOptions(),
-            },
         };
     }
 

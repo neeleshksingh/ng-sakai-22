@@ -1,0 +1,117 @@
+<div class="grid grid-cols-12 m-0 p-0 gap-0">
+
+  <!-- ── Pie Chart ── -->
+  <div class="col-span-12 md:col-span-4 lg:col-span-4 p-2">
+    <div class="card dashboard-cards h-full m-0 flex flex-col">
+
+      <!-- Skeleton -->
+      @if (isLoading) {
+      <div class="flex flex-col items-center justify-center gap-3 p-4 flex-1">
+        <p-skeleton shape="circle" size="180px"></p-skeleton>
+        <div class="flex flex-col items-center gap-2 w-full">
+          <p-skeleton width="60%" height="12px" borderRadius="6px"></p-skeleton>
+          <div class="flex gap-3 justify-center w-full mt-2">
+            <p-skeleton width="60px" height="10px" borderRadius="6px"></p-skeleton>
+            <p-skeleton width="60px" height="10px" borderRadius="6px"></p-skeleton>
+            <p-skeleton width="60px" height="10px" borderRadius="6px"></p-skeleton>
+          </div>
+        </div>
+      </div>
+      } @else if (hasOverallRatingData) {
+      <!-- Chart -->
+      <div class="flex-1 w-full">
+        <div echarts [options]="overallRatingChartOptions" [theme]="colorScheme === 'dark' ? 'dark' : ''" class="w-full"
+          style="height: 300px;">
+        </div>
+      </div>
+      } @else {
+      <!-- Empty State -->
+      <div class="flex flex-col items-center justify-center h-full text-slate-500 dark:text-slate-400 min-h-[300px]">
+        <i class="pi pi-chart-pie text-4xl mb-3"></i>
+        <p class="m-0 font-medium">No rating data available</p>
+      </div>
+      }
+
+    </div>
+  </div>
+
+  <!-- ── Doughnut Chart ── -->
+  <div class="col-span-12 md:col-span-4 lg:col-span-4 p-2">
+    <div class="card dashboard-cards h-full m-0 flex flex-col">
+
+      <!-- Skeleton -->
+      @if (isLoading) {
+      <div class="flex flex-col items-center justify-center gap-3 p-4 flex-1">
+        <div class="relative w-[180px] h-[180px]">
+          <p-skeleton shape="circle" size="180px"></p-skeleton>
+          <!-- Cutout logic using CSS variables to match any card background -->
+          <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80px] h-[80px] rounded-full"
+            style="background: var(--surface-card);">
+          </div>
+        </div>
+        <div class="flex flex-col items-center gap-2 w-full">
+          <p-skeleton width="55%" height="12px" borderRadius="6px"></p-skeleton>
+          <div class="flex gap-3 justify-center w-full mt-2">
+            <p-skeleton width="55px" height="10px" borderRadius="6px"></p-skeleton>
+            <p-skeleton width="55px" height="10px" borderRadius="6px"></p-skeleton>
+            <p-skeleton width="55px" height="10px" borderRadius="6px"></p-skeleton>
+          </div>
+        </div>
+      </div>
+      } @else if (hasSentimentData) {
+      <!-- Chart -->
+      <div class="flex-1 w-full">
+        <div echarts [options]="sentimentChartOptions" [theme]="colorScheme === 'dark' ? 'dark' : ''" class="w-full"
+          style="height: 300px;">
+        </div>
+      </div>
+      } @else {
+      <!-- Empty State -->
+      <div class="flex flex-col items-center justify-center h-full text-slate-500 dark:text-slate-400 min-h-[300px]">
+        <i class="pi pi-chart-bar text-4xl mb-3"></i>
+        <p class="m-0 font-medium">No sentiment data available</p>
+      </div>
+      }
+
+    </div>
+  </div>
+
+  <!-- ── Line Chart ── -->
+  <div class="col-span-12 md:col-span-4 lg:col-span-4 p-2">
+    <div class="card dashboard-cards h-full m-0 flex flex-col">
+
+      <!-- Skeleton -->
+      @if (isLoading) {
+      <div class="flex flex-col gap-3 p-4 flex-1">
+        <p-skeleton width="50%" height="14px" borderRadius="6px"></p-skeleton>
+        <div class="relative w-full h-[200px] flex items-end gap-1.5 pt-4">
+          <p-skeleton width="100%" height="200px" borderRadius="8px"></p-skeleton>
+        </div>
+        <div class="flex justify-between mt-1">
+          <p-skeleton width="32px" height="10px" borderRadius="6px"></p-skeleton>
+          <p-skeleton width="32px" height="10px" borderRadius="6px"></p-skeleton>
+          <p-skeleton width="32px" height="10px" borderRadius="6px"></p-skeleton>
+          <p-skeleton width="32px" height="10px" borderRadius="6px"></p-skeleton>
+          <p-skeleton width="32px" height="10px" borderRadius="6px"></p-skeleton>
+          <p-skeleton width="32px" height="10px" borderRadius="6px"></p-skeleton>
+        </div>
+      </div>
+      } @else if (hasTrendData) {
+      <!-- Chart -->
+      <div class="flex-1 w-full">
+        <div echarts [options]="trendChartOptions" [theme]="colorScheme === 'dark' ? 'dark' : ''" class="w-full"
+          style="height: 300px;">
+        </div>
+      </div>
+      } @else {
+      <!-- Empty State -->
+      <div class="flex flex-col items-center justify-center h-full text-slate-500 dark:text-slate-400 min-h-[300px]">
+        <i class="pi pi-chart-line text-4xl mb-3"></i>
+        <p class="m-0 font-medium">No trend data available</p>
+      </div>
+      }
+
+    </div>
+  </div>
+
+</div>

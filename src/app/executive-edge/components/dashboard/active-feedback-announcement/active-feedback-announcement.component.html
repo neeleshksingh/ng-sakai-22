@@ -1,0 +1,34 @@
+<div class="dashboard-container">
+  <div class="header">
+    <h2>Academic Feedback Overview</h2>
+    <p>Monitor and manage active faculty feedback cycles</p>
+  </div>
+
+  <div class="feedback-grid">
+    <div *ngFor="let item of activeFeedbackAnnouncementList" class="feedback-card">
+      <div class="card-accent" [ngClass]="getDaysRemaining(item.endDateTime) < 30 ? 'accent-warn' : 'accent-default'"></div>
+      <div class="card-body">
+        <h3 class="card-title">{{ item?.title }}</h3>
+        <div class="badge-row">
+          <span class="status-badge">{{ item?.status }}</span>
+          <span class="id-tag">#ID-{{ item?.id }}</span>
+        </div>
+        <p class="description">{{ item?.description }}</p>
+        <div class="divider"></div>
+        <div class="meta-row">
+          <div class="meta-item">
+            <i class="pi pi-calendar"></i>
+            <div>
+              <span class="meta-label">Ends</span>
+              <span class="meta-value">{{ item.endDateTime | date:'mediumDate' }}</span>
+            </div>
+          </div>
+          <div class="days-chip" [ngClass]="getDaysRemaining(item.endDateTime) < 30 ? 'chip-warn' : 'chip-ok'">
+            <i class="pi pi-clock"></i>
+            <span>{{ getDaysRemaining(item?.endDateTime) }} days left</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
