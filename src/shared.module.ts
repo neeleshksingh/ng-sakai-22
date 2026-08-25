@@ -108,6 +108,7 @@ import { SafePipe } from './app/shared/pipes/safe.pipe';
 import { GlobalCurrencyPipe } from './app/shared/pipes/global-currency.pipe';
 import { UnderProgressComponent } from './app/global/components/exception-pages/under-progress/under-progress.component';
 import { SelectModule } from 'primeng/select';
+import { NgxEchartsModule } from 'ngx-echarts';
 
 
 @NgModule({
@@ -227,11 +228,14 @@ import { SelectModule } from 'primeng/select';
         // DirevtivesModule
         AddRowOVSMDirective,
         AddRowOVSMSMDirective,
+        NgxEchartsModule.forRoot({
+            echarts: () => import('echarts')
+        })
     ],
     providers: [
         DatePipe,
         MessageService,
-        ConfirmationService,
+        ConfirmationService
     ],
     exports: [
         CommonModule,
@@ -348,6 +352,7 @@ import { SelectModule } from 'primeng/select';
         ReduceDuplicatesSelectItemPipe,
         HasPermissionPipe,
         GlobalCurrencyPipe,
+        NgxEchartsModule
     ]
 })
 export class SharedModule { }

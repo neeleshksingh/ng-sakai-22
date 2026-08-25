@@ -1,1 +1,255 @@
-<app-module-dashboard title="Developers" subtitle="Application configuration and service health overview" [kpis]="kpis" />
+<div class="grid grid-cols-12 gap-4 pb-6">
+    <!-- Summary Cards -->
+    <div class="col-span-12 lg:col-span-6 xl:col-span-3 cursor-pointer scalein animation-duration-300 dashboard-cards">
+        <div class="card h-full p-0 overflow-hidden flex flex-col" style="padding: 0!important;">
+            <div class="flex items-center p-3 flex-1">
+                <i class="pi pi-check-circle text-6xl text-blue-500 shrink-0" style="font-size: 3rem;"></i>
+                <div class="ml-3 flex-1 min-w-0">
+                    @if (!isLoading) {
+                    <span class="text-blue-500 dark:text-blue-400 block whitespace-nowrap truncate">Auto Attendance
+                        Calculation</span>
+                    <span class="text-blue-500 dark:text-blue-400 block text-4xl font-bold truncate">
+                        {{ isSettingTrue('IsAutomaticCalculationEnabledForAttendanceMarksEntry') ? 'Enabled' :
+                        'Disabled' }}
+                    </span>
+                    } @else {
+                    <app-dashboard-cards-skeleton></app-dashboard-cards-skeleton>
+                    }
+                </div>
+            </div>
+            <img [src]="'assets/demo/images/dashboard/users' + (colorScheme === 'light' ? '' : '-dark') + '.svg'"
+                class="w-full mt-auto" alt="users">
+        </div>
+    </div>
+
+    <div class="col-span-12 lg:col-span-6 xl:col-span-3 cursor-pointer scalein animation-duration-400 dashboard-cards">
+        <div class="card h-full p-0 overflow-hidden flex flex-col" style="padding: 0!important;">
+            <div class="flex items-center p-3 flex-1">
+                <i class="pi pi-lock text-6xl text-amber-500 shrink-0" style="font-size: 3rem;"></i>
+                <div class="ml-3 flex-1 min-w-0">
+                    @if (!isLoading) {
+                    <span class="text-amber-500 dark:text-amber-400 block whitespace-nowrap truncate">Student Login
+                        Status</span>
+                    <span class="text-amber-500 dark:text-amber-400 block text-4xl font-bold truncate">
+                        {{ isSettingTrue('IsStudentLoginDisabled') ? 'Disabled' : 'Enabled' }}
+                    </span>
+                    } @else {
+                    <app-dashboard-cards-skeleton></app-dashboard-cards-skeleton>
+                    }
+                </div>
+            </div>
+            <img [src]="'assets/demo/images/dashboard/locations' + (colorScheme === 'light' ? '' : '-dark') + '.svg'"
+                class="w-full mt-auto" alt="locations">
+        </div>
+    </div>
+
+    <div class="col-span-12 lg:col-span-6 xl:col-span-3 cursor-pointer scalein animation-duration-500 dashboard-cards">
+        <div class="card h-full p-0 overflow-hidden flex flex-col" style="padding: 0!important;">
+            <div class="flex items-center p-3 flex-1">
+                <i class="pi pi-envelope text-6xl text-emerald-500 shrink-0" style="font-size: 3rem;"></i>
+                <div class="ml-3 flex-1 min-w-0">
+                    @if (!isLoading) {
+                    <span class="text-emerald-500 dark:text-emerald-400 block whitespace-nowrap truncate">Welcome
+                        Letter</span>
+                    <span class="text-emerald-500 dark:text-emerald-400 block text-4xl font-bold truncate">
+                        {{ isSettingTrue('IsStudentWelcomeLetterEnabled') ? 'Enabled' : 'Disabled' }}
+                    </span>
+                    } @else {
+                    <app-dashboard-cards-skeleton></app-dashboard-cards-skeleton>
+                    }
+                </div>
+            </div>
+            <img [src]="'assets/demo/images/dashboard/rate' + (colorScheme === 'light' ? '' : '-dark') + '.svg'"
+                class="w-full mt-auto" alt="conversion">
+        </div>
+    </div>
+
+    <div class="col-span-12 lg:col-span-6 xl:col-span-3 cursor-pointer scalein animation-duration-1000 dashboard-cards">
+        <div class="card h-full p-0 overflow-hidden flex flex-col" style="padding: 0!important;">
+            <div class="flex items-center p-3 flex-1">
+                <i class="pi pi-id-card text-6xl text-purple-500 shrink-0" style="font-size: 3rem;"></i>
+                <div class="ml-3 flex-1 min-w-0">
+                    @if (!isLoading) {
+                    <span class="text-purple-500 dark:text-purple-400 block whitespace-nowrap truncate">Student ID
+                        Prefix</span>
+                    <span class="text-purple-500 dark:text-purple-400 block text-4xl font-bold truncate">
+                        {{ getSettingValue('PartnerStudentIdPrefix') || 'N/A' }}
+                    </span>
+                    } @else {
+                    <app-dashboard-cards-skeleton></app-dashboard-cards-skeleton>
+                    }
+                </div>
+            </div>
+            <img [src]="'assets/demo/images/dashboard/interactions' + (colorScheme === 'light' ? '' : '-dark') + '.svg'"
+                class="w-full mt-auto" alt="interactions">
+        </div>
+    </div>
+
+    <!-- Settings Table -->
+    <div class="col-span-12 lg:col-span-6 xl:col-span-8">
+        <div class="card p-4 h-full overflow-y-auto" style="scrollbar-width: none;">
+            <h5 class="text-xl font-bold mb-4">Application Settings</h5>
+
+            @if (!isLoading) {
+            @if (appSettings.length > 0) {
+            <p-table [value]="appSettings" dataKey="id" [tableStyle]="{'min-width': '50rem'}" [scrollable]="true"
+                scrollHeight="400px" styleClass="p-datatable-striped p-datatable-sm p-datatable-gridlines">
+
+                <!-- ⚠️ CHANGED: pTemplate="header" is now #header -->
+                <ng-template #header>
+                    <tr>
+                        <th class="bg-slate-50 dark:bg-slate-800 text-slate-700 dark:text-slate-300">Name</th>
+                        <th class="bg-slate-50 dark:bg-slate-800 text-slate-700 dark:text-slate-300">Type</th>
+                        <th class="bg-slate-50 dark:bg-slate-800 text-slate-700 dark:text-slate-300">Value</th>
+                        <th class="bg-slate-50 dark:bg-slate-800 text-slate-700 dark:text-slate-300">Last Modified</th>
+                        <th class="bg-slate-50 dark:bg-slate-800 text-slate-700 dark:text-slate-300">Modified By</th>
+                    </tr>
+                </ng-template>
+
+                <!-- ⚠️ CHANGED: pTemplate="body" is now #body -->
+                <ng-template #body let-setting>
+                    <tr>
+                        <td class="text-slate-800 dark:text-slate-200">{{ setting.name }}</td>
+                        <td class="text-slate-800 dark:text-slate-200">
+                            <p-tag [value]="setting.type" severity="info" [rounded]="true"
+                                styleClass="px-2 text-xs uppercase"></p-tag>
+                        </td>
+                        <td class="text-slate-800 dark:text-slate-200 font-semibold">{{ setting.value }}</td>
+                        <td class="text-slate-600 dark:text-slate-400 text-sm">{{ setting.modifiedDate | date: 'dd MMM
+                            yyyy,
+                            HH:mm' }}</td>
+                        <td class="text-slate-600 dark:text-slate-400 font-medium text-sm">{{ setting.modifiedBy }}</td>
+                    </tr>
+                </ng-template>
+            </p-table>
+            } @else {
+            <div class="flex flex-col items-center justify-center h-[300px] text-slate-500 dark:text-slate-400">
+                <i class="pi pi-inbox text-4xl mb-3"></i>
+                <p>No published settings found.</p>
+            </div>
+            }
+            } @else {
+            <!-- SKELETON TABLE -->
+            <p-table [value]="[1,2,3,4,5]">
+                <!-- ⚠️ CHANGED TO #header AND #body HERE AS WELL -->
+                <ng-template #header>
+                    <tr>
+                        <th>Name</th>
+                        <th>Type</th>
+                        <th>Value</th>
+                        <th>Last Modified</th>
+                        <th>Modified By</th>
+                    </tr>
+                </ng-template>
+                <ng-template #body>
+                    <tr>
+                        <td><p-skeleton width="10rem"></p-skeleton></td>
+                        <td><p-skeleton width="5rem"></p-skeleton></td>
+                        <td><p-skeleton width="5rem"></p-skeleton></td>
+                        <td><p-skeleton width="8rem"></p-skeleton></td>
+                        <td><p-skeleton width="8rem"></p-skeleton></td>
+                    </tr>
+                </ng-template>
+            </p-table>
+            }
+        </div>
+    </div>
+
+    <!-- Settings Type Chart -->
+    <div class="col-span-12 lg:col-span-6 xl:col-span-4">
+        <div class="card p-4 h-full flex flex-col">
+            <h5 class="text-xl font-bold mb-4">Settings Type Distribution</h5>
+            <div class="graph flex-1">
+                @if (!isLoading) {
+                @if (appSettings.length > 0) {
+                <div echarts [options]="echartsOptions" [theme]="colorScheme === 'dark' ? 'dark' : ''" class="w-full"
+                    style="height: 400px;">
+                </div>
+                } @else {
+                <div
+                    class="flex flex-col items-center justify-center h-full text-slate-500 dark:text-slate-400 min-h-[300px]">
+                    <i class="pi pi-chart-bar text-4xl mb-3"></i>
+                    <p>No chart data available</p>
+                </div>
+                }
+                } @else {
+                <app-bar-graph-skeleton></app-bar-graph-skeleton>
+                }
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Updates Timeline -->
+    <div class="col-span-12 lg:col-span-6 xl:col-span-4">
+        <div class="card p-4 h-full widget-timeline overflow-y-auto">
+            <h5 class="text-xl font-bold mb-5">Recent Setting Updates</h5>
+
+            @if (!isLoading) {
+            @if (recentUpdates.length > 0) {
+            <ul class="list-none p-0 m-0 flex flex-col gap-0">
+                @for (setting of recentUpdates; track setting.id) {
+                <li class="flex items-stretch gap-4">
+                    <div class="flex flex-col items-center shrink-0">
+                        <span
+                            class="flex items-center justify-center rounded-full p-2 timeline-icon bg-blue-100 text-blue-500 dark:bg-blue-900/40 dark:text-blue-400 z-10">
+                            <i class="pi pi-cog"></i>
+                        </span>
+                        <div class="w-[2px] flex-1 bg-blue-100 dark:bg-slate-700"></div>
+                    </div>
+                    <div class="flex-1 w-full pb-6">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-slate-800 dark:text-slate-200">
+                                <strong class="font-bold">{{ setting.modifiedBy }}</strong> updated
+                                <strong class="font-bold">{{ setting.name }}</strong>
+                            </span>
+                            <span class="font-medium text-xs text-slate-500 dark:text-slate-400 ml-2 whitespace-nowrap">
+                                {{ formatTimeSince(setting.modifiedDate ? setting.modifiedDate.toString() : '') }}
+                            </span>
+                        </div>
+                        <div
+                            class="p-3 rounded-lg bg-sky-50 dark:bg-sky-900/20 border border-sky-100 dark:border-sky-800/30">
+                            <p class="text-slate-600 dark:text-slate-300 text-sm leading-relaxed m-0">New Value: <span
+                                    class="font-semibold">{{ setting.value }}</span></p>
+                        </div>
+                    </div>
+                </li>
+                }
+                <li class="text-center pt-2">
+                    <p-button pRipple styleClass="p-button-text p-button-sm text-slate-500 dark:text-slate-400"
+                        icon="pi pi-chevron-down" label="View More"></p-button>
+                </li>
+            </ul>
+            } @else {
+            <div
+                class="flex flex-col items-center justify-center h-full text-slate-500 dark:text-slate-400 min-h-[300px]">
+                <i class="pi pi-history text-4xl mb-3"></i>
+                <p>No recent updates found</p>
+            </div>
+            }
+            } @else {
+            <ul class="list-none p-0 m-0 flex flex-col gap-0">
+                @for (item of [1,2,3]; track $index) {
+                <li class="flex items-stretch gap-4">
+                    <div class="flex flex-col items-center shrink-0">
+                        <span
+                            class="flex items-center justify-center rounded-full p-2 timeline-icon bg-blue-100 text-blue-500 dark:bg-slate-800 z-10">
+                            <i class="pi pi-cog text-slate-300 dark:text-slate-600"></i>
+                        </span>
+                        <div class="w-[2px] flex-1 bg-slate-200 dark:bg-slate-700"></div>
+                    </div>
+                    <div class="flex-1 w-full pb-6">
+                        <div class="flex items-center justify-between mb-2">
+                            <span><p-skeleton width="12rem"></p-skeleton></span>
+                            <span><p-skeleton width="4rem"></p-skeleton></span>
+                        </div>
+                        <div class="p-3 rounded-lg bg-slate-50 dark:bg-slate-800/50">
+                            <p-skeleton width="10rem" height="1.25rem"></p-skeleton>
+                        </div>
+                    </div>
+                </li>
+                }
+            </ul>
+            }
+        </div>
+    </div>
+</div>

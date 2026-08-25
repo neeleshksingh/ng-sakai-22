@@ -115,14 +115,14 @@ export const appsRoutes: Routes = [
             //         userRoles: [Roles.STUDENT]
             //     }
             // },
-            // {
-            //     path: 'developers',
-            //     loadChildren: () => import('./developers/developers.module').then(mod => mod.DevelopersModule),
-            //     data: {
-            //         breadcrumb: 'Developers',
-            //         userRoles: [Roles.DEVELOPERS]
-            //     }
-            // },
+            {
+                path: 'developers',
+                loadChildren: () => import('./app/developers/developers.module').then(mod => mod.DevelopersModule),
+                data: {
+                    breadcrumb: 'Developers',
+                    userRoles: [Roles.DEVELOPERS]
+                }
+            },
             // {
             //     path: 'settings', loadChildren: () => import('./settings/settings/settings.module').then(mod => mod.SettingsModule)
             // },
