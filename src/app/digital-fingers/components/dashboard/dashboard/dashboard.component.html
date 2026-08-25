@@ -1,1 +1,119 @@
-<app-module-dashboard title="Digital Fingers" subtitle="Identity, roles, permissions, and access overview" [kpis]="kpis" />
+<div class="grid grid-cols-12 gap-4 pb-6">
+    <!-- Users Signed Up Card -->
+    <div class="col-span-12 lg:col-span-6 xl:col-span-3 cursor-pointer scalein animation-duration-300 dashboard-cards">
+        <div class="card h-full p-0 overflow-hidden flex flex-col" style="padding: 0!important;">
+            <div class="flex items-center p-3 flex-1">
+                <i class="pi pi-users text-6xl text-blue-500 shrink-0" style="font-size: 3rem;"></i>
+                <div class="ml-3 flex-1 min-w-0">
+                    <span class="text-blue-500 dark:text-blue-400 block whitespace-nowrap truncate font-semibold">USERS
+                        SIGNED UP</span>
+                    <span class="text-blue-500 dark:text-blue-400 block text-4xl font-bold truncate">3882</span>
+                </div>
+            </div>
+            <img [src]="'assets/demo/images/dashboard/users' + (colorScheme === 'light' ? '' : '-dark') + '.svg'"
+                class="w-full mt-auto" alt="users">
+        </div>
+    </div>
+
+    <!-- Lifetime Value Card -->
+    <div class="col-span-12 lg:col-span-6 xl:col-span-3 cursor-pointer scalein animation-duration-400 dashboard-cards">
+        <div class="card h-full p-0 overflow-hidden flex flex-col" style="padding: 0!important;">
+            <div class="flex items-center p-3 flex-1">
+                <i class="pi pi-map text-6xl text-amber-500 shrink-0" style="font-size: 3rem;"></i>
+                <div class="ml-3 flex-1 min-w-0">
+                    <span
+                        class="text-amber-500 dark:text-amber-400 block whitespace-nowrap truncate font-semibold">LIFETIME
+                        VALUE</span>
+                    <span class="text-amber-500 dark:text-amber-400 block text-4xl font-bold truncate">532</span>
+                </div>
+            </div>
+            <img [src]="'assets/demo/images/dashboard/locations' + (colorScheme === 'light' ? '' : '-dark') + '.svg'"
+                class="w-full mt-auto" alt="locations">
+        </div>
+    </div>
+
+    <!-- Conversion Rate Card -->
+    <div class="col-span-12 lg:col-span-6 xl:col-span-3 cursor-pointer scalein animation-duration-500 dashboard-cards">
+        <div class="card h-full p-0 overflow-hidden flex flex-col" style="padding: 0!important;">
+            <div class="flex items-center p-3 flex-1">
+                <i class="pi pi-directions text-6xl text-emerald-500 shrink-0" style="font-size: 3rem;"></i>
+                <div class="ml-3 flex-1 min-w-0">
+                    <span
+                        class="text-emerald-500 dark:text-emerald-400 block whitespace-nowrap truncate font-semibold">CONVERSION
+                        RATE</span>
+                    <span class="text-emerald-500 dark:text-emerald-400 block text-4xl font-bold truncate">12.6%</span>
+                </div>
+            </div>
+            <img [src]="'assets/demo/images/dashboard/rate' + (colorScheme === 'light' ? '' : '-dark') + '.svg'"
+                class="w-full mt-auto" alt="conversion">
+        </div>
+    </div>
+
+    <!-- Active Trials Card -->
+    <div class="col-span-12 lg:col-span-6 xl:col-span-3 cursor-pointer scalein animation-duration-1000 dashboard-cards">
+        <div class="card h-full p-0 overflow-hidden flex flex-col" style="padding: 0!important;">
+            <div class="flex items-center p-3 flex-1">
+                <i class="pi pi-comments text-6xl text-purple-500 shrink-0" style="font-size: 3rem;"></i>
+                <div class="ml-3 flex-1 min-w-0">
+                    <span
+                        class="text-purple-500 dark:text-purple-400 block whitespace-nowrap truncate font-semibold">ACTIVE
+                        TRIALS</span>
+                    <span class="text-purple-500 dark:text-purple-400 block text-4xl font-bold truncate">440</span>
+                </div>
+            </div>
+            <img [src]="'assets/demo/images/dashboard/interactions' + (colorScheme === 'light' ? '' : '-dark') + '.svg'"
+                class="w-full mt-auto" alt="interactions">
+        </div>
+    </div>
+
+    <!-- Available Roles Card -->
+    <div class="col-span-12 lg:col-span-6 xl:col-span-4">
+        <div class="card h-full flex flex-col">
+            <div class="flex justify-between items-center mb-4 px-3 pt-3">
+                <!-- Replaced inline ngStyle with Tailwind dark mode classes -->
+                <h5 class="m-0 font-bold text-xl text-slate-800 dark:text-slate-200">Available Roles</h5>
+                <p-button icon="pi pi-refresh" styleClass="p-button-text p-button-rounded"
+                    (click)="getRoleDistribution()" [style]="{ 'color': '#4B9BFF' }" title="Refresh Roles"></p-button>
+            </div>
+            <div class="role-list flex-1">
+                <ng-container *ngIf="isLoadingRoleChart">
+                    <div class="skeleton-container flex flex-col gap-2">
+                        <p-skeleton width="100%" height="48px"></p-skeleton>
+                        <p-skeleton width="100%" height="48px"></p-skeleton>
+                        <p-skeleton width="100%" height="48px"></p-skeleton>
+                        <p-skeleton width="100%" height="48px"></p-skeleton>
+                        <p-skeleton width="100%" height="48px"></p-skeleton>
+                    </div>
+                </ng-container>
+                <ng-container *ngIf="!isLoadingRoleChart && roleChartError">
+                    <p-message severity="error" text="Failed to load roles. Please try again.">
+                        <button pButton type="button" label="Retry" (click)="getRoleDistribution()"
+                            class="p-button-outlined p-button-sm"></button>
+                    </p-message>
+                </ng-container>
+                <ng-container *ngIf="!isLoadingRoleChart && !roleChartError && roles?.length">
+                    <p-listbox [options]="roles" [(ngModel)]="selectedRole" optionLabel="roleName"
+                        [style]="{ 'max-height': '400px', 'width': '100%' }" [filter]="true"
+                        filterPlaceholder="Search roles..." emptyFilterMessage="No roles found"
+                        emptyMessage="No roles available">
+
+                        <ng-template let-role pTemplate="item">
+                            <div class="role-item flex items-center justify-between p-2 w-full">
+                                <div class="flex items-center">
+                                    <i class="pi pi-user mr-3 text-blue-500"></i>
+                                    <span class="font-medium text-base text-slate-800 dark:text-slate-200">
+                                        {{ role.roleName }}
+                                    </span>
+                                </div>
+                            </div>
+                        </ng-template>
+
+                    </p-listbox>
+                </ng-container>
+                <ng-container *ngIf="!isLoadingRoleChart && !roleChartError && !roles?.length">
+                    <p-message severity="info" text="No roles available."></p-message>
+                </ng-container>
+            </div>
+        </div>
+    </div>
+</div>

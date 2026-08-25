@@ -67,14 +67,14 @@ export const appsRoutes: Routes = [
             //         userRoles: [Roles.ACADEMICS, Roles.ACADEMICSADMIN, Roles.FACULTY, Roles.ITSUPPORTS, Roles.MASTERS, Roles.MASTERSADMIN, Roles.SUPERADMIN, Roles.ADMINISTRATION],
             //     }
             // },
-            // {
-            //     path: 'digitalfingers',
-            //     loadChildren: () => import('./digital-fingers/digital-fingers/digital-fingers.module').then(m => m.DigitalFingersModule),
-            //     data: {
-            //         breadcrumb: 'DigitalFingers',
-            //         userRoles: [Roles.ITSUPPORTS, Roles.ITSUPPORTSSUPERADMIN, Roles.SUPERADMIN, Roles.ADMINISTRATION],
-            //     }
-            // },
+            {
+                path: 'digitalfingers',
+                loadChildren: () => import('./app/digital-fingers/digital-fingers.module').then(m => m.DigitalFingersModule),
+                data: {
+                    breadcrumb: 'DigitalFingers',
+                    userRoles: [Roles.ITSUPPORTS, Roles.ITSUPPORTSSUPERADMIN, Roles.SUPERADMIN, Roles.ADMINISTRATION],
+                }
+            },
             // {
             //     path: 'knowledgestand',
             //     loadChildren: () => import('./knowledge-stand/knowledge-stand/knowledge-stand.module').then(m => m.KnowledgeStandModule),

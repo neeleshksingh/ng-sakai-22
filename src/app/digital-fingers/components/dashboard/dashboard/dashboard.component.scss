@@ -1,3 +1,4 @@
-:host {
-    display: block;
+:host ::ng-deep .p-listbox-list-wrapper {
+    height: auto;
+    max-height: none !important;
 }
