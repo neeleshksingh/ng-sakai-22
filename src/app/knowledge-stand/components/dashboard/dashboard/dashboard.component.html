@@ -1,1 +1,634 @@
-<app-module-dashboard title="Knowledge Stand" subtitle="Examination and result processing overview" [kpis]="kpis" />
+<div class="grid grid-cols-12 gap-4 pb-6">
+    <!-- Card 1: Examinations -->
+    <div class="col-span-12 lg:col-span-6 xl:col-span-3 cursor-pointer scalein animation-duration-300 dashboard-cards">
+        <div class="card h-full p-0 overflow-hidden flex flex-col" style="padding: 0!important;">
+            <div class="flex items-center p-3 flex-1">
+                <i class="pi pi-users text-blue-500 shrink-0" style="font-size: 3rem;"></i>
+                <div class="ml-3 flex-1 min-w-0">
+                    @if (totalExaminationScheduledToday && totalExaminationScheduledToday > 0) {
+                    <span
+                        class="text-blue-500 dark:text-blue-400 block whitespace-nowrap truncate font-semibold">Examinations</span>
+                    <span
+                        class="text-blue-500 dark:text-blue-400 block text-4xl font-bold truncate">{{totalExaminationScheduledToday}}</span>
+                    <span class="text-blue-500 dark:text-blue-400 text-sm">Total scheduled examinations</span>
+                    } @else if (isLoading) {
+                    <app-dashboard-cards-skeleton [data]="'knowledgestand'"></app-dashboard-cards-skeleton>
+                    } @else {
+                    <span
+                        class="text-blue-500 dark:text-blue-400 block whitespace-nowrap truncate font-semibold">Examinations</span>
+                    <span class="text-blue-500 dark:text-blue-400 block text-2xl font-bold truncate mt-1">No Scheduled
+                        Examinations</span>
+                    }
+                </div>
+            </div>
+            <img [src]="'assets/demo/images/dashboard/users' + (colorScheme === 'light' ? '' : '-dark') + '.svg'"
+                class="w-full mt-auto" alt="users">
+        </div>
+    </div>
+
+    <!-- Card 2: Examination Registrations -->
+    <div class="col-span-12 lg:col-span-6 xl:col-span-3 cursor-pointer scalein animation-duration-300 dashboard-cards">
+        <div class="card h-full p-0 overflow-hidden flex flex-col" style="padding: 0!important;">
+            <div class="flex items-center p-3 flex-1">
+                <i class="pi pi-map text-orange-500 shrink-0" style="font-size: 3rem;"></i>
+                <div class="ml-3 flex-1 min-w-0">
+                    @if (totalExaminationScheduledToday && totalExaminationScheduledToday > 0) {
+                    <span
+                        class="text-orange-500 dark:text-orange-400 block whitespace-nowrap truncate font-semibold">Examination
+                        Registrations</span>
+                    <span
+                        class="text-orange-500 dark:text-orange-400 block text-4xl font-bold truncate">{{totalStudentExaminationRegistrations}}</span>
+                    } @else if (isLoading) {
+                    <app-dashboard-cards-skeleton [data]="'knowledgestand'"></app-dashboard-cards-skeleton>
+                    } @else {
+                    <span
+                        class="text-orange-500 dark:text-orange-400 block whitespace-nowrap truncate font-semibold">Examination
+                        Registrations</span>
+                    <span class="text-orange-500 dark:text-orange-400 block text-2xl font-bold truncate mt-1">No
+                        Examination Registrations</span>
+                    }
+                </div>
+            </div>
+            <img [src]="'assets/demo/images/dashboard/locations' + (colorScheme === 'light' ? '' : '-dark') + '.svg'"
+                class="w-full mt-auto" alt="locations">
+        </div>
+    </div>
+
+    <!-- Card 3: Backlog Registrations -->
+    <div class="col-span-12 lg:col-span-6 xl:col-span-3 cursor-pointer scalein animation-duration-300 dashboard-cards">
+        <div class="card h-full p-0 overflow-hidden flex flex-col" style="padding: 0!important;">
+            <div class="flex items-center p-3 flex-1">
+                <i class="pi pi-directions text-green-500 shrink-0" style="font-size: 3rem;"></i>
+                <div class="ml-3 flex-1 min-w-0">
+                    @if (totalExaminationScheduledToday && totalExaminationScheduledToday > 0) {
+                    <span
+                        class="text-green-500 dark:text-green-400 block whitespace-nowrap truncate font-semibold">Backlog
+                        Registrations</span>
+                    <span class="text-green-500 dark:text-green-400 block text-4xl font-bold truncate">56</span>
+                    } @else if (isLoading) {
+                    <app-dashboard-cards-skeleton [data]="'knowledgestand'"></app-dashboard-cards-skeleton>
+                    } @else {
+                    <span
+                        class="text-green-500 dark:text-green-400 block whitespace-nowrap truncate font-semibold">Backlog
+                        Examinations</span>
+                    <span class="text-green-500 dark:text-green-400 block text-2xl font-bold truncate mt-1">No Backlog
+                        Registrations</span>
+                    }
+                </div>
+            </div>
+            <img [src]="'assets/demo/images/dashboard/rate' + (colorScheme === 'light' ? '' : '-dark') + '.svg'"
+                class="w-full mt-auto" alt="conversion">
+        </div>
+    </div>
+
+    <!-- Card 4: Active Backlogs -->
+    <div class="col-span-12 lg:col-span-6 xl:col-span-3 cursor-pointer scalein animation-duration-300 dashboard-cards">
+        <div class="card h-full p-0 overflow-hidden flex flex-col" style="padding: 0!important;">
+            <div class="flex items-center p-3 flex-1">
+                <i class="pi pi-comments text-purple-500 shrink-0" style="font-size: 3rem;"></i>
+                <div class="ml-3 flex-1 min-w-0">
+                    @if (totalExaminationScheduledToday && totalExaminationScheduledToday > 0) {
+                    <span
+                        class="text-purple-500 dark:text-purple-400 block whitespace-nowrap truncate font-semibold">Active
+                        Backlogs</span>
+                    <span class="text-purple-500 dark:text-purple-400 block text-4xl font-bold truncate">100</span>
+                    } @else if (isLoading) {
+                    <app-dashboard-cards-skeleton [data]="'knowledgestand'"></app-dashboard-cards-skeleton>
+                    } @else {
+                    <span
+                        class="text-purple-500 dark:text-purple-400 block whitespace-nowrap truncate font-semibold">Active
+                        Backlogs</span>
+                    <span class="text-purple-500 dark:text-purple-400 block text-2xl font-bold truncate mt-1">No Active
+                        Backlogs</span>
+                    }
+                </div>
+            </div>
+            <img [src]="'assets/demo/images/dashboard/interactions' + (colorScheme === 'light' ? '' : '-dark') + '.svg'"
+                class="w-full mt-auto" alt="interactions">
+        </div>
+    </div>
+
+    <!-- Examination Tabs Section -->
+    <div class="col-span-12" [hidden]="hideTable">
+        <div class="card rounded-lg shadow-md p-0">
+            <!-- MIGRATED TO PRIME 22 TABS API -->
+            <p-tabs value="ongoing">
+                <p-tablist>
+                    <p-tab value="ongoing">
+                        <div class="flex items-center gap-2">
+                            <i class="pi pi-video text-red-500"></i>
+                            <span class="text-red-500 font-semibold">Ongoing Examinations</span>
+                            <p-badge [value]="liveExaminationConfigurations.length || 0" severity="danger"></p-badge>
+                        </div>
+                    </p-tab>
+                    <p-tab value="upcoming">
+                        <div class="flex items-center gap-2">
+                            <i class="pi pi-calendar text-blue-500"></i>
+                            <span class="text-blue-500 font-semibold">Upcoming Examinations</span>
+                            <p-badge [value]="activeExaminationProgramConfigurations.length || 0"
+                                severity="info"></p-badge>
+                        </div>
+                    </p-tab>
+                </p-tablist>
+
+                <p-tabpanels>
+                    <!-- Ongoing Examinations Panel -->
+                    <p-tabpanel value="ongoing">
+                        @if (liveExaminationConfigurations.length) {
+                        <div class="mb-4 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3">
+                            <div class="flex items-center gap-2">
+                                <span class="live-indicator"></span>
+                                <h4 class="m-0 text-red-500 font-semibold">Ongoing Examinations</h4>
+                                <p-tag severity="danger" [value]="liveExaminationConfigurations.length + ' Active'"
+                                    [rounded]="true"></p-tag>
+                            </div>
+                            <div class="flex gap-2">
+                                <span class="p-input-icon-left">
+                                    <i class="pi pi-search"></i>
+                                    <input #liveSearchInput pInputText type="text"
+                                        placeholder="Search live examinations..." class="w-full lg:w-[20rem]" />
+                                </span>
+                                <p-button icon="pi pi-refresh" severity="danger" [text]="true"
+                                    pTooltip="Refresh Live Data"></p-button>
+                            </div>
+                        </div>
+
+                        <p-table #liveTable [value]="liveExaminationConfigurations"
+                            [paginator]="liveExaminationConfigurations.length > 10" [rows]="10" [columns]="cols"
+                            [rowsPerPageOptions]="[10,20,30,40,50,{ showAll: 'All' }]" selectionMode="multiple"
+                            [globalFilterFields]="['programName', 'operationalVerticalName', 'subjectName', 'subjectPaperCodeName', 'academicSessionName']"
+                            styleClass="p-datatable-gridlines p-datatable-striped"
+                            currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+                            [showCurrentPageReport]="true" [resizableColumns]="true" responsiveLayout="scroll">
+
+                            <ng-template #header>
+                                <tr>
+                                    <th pSortableColumn="academicSessionName">
+                                        <div class="flex items-center gap-2">
+                                            <i class="pi pi-graduation-cap text-sm"></i> <span>Session</span>
+                                            <p-sort-icon field="academicSessionName"></p-sort-icon>
+                                            <p-column-filter type="text" field="academicSessionName"
+                                                display="menu"></p-column-filter>
+                                        </div>
+                                    </th>
+                                    <th pSortableColumn="programName">
+                                        <div class="flex items-center gap-2">
+                                            <i class="pi pi-book text-sm"></i> <span>Program</span>
+                                            <p-sort-icon field="programName"></p-sort-icon>
+                                            <p-column-filter type="text" field="programName"
+                                                display="menu"></p-column-filter>
+                                        </div>
+                                    </th>
+                                    <th pSortableColumn="operationalVerticalName">
+                                        <div class="flex items-center gap-2">
+                                            <i class="pi pi-list text-sm"></i> <span>Semester</span>
+                                            <p-sort-icon field="operationalVerticalName"></p-sort-icon>
+                                            <p-column-filter type="text" field="operationalVerticalName"
+                                                display="menu"></p-column-filter>
+                                        </div>
+                                    </th>
+                                    <th pSortableColumn="subjectPaperCodeName">
+                                        <div class="flex items-center gap-2">
+                                            <i class="pi pi-file-edit text-sm"></i> <span>Subject</span>
+                                            <p-sort-icon field="subjectPaperCodeName"></p-sort-icon>
+                                            <p-column-filter type="text" field="subjectPaperCodeName"
+                                                display="menu"></p-column-filter>
+                                        </div>
+                                    </th>
+                                    <th>
+                                        <div class="flex items-center gap-2">
+                                            <i class="pi pi-clock text-sm text-green-500"></i> <span>Started At</span>
+                                        </div>
+                                    </th>
+                                    <th>
+                                        <div class="flex items-center justify-center gap-2">
+                                            <i class="pi pi-clock text-sm text-red-500"></i> <span>Time Remaining</span>
+                                        </div>
+                                    </th>
+                                </tr>
+                            </ng-template>
+
+                            <ng-template #body let-exam let-ri="rowIndex">
+                                <tr class="hover:bg-red-50 dark:hover:bg-red-900/20">
+                                    <td class="text-center">
+                                        <p-tag [value]="exam.academicSessionName" severity="info"
+                                            [rounded]="true"></p-tag>
+                                    </td>
+                                    <td class="max-w-[20rem] break-words whitespace-normal">
+                                        <div
+                                            class="font-medium text-slate-800 dark:text-slate-200 mb-1 leading-relaxed">
+                                            {{ exam.programName }}
+                                        </div>
+                                    </td>
+                                    <td class="text-center">
+                                        <p-chip [label]="exam.operationalVerticalName"
+                                            styleClass="bg-blue-100 text-blue-900 dark:bg-blue-900/40 dark:text-blue-400"></p-chip>
+                                    </td>
+                                    <td>
+                                        <div class="flex flex-col gap-1">
+                                            <span class="font-semibold text-slate-800 dark:text-slate-200">{{
+                                                exam.subjectPaperCodeName }}</span>
+                                            <span class="text-sm text-slate-500 dark:text-slate-400">{{ exam.subjectName
+                                                }}</span>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="flex flex-col gap-1">
+                                            <span class="font-medium text-green-700 dark:text-green-500">{{
+                                                exam.examinationStartDateTime | date: 'MMM d, y' }}</span>
+                                            <span class="text-sm text-slate-500 dark:text-slate-400">{{
+                                                exam.examinationStartDateTime | date: 'h:mm a' }}</span>
+                                        </div>
+                                    </td>
+                                    <td class="text-center">
+                                        <div class="flex flex-col items-center gap-1">
+                                            <span class="font-bold text-lg text-red-600 dark:text-red-400">{{
+                                                getTimeRemaining(exam.examinationEndDateTime) }}</span>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </ng-template>
+
+                            <ng-template #summary>
+                                <div class="flex items-center justify-between p-2">
+                                    <span class="text-sm text-red-600 dark:text-red-400 font-semibold">
+                                        {{ liveExaminationConfigurations.length || 0 }} examinations currently Ongoing
+                                    </span>
+                                    <div class="flex items-center gap-2">
+                                        <span class="live-indicator"></span>
+                                        <span class="text-sm text-slate-500 dark:text-slate-400">Auto-refresh every 30
+                                            seconds</span>
+                                    </div>
+                                </div>
+                            </ng-template>
+                        </p-table>
+                        } @else {
+                        <div class="text-center p-6">
+                            <p-card>
+                                <div class="flex flex-col items-center gap-4">
+                                    <i class="pi pi-pause-circle text-6xl text-slate-400 dark:text-slate-500"></i>
+                                    <h4 class="text-slate-600 dark:text-slate-400 m-0 font-semibold">No Ongoing
+                                        Examinations</h4>
+                                    <p class="text-slate-500 dark:text-slate-400 m-0 text-center max-w-[30rem]">
+                                        There are currently no examinations in progress. Check back when examinations
+                                        are scheduled to begin.
+                                    </p>
+                                </div>
+                            </p-card>
+                        </div>
+                        }
+                    </p-tabpanel>
+
+                    <!-- Upcoming Examinations Panel -->
+                    <p-tabpanel value="upcoming">
+                        <div class="mb-4">
+                            <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3">
+                                <div class="flex items-center gap-2">
+                                    <i class="pi pi-calendar-plus text-blue-500 text-xl"></i>
+                                    <h4 class="m-0 text-blue-500 font-semibold">Scheduled Examinations</h4>
+                                </div>
+                                <div class="flex gap-2">
+                                    <span class="p-input-icon-left">
+                                        <i class="pi pi-search"></i>
+                                        <input #searchInput pInputText type="text"
+                                            (input)="dt.filterGlobal((searchInput.value || ''), 'contains')"
+                                            placeholder="Search examinations..." class="w-full lg:w-[20rem]" />
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <p-table #dt [value]="activeExaminationProgramConfigurations" [columns]="cols" [rows]="10"
+                            [paginator]="true" selectionMode="multiple"
+                            [globalFilterFields]="['programName', 'operationalVerticalName', 'subjectName', 'subjectPaperCodeName', 'academicSessionName']"
+                            [rowsPerPageOptions]="[10,20,30,40,50,{ showAll: 'All' }]" [rowHover]="true" dataKey="id"
+                            styleClass="p-datatable-customers p-datatable-gridlines p-datatable-striped p-datatable-sm"
+                            currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+                            [showCurrentPageReport]="true" [resizableColumns]="true">
+
+                            <ng-template #header>
+                                <tr>
+                                    <th pSortableColumn="academicSessionName">
+                                        <div class="flex items-center gap-2">
+                                            <i class="pi pi-graduation-cap text-sm"></i> <span>Session</span>
+                                            <p-sort-icon field="academicSessionName"></p-sort-icon>
+                                            <p-column-filter type="text" field="academicSessionName"
+                                                display="menu"></p-column-filter>
+                                        </div>
+                                    </th>
+                                    <th pSortableColumn="programName">
+                                        <div class="flex items-center gap-2">
+                                            <i class="pi pi-book text-sm"></i> <span>Program</span>
+                                            <p-sort-icon field="programName"></p-sort-icon>
+                                            <p-column-filter type="text" field="programName"
+                                                display="menu"></p-column-filter>
+                                        </div>
+                                    </th>
+                                    <th pSortableColumn="operationalVerticalName">
+                                        <div class="flex items-center gap-2">
+                                            <i class="pi pi-list text-sm"></i> <span>Semester</span>
+                                            <p-sort-icon field="operationalVerticalName"></p-sort-icon>
+                                            <p-column-filter type="text" field="operationalVerticalName"
+                                                display="menu"></p-column-filter>
+                                        </div>
+                                    </th>
+                                    <th pSortableColumn="subjectPaperCodeName">
+                                        <div class="flex items-center gap-2">
+                                            <i class="pi pi-file-edit text-sm"></i> <span>Subject</span>
+                                            <p-sort-icon field="subjectPaperCodeName"></p-sort-icon>
+                                            <p-column-filter type="text" field="subjectPaperCodeName"
+                                                display="menu"></p-column-filter>
+                                        </div>
+                                    </th>
+                                    <th pSortableColumn="examinationStartDateTime">
+                                        <div class="flex items-center gap-2">
+                                            <i class="pi pi-clock text-sm text-green-500"></i> <span>Start Time</span>
+                                            <p-sort-icon field="examinationStartDateTime"></p-sort-icon>
+                                            <p-column-filter type="date" field="examinationStartDateTime"
+                                                display="menu"></p-column-filter>
+                                        </div>
+                                    </th>
+                                    <th pSortableColumn="examinationEndDateTime">
+                                        <div class="flex items-center gap-2">
+                                            <i class="pi pi-stop-circle text-sm text-red-500"></i> <span>End Time</span>
+                                            <p-sort-icon field="examinationEndDateTime"></p-sort-icon>
+                                            <p-column-filter type="date" field="examinationEndDateTime"
+                                                display="menu"></p-column-filter>
+                                        </div>
+                                    </th>
+                                </tr>
+                            </ng-template>
+
+                            <ng-template #body let-assessmentComponent let-ri="rowIndex">
+                                <tr class="hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors">
+                                    <td class="text-center">
+                                        <p-tag [value]="assessmentComponent.academicSessionName" severity="info"
+                                            [rounded]="true"></p-tag>
+                                    </td>
+                                    <td class="max-w-[20rem] break-words whitespace-normal">
+                                        <div
+                                            class="font-medium text-slate-800 dark:text-slate-200 mb-1 leading-relaxed">
+                                            {{ assessmentComponent.programName }}
+                                        </div>
+                                    </td>
+                                    <td class="text-center">
+                                        <p-chip [label]="assessmentComponent.operationalVerticalName"
+                                            styleClass="bg-blue-100 text-blue-900 dark:bg-blue-900/40 dark:text-blue-400"></p-chip>
+                                    </td>
+                                    <td>
+                                        <div class="flex flex-col gap-1">
+                                            <span class="font-semibold text-slate-800 dark:text-slate-200">{{
+                                                assessmentComponent.subjectPaperCodeName }}</span>
+                                            <span class="text-sm text-slate-500 dark:text-slate-400">{{
+                                                assessmentComponent.subjectName }}</span>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="flex flex-col gap-1">
+                                            <span class="font-medium text-green-700 dark:text-green-500">{{
+                                                assessmentComponent.examinationStartDateTime | date: 'MMM d, y'
+                                                }}</span>
+                                            <span class="text-sm text-slate-500 dark:text-slate-400">{{
+                                                assessmentComponent.examinationStartDateTime | date: 'h:mm a' }}</span>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="flex flex-col gap-1">
+                                            <span class="font-medium text-red-700 dark:text-red-500">{{
+                                                assessmentComponent.examinationEndDateTime | date: 'MMM d, y' }}</span>
+                                            <span class="text-sm text-slate-500 dark:text-slate-400">{{
+                                                assessmentComponent.examinationEndDateTime | date: 'h:mm a' }}</span>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </ng-template>
+
+                            <ng-template #emptymessage>
+                                <tr>
+                                    <td colspan="7" class="text-center p-4">
+                                        <div class="flex flex-col items-center gap-3">
+                                            <i
+                                                class="pi pi-calendar-times text-4xl text-slate-400 dark:text-slate-500"></i>
+                                            <span class="text-lg text-slate-600 dark:text-slate-400">No upcoming
+                                                examinations found</span>
+                                            <p-button label="Refresh" icon="pi pi-refresh" severity="secondary"
+                                                size="small"></p-button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </ng-template>
+
+                            <ng-template #summary>
+                                <div class="flex items-center justify-between p-2">
+                                    <span class="text-sm text-slate-600 dark:text-slate-400">
+                                        Total {{ activeExaminationProgramConfigurations.length || 0 }} examinations
+                                        scheduled
+                                    </span>
+                                    <p-chip [label]="activeExaminationProgramConfigurations.length + ' Active'"
+                                        styleClass="bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-300"></p-chip>
+                                </div>
+                            </ng-template>
+                        </p-table>
+                    </p-tabpanel>
+                </p-tabpanels>
+            </p-tabs>
+        </div>
+    </div>
+
+    <!-- Pending Marks Entry List -->
+    @if (isMarksEntryPendingInfoVisible) {
+    <div class="col-span-12">
+        <div class="card h-full rounded-lg shadow-md p-5">
+            <div class="flex flex-col mb-4">
+                <h5 class="text-xl font-bold m-0 text-slate-800 dark:text-slate-200">Pending Marks Entry List</h5>
+                <h6 class="text-slate-500 dark:text-slate-400 mt-1 mb-0">
+                    {{this.employeeDetails?.employeeCode}} - {{this.employeeDetails?.firstName}}
+                    {{this.employeeDetails?.lastName}}
+                </h6>
+            </div>
+
+            <p-table #dt [value]="pendingMarksEntryReportList" [rows]="10" [paginator]="true"
+                [globalFilterFields]="['AcademicSessionName', 'ProgramName', 'Semester', 'Subject', 'SubjectCode']"
+                [rowHover]="true" dataKey="id" [resizableColumns]="true"
+                [rowsPerPageOptions]="[10, 20, 50, 100, {showAll : 'All'}]"
+                styleClass="p-datatable-customers p-datatable-gridlines p-datatable-striped p-datatable-sm"
+                currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+                [showCurrentPageReport]="true">
+
+                <ng-template #header>
+                    <tr class="bg-slate-100 dark:bg-slate-800">
+                        <th>S.No.</th>
+                        @for (headers of pendingMarksEntryReportHeaders; track $index) {
+                        @if (!(headers == 'OperationalVerticalId' || headers == 'ExaminationId' || headers ==
+                        'ProgramId' || headers == 'AcademicSessionId' || headers == 'SubjectPapercodeId' || headers ==
+                        'SubjectId')) {
+                        <th [pSortableColumn]="headers">
+                            {{ headers }}
+                            <p-sort-icon [field]="headers"></p-sort-icon>
+                            <p-column-filter [type]="headers" [field]="headers" display="menu"></p-column-filter>
+                        </th>
+                        }
+                        }
+                        <th>Action</th>
+                    </tr>
+                </ng-template>
+
+                <ng-template #body let-pendingReport let-rowIndex="rowIndex">
+                    <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                        <td>{{ rowIndex + 1 }}</td>
+                        @for (header of pendingMarksEntryReportHeaders; track $index) {
+                        @if (!(header == 'OperationalVerticalId' || header == 'ExaminationId' || header == 'ProgramId'
+                        || header == 'AcademicSessionId' || header == 'SubjectPapercodeId' || header == 'SubjectId')) {
+                        <td>{{pendingReport[header]}}</td>
+                        }
+                        }
+                        <td>
+                            <p-button label="Marks Entry" severity="primary" size="small"
+                                (onClick)="navigateToMarksEntry(pendingReport)"></p-button>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+    </div>
+    }
+
+    <!-- Latest Notifications -->
+    <div class="col-span-12 lg:col-span-8">
+        <div class="card h-full p-4 relative rounded-lg shadow-md">
+            <h5 class="text-xl font-bold mb-4 text-slate-800 dark:text-slate-200">Latest Notifications</h5>
+            @if (isLoading) {
+            <app-dashboard-list-skeleton></app-dashboard-list-skeleton>
+            } @else {
+            <ul class="list-none p-0 m-0 w-full">
+                @for (item of notificationList; track $index) {
+                <p-scroll-panel [style]="{ width: '100%', height: '200px' }" styleClass="custombar1">
+                    <li
+                        class="mb-4 flex items-center p-2 hover:bg-slate-50 dark:hover:bg-slate-800/50 rounded-lg transition-colors">
+                        <p-avatar icon="pi pi-bell" size="large" shape="circle"
+                            styleClass="text-base font-bold shrink-0"
+                            [style]="{'background-color':'rgba(25, 146, 212, 0.1)', 'color': '#1992D4', 'border': '1px solid #5ED0FA'}"></p-avatar>
+                        <div class="ml-3">
+                            <span
+                                class="block font-semibold text-slate-800 dark:text-slate-200">{{item.SendingAuthority}}</span>
+                            <span class="text-slate-500 dark:text-slate-400 block mt-1">{{item.SendingMessage}}</span>
+                        </div>
+                    </li>
+                </p-scroll-panel>
+                }
+            </ul>
+            }
+            <p-button label="Read more..." [text]="true" class="absolute bottom-2 right-2" severity="info"></p-button>
+        </div>
+    </div>
+
+    <!-- Quick Links -->
+    <div class="col-span-12 lg:col-span-4">
+        <div class="card h-full p-0 overflow-hidden rounded-lg shadow-lg">
+            <div class="p-4 border-b border-slate-200 dark:border-slate-700">
+                <div class="flex items-center gap-2">
+                    <i class="pi pi-bookmark text-blue-500 text-xl" style="font-size: 2rem;"></i>
+                    <div>
+                        <h5 class="m-0 font-semibold text-slate-800 dark:text-slate-200">Quick Links</h5>
+                        <p class="m-0 text-slate-500 dark:text-slate-400 text-xs mt-0.5">Access frequently used features
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="p-0">
+                <ul class="list-none p-0 m-0">
+                    <li class="border-b border-slate-200 dark:border-slate-700 quick-link-glow-item">
+                        <div class="flex items-center p-4 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-all duration-200 cursor-pointer"
+                            routerLink="/home/executiveedge/transactions/faculty-feedback">
+                            <div class="flex items-center justify-center w-12 h-12 rounded-lg mr-3"
+                                style="background: rgba(245, 158, 11, 0.15);">
+                                <i class="pi pi-star-fill text-xl" style="color: #f59e0b; font-size: 1.2rem;"></i>
+                            </div>
+                            <div class="flex-1">
+                                <div class="flex items-center gap-2">
+                                    <h6 class="m-0 text-slate-800 dark:text-slate-200 font-medium">Faculty Feedback</h6>
+                                    <p-tag value="HOT" severity="warn" styleClass="text-xs px-1 py-0"></p-tag>
+                                </div>
+                                <p class="m-0 text-slate-500 dark:text-slate-400 text-sm mt-1">Submit faculty feedback
+                                </p>
+                            </div>
+                            <i class="pi pi-chevron-right" style="color: #f59e0b;"></i>
+                        </div>
+                    </li>
+
+                    @if (!this.userRoleList.includes('Faculty')) {
+                    <li class="border-b border-slate-200 dark:border-slate-700">
+                        <div class="flex items-center p-4 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-all duration-200 cursor-pointer"
+                            routerLink="/home/knowledgestand/transactions/marks-entry/batch-code-wise">
+                            <div
+                                class="flex items-center justify-center w-12 h-12 bg-blue-100 dark:bg-blue-900/40 rounded-lg mr-3">
+                                <i class="pi pi-pencil text-blue-600 dark:text-blue-400 text-xl"
+                                    style="font-size: 1.2rem;"></i>
+                            </div>
+                            <div class="flex-1">
+                                <h6 class="m-0 text-slate-800 dark:text-slate-200 font-medium">Marks Entry</h6>
+                                <p class="m-0 text-slate-500 dark:text-slate-400 text-sm mt-1">Batchcode wise</p>
+                            </div>
+                            <i class="pi pi-chevron-right text-slate-400"></i>
+                        </div>
+                    </li>
+                    <li class="border-b border-slate-200 dark:border-slate-700">
+                        <div class="flex items-center p-4 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-all duration-200 cursor-pointer"
+                            routerLink="/home/knowledgestand/transactions/marks-entry/section-wise">
+                            <div
+                                class="flex items-center justify-center w-12 h-12 bg-emerald-100 dark:bg-emerald-900/40 rounded-lg mr-3">
+                                <i class="pi pi-pencil text-emerald-600 dark:text-emerald-400 text-xl"></i>
+                            </div>
+                            <div class="flex-1">
+                                <h6 class="m-0 text-slate-800 dark:text-slate-200 font-medium">Marks Entry</h6>
+                                <p class="m-0 text-slate-500 dark:text-slate-400 text-sm mt-1">Section wise</p>
+                            </div>
+                            <i class="pi pi-chevron-right text-slate-400"></i>
+                        </div>
+                    </li>
+                    }
+
+                    <li class="border-b border-slate-200 dark:border-slate-700">
+                        <div class="flex items-center p-4 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-all duration-200 cursor-pointer"
+                            routerLink="/home/knowledgestand/reports/students/student-certificates">
+                            <div
+                                class="flex items-center justify-center w-12 h-12 bg-orange-100 dark:bg-orange-900/40 rounded-lg mr-3">
+                                <i class="pi pi-question-circle text-orange-600 dark:text-orange-400 text-xl"
+                                    style="font-size: 1.2rem;"></i>
+                            </div>
+                            <div class="flex-1">
+                                <h6 class="m-0 text-slate-800 dark:text-slate-200 font-medium">Student Certificates</h6>
+                                <p class="m-0 text-slate-500 dark:text-slate-400 text-sm mt-1">Student's Transfer
+                                    Migration and Provisional Certificates</p>
+                            </div>
+                            <i class="pi pi-chevron-right text-slate-400"></i>
+                        </div>
+                    </li>
+                    <li class="last:border-none">
+                        <div class="flex items-center p-4 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-all duration-200 cursor-pointer"
+                            routerLink="/home/knowledgestand/reports/students/student-information-center">
+                            <div
+                                class="flex items-center justify-center w-12 h-12 bg-purple-100 dark:bg-purple-900/40 rounded-lg mr-3">
+                                <i class="pi pi-info-circle text-purple-600 dark:text-purple-400 text-xl"
+                                    style="font-size: 1.2rem;"></i>
+                            </div>
+                            <div class="flex-1">
+                                <h6 class="m-0 text-slate-800 dark:text-slate-200 font-medium">Student Information
+                                    Center</h6>
+                                <p class="m-0 text-slate-500 dark:text-slate-400 text-sm mt-1">Student's Details -
+                                    General, Academic, Examination.</p>
+                            </div>
+                            <i class="pi pi-chevron-right text-slate-400"></i>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div class="p-3 bg-slate-50 dark:bg-slate-800/50 border-t border-slate-200 dark:border-slate-700">
+                <div class="flex justify-center">
+                    <p-button label="View All Links" icon="pi pi-external-link" [text]="true" size="small"
+                        class="p-button-sm text-blue-500"></p-button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

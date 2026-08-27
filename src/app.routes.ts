@@ -75,14 +75,14 @@ export const appsRoutes: Routes = [
                     userRoles: [Roles.ITSUPPORTS, Roles.ITSUPPORTSSUPERADMIN, Roles.SUPERADMIN, Roles.ADMINISTRATION],
                 }
             },
-            // {
-            //     path: 'knowledgestand',
-            //     loadChildren: () => import('./knowledge-stand/knowledge-stand/knowledge-stand.module').then(m => m.KnowledgeStandModule),
-            //     data: {
-            //         breadcrumb: 'KnowledgeStand',
-            //         userRoles: [Roles.EXAMINATIONS, Roles.EXAMINATIONSADMIN, Roles.FACULTY, Roles.ITSUPPORTS, Roles.ITSUPPORTSSUPERADMIN, Roles.SUPERADMIN, Roles.ADMINISTRATION],
-            //     }
-            // },
+            {
+                path: 'knowledgestand',
+                loadChildren: () => import('./app/knowledge-stand/knowledge-stand.module').then(m => m.KnowledgeStandModule),
+                data: {
+                    breadcrumb: 'KnowledgeStand',
+                    userRoles: [Roles.EXAMINATIONS, Roles.EXAMINATIONSADMIN, Roles.FACULTY, Roles.ITSUPPORTS, Roles.ITSUPPORTSSUPERADMIN, Roles.SUPERADMIN, Roles.ADMINISTRATION],
+                }
+            },
             {
                 path: 'executiveedge',
                 loadChildren: () => import('./app/executive-edge/executive-edge.module').then(m => m.ExecutiveEdgeModule),
