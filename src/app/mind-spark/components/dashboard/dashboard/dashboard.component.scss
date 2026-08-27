@@ -1,3 +1,771 @@
-:host {
+/* Define your light color classes */
+.color-light-blue {
+    background-color: #e0f7fa;
+} /* Light blue */
+.color-light-green {
+    background-color: #e8f5e9;
+} /* Light green */
+.color-light-yellow {
+    background-color: #fffde7;
+} /* Light yellow */
+.color-light-pink {
+    background-color: #fce4ec;
+} /* Light pink */
+.color-light-orange {
+    background-color: #fff3e0;
+} /* Light orange */
+
+.dashboard-cards {
+    transition: transform 0.2s;
+}
+.dashboard-cards:hover {
+    transform: scale(1.01);
+}
+
+@keyframes quick-link-item-glow {
+    0%,
+    100% {
+        box-shadow: inset 0 0 4px 1px rgba(245, 158, 11, 0.25);
+    }
+    50% {
+        box-shadow: inset 0 0 10px 3px rgba(245, 158, 11, 0.5);
+    }
+}
+
+.quick-link-glow-item {
+    animation: quick-link-item-glow 2.2s ease-in-out infinite;
+}
+
+.batch-table {
+    padding: 0 1rem 1rem 1rem;
+    position: relative;
+
+    .flip-container {
+        perspective: 1000px; /* Adds 3D perspective */
+        width: 100%;
+        height: 450px; /* Adjust based on your table height */
+    }
+
+    .flipper {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        transition: transform 0.6s;
+        transform-style: preserve-3d;
+    }
+
+    .flip-container.flipped .flipper {
+        transform: rotateY(180deg);
+    }
+
+    .front,
+    .back {
+        position: absolute;
+        width: 100%;
+        height: auto !important;
+        overflow: visible !important;
+    }
+
+    .front {
+        z-index: 2;
+        transform: rotateY(0deg);
+    }
+
+    .back {
+        transform: rotateY(180deg);
+    }
+
+    .p-datatable {
+        .p-datatable-header {
+            background: var(--surface-card);
+            border: none;
+            padding: 1rem;
+        }
+
+        .p-datatable-thead > tr > th {
+            background: var(--surface-card);
+            color: var(--text-color);
+            font-weight: 600;
+            padding: 0.75rem;
+            border-bottom: 1px solid var(--surface-border);
+        }
+
+        .p-datatable-tbody > tr > td {
+            padding: 0.5rem;
+            border-bottom: 1px solid var(--surface-border);
+        }
+
+        .p-chip {
+            font-size: 0.75rem;
+            padding: 0.25rem 0.5rem;
+            border-radius: 12px;
+        }
+
+        .attendance-tag {
+            min-width: 40px;
+            text-align: center;
+            padding: 0.25rem 0.5rem;
+            border-radius: 12px;
+        }
+    }
+
+    .skeleton-container {
+        padding: 1rem;
+    }
+
+    .table-header {
+        padding: 0.5rem 0;
+        align-items: center;
+
+        .p-button-outlined {
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+            font-size: 0.875rem;
+        }
+
+        .p-input-icon-left {
+            .pi {
+                color: var(--text-color-secondary);
+            }
+
+            input {
+                border-radius: 4px;
+                border: 1px solid var(--surface-border);
+                padding: 0.5rem 0.5rem 0.5rem 2rem;
+                font-size: 0.875rem;
+                width: 200px;
+
+                &:focus {
+                    border-color: var(--primary-color);
+                    box-shadow: 0 0 0 2px rgba(var(--primary-color-rgb), 0.2);
+                }
+            }
+        }
+    }
+}
+
+.low-attendance {
+    background-color: #ffe5e5 !important;
+    color: #b30000;
+    font-weight: 600;
+}
+
+.form-card {
+    background: linear-gradient(135deg, var(--surface-ground) 0%, var(--surface-card) 100%);
+    border: 1px solid var(--surface-border);
+}
+
+.timetable-card {
+    padding: 1.5rem;
+    background: var(--surface-card);
+    border-radius: 10px;
+    border: 1px solid var(--surface-border);
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.12);
+    min-height: 460px;
+}
+
+.timetable-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.8rem;
+}
+
+.timetable-title {
+    text-align: center;
+    margin: 0;
+    font-size: 1.6rem;
+    font-weight: 600;
+    color: var(--text-color);
+    letter-spacing: 0.4px;
+    flex: 1;
+}
+
+.current-time-indicator {
+    background: #ff6b6b;
+    color: white;
+    padding: 0.4rem 0.8rem;
+    border-radius: 16px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    box-shadow: 0 2px 6px rgba(255, 107, 107, 0.3);
+    animation: pulse 2s infinite;
+}
+
+.current-time-indicator i {
+    font-size: 1rem;
+}
+
+.table-responsive {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+.timetable {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    border-radius: 10px;
+    overflow: hidden;
+    background: var(--surface-card);
+    box-shadow: 0 3px 15px rgba(0, 0, 0, 0.08);
+}
+
+.timetable-loading {
+    min-height: 360px;
+}
+
+.timetable-empty {
+    min-height: 360px;
+}
+
+.timetable-empty .timetable-empty-message {
+    height: 360px;
+    vertical-align: middle;
+    padding: 1.25rem;
+}
+
+.timetable-empty-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.7rem;
+    height: 100%;
+    color: var(--text-color-secondary);
+}
+
+.timetable-empty-icon {
+    font-size: 2rem;
+    color: #f59e0b;
+}
+
+.timetable-empty-title {
+    margin: 0;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--text-color);
+}
+
+.timetable-empty-description {
+    margin: 0;
+    max-width: 42rem;
+    font-size: 1rem;
+    line-height: 1.4;
+}
+
+.timetable-empty-hint {
+    margin: 0;
+    max-width: 40rem;
+    font-size: 0.95rem;
+    color: var(--text-color);
+    opacity: 0.9;
+}
+
+.timetable-empty-link {
+    margin-top: 0.35rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.55rem 1rem;
+    border-radius: 999px;
+    border: 1px solid var(--primary-color);
+    color: var(--primary-color);
+    font-size: 0.95rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+.timetable-empty-link:hover {
+    background: var(--primary-color);
+    color: #ffffff;
+}
+
+.timetable th {
+    background: #4caf50;
+    color: #ffffff;
+    font-weight: 600;
+    font-size: 0.9rem;
+    padding: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    border-bottom: 1px solid var(--surface-border);
+    position: relative;
+}
+
+.timetable .period-header {
+    background: #34495e;
+    min-width: 120px;
+}
+
+.day-header.current-day-header {
+    background: #ff9800;
+    box-shadow: 0 0 0 1px rgba(255, 152, 0, 0.3);
+}
+
+.day-badge {
+    display: inline-block;
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    padding: 0.15rem 0.4rem;
+    border-radius: 8px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    margin-left: 0.4rem;
+    animation: bounce 1s infinite;
+}
+
+.timetable td {
+    padding: 0.3rem;
+    text-align: left;
+    vertical-align: top;
+    font-size: 0.8rem;
+    color: var(--text-color);
+    border: 1px solid var(--surface-border);
+    transition: all 0.2s ease;
+    position: relative;
+}
+
+.timetable td.period-cell {
+    background: var(--surface-ground);
+    font-weight: 500;
+    color: var(--text-color);
+    position: sticky;
+    left: 0;
+    z-index: 1;
+    padding: 0.6rem;
+}
+
+.timetable td.period-cell .period-name {
     display: block;
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.timetable td.period-cell .period-time {
+    display: block;
+    font-size: 0.75rem;
+    color: var(--text-color-secondary);
+    margin-top: 0.15rem;
+    transition: all 0.2s ease;
+}
+
+.timetable td.period-cell.current-period {
+    background: #fff3cd;
+    box-shadow: 0 0 0 1px #ffc107;
+    border-left: 3px solid #ffc107;
+}
+
+.period-time.current-time-highlight {
+    color: #e67e22;
+    font-weight: 600;
+    text-shadow: 0 0 4px rgba(255, 193, 7, 0.5);
+}
+
+.subject-cell.current-session {
+    background: #bfffdb;
+    color: #000000;
+    box-shadow:
+        0 0 0 1px rgba(100, 181, 246, 0.5),
+        inset 0 0 6px rgba(255, 255, 255, 0.2);
+    transform: scale(1.01);
+    animation: currentSessionGlow 2s ease-in-out infinite alternate;
+    position: relative;
+    overflow: hidden;
+}
+
+.subject-cell.current-session::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.4s;
+}
+
+.subject-cell.current-session:hover::before {
+    left: 100%;
+}
+
+.subject-cell.current-session .subject-info {
+    background: rgba(255, 255, 255, 0.15);
+}
+
+.subject-cell.current-session .info-item,
+.subject-cell.current-session .info-content,
+.subject-cell.current-session .info-content strong,
+.subject-cell.current-session .info-content .sub-info,
+.subject-cell.current-session .info-item i {
+    color: #000000;
+}
+
+.current-period-row {
+    background: rgba(255, 193, 7, 0.1);
+}
+
+.current-period-row:hover td {
+    background-color: rgba(255, 193, 7, 0.15);
+}
+
+.timetable tr:hover td {
+    background-color: var(--surface-hover);
+    transform: scale(1.005);
+}
+
+.timetable tr:hover td.current-session {
+    transform: scale(1.015);
+}
+
+.lunch-break td {
+    background: rgba(255, 193, 7, 0.12);
+    color: var(--text-color);
+    font-style: italic;
+    font-weight: 500;
+}
+
+.lunch-break.current-session {
+    background: #ffca28;
+    color: #ffffff;
+}
+
+.lunch-break.current-session .subject-info {
+    background: rgba(255, 255, 255, 0.15);
+}
+
+.lunch-break.current-session .info-item,
+.lunch-break.current-session .info-item i {
+    color: #000000;
+}
+
+.subject-cell {
+    min-width: 100px;
+}
+
+.subject-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    padding: 0.4rem;
+    margin: 0.2rem;
+    border-radius: 5px;
+    background: linear-gradient(145deg, var(--surface-card), var(--surface-ground));
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    transition:
+        transform 0.15s ease,
+        box-shadow 0.15s ease;
+}
+
+.subject-info:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.12);
+}
+
+.info-item {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.3rem;
+    border-radius: 4px;
+    background: var(--surface-ground);
+    transition:
+        background 0.15s ease,
+        transform 0.15s ease;
+}
+
+.info-item.employee-info {
+    transition: background 0.15s ease;
+    color: #1f2937;
+}
+
+.info-item.employee-info .info-content,
+.info-item.employee-info .info-content strong,
+.info-item.employee-info .info-content span,
+.info-item.employee-info .info-content .sub-info {
+    color: #1f2937 !important;
+}
+
+.info-item:hover {
+    background: var(--surface-hover);
+    transform: translateX(1px);
+}
+
+.info-item.employee-info:hover {
+    filter: brightness(95%);
+}
+
+.info-item i {
+    font-size: 0.9rem;
+    width: 1.4rem;
+    height: 1.4rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    color: #ffffff;
+    transition: transform 0.15s ease;
+}
+
+.info-item:hover i {
+    transform: scale(1.1);
+}
+
+.info-item i.pi-calculator {
+    background: #d81b60;
+}
+.info-item i.pi-flask {
+    background: #0288d1;
+}
+.info-item i.pi-bolt {
+    background: #fb8c00;
+}
+.info-item i.pi-leaf {
+    background: #388e3c;
+}
+.info-item i.pi-code {
+    background: #7b1fa2;
+}
+.info-item i.pi-book {
+    background: #303f9f;
+}
+.info-item i.pi-globe {
+    background: #0097a7;
+}
+.info-item i.pi-pencil {
+    background: #e53935;
+}
+.info-item i.pi-chart-line {
+    background: #689f38;
+}
+.info-item i.pi-users {
+    background: #ef6c00;
+}
+.info-item i.pi-palette {
+    background: #512da8;
+}
+.info-item i.pi-volume-up {
+    background: #00796b;
+}
+.info-item i.pi-flag {
+    background: #455a64;
+}
+.info-item i.pi-lightbulb {
+    background: #fbc02d;
+}
+.info-item i.pi-user {
+    background: #5d4037;
+}
+.info-item i.pi-home {
+    background: #1976d2;
+}
+.info-item i.pi-coffee {
+    background: #e64a19;
+}
+
+.lunch-break .info-item i.pi-coffee {
+    background: #e64a19;
+    color: #ffffff;
+}
+
+.info-content {
+    display: flex;
+    flex-direction: column;
+    gap: 0.1rem;
+    flex: 1;
+}
+
+.info-content strong {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--text-color);
+}
+
+.info-content span {
+    font-size: 0.8rem;
+    line-height: 1.2;
+}
+
+.info-content .sub-info {
+    font-size: 0.75rem;
+    color: var(--text-color-secondary);
+}
+
+.lunch-item {
+    font-size: 0.8rem;
+    font-style: italic;
+    font-weight: 500;
+}
+
+.timetable tbody tr:nth-child(even) {
+    background: var(--surface-ground);
+}
+
+.layout-dark app-academic-schedule-view .timetable-card {
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
+}
+
+.layout-dark app-academic-schedule-view .timetable {
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
+}
+
+.layout-dark app-academic-schedule-view .timetable th {
+    border-bottom-color: var(--surface-600);
+}
+
+.layout-dark app-academic-schedule-view .timetable .period-header {
+    background: #2d3f56;
+}
+
+.layout-dark app-academic-schedule-view .timetable td {
+    background-color: #233752 !important;
+    color: var(--text-color) !important;
+    border-color: var(--surface-600) !important;
+}
+
+.layout-dark app-academic-schedule-view .timetable td.period-cell {
+    background-color: #1b2c40 !important;
+    color: var(--text-color) !important;
+    border-right: 1px solid var(--surface-600) !important;
+}
+
+.layout-dark app-academic-schedule-view .timetable td.period-cell .period-time {
+    color: var(--text-color-secondary) !important;
+}
+
+.layout-dark app-academic-schedule-view .timetable tbody tr:nth-child(even) td {
+    background-color: #263a52 !important;
+}
+
+.layout-dark app-academic-schedule-view .timetable tbody tr:hover td {
+    background-color: #314763 !important;
+}
+
+.layout-dark app-academic-schedule-view .timetable tbody tr:hover td.period-cell {
+    background-color: #253750 !important;
+}
+
+.layout-dark app-academic-schedule-view .lunch-break td {
+    background: rgba(255, 193, 7, 0.16) !important;
+}
+
+.layout-dark app-academic-schedule-view .info-item.employee-info,
+.layout-dark app-academic-schedule-view .info-item.employee-info .info-content,
+.layout-dark app-academic-schedule-view .info-item.employee-info .info-content strong,
+.layout-dark app-academic-schedule-view .info-item.employee-info .info-content span,
+.layout-dark app-academic-schedule-view .info-item.employee-info .info-content .sub-info {
+    color: #1f2937 !important;
+}
+
+.current-period-row:nth-child(even) {
+    background: rgba(255, 193, 7, 0.1);
+}
+
+@keyframes pulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(255, 107, 107, 0.7);
+    }
+    70% {
+        box-shadow: 0 0 0 8px rgba(255, 107, 107, 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(255, 107, 107, 0);
+    }
+}
+
+@keyframes currentSessionGlow {
+    from {
+        box-shadow:
+            0 0 4px rgba(100, 181, 246, 0.5),
+            inset 0 0 6px rgba(255, 255, 255, 0.2);
+    }
+    to {
+        box-shadow:
+            0 0 10px rgba(100, 181, 246, 0.7),
+            inset 0 0 10px rgba(255, 255, 255, 0.3);
+    }
+}
+
+@keyframes bounce {
+    0%,
+    20%,
+    50%,
+    80%,
+    100% {
+        transform: translateY(0);
+    }
+    40% {
+        transform: translateY(-2px);
+    }
+    60% {
+        transform: translateY(-1px);
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .timetable-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .timetable-title {
+        font-size: 1.4rem;
+        text-align: left;
+    }
+    .current-time-indicator {
+        font-size: 0.8rem;
+        padding: 0.3rem 0.7rem;
+    }
+    .timetable th,
+    .timetable td {
+        padding: 0.2rem;
+    }
+    .timetable td.period-cell {
+        padding: 0.5rem;
+    }
+    .timetable .period-header {
+        min-width: 90px;
+    }
+    .subject-cell {
+        min-width: 90px;
+    }
+    .day-badge {
+        font-size: 0.6rem;
+        padding: 0.1rem 0.3rem;
+    }
+    .subject-info {
+        padding: 0.3rem;
+        margin: 0.15rem;
+        gap: 0.25rem;
+    }
+    .info-item {
+        padding: 0.25rem;
+        gap: 0.3rem;
+    }
+    .info-item i {
+        font-size: 0.85rem;
+        width: 1.2rem;
+        height: 1.2rem;
+    }
+    .info-content strong {
+        font-size: 0.85rem;
+    }
+    .info-content span {
+        font-size: 0.75rem;
+    }
+    .info-content .sub-info {
+        font-size: 0.7rem;
+    }
+    .lunch-item {
+        font-size: 0.75rem;
+    }
+}
+
+h6,
+h5 {
+    margin: 0 !important;
 }

@@ -20,7 +20,7 @@ import { ProgressBarComponent } from "@/app/global/components/progress-bar/progr
                 <app-progress-bar></app-progress-bar>
             </div>
             <div class="layout-main layout-content">
-                <div class="layout-content-inner">
+                <div class="layout-content-inner pb-7">
                     <router-outlet></router-outlet>
                     <app-footer></app-footer>
                 </div>

@@ -1,1 +1,578 @@
-<app-module-dashboard title="Mind Spark" subtitle="Academics, schedules, faculty, and attendance overview" [kpis]="kpis" />
+<div class="grid grid-cols-12 gap-4 pb-6">
+    <!-- Active Batches Card -->
+    <div class="col-span-12 lg:col-span-6 xl:col-span-3 cursor-pointer scalein animation-duration-300 dashboard-cards">
+        <div class="card h-full p-0 overflow-hidden flex flex-col" style="padding: 0!important;">
+            <div class="flex items-center p-3 flex-1">
+                <i class="pi pi-users text-blue-500 shrink-0" style="font-size: 3rem;"></i>
+                <div class="ml-3 flex-1 min-w-0">
+                    @if (batchList && batchList.length >= 0) {
+                    <span class="text-blue-500 dark:text-blue-400 block whitespace-nowrap truncate font-semibold">Active
+                        Batches</span>
+                    <span
+                        class="text-blue-500 dark:text-blue-400 block text-4xl font-bold truncate">{{batchList.length}}</span>
+                    } @else {
+                    <app-dashboard-cards-skeleton></app-dashboard-cards-skeleton>
+                    }
+                </div>
+            </div>
+            <img [src]="'assets/demo/images/dashboard/users' + (colorScheme === 'light' ? '' : '-dark') + '.svg'"
+                class="w-full mt-auto" alt="users">
+        </div>
+    </div>
+
+    <!-- Total Programs Card -->
+    <div class="col-span-12 lg:col-span-6 xl:col-span-3 cursor-pointer scalein animation-duration-400 dashboard-cards"
+        (click)="onProgramClick()">
+        <div class="card h-full p-0 overflow-hidden flex flex-col" style="padding: 0!important;">
+            <div class="flex items-center p-3 flex-1">
+                <i class="pi pi-map text-amber-500 shrink-0" style="font-size: 3rem;"></i>
+                <div class="ml-3 flex-1 min-w-0">
+                    @if (programCount) {
+                    <span
+                        class="text-amber-500 dark:text-amber-400 block whitespace-nowrap truncate font-semibold">Total
+                        Programs</span>
+                    <span class="text-amber-500 dark:text-amber-400 block text-4xl font-bold truncate">{{programCount}}
+                        Programs</span>
+                    } @else {
+                    <app-dashboard-cards-skeleton></app-dashboard-cards-skeleton>
+                    }
+                </div>
+            </div>
+            <img [src]="'assets/demo/images/dashboard/locations' + (colorScheme === 'light' ? '' : '-dark') + '.svg'"
+                class="w-full mt-auto" alt="locations">
+        </div>
+    </div>
+
+    <!-- Conversion Rate Card -->
+    <div class="col-span-12 lg:col-span-6 xl:col-span-3 cursor-pointer scalein animation-duration-500 dashboard-cards">
+        <div class="card h-full p-0 overflow-hidden flex flex-col" style="padding: 0!important;">
+            <div class="flex items-center p-3 flex-1">
+                <i class="pi pi-directions text-green-500 shrink-0" style="font-size: 3rem;"></i>
+                <div class="ml-3 flex-1 min-w-0">
+                    <span
+                        class="text-green-500 dark:text-green-400 block whitespace-nowrap truncate font-semibold">CONVERSION
+                        RATE</span>
+                    <span class="text-green-500 dark:text-green-400 block text-4xl font-bold truncate">12.6%</span>
+                </div>
+            </div>
+            <img [src]="'assets/demo/images/dashboard/rate' + (colorScheme === 'light' ? '' : '-dark') + '.svg'"
+                class="w-full mt-auto" alt="conversion">
+        </div>
+    </div>
+
+    <!-- Active Trials Card -->
+    <div class="col-span-12 lg:col-span-6 xl:col-span-3 cursor-pointer scalein animation-duration-1000 dashboard-cards">
+        <div class="card h-full p-0 overflow-hidden flex flex-col" style="padding: 0!important;">
+            <div class="flex items-center p-3 flex-1">
+                <i class="pi pi-comments text-purple-500 shrink-0" style="font-size: 3rem;"></i>
+                <div class="ml-3 flex-1 min-w-0">
+                    <span
+                        class="text-purple-500 dark:text-purple-400 block whitespace-nowrap truncate font-semibold">ACTIVE
+                        TRIALS</span>
+                    <span class="text-purple-500 dark:text-purple-400 block text-4xl font-bold truncate">440</span>
+                </div>
+            </div>
+            <img [src]="'assets/demo/images/dashboard/interactions' + (colorScheme === 'light' ? '' : '-dark') + '.svg'"
+                class="w-full mt-auto" alt="interactions">
+        </div>
+    </div>
+
+    <!-- Timetable Area -->
+    <div class="col-span-12 lg:col-span-6 xl:col-span-9">
+        <div class="card timetable-card h-full">
+            <div class="overflow-x-auto">
+                @if (isLoading) {
+                <table class="timetable timetable-loading w-full">
+                    <thead>
+                        <tr>
+                            <th class="period-header">
+                                <p-skeleton width="100px" height="20px"></p-skeleton>
+                            </th>
+                            @for (i of [1, 2, 3, 4, 5, 6]; track $index) {
+                            <th class="day-header">
+                                <p-skeleton width="60px" height="20px"></p-skeleton>
+                            </th>
+                            }
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for (i of [1, 2, 3, 4, 5, 6]; track $index) {
+                        <tr>
+                            <td class="period-cell">
+                                <p-skeleton width="80px" height="20px" styleClass="mb-2"></p-skeleton>
+                                <p-skeleton width="60px" height="16px"></p-skeleton>
+                            </td>
+                            @for (j of [1, 2, 3, 4, 5, 6]; track $index) {
+                            <td class="subject-cell">
+                                <p-skeleton width="80px" height="20px"></p-skeleton>
+                            </td>
+                            }
+                        </tr>
+                        }
+                    </tbody>
+                </table>
+                } @else if (days.length && periods.length && hasValidTimetableAllocations) {
+                <table class="timetable w-full">
+                    <thead>
+                        <tr>
+                            <th class="period-header">Period / Time</th>
+                            @for (day of days; track day.dayId) {
+                            <th class="day-header" [class.current-day-header]="currentDayId === day.dayId">
+                                {{ day.dayName }}
+                                @if (currentDayId === day.dayId && isCurrentTimeInSession) {
+                                <span class="day-badge">Today</span>
+                                }
+                            </th>
+                            }
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for (period of periods; track period.timeTablePeriodId) {
+                        <tr
+                            [class.current-period-row]="currentPeriodId === period.timeTablePeriodId && isCurrentTimeInSession">
+                            <td class="period-cell"
+                                [class.current-period]="currentPeriodId === period.timeTablePeriodId && isCurrentTimeInSession">
+                                <span class="period-name">{{ period.timeTablePeriodName }}</span>
+                                <span class="period-time"
+                                    [class.current-time-highlight]="currentPeriodId === period.timeTablePeriodId">
+                                    {{ period.periodTime }}
+                                </span>
+                            </td>
+                            @for (day of days; track day.dayId) {
+                            <td class="subject-cell"
+                                [class.lunch-break]="getSubjectForDayAndPeriod(day.dayId, period.timeTablePeriodId)?.isBreak"
+                                [class.current-session]="isCurrentCell(day.dayId, period.timeTablePeriodId)"
+                                [pTooltip]="getCellTooltip(day.dayId, period.timeTablePeriodId)" [escape]="false"
+                                tooltipStyleClass="academic-schedule-tooltip" tooltipPosition="top">
+
+                                @if (getSubjectForDayAndPeriod(day.dayId, period.timeTablePeriodId); as subject) {
+                                @if (!subject.isBreak) {
+                                <div class="subject-info">
+                                    <div class="info-item">
+                                        <i [class]="subject.subjectIcon"></i>
+                                        <span class="info-content">
+                                            <strong>{{ subject.subjectPaperCodeName }}</strong>
+                                            {{ subject.subjectName }}
+                                        </span>
+                                    </div>
+                                    <div class="info-item employee-info"
+                                        [style.background-color]="subject.employeeColor">
+                                        <i class="pi pi-user"></i>
+                                        <span class="info-content">
+                                            <strong>{{ subject.employeeCode }}</strong>
+                                            {{ subject.employeeName }}
+                                        </span>
+                                    </div>
+                                </div>
+                                } @else {
+                                <div class="subject-info">
+                                    <div class="info-item lunch-item">
+                                        <i class="pi pi-coffee"></i>
+                                        {{ subject.breakType }}
+                                    </div>
+                                </div>
+                                }
+                                } @else {
+                                -
+                                }
+                            </td>
+                            }
+                        </tr>
+                        }
+                    </tbody>
+                </table>
+                } @else {
+                <table class="timetable timetable-empty w-full">
+                    <thead>
+                        <tr>
+                            <th class="period-header">Period / Time</th>
+                            @for (day of days; track day.dayId) {
+                            <th class="day-header" [class.current-day-header]="currentDayId === day.dayId">
+                                {{ day.dayName }}
+                                @if (currentDayId === day.dayId && isCurrentTimeInSession) {
+                                <span class="day-badge">Today</span>
+                                }
+                            </th>
+                            }
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for (period of periods; track period.timeTablePeriodId) {
+                        <tr
+                            [class.current-period-row]="currentPeriodId === period.timeTablePeriodId && isCurrentTimeInSession">
+                            <td class="period-cell"
+                                [class.current-period]="currentPeriodId === period.timeTablePeriodId && isCurrentTimeInSession">
+                                <span class="period-name">{{ period.timeTablePeriodName }}</span>
+                                <span class="period-time"
+                                    [class.current-time-highlight]="currentPeriodId === period.timeTablePeriodId">
+                                    {{ period.periodTime }}
+                                </span>
+                            </td>
+                            @if ($index === 0) {
+                            <td class="subject-cell text-center timetable-empty-message"
+                                [attr.colspan]="days.length || 1" [attr.rowspan]="periods.length">
+                                <div class="timetable-empty-content">
+                                    <i class="pi pi-calendar-times timetable-empty-icon"></i>
+                                    <h4 class="timetable-empty-title">No Academic Schedule Assigned</h4>
+                                    <a routerLink="/home/mindspark/transactions/academic-schedule"
+                                        class="timetable-empty-link">
+                                        <i class="pi pi-external-link"></i>
+                                        Assign Academic Schedules
+                                    </a>
+                                </div>
+                            </td>
+                            }
+                        </tr>
+                        }
+                        @if (!periods.length) {
+                        <tr>
+                            <td class="subject-cell text-center timetable-empty-message"
+                                [attr.colspan]="days.length + 1">
+                                <div class="timetable-empty-content">
+                                    <i class="pi pi-calendar-times timetable-empty-icon"></i>
+                                    <h4 class="timetable-empty-title">No Academic Schedule Assigned</h4>
+                                    <a routerLink="/home/mindspark/transactions/academic-schedule"
+                                        class="timetable-empty-link">
+                                        <i class="pi pi-external-link"></i>
+                                        Assign Academic Schedules
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                        }
+                    </tbody>
+                </table>
+                }
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Links -->
+    <div class="col-span-12 lg:col-span-6 xl:col-span-3">
+        <div class="card h-full p-0 overflow-hidden rounded-lg shadow-md">
+            <div class="p-4 border-b border-slate-200 dark:border-slate-700">
+                <div class="flex items-center gap-2">
+                    <i class="pi pi-bookmark text-blue-500 text-xl" style="font-size: 2rem;"></i>
+                    <div>
+                        <h5 class="m-0 font-semibold text-slate-800 dark:text-slate-200">Quick Links</h5>
+                        <p class="m-0 text-slate-500 dark:text-slate-400 text-xs mt-0.5">Access frequently used features
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="p-0">
+                <ul class="list-none p-0 m-0">
+                    <li class="border-b border-slate-200 dark:border-slate-700 quick-link-glow-item">
+                        <div class="flex items-center p-4 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-all duration-200 cursor-pointer"
+                            routerLink="/home/executiveedge/transactions/faculty-feedback">
+                            <div class="flex items-center justify-center w-12 h-12 rounded-lg mr-3"
+                                style="background: rgba(245, 158, 11, 0.15);">
+                                <i class="pi pi-star-fill text-xl" style="color: #f59e0b; font-size: 1.2rem;"></i>
+                            </div>
+                            <div class="flex-1">
+                                <div class="flex items-center gap-2">
+                                    <h6 class="m-0 text-slate-800 dark:text-slate-200 font-medium">Faculty Feedback</h6>
+                                    <p-tag value="HOT" severity="warn" styleClass="text-xs px-1 py-0"></p-tag>
+                                </div>
+                                <p class="m-0 text-slate-500 dark:text-slate-400 text-sm mt-1">Submit faculty feedback
+                                </p>
+                            </div>
+                            <i class="pi pi-chevron-right" style="color: #f59e0b;"></i>
+                        </div>
+                    </li>
+                    <li class="border-b border-slate-200 dark:border-slate-700">
+                        <div class="flex items-center p-4 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-all duration-200 cursor-pointer"
+                            routerLink="/home/mindspark/transactions/batch-attendance-v2">
+                            <div
+                                class="flex items-center justify-center w-12 h-12 bg-blue-100 dark:bg-blue-900/40 rounded-lg mr-3">
+                                <i class="pi pi-users text-blue-600 dark:text-blue-400 text-xl"
+                                    style="font-size: 1.2rem;"></i>
+                            </div>
+                            <div class="flex-1">
+                                <h6 class="m-0 text-slate-800 dark:text-slate-200 font-medium">Mark Attendance - 2.0
+                                </h6>
+                                <p class="m-0 text-slate-500 dark:text-slate-400 text-sm mt-1">Section Wise</p>
+                            </div>
+                            <i class="pi pi-chevron-right text-slate-400"></i>
+                        </div>
+                    </li>
+                    <li class="border-b border-slate-200 dark:border-slate-700">
+                        <div class="flex items-center p-4 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-all duration-200 cursor-pointer"
+                            routerLink="/home/mindspark/reports/student/student-program-report">
+                            <div
+                                class="flex items-center justify-center w-12 h-12 bg-emerald-100 dark:bg-emerald-900/40 rounded-lg mr-3">
+                                <i class="pi pi-book text-emerald-600 dark:text-emerald-400 text-xl"
+                                    style="font-size: 1.2rem;"></i>
+                            </div>
+                            <div class="flex-1">
+                                <h6 class="m-0 text-slate-800 dark:text-slate-200 font-medium">Student Program</h6>
+                                <p class="m-0 text-slate-500 dark:text-slate-400 text-sm mt-1">Student Program Report
+                                </p>
+                            </div>
+                            <i class="pi pi-chevron-right text-slate-400"></i>
+                        </div>
+                    </li>
+                    <li class="border-b border-slate-200 dark:border-slate-700">
+                        <div class="flex items-center p-4 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-all duration-200 cursor-pointer"
+                            routerLink="/home/mindspark/transactions/academic-schedule">
+                            <div
+                                class="flex items-center justify-center w-12 h-12 bg-orange-100 dark:bg-orange-900/40 rounded-lg mr-3">
+                                <i class="pi pi-file-pdf text-orange-600 dark:text-orange-400 text-xl"
+                                    style="font-size: 1.2rem;"></i>
+                            </div>
+                            <div class="flex-1">
+                                <h6 class="m-0 text-slate-800 dark:text-slate-200 font-medium">Academic Schedules</h6>
+                                <p class="m-0 text-slate-500 dark:text-slate-400 text-sm mt-1">Academic Schedules table
+                                </p>
+                            </div>
+                            <i class="pi pi-chevron-right text-slate-400"></i>
+                        </div>
+                    </li>
+                    <li class="last:border-none">
+                        <div class="flex items-center p-4 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-all duration-200 cursor-pointer"
+                            routerLink="/home/mindspark/reports/students/student-information-center">
+                            <div
+                                class="flex items-center justify-center w-12 h-12 bg-purple-100 dark:bg-purple-900/40 rounded-lg mr-3">
+                                <i class="pi pi-info-circle text-purple-600 dark:text-purple-400 text-xl"
+                                    style="font-size: 1.2rem;"></i>
+                            </div>
+                            <div class="flex-1">
+                                <h6 class="m-0 text-slate-800 dark:text-slate-200 font-medium">Student Info Center</h6>
+                                <p class="m-0 text-slate-500 dark:text-slate-400 text-sm mt-1">Details - General,
+                                    Academic, Exam</p>
+                            </div>
+                            <i class="pi pi-chevron-right text-slate-400"></i>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div
+                class="p-3 bg-slate-50 dark:bg-slate-800/50 border-t border-slate-200 dark:border-slate-700 text-right">
+                <a class="text-xs text-blue-500 hover:underline cursor-pointer font-medium">View All Links</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Faculty Subject Allocation Table -->
+    @if (facultyBatchAttendanceLoading || facultyBatchAttendanceList.length > 0) {
+    <div class="col-span-12">
+        <div class="card h-full p-4 rounded-lg shadow-md">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-3 mb-4">
+                <div>
+                    <h5 class="m-0 font-bold text-xl text-slate-800 dark:text-slate-200 mb-2">Faculty Subject Allocation
+                    </h5>
+                    @if (attendanceFilter === 'CurrentEmployee' && employeeDetails) {
+                    <p-tag icon="pi pi-user"
+                        value="Primary: {{employeeDetails.employeeCode}} - {{employeeDetails.firstName}} {{employeeDetails.lastName}}"></p-tag>
+                    }
+                </div>
+                <div class="flex flex-wrap items-center gap-2 w-full md:w-auto">
+                    <div class="relative flex-1 md:w-64">
+                        <p-iconfield>
+                            <p-inputicon>
+                                <i class="pi pi-search"></i>
+                            </p-inputicon>
+                            <input pInputText type="text" (input)="onGlobalFilter($event)"
+                                placeholder="Search allocations..."
+                                class="w-full pl-9 py-1.5 text-sm rounded-md border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800" />
+                        </p-iconfield>
+                    </div>
+                    <p-button [label]="attendanceFilter === 'CurrentEmployee' ? 'All' : 'My Attendance'"
+                        styleClass="p-button-primary p-button-rounded" (click)="toggleAttendanceFilter()"
+                        title="Toggle Attendance Filter"></p-button>
+                    <p-button icon="pi pi-refresh" styleClass="p-button-text p-button-rounded"
+                        (click)="getFacultyBatchAttendance()" [style]="{ 'color': '#4B9BFF' }"
+                        title="Refresh Table"></p-button>
+                </div>
+            </div>
+
+            <div class="batch-table">
+                @if (facultyBatchAttendanceLoading) {
+                <div class="skeleton-container">
+                    <p-skeleton width="100%" height="400px"></p-skeleton>
+                </div>
+                } @else if (facultyBatchAttendanceError) {
+                <p-message severity="error" text="Failed to load attendance data. Please try again.">
+                    <button pButton type="button" label="Retry" (click)="getFacultyBatchAttendance()"
+                        class="p-button-outlined p-button-sm"></button>
+                </p-message>
+                } @else if (facultyBatchAttendanceList.length) {
+                <p-table #dt [value]="facultyBatchAttendanceList" [columns]="facultyBatchAttendanceCols"
+                    [tableStyle]="{'min-width': '50rem'}" [scrollable]="true" scrollHeight="400px" [paginator]="true"
+                    [rows]="10" [rowsPerPageOptions]="[10, 25, 50, 100]" showGridlines="true"
+                    [globalFilterFields]="['employeeCode', 'employeeName', 'academicSessionName', 'programName', 'operationalVerticalName', 'section', 'subjectName', 'subjectPaperCodeName']"
+                    styleClass="p-datatable-sm p-datatable-gridlines p-datatable-striped"
+                    (onRowSelect)="markAttendance($event.data)" selectionMode="single">
+
+                    <ng-template #header let-columns>
+                        <tr>
+                            @for (col of columns; track col.field) {
+                            <th [ngStyle]="col.style || getColStyle(col.field)">
+                                @if (col.icon) {
+                                <i class="{{ col.icon }} mr-2 text-blue-500"></i>
+                                }
+                                {{ col.header }}
+                            </th>
+                            }
+                        </tr>
+                    </ng-template>
+
+                    <ng-template #body let-rowData let-columns="columns">
+                        <tr [pSelectableRow]="rowData"
+                            class="cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                            @for (col of columns; track col.field) {
+                            <td [ngStyle]="col.style || getColStyle(col.field)">
+                                @switch (col.field) {
+                                @case ('employeeName') {
+                                <span [pTooltip]="rowData.employeeCode" tooltipPosition="top">{{ rowData.employeeName
+                                    }}</span>
+                                }
+                                @case ('programName') {
+                                <span [pTooltip]="rowData.fullProgramName" tooltipPosition="top">{{ rowData.programName
+                                    }}</span>
+                                h }
+                                @case ('section') {
+                                <div class="flex justify-center">
+                                    <p-chip [label]="rowData.section"
+                                        [style]="getSectionStyle(rowData.section)"></p-chip>
+                                </div>
+                                }
+                                @default {
+                                {{ rowData[col.field] }}
+                                }
+                                }
+                            </td>
+                            }
+                        </tr>
+                    </ng-template>
+                </p-table>
+                } @else {
+                <p-message severity="info" text="No attendance data available."></p-message>
+                }
+            </div>
+        </div>
+    </div>
+    }
+
+    <!-- CHART 1: Batches by Program -->
+    @if (batchLoading || hasBatchData) {
+    <div class="col-span-12">
+        <div class="card h-full p-4 rounded-lg shadow-md">
+            <div class="flex justify-between items-center mb-4">
+                <h5 class="m-0 font-bold text-xl text-slate-800 dark:text-slate-200">Batches by Program</h5>
+                <p-button icon="pi pi-refresh" styleClass="p-button-text p-button-rounded"
+                    (click)="getBatchByFacultyCode(this.employeeDetails?.employeeCode)" [style]="{ 'color': '#4B9BFF' }"
+                    title="Refresh Chart"></p-button>
+            </div>
+
+            @if (batchLoading) {
+            <div class="skeleton-container">
+                <p-skeleton width="100%" height="400px"></p-skeleton>
+            </div>
+            } @else if (batchChartError) {
+            <p-message severity="error" text="Failed to load batch data. Please try again.">
+                <button pButton type="button" label="Retry"
+                    (click)="getBatchByFacultyCode(this.employeeDetails?.employeeCode)"
+                    class="p-button-outlined p-button-sm"></button>
+            </p-message>
+            } @else if (hasBatchData) {
+            <!-- MIGRATED TO ECHARTS -->
+            <div echarts [options]="batchChartOptions" [theme]="colorScheme === 'dark' ? 'dark' : ''" class="w-full"
+                style="height: 400px;"></div>
+            } @else {
+            <p-message severity="info" text="No batch data available."></p-message>
+            }
+        </div>
+    </div>
+    }
+
+    <!-- CHART 2: Total Capacity by Program -->
+    @if (batchLoading || hasCapacityData) {
+    <div class="col-span-12 xl:col-span-4">
+        <div class="card h-full p-4 rounded-lg shadow-md">
+            <div class="flex justify-between items-center mb-4">
+                <h5 class="m-0 font-bold text-xl text-slate-800 dark:text-slate-200">Total Capacity by Program</h5>
+                <p-button icon="pi pi-refresh" styleClass="p-button-text p-button-rounded"
+                    (click)="getBatchByFacultyCode(this.employeeDetails?.employeeCode)" [style]="{ 'color': '#4B9BFF' }"
+                    title="Refresh Chart"></p-button>
+            </div>
+
+            @if (batchLoading) {
+            <div class="skeleton-container">
+                <p-skeleton width="100%" height="400px"></p-skeleton>
+            </div>
+            } @else if (batchChartError) {
+            <p-message severity="error" text="Failed to load capacity data. Please try again.">
+                <button pButton type="button" label="Retry"
+                    (click)="getBatchByFacultyCode(this.employeeDetails?.employeeCode)"
+                    class="p-button-outlined p-button-sm"></button>
+            </p-message>
+            } @else if (hasCapacityData) {
+            <!-- MIGRATED TO ECHARTS -->
+            <div echarts [options]="capacityChartOptions" [theme]="colorScheme === 'dark' ? 'dark' : ''" class="w-full"
+                style="height: 400px;"></div>
+            }
+        </div>
+    </div>
+    }
+
+    <!-- CHART 3: Batches by Academic Session -->
+    @if (batchLoading || hasSessionData) {
+    <div class="col-span-12 xl:col-span-4">
+        <div class="card h-full p-4 rounded-lg shadow-md">
+            <div class="flex justify-between items-center mb-4">
+                <h5 class="m-0 font-bold text-xl text-slate-800 dark:text-slate-200">Batches by Academic Session</h5>
+                <p-button icon="pi pi-refresh" styleClass="p-button-text p-button-rounded"
+                    (click)="getBatchByFacultyCode(this.employeeDetails?.employeeCode)" [style]="{ 'color': '#4B9BFF' }"
+                    title="Refresh Chart"></p-button>
+            </div>
+
+            @if (batchLoading) {
+            <div class="skeleton-container">
+                <p-skeleton width="100%" height="400px"></p-skeleton>
+            </div>
+            } @else if (batchChartError) {
+            <p-message severity="error" text="Failed to load session data. Please try again.">
+                <button pButton type="button" label="Retry"
+                    (click)="getBatchByFacultyCode(this.employeeDetails?.employeeCode)"
+                    class="p-button-outlined p-button-sm"></button>
+            </p-message>
+            } @else if (hasSessionData) {
+            <!-- MIGRATED TO ECHARTS -->
+            <div echarts [options]="sessionChartOptions" [theme]="colorScheme === 'dark' ? 'dark' : ''" class="w-full"
+                style="height: 400px;"></div>
+            }
+        </div>
+    </div>
+    }
+
+    <!-- CHART 4: Batches by Subject -->
+    @if (batchLoading || hasSubjectData) {
+    <div class="col-span-12 xl:col-span-4">
+        <div class="card h-full p-4 rounded-lg shadow-md">
+            <div class="flex justify-between items-center mb-4">
+                <h5 class="m-0 font-bold text-xl text-slate-800 dark:text-slate-200">Batches by Subject</h5>
+                <p-button icon="pi pi-refresh" styleClass="p-button-text p-button-rounded"
+                    (click)="getBatchByFacultyCode(this.employeeDetails?.employeeCode)" [style]="{ 'color': '#4B9BFF' }"
+                    title="Refresh Chart"></p-button>
+            </div>
+
+            @if (batchLoading) {
+            <div class="skeleton-container">
+                <p-skeleton width="100%" height="400px"></p-skeleton>
+            </div>
+            } @else if (batchChartError) {
+            <p-message severity="error" text="Failed to load subject data. Please try again.">
+                <button pButton type="button" label="Retry"
+                    (click)="getBatchByFacultyCode(this.employeeDetails?.employeeCode)"
+                    class="p-button-outlined p-button-sm"></button>
+            </p-message>
+            } @else if (hasSubjectData) {
+            <!-- MIGRATED TO ECHARTS -->
+            <div echarts [options]="subjectChartOptions" [theme]="colorScheme === 'dark' ? 'dark' : ''" class="w-full"
+                style="height: 400px;"></div>
+            }
+        </div>
+    </div>
+    }
+</div>

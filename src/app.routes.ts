@@ -60,14 +60,14 @@ export const appsRoutes: Routes = [
                     userRoles: [Roles.LEADS, Roles.LEADSADMIN, Roles.FACULTY, Roles.HR, Roles.ACADEMICS, Roles.ACADEMICSADMIN, Roles.ITSUPPORTS, Roles.SUPERADMIN, Roles.ADMINISTRATION],
                 }
             },
-            // {
-            //     path: 'mindspark',
-            //     loadChildren: () => import('./mind-spark/mind-spark/mind-spark.module').then(m => m.MindSparkModule),
-            //     data: {
-            //         breadcrumb: 'MindSpark',
-            //         userRoles: [Roles.ACADEMICS, Roles.ACADEMICSADMIN, Roles.FACULTY, Roles.ITSUPPORTS, Roles.MASTERS, Roles.MASTERSADMIN, Roles.SUPERADMIN, Roles.ADMINISTRATION],
-            //     }
-            // },
+            {
+                path: 'mindspark',
+                loadChildren: () => import('./app/mind-spark/mind-spark.module').then(m => m.MindSparkModule),
+                data: {
+                    breadcrumb: 'MindSpark',
+                    userRoles: [Roles.ACADEMICS, Roles.ACADEMICSADMIN, Roles.FACULTY, Roles.ITSUPPORTS, Roles.MASTERS, Roles.MASTERSADMIN, Roles.SUPERADMIN, Roles.ADMINISTRATION],
+                }
+            },
             {
                 path: 'digitalfingers',
                 loadChildren: () => import('./app/digital-fingers/digital-fingers.module').then(m => m.DigitalFingersModule),
