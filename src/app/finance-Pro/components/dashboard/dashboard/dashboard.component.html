@@ -26,14 +26,14 @@
     <div class="col-span-12 lg:col-span-6 xl:col-span-3 cursor-pointer scalein animation-duration-300 dashboard-cards">
         <div class="card h-full p-0 overflow-hidden flex flex-col" style="padding: 0!important;">
             <div class="flex items-center p-3 flex-1">
-                <i class="pi pi-map text-orange-500 shrink-0" style="font-size: 3rem;"></i>
+                <i class="pi pi-map text-amber-500 shrink-0" style="font-size: 3rem;"></i>
                 <div class="ml-3 flex-1 min-w-0">
                     @if(currentMonth) {
-                    <span class="text-orange-500 dark:text-orange-400 block whitespace-nowrap truncate font-semibold">{{
+                    <span class="text-amber-500 dark:text-amber-400 block whitespace-nowrap truncate font-semibold">{{
                         currentMonth }}</span>
-                    <span class="text-orange-500 dark:text-orange-400 block text-2xl font-bold truncate">Rs. {{
+                    <span class="text-amber-500 dark:text-amber-400 block text-2xl font-bold truncate">Rs. {{
                         currentMonthCollection }}.00</span>
-                    <span class="text-orange-500 dark:text-orange-400 block text-xl">{{
+                    <span class="text-amber-500 dark:text-amber-400 block text-xl">{{
                         collectioninShortHand(currentMonthCollection) }}</span>
                     } @else {
                     <app-dashboard-cards-skeleton [data]="'finpro'"></app-dashboard-cards-skeleton>

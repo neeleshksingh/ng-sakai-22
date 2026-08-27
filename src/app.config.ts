@@ -10,6 +10,9 @@ import { provideAppStore } from './app/store/provider';
 import { progressBarInterceptor } from './app/shared/interceptors/progress-bar.interceptor';
 import { errorInterceptor } from './app/shared/interceptors/error.interceptor';
 import { appsRoutes } from './app.routes';
+import { HashLocationStrategy, LocationStrategy } from '@angular/common';
+import { LoadingService } from './app/shared/services/loading.service';
+import { LazyLoaderComponent } from './app/global/components/lazy-loader/lazy-loader.component';
 
 export const appConfig: ApplicationConfig = {
     providers: [
@@ -22,6 +25,9 @@ export const appConfig: ApplicationConfig = {
         }),
         MessageService,
         ConfirmationService,
+        { provide: LocationStrategy, useClass: HashLocationStrategy },
+        LoadingService,
+        LazyLoaderComponent,
         provideAppStore()
     ]
 };

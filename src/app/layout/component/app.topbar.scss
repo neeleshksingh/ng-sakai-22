@@ -6,6 +6,7 @@
 .layout-topbar-logo-container {
     display: flex;
     align-items: center;
+    justify-content: center;
 }
 
 .layout-topbar-logo,
@@ -48,11 +49,7 @@
 }
 
 .logo-container {
-    background: linear-gradient(
-        135deg,
-        rgba(255, 255, 255, 0.3),
-        rgba(255, 255, 255, 0.15)
-    );
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.15));
     border-radius: 50%;
     padding: 3px;
     perspective: 1000px;
@@ -65,8 +62,8 @@
     border: 2px solid rgba(255, 255, 255, 0.4);
     transition: transform 0.6s ease-in-out;
     transform-style: preserve-3d;
-    height: 36px;
-    width: 36px;
+    height: 45px;
+    width: 45px;
 }
 
 .university-logo.flip {
@@ -84,7 +81,7 @@
     margin: 0;
     font-size: 8px;
     font-weight: 600;
-    color: #FF5C00;
+    color: #ff5c00;
     animation: pulseGrow 2.5s ease-in-out infinite;
     transform-origin: center;
     text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
@@ -92,9 +89,15 @@
 }
 
 @keyframes pulseGrow {
-    0% { transform: scale(1); }
-    50% { transform: scale(1.15); }
-    100% { transform: scale(1); }
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.15);
+    }
+    100% {
+        transform: scale(1);
+    }
 }
 
 .app-name,
@@ -131,9 +134,15 @@
 }
 
 @keyframes pulse {
-    0% { transform: scale(0.95); }
-    50% { transform: scale(1.05); }
-    100% { transform: scale(0.95); }
+    0% {
+        transform: scale(0.95);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+    100% {
+        transform: scale(0.95);
+    }
 }
 
 .janmashtami-text {
@@ -141,17 +150,27 @@
     font-size: 0.7rem;
     color: #ff8000;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-    animation: 
+    animation:
         colorChange 5s infinite alternate,
         float 3s ease-in-out infinite;
 }
 
 @keyframes colorChange {
-    0% { color: #ffcc00; }
-    25% { color: #ff6699; }
-    50% { color: #6691ff; }
-    75% { color: #ffba66; }
-    100% { color: #ff9933; }
+    0% {
+        color: #ffcc00;
+    }
+    25% {
+        color: #ff6699;
+    }
+    50% {
+        color: #6691ff;
+    }
+    75% {
+        color: #ffba66;
+    }
+    100% {
+        color: #ff9933;
+    }
 }
 
 .brand-mark,
@@ -295,4 +314,3 @@
         display: none;
     }
 }
-

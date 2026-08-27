@@ -8,41 +8,19 @@ import { LoadingService } from '../shared/services/loading.service';
 import { DevelopersComponent } from './components/layouts/developers/developers.component';
 
 const routes: Routes = [
-    {
-        path: '', component: DevelopersComponent,
-        children: [
-            { path: 'dashboard', data: { breadcrumb: 'Dashboard' }, loadChildren: () => import('./components/dashboard/dashboard.module').then(m => m.DashboardModule) },
-            // { path: 'masters', data: { breadcrumb: 'Masters' }, loadChildren: () => import('./components/masters/masters.module').then(m => m.MastersModule) },
-            // { path: 'transactions', data: { breadcrumb: 'Transactions' }, loadChildren: () => import('./components/transactions/transactions.module').then(m => m.TransactionsModule) },
-            // { path: 'reports', data: { breadcrumb: 'Reports' }, loadChildren: () => import('./components/reports/reports.module').then(m => m.ReportsModule) },
+    { path: '', data: { breadcrumb: 'Dashboard' }, loadChildren: () => import('./components/dashboard/dashboard.module').then(m => m.DashboardModule) },
+    // { path: 'masters', data: { breadcrumb: 'Masters' }, loadChildren: () => import('./components/masters/masters.module').then(m => m.MastersModule) },
+    // { path: 'transactions', data: { breadcrumb: 'Transactions' }, loadChildren: () => import('./components/transactions/transactions.module').then(m => m.TransactionsModule) },
+    // { path: 'reports', data: { breadcrumb: 'Reports' }, loadChildren: () => import('./components/reports/reports.module').then(m => m.ReportsModule) },
 
-            { path: 'forbidden-access', component: ForbiddenAccessComponent, data: { breadcrumb: 'Forbidden Access' } },
-            { path: 'login-token-expired', component: LoginTokenExpiredComponent, data: { breadcrumb: 'Login Token Expired' } },
-            { path: 'access-denied', component: AccessDeniedComponent, data: { breadcrumb: 'Access Denied' } },
-            { path: 'internal-server-error', component: InternalServerErrorComponent, data: { breadcrumb: 'Internal Server Error' } },
-        ]
-    },
-
+    { path: 'forbidden-access', component: ForbiddenAccessComponent, data: { breadcrumb: 'Forbidden Access' } },
+    { path: 'login-token-expired', component: LoginTokenExpiredComponent, data: { breadcrumb: 'Login Token Expired' } },
+    { path: 'access-denied', component: AccessDeniedComponent, data: { breadcrumb: 'Access Denied' } },
+    { path: 'internal-server-error', component: InternalServerErrorComponent, data: { breadcrumb: 'Internal Server Error' } },
 ];
 
 @NgModule({
     imports: [RouterModule.forChild(routes)],
     exports: [RouterModule]
 })
-export class DevelopersRoutingModule {
-    constructor(private router: Router, private loaderService: LoadingService) {
-        this.router.events.subscribe((event: any) => {
-            if (event instanceof NavigationStart) {
-                this.loaderService.show();
-            }
-
-            if (
-                event instanceof NavigationEnd ||
-                event instanceof NavigationCancel ||
-                event instanceof NavigationError
-            ) {
-                this.loaderService.hide();
-            }
-        });
-    }
-}
+export class DevelopersRoutingModule { }

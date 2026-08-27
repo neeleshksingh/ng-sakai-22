@@ -1,9 +1,11 @@
 <header class="layout-topbar">
     <div class="layout-topbar-logo-container topbar-start">
-        <button #menubutton class="layout-menu-button layout-topbar-action" type="button" aria-label="Toggle navigation" (click)="onMenuButtonClick()">
+        <button #menubutton class="layout-menu-button layout-topbar-action" type="button" aria-label="Toggle navigation"
+            (click)="onMenuButtonClick()">
             <i class="pi pi-bars"></i>
         </button>
-        <a class="app-logo layout-topbar-logo" [routerLink]="topBarRouterLink || '/home/dashboard'" aria-label="NCorePro dashboard">
+        <a class="app-logo layout-topbar-logo" [routerLink]="topBarRouterLink || '/home/dashboard'"
+            aria-label="NCorePro dashboard">
             <div class="logo-container flex flex-column align-items-center">
                 <img alt="app logo" [src]="currentLogo || logo" class="university-logo" [ngClass]="{'flip': isFlipped}">
                 <div *ngIf="foundationDay" class="greeting-text" [ngClass]="{'hidden': isFlipped}">
@@ -42,42 +44,42 @@
             <img (click)="onLogoClick()" [src]="animationGifPath" alt="Event Animation" class="event-animation">
         </div>
         <i class="pi pi-search" (click)="activateSearch()"></i>
-        <input #searchinput pInputText [(ngModel)]="searchQuery" placeholder="Search" aria-label="Search modules" (blur)="deactivateSearch()" (keydown.escape)="deactivateSearch()" />
+        <input #searchinput pInputText [(ngModel)]="searchQuery" placeholder="Search" aria-label="Search modules"
+            (blur)="deactivateSearch()" (keydown.escape)="deactivateSearch()" />
         <kbd>⌘ K</kbd>
     </div>
 
-    <div class="layout-topbar-actions">
+    <div class="layout-topbar-actions flex items-center">
         <div class="layout-config-menu">
             <button type="button" class="layout-topbar-action" aria-label="Toggle dark mode" (click)="toggleDarkMode()">
                 <i [class]="layoutService.isDarkTheme() ? 'pi pi-sun' : 'pi pi-moon'"></i>
             </button>
             <div class="relative">
-                <button
-                    class="layout-topbar-action layout-topbar-action-highlight"
-                    type="button"
-                    aria-label="Open appearance settings"
-                    pStyleClass="@next"
-                    enterFromClass="hidden"
-                    enterActiveClass="animate-scalein"
-                    leaveToClass="hidden"
-                    leaveActiveClass="animate-fadeout"
-                    [hideOnOutsideClick]="true"
-                >
+                <button class="layout-topbar-action layout-topbar-action-highlight" type="button"
+                    aria-label="Open appearance settings" pStyleClass="@next" enterFromClass="hidden"
+                    enterActiveClass="animate-scalein" leaveToClass="hidden" leaveActiveClass="animate-fadeout"
+                    [hideOnOutsideClick]="true">
                     <i class="pi pi-palette"></i>
                 </button>
                 <app-configurator />
             </div>
         </div>
 
-        <button class="layout-topbar-menu-button layout-topbar-action" type="button" pStyleClass="@next" enterFromClass="hidden" enterActiveClass="animate-scalein" leaveToClass="hidden" leaveActiveClass="animate-fadeout" [hideOnOutsideClick]="true">
+        <button class="layout-topbar-menu-button layout-topbar-action" type="button" pStyleClass="@next"
+            enterFromClass="hidden" enterActiveClass="animate-scalein" leaveToClass="hidden"
+            leaveActiveClass="animate-fadeout" [hideOnOutsideClick]="true">
             <i class="pi pi-ellipsis-v"></i>
         </button>
 
         <div class="layout-topbar-menu hidden lg:block">
-            <div class="layout-topbar-menu-content">
-                <button type="button" class="layout-topbar-action" aria-label="Notifications"><i class="pi pi-bell"></i><span>Notifications</span><b class="notification-dot"></b></button>
-                <button type="button" class="profile-button" pStyleClass="@next" enterFromClass="hidden" enterActiveClass="animate-scalein" leaveToClass="hidden" leaveActiveClass="animate-fadeout" [hideOnOutsideClick]="true">
-                    <img alt="avatar" [src]="displayImageUrl || defaultImage" (error)="onImageError($event)" style="border-radius: 50%;" height="36px" width="36px">
+            <div class="layout-topbar-menu-content flex items-center">
+                <button type="button" class="layout-topbar-action" aria-label="Notifications"><i
+                        class="pi pi-bell"></i><span>Notifications</span><b class="notification-dot"></b></button>
+                <button type="button" class="profile-button" pStyleClass="@next" enterFromClass="hidden"
+                    enterActiveClass="animate-scalein" leaveToClass="hidden" leaveActiveClass="animate-fadeout"
+                    [hideOnOutsideClick]="true">
+                    <img alt="avatar" [src]="displayImageUrl || defaultImage" (error)="onImageError($event)"
+                        style="border-radius: 50%;" height="36px" width="36px">
                     <span class="profile-details">
                         <strong class="profile-name">{{UserName || 'User'}}</strong>
                         <small class="profile-job">{{UserRole || 'Role'}}</small>
@@ -85,10 +87,15 @@
                     <i class="pi pi-angle-down"></i>
                 </button>
                 <div class="profile-menu hidden">
-                    <a (click)="onProfileClick()" class="cursor-pointer flex align-items-center gap-2"><i class="pi pi-user mr-2"></i><span>Profile</span></a>
-                    <a *ngIf="UserRole !== 'Student'" (click)="Developers()" class="cursor-pointer flex align-items-center gap-2"><i class="pi pi-desktop mr-2"></i><span>Developers</span></a>
-                    <a (click)="onSettingsClick()" class="cursor-pointer flex align-items-center gap-2"><i class="pi pi-cog mr-2"></i><span>Settings</span></a>
-                    <a (click)="logOut()" class="cursor-pointer flex align-items-center gap-2"><i class="pi pi-power-off mr-2"></i><span>Log Out</span></a>
+                    <a (click)="onProfileClick()" class="cursor-pointer flex align-items-center gap-2"><i
+                            class="pi pi-user mr-2"></i><span>Profile</span></a>
+                    <a *ngIf="UserRole !== 'Student'" (click)="Developers()"
+                        class="cursor-pointer flex align-items-center gap-2"><i
+                            class="pi pi-desktop mr-2"></i><span>Developers</span></a>
+                    <a (click)="onSettingsClick()" class="cursor-pointer flex align-items-center gap-2"><i
+                            class="pi pi-cog mr-2"></i><span>Settings</span></a>
+                    <a (click)="logOut()" class="cursor-pointer flex align-items-center gap-2"><i
+                            class="pi pi-power-off mr-2"></i><span>Log Out</span></a>
                 </div>
             </div>
         </div>

@@ -1,8 +1,9 @@
-import { Routes } from '@angular/router';
+import { NavigationCancel, NavigationEnd, NavigationError, NavigationStart, Router, Routes } from '@angular/router';
 import { AppLayout } from './app/layout/component/app.layout';
 import { AuthGuard } from './app/shared/guard/auth-guard.guard';
 import { SurveyPendingGuard } from './app/shared/guard/survey-pending.guard';
 import { Roles } from './app/shared/models/commons/user-roles';
+import { LoadingService } from './app/shared/services/loading.service';
 
 export const appsRoutes: Routes = [
     {
@@ -131,3 +132,21 @@ export const appsRoutes: Routes = [
 
     // { path: '**', loadComponent: () => import('./global/components/exception-pages/not-found/not-found.component').then(m => m.NotFoundComponent), data: { title: 'NotFound' } },
 ];
+
+export class AppRoutingModule {
+    constructor(private router: Router, private loaderService: LoadingService) {
+        this.router.events.subscribe((event: any) => {
+            if (event instanceof NavigationStart) {
+                this.loaderService.show();
+            }
+
+            if (
+                event instanceof NavigationEnd ||
+                event instanceof NavigationCancel ||
+                event instanceof NavigationError
+            ) {
+                this.loaderService.hide();
+            }
+        });
+    }
+}

@@ -30,21 +30,21 @@
     <div class="col-span-12 lg:col-span-6 xl:col-span-3 cursor-pointer scalein animation-duration-300 dashboard-cards">
         <div class="card h-full p-0 overflow-hidden flex flex-col" style="padding: 0!important;">
             <div class="flex items-center p-3 flex-1">
-                <i class="pi pi-map text-orange-500 shrink-0" style="font-size: 3rem;"></i>
+                <i class="pi pi-map text-amber-500 shrink-0" style="font-size: 3rem;"></i>
                 <div class="ml-3 flex-1 min-w-0">
                     @if (totalExaminationScheduledToday && totalExaminationScheduledToday > 0) {
                     <span
-                        class="text-orange-500 dark:text-orange-400 block whitespace-nowrap truncate font-semibold">Examination
+                        class="text-amber-500 dark:text-amber-400 block whitespace-nowrap truncate font-semibold">Examination
                         Registrations</span>
                     <span
-                        class="text-orange-500 dark:text-orange-400 block text-4xl font-bold truncate">{{totalStudentExaminationRegistrations}}</span>
+                        class="text-amber-500 dark:text-amber-400 block text-4xl font-bold truncate">{{totalStudentExaminationRegistrations}}</span>
                     } @else if (isLoading) {
                     <app-dashboard-cards-skeleton [data]="'knowledgestand'"></app-dashboard-cards-skeleton>
                     } @else {
                     <span
-                        class="text-orange-500 dark:text-orange-400 block whitespace-nowrap truncate font-semibold">Examination
+                        class="text-amber-500 dark:text-amber-400 block whitespace-nowrap truncate font-semibold">Examination
                         Registrations</span>
-                    <span class="text-orange-500 dark:text-orange-400 block text-2xl font-bold truncate mt-1">No
+                    <span class="text-amber-500 dark:text-amber-400 block text-2xl font-bold truncate mt-1">No
                         Examination Registrations</span>
                     }
                 </div>
