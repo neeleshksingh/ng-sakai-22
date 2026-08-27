@@ -35,14 +35,14 @@ export const appsRoutes: Routes = [
                     userRoles: [Roles.MASTERS, Roles.MASTERSADMIN, Roles.MASTERSSUPERADMIN, Roles.ITSUPPORTS, Roles.SUPERADMIN, Roles.ADMINISTRATION],
                 }
             },
-            // {
-            //     path: 'finpro',
-            //     loadChildren: () => import('./finance-Pro/finance-pro.module').then(m => m.FinanceProModule),
-            //     data: {
-            //         breadcrumb: 'FinPro',
-            //         userRoles: [Roles.ACCOUNTS, Roles.ACCOUNTSADMIN, Roles.ACCOUNTSSUPERADMIN, Roles.ITSUPPORTS, Roles.ITSUPPORTSSUPERADMIN, Roles.SUPERADMIN, Roles.ADMINISTRATION],
-            //     }
-            // },
+            {
+                path: 'finpro',
+                loadChildren: () => import('./app/finance-Pro/finance-pro.module').then(m => m.FinanceProModule),
+                data: {
+                    breadcrumb: 'FinPro',
+                    userRoles: [Roles.ACCOUNTS, Roles.ACCOUNTSADMIN, Roles.ACCOUNTSSUPERADMIN, Roles.ITSUPPORTS, Roles.ITSUPPORTSSUPERADMIN, Roles.SUPERADMIN, Roles.ADMINISTRATION],
+                }
+            },
             // {
             //     path: 'smallbizgurus',
             //     loadChildren: () => import('./smallbiz-gurus/smallbiz-gurus/smallbiz-gurus.module').then(m => m.SmallbizGurusModule),

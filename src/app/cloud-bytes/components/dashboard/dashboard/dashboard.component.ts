@@ -7,6 +7,7 @@ import { BehaviorSubject, Subscription } from 'rxjs';
 import { AcademicSessionProgramService } from 'src/app/cloud-bytes/services/academic-session-program.service';
 import { AcademicSessionService } from 'src/app/cloud-bytes/services/academic-session.service';
 import { DegreeService } from 'src/app/cloud-bytes/services/degree.service';
+import type { EChartsOption } from 'echarts';
 import { DepartmentService } from 'src/app/cloud-bytes/services/department.service';
 import { OrganizationalHolidayService } from 'src/app/cloud-bytes/services/organizational-holiday.service';
 import { ProgramService } from 'src/app/cloud-bytes/services/program.service';
@@ -27,12 +28,10 @@ import { StorageService } from 'src/app/shared/services/storage.service';
 })
 export class DashboardComponent implements OnInit, OnDestroy {
 
-    overviewChartData: any;
-    overviewChartOptions: any;
-    overviewWeeks: any;
-    selectedOverviewWeek: any;
-    revenueChartData: any;
-    revenueChartOptions: any;
+    overviewChartOptions: EChartsOption = {};
+    hasOverviewData: boolean = false;
+    degreeChartOptions: EChartsOption = {};
+    hasDegreeData: boolean = false;
     subscription!: Subscription;
 
     organizationalHolidays: HolidayResponse[] = [];
@@ -89,9 +88,11 @@ export class DashboardComponent implements OnInit, OnDestroy {
     ) {
         effect(() => {
             this.layoutService.layoutConfig().darkTheme;
-            this.initCharts();
-            if (this.degrees) {
-                this.updateDegreeOptions();
+            if (this.hasDegreeData) {
+                this.rebuildDegreeChart();
+            }
+            if (this.hasOverviewData) {
+                this.rebuildOverviewChart();
             }
         });
 
@@ -101,13 +102,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
-        this.initCharts();
         this.callApis();
-        this.overviewWeeks = [
-            { name: 'Last Week', code: '0' },
-            { name: 'This Week', code: '1' }
-        ];
-        this.selectedOverviewWeek = this.overviewWeeks[0];
 
         const currentUser = localStorage.getItem('currentUser');
         if (currentUser) {
@@ -172,13 +167,15 @@ export class DashboardComponent implements OnInit, OnDestroy {
         this.getRoomList();
     }
 
+    // Cached data for rebuilding on theme change
+    private _overviewLabels: string[] = [];
+    private _overviewValues: number[] = [];
+    private _degreeTypes: string[] = [];
+    private _degreeDatasets: { label: string; data: number[]; color: string }[] = [];
+
     //#region Program Distribution by Academic Sessions Graph
     getAcademicSession() {
         this.loadingAcademicSession = true;
-        const documentStyle = getComputedStyle(document.documentElement);
-        const textColor = documentStyle.getPropertyValue('--text-color');
-        const textColorSecondary = documentStyle.getPropertyValue('--text-color-secondary');
-        const surfaceBorder = documentStyle.getPropertyValue('--surface-border');
 
         this.academicSessionService.getAll().subscribe({
             next: (data) => {
@@ -230,29 +227,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
                                     .sort((a, b) => b.programCount - a.programCount)
                                     .slice(0, 7);
 
-                                const labels = sortedSessionIds.map(item => item.sessionName);
-                                const chartValues = sortedSessionIds.map(item => item.programCount);
-
-                                const backgroundColors = [
-                                    '#4B9BFF', '#FF6B6B', '#FFD93D', '#6BCB77', '#FF8F5F', '#A77BCA', '#5CE1E6'
-                                ].slice(0, labels.length);
-
-                                this.overviewChartData = {
-                                    labels: labels,
-                                    datasets: [{
-                                        label: 'Programs per Session',
-                                        data: chartValues,
-                                        backgroundColor: backgroundColors,
-                                        borderColor: backgroundColors.map(color => color.replace('0.8', '1')),
-                                        borderWidth: 1,
-                                        borderRadius: 6,
-                                        barThickness: 20,
-                                        maxBarThickness: 25,
-                                        hoverBackgroundColor: backgroundColors.map(color => color.replace('0.8', '0.9')),
-                                    }]
-                                };
-
-                                this.buildOverviewChartOptions(textColor, textColorSecondary, surfaceBorder);
+                                this._overviewLabels = sortedSessionIds.map(item => item.sessionName);
+                                this._overviewValues = sortedSessionIds.map(item => item.programCount);
+                                this.hasOverviewData = true;
+                                this.rebuildOverviewChart();
                             }
                             this.loadingAcademicSession = false;
                             this.cdr.markForCheck();
@@ -274,271 +252,55 @@ export class DashboardComponent implements OnInit, OnDestroy {
         });
     }
 
-    private buildOverviewChartOptions(textColor: string, textColorSecondary: string, surfaceBorder: string) {
+    private rebuildOverviewChart() {
+        const isDark = this.colorScheme === 'dark';
+        const textColor = isDark ? '#cbd5e1' : '#64748b';
+        const borderColor = isDark ? '#334155' : '#e2e8f0';
+        const barColors = ['#4B9BFF', '#FF6B6B', '#FFD93D', '#6BCB77', '#FF8F5F', '#A77BCA', '#5CE1E6'];
+
         this.overviewChartOptions = {
-            responsive: true,
-            maintainAspectRatio: false,
-            aspectRatio: 1.2,
-            plugins: {
-                legend: {
-                    position: 'top',
-                    align: 'center',
-                    labels: {
-                        color: textColor,
-                        font: { size: 12, weight: '500' },
-                        padding: 15,
-                        boxWidth: 16,
-                        usePointStyle: true
-                    }
-                },
-                tooltip: {
-                    backgroundColor: '#2D3748',
-                    titleFont: { size: 12, weight: '600' },
-                    bodyFont: { size: 10 },
-                    padding: 10,
-                    cornerRadius: 6,
-                    callbacks: {
-                        label: (context: any) => {
-                            return `${context.dataset.label}: ${context.raw} programs`;
-                        }
-                    }
-                },
-                title: {
-                    display: true,
-                    color: textColor,
-                    font: { size: 14, weight: '600' },
-                    padding: { top: 8, bottom: 12 }
+            backgroundColor: 'transparent',
+            tooltip: {
+                trigger: 'axis', axisPointer: { type: 'shadow' },
+                backgroundColor: isDark ? 'rgba(15,23,42,0.95)' : 'rgba(255,255,255,0.96)',
+                textStyle: { color: isDark ? '#e5e7eb' : '#374151', fontSize: 12 },
+                borderWidth: 0, padding: 12, borderRadius: 6,
+                formatter: (params: any) => {
+                    const p = params[0];
+                    return `${p.name}<br/>${p.marker} Programs: <b>${p.value}</b>`;
                 }
             },
-            animation: {
-                duration: 800,
-                easing: 'easeOutQuart'
+            grid: { left: '3%', right: '4%', bottom: '15%', top: '10%', containLabel: true },
+            xAxis: {
+                type: 'category',
+                data: this._overviewLabels,
+                axisLabel: { color: textColor, rotate: 45, fontSize: 10 },
+                axisLine: { lineStyle: { color: borderColor } },
+                axisTick: { show: false },
+                name: 'Sessions', nameLocation: 'middle', nameGap: 45,
+                nameTextStyle: { color: textColor, fontSize: 12, fontWeight: 500 }
             },
-            scales: {
-                y: {
-                    beginAtZero: true,
-                    ticks: {
-                        stepSize: 1,
-                        color: textColorSecondary,
-                        font: { size: 10 },
-                        callback: (value: number) => `${value}`
-                    },
-                    grid: {
-                        color: surfaceBorder,
-                        drawBorder: false,
-                        borderDash: [4, 4]
-                    },
-                    title: {
-                        display: true,
-                        text: 'Programs',
-                        color: textColor,
-                        font: { size: 12, weight: '500' }
-                    }
-                },
-                x: {
-                    ticks: {
-                        color: textColorSecondary,
-                        font: { size: 10 },
-                        maxRotation: 45,
-                        minRotation: 45,
-                        autoSkip: true,
-                        maxTicksLimit: 5
-                    },
-                    grid: { display: false },
-                    title: {
-                        display: true,
-                        text: 'Sessions',
-                        color: textColor,
-                        font: { size: 12, weight: '500' }
-                    }
-                }
+            yAxis: {
+                type: 'value', minInterval: 1,
+                axisLabel: { color: textColor },
+                splitLine: { lineStyle: { color: borderColor, type: 'dashed' } },
+                name: 'Programs', nameTextStyle: { color: textColor, fontSize: 12, fontWeight: 500 }
             },
-            hover: {
-                mode: 'index',
-                intersect: false
-            },
-            layout: {
-                padding: { left: 10, right: 10, top: 10, bottom: 10 }
-            }
+            series: [{
+                name: 'Programs per Session',
+                type: 'bar',
+                data: this._overviewValues.map((val, i) => ({
+                    value: val,
+                    itemStyle: { color: barColors[i % barColors.length], borderRadius: [6, 6, 0, 0] }
+                })),
+                barMaxWidth: 25
+            }]
         };
     }
 
-    generateRandomColors(count: number): string[] {
-        const colors: string[] = [];
-        for (let i = 0; i < count; i++) {
-            const red = Math.floor(Math.random() * 128 + 127);
-            const green = Math.floor(Math.random() * 128 + 127);
-            const blue = Math.floor(Math.random() * 128 + 127);
-            const lightColor = `rgb(${red}, ${green}, ${blue})`;
-            colors.push(lightColor);
-        }
-        return colors;
-    }
+
+
     //#endregion
-    initCharts() {
-        const documentStyle = getComputedStyle(document.documentElement);
-        const textColorSecondary = documentStyle.getPropertyValue('--text-color-secondary');
-        const primaryColor = documentStyle.getPropertyValue('--primary-color');
-        const primaryColor300 = documentStyle.getPropertyValue('--primary-200');
-        const borderColor = documentStyle.getPropertyValue('--surface-border');
-
-        this.overviewChartData = {
-            labels: ['M', 'T', 'W', 'T', 'F', 'S', 'S'],
-            datasets: [
-                {
-                    label: 'Organic',
-                    data: [2, 1, 0.5, 0.6, 0.5, 1.3, 1],
-                    borderColor: [
-                        primaryColor
-                    ],
-                    pointBorderColor: 'transparent',
-                    pointBackgroundColor: 'transparent',
-                    type: 'line',
-                    fill: false,
-                },
-                {
-                    label: 'Referral',
-                    data: [4.88, 3, 6.2, 4.5, 2.1, 5.1, 4.1],
-                    backgroundColor: [this.layoutService.isDarkTheme() ? '#879AAF' : '#E4E7EB'],
-                    hoverBackgroundColor: [primaryColor300],
-                    fill: true,
-                    borderRadius: 10,
-                    borderSkipped: 'top bottom',
-                    barPercentage: 0.3
-                }
-            ]
-        };
-
-        this.overviewChartOptions = {
-            plugins: {
-                legend: {
-                    position: 'bottom',
-                    align: 'end',
-                    labels: {
-                        color: textColorSecondary
-                    }
-                }
-            },
-            responsive: true,
-            hover: {
-                mode: 'index'
-            },
-            scales: {
-                y: {
-                    max: 7,
-                    min: 0,
-                    ticks: {
-                        stepSize: 0,
-                        callback: function (value: number, index: number) {
-                            if (index === 0) {
-                                return value;
-                            }
-                            else {
-                                return value + 'k';
-                            }
-                        },
-                        color: textColorSecondary
-                    },
-                    grid: {
-                        borderDash: [2, 2],
-                        color: borderColor,
-                        drawBorder: false
-                    }
-                },
-                x: {
-                    grid: {
-                        display: false,
-                    },
-                    ticks: {
-                        beginAtZero: true,
-                        color: textColorSecondary
-                    }
-                }
-            }
-        };
-
-        this.revenueChartData = {
-            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
-            datasets: [
-                {
-                    data: [11, 17, 30, 60, 88, 92],
-                    borderColor: 'rgba(25, 146, 212, 0.5)',
-                    pointBorderColor: 'transparent',
-                    pointBackgroundColor: 'transparent',
-                    fill: false,
-                    tension: .4
-                },
-                {
-                    data: [11, 19, 39, 59, 69, 71],
-                    borderColor: 'rgba(25, 146, 212, 0.5)',
-                    pointBorderColor: 'transparent',
-                    pointBackgroundColor: 'transparent',
-                    fill: false,
-                    tension: .4
-                },
-                {
-                    data: [11, 17, 21, 30, 47, 83],
-                    backgroundColor: 'rgba(25, 146, 212, 0.2)',
-                    borderColor: 'rgba(25, 146, 212, 0.5)',
-                    pointBorderColor: 'transparent',
-                    pointBackgroundColor: 'transparent',
-                    fill: true,
-                    tension: .4
-                }
-            ]
-        };
-
-        this.revenueChartOptions = {
-            plugins: {
-                legend: {
-                    display: false
-                }
-            },
-            scales: {
-                y: {
-                    grid: {
-                        color: borderColor
-                    },
-                    max: 100,
-                    min: 0,
-                    ticks: {
-                        color: textColorSecondary
-                    }
-                },
-                x: {
-                    grid: {
-                        color: borderColor
-                    },
-                    ticks: {
-                        color: textColorSecondary,
-                        beginAtZero: true
-                    }
-                }
-            }
-        };
-    }
-
-    changeOverviewWeek() {
-        const dataSet1 = [
-            [2, 1, 0.5, 0.6, 0.5, 1.3, 1],
-            [4.88, 3, 6.2, 4.5, 2.1, 5.1, 4.1]
-        ];
-        const dataSet2 = [
-            [3, 2.4, 1.5, 0.6, 4.5, 3.3, 2],
-            [3.2, 4.1, 2.2, 5.5, 4.1, 3.6, 3.5],
-        ];
-
-        if (this.selectedOverviewWeek.code === '1') {
-            this.overviewChartData.datasets[0].data = dataSet2[parseInt('0')];
-            this.overviewChartData.datasets[1].data = dataSet2[parseInt('1')];
-        }
-        else {
-            this.overviewChartData.datasets[0].data = dataSet1[parseInt('0')];
-            this.overviewChartData.datasets[1].data = dataSet1[parseInt('1')];
-        }
-
-        this.overviewChartData = { ...this.overviewChartData };
-    }
 
     get colorScheme(): string {
         return this.layoutService.isDarkTheme() ? 'dark' : 'light';
@@ -601,137 +363,84 @@ export class DashboardComponent implements OnInit, OnDestroy {
                     }
                 });
 
-                const degreeTypes = Array.from(degreeMap.keys());
+                this._degreeTypes = Array.from(degreeMap.keys());
                 const allDegrees = Array.from(new Set(degrees.map((degree: any) => degree?.name).filter(Boolean)));
+                const colors = [
+                    '#4B9BFF', '#FF6B6B', '#FFD93D', '#6BCB77',
+                    '#FF8F5F', '#A77BCA', '#5CE1E6', '#F472B6',
+                    '#34D399', '#FBBF24', '#60A5FA', '#A78BFA',
+                    '#F87171', '#38BDF8', '#818CF8'
+                ];
 
-                const datasets = allDegrees.map((degreeName, index) => {
-                    return {
-                        type: 'bar',
-                        label: degreeName as string,
-                        backgroundColor: this.getColor(index),
-                        borderRadius: 4,
-                        barThickness: 20,
-                        maxBarThickness: 25,
-                        data: degreeTypes.map(degreeType => {
-                            const degreesInType = degreeMap.get(degreeType) || [];
-                            return degreesInType.filter(d => d === degreeName).length;
-                        })
-                    };
-                });
+                this._degreeDatasets = allDegrees.map((degreeName, index) => ({
+                    label: degreeName as string,
+                    color: colors[index % colors.length],
+                    data: this._degreeTypes.map(degreeType => {
+                        const degreesInType = degreeMap.get(degreeType) || [];
+                        return degreesInType.filter(d => d === degreeName).length;
+                    })
+                }));
 
-                this.degrees = {
-                    labels: degreeTypes,
-                    datasets: datasets
-                };
-
-                this.updateDegreeOptions();
+                this.hasDegreeData = true;
+                this.rebuildDegreeChart();
                 this.loadingDegrees = false;
                 this.cdr.markForCheck();
             },
             error: (err) => {
                 console.error('Error fetching degrees:', err);
-                this.degrees = null;
+                this.hasDegreeData = false;
                 this.loadingDegrees = false;
                 this.cdr.markForCheck();
             }
         });
     }
 
-    updateDegreeOptions() {
-        this.degreeOptions = {
-            indexAxis: 'y',
-            maintainAspectRatio: false,
-            aspectRatio: 0.8,
-            plugins: {
-                tooltip: {
-                    mode: 'nearest',
-                    intersect: true,
-                    backgroundColor: '#2D3748',
-                    padding: 10,
-                    cornerRadius: 6,
-                    titleFont: { size: 13, weight: '600' },
-                    callbacks: {
-                        label: (context: any) => {
-                            const dataset = context.dataset;
-                            const index = context.dataIndex;
-                            const value = dataset.data[index] as number;
-                            return value > 0 ? ` ${dataset.label}: ${value}` : '';
-                        }
-                    }
-                },
-                legend: {
-                    position: 'right',
-                    align: 'start',
-                    display: this.showLegend,
-                    labels: {
-                        color: this.getTextColor(),
-                        usePointStyle: true,
-                        boxWidth: 8,
-                        font: {
-                            size: 11
-                        }
-                    }
-                }
+    private rebuildDegreeChart() {
+        const isDark = this.colorScheme === 'dark';
+        const textColor = isDark ? '#cbd5e1' : '#64748b';
+        const borderColor = isDark ? '#334155' : '#e2e8f0';
+
+        this.degreeChartOptions = {
+            backgroundColor: 'transparent',
+            tooltip: {
+                trigger: 'axis', axisPointer: { type: 'shadow' },
+                backgroundColor: isDark ? 'rgba(15,23,42,0.95)' : 'rgba(255,255,255,0.96)',
+                textStyle: { color: isDark ? '#e5e7eb' : '#374151', fontSize: 12 },
+                borderWidth: 0, padding: 12, borderRadius: 6
             },
-            scales: {
-                x: {
-                    stacked: true,
-                    ticks: {
-                        color: this.getTextColorSecondary(),
-                        stepSize: 1
-                    },
-                    grid: {
-                        color: this.getSurfaceBorder(),
-                        drawBorder: false,
-                        borderDash: [4, 4]
-                    }
-                },
-                y: {
-                    stacked: true,
-                    ticks: {
-                        color: this.getTextColorSecondary(),
-                        font: {
-                            weight: '500'
-                        }
-                    },
-                    grid: {
-                        display: false,
-                        drawBorder: false
-                    }
-                }
-            }
+            legend: this.showLegend ? {
+                orient: 'vertical' as const,
+                right: 0, top: 'center',
+                textStyle: { color: textColor, fontSize: 11 },
+                icon: 'circle', itemWidth: 8, itemGap: 8
+            } : undefined,
+            grid: { left: '3%', right: this.showLegend ? '25%' : '4%', bottom: '5%', top: '5%', containLabel: true },
+            yAxis: {
+                type: 'category',
+                data: this._degreeTypes,
+                axisLabel: { color: textColor, fontWeight: 500 },
+                axisLine: { show: false }, axisTick: { show: false }
+            },
+            xAxis: {
+                type: 'value', minInterval: 1,
+                axisLabel: { color: textColor },
+                splitLine: { lineStyle: { color: borderColor, type: 'dashed' } }
+            },
+            series: this._degreeDatasets.map(ds => ({
+                name: ds.label,
+                type: 'bar' as const,
+                stack: 'total',
+                data: ds.data,
+                itemStyle: { color: ds.color, borderRadius: [0, 4, 4, 0] },
+                barMaxWidth: 25,
+                emphasis: { focus: 'series' as const }
+            }))
         };
     }
 
     toggleLegend() {
         this.showLegend = !this.showLegend;
-        this.updateDegreeOptions();
-    }
-
-    private getColor(index: number): string {
-        const colors = [
-            '#4B9BFF', '#FF6B6B', '#FFD93D', '#6BCB77',
-            '#FF8F5F', '#A77BCA', '#5CE1E6', '#F472B6',
-            '#34D399', '#FBBF24', '#60A5FA', '#A78BFA',
-            '#F87171', '#38BDF8', '#818CF8'
-        ];
-        return colors[index % colors.length];
-    }
-
-    private getDataForDegreeType(degreeNames: string[]): number[] {
-        return [degreeNames.length];
-    }
-
-    private getTextColor(): string {
-        return getComputedStyle(document.documentElement).getPropertyValue('--text-color');
-    }
-
-    private getTextColorSecondary(): string {
-        return getComputedStyle(document.documentElement).getPropertyValue('--text-color-secondary');
-    }
-
-    private getSurfaceBorder(): string {
-        return getComputedStyle(document.documentElement).getPropertyValue('--surface-border');
+        this.rebuildDegreeChart();
     }
     //#endregion
 

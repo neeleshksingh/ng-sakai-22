@@ -1,1 +1,544 @@
-<app-module-dashboard title="Finance Pro" subtitle="Fees, accounts, vouchers, and collections overview" [kpis]="kpis" />
+<div class="grid grid-cols-12 gap-4 pb-6">
+    <!-- Today's Collection Card -->
+    <div class="col-span-12 lg:col-span-6 xl:col-span-3 cursor-pointer scalein animation-duration-300 dashboard-cards">
+        <div class="card h-full p-0 overflow-hidden flex flex-col" style="padding: 0!important;">
+            <div class="flex items-center p-3 flex-1">
+                <i class="pi pi-users text-blue-500 shrink-0" style="font-size: 3rem;"></i>
+                <div class="ml-3 flex-1 min-w-0">
+                    @if(todaysDate) {
+                    <span class="text-blue-500 dark:text-blue-400 block whitespace-nowrap truncate font-semibold">{{
+                        todaysDate }}</span>
+                    <span class="text-blue-500 dark:text-blue-400 block text-2xl font-bold truncate">Rs. {{
+                        todaysCollection }}.00</span>
+                    <span class="text-blue-500 dark:text-blue-400 block text-xl font-semibold">{{
+                        collectioninShortHand(todaysCollection) }}</span>
+                    } @else {
+                    <app-dashboard-cards-skeleton [data]="'finpro'"></app-dashboard-cards-skeleton>
+                    }
+                </div>
+            </div>
+            <img [src]="'assets/demo/images/dashboard/users' + (colorScheme === 'light' ? '' : '-dark') + '.svg'"
+                class="w-full mt-auto" alt="users">
+        </div>
+    </div>
+
+    <!-- Current Month Collection Card -->
+    <div class="col-span-12 lg:col-span-6 xl:col-span-3 cursor-pointer scalein animation-duration-300 dashboard-cards">
+        <div class="card h-full p-0 overflow-hidden flex flex-col" style="padding: 0!important;">
+            <div class="flex items-center p-3 flex-1">
+                <i class="pi pi-map text-orange-500 shrink-0" style="font-size: 3rem;"></i>
+                <div class="ml-3 flex-1 min-w-0">
+                    @if(currentMonth) {
+                    <span class="text-orange-500 dark:text-orange-400 block whitespace-nowrap truncate font-semibold">{{
+                        currentMonth }}</span>
+                    <span class="text-orange-500 dark:text-orange-400 block text-2xl font-bold truncate">Rs. {{
+                        currentMonthCollection }}.00</span>
+                    <span class="text-orange-500 dark:text-orange-400 block text-xl">{{
+                        collectioninShortHand(currentMonthCollection) }}</span>
+                    } @else {
+                    <app-dashboard-cards-skeleton [data]="'finpro'"></app-dashboard-cards-skeleton>
+                    }
+                </div>
+            </div>
+            <img [src]="'assets/demo/images/dashboard/locations' + (colorScheme === 'light' ? '' : '-dark') + '.svg'"
+                class="w-full mt-auto" alt="locations">
+        </div>
+    </div>
+
+    <!-- Current Year Collection Card -->
+    <div class="col-span-12 lg:col-span-6 xl:col-span-3 cursor-pointer scalein animation-duration-300 dashboard-cards">
+        <div class="card h-full p-0 overflow-hidden flex flex-col" style="padding: 0!important;">
+            <div class="flex items-center p-3 flex-1">
+                <i class="pi pi-directions text-green-500 shrink-0" style="font-size: 3rem;"></i>
+                <div class="ml-3 flex-1 min-w-0">
+                    @if(currentFyYear) {
+                    <span class="text-green-500 dark:text-green-400 block whitespace-nowrap truncate font-semibold">{{
+                        currentFyYear }}</span>
+                    <span class="text-green-500 dark:text-green-400 block text-2xl font-bold truncate">Rs. {{
+                        currentYearCollection }}.00</span>
+                    <span class="text-green-500 dark:text-green-400 block text-xl">{{
+                        collectioninShortHand(currentYearCollection) }}</span>
+                    } @else {
+                    <app-dashboard-cards-skeleton [data]="'finpro'"></app-dashboard-cards-skeleton>
+                    }
+                </div>
+            </div>
+            <img [src]="'assets/demo/images/dashboard/rate' + (colorScheme === 'light' ? '' : '-dark') + '.svg'"
+                class="w-full mt-auto" alt="conversion">
+        </div>
+    </div>
+
+    <!-- Last 30 Days Revenue Card -->
+    <div class="col-span-12 lg:col-span-6 xl:col-span-3 cursor-pointer scalein animation-duration-300 dashboard-cards">
+        <div class="card h-full p-0 overflow-hidden flex flex-col" style="padding: 0!important;">
+            <div class="flex items-center p-3 flex-1">
+                <i class="pi pi-comments text-purple-500 shrink-0" style="font-size: 3rem;"></i>
+                <div class="ml-3 flex-1 min-w-0">
+                    @if(currentFyYear) {
+                    <span
+                        class="text-purple-500 dark:text-purple-400 block whitespace-nowrap truncate font-semibold">Last
+                        30 Days Revenue</span>
+                    <span
+                        class="text-purple-500 dark:text-purple-400 block text-2xl font-bold truncate">{{grossAmount}}</span>
+                    <span class="text-purple-500 dark:text-purple-400 block text-xl">{{
+                        collectioninShortHand(grossAmount) }}</span>
+                    } @else {
+                    <app-dashboard-cards-skeleton [data]="'finpro'"></app-dashboard-cards-skeleton>
+                    }
+                </div>
+            </div>
+            <img [src]="'assets/demo/images/dashboard/interactions' + (colorScheme === 'light' ? '' : '-dark') + '.svg'"
+                class="w-full mt-auto" alt="interactions">
+        </div>
+    </div>
+
+    <!-- Financial Breakdown Section -->
+    <div class="col-span-12">
+        <div class="card p-0 rounded-lg shadow-md">
+            <!-- Header Section -->
+            <div class="p-4 border-b border-slate-200 dark:border-slate-700">
+                <div class="flex justify-between items-center">
+                    <div class="flex items-center gap-2">
+                        <i class="pi pi-chart-pie text-blue-500 text-xl" style="font-size: 2rem;"></i>
+                        <h5 class="m-0 text-slate-800 dark:text-slate-200 font-semibold">Financial Overview</h5>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <p-tag severity="success" styleClass="text-sm font-semibold">
+                            <i class="fas fa-indian-rupee-sign mr-1" style="font-size: 12px;"></i>
+                            {{collectioninShortHand(grossAmount)}}
+                        </p-tag>
+                        <span class="text-slate-500 dark:text-slate-400 text-sm">Past 30 Days</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Content Section -->
+            @if (loadingCollectionTable) {
+            <div class="p-4">
+                <app-bar-graph-skeleton [data]="'finpro'"></app-bar-graph-skeleton>
+            </div>
+            } @else if (hasDoughnutData) {
+            <div class="p-4">
+                <div class="grid grid-cols-12 gap-4">
+                    <!-- Pie Chart Section (MIGRATED TO ECHARTS) -->
+                    <div class="col-span-12 md:col-span-6 lg:col-span-6">
+                        <div class="flex flex-col items-center justify-center h-full">
+                            <div echarts [options]="doughnutOptions" [theme]="colorScheme === 'dark' ? 'dark' : ''"
+                                class="w-full" style="height: 360px;">
+                            </div>
+                            <div class="mt-3 text-center">
+                                <p class="text-slate-500 dark:text-slate-400 text-sm m-0">Total Collection Breakdown</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Financial Details Section -->
+                    <div class="col-span-12 md:col-span-6 lg:col-span-6">
+                        <div class="pl-0 lg:pl-4">
+                            <div class="mb-4">
+                                <h6
+                                    class="text-slate-800 dark:text-slate-200 font-semibold mb-2 flex items-center gap-2">
+                                    <i class="pi pi-wallet text-blue-500" style="font-size: 1.2rem;"></i>
+                                    Collection Summary
+                                </h6>
+                                <p class="text-slate-500 dark:text-slate-400 text-sm m-0">Detailed breakdown of
+                                    financial transactions</p>
+                            </div>
+
+                            <div class="grid grid-cols-12 gap-3">
+                                @for (item of transactionType; track $index) {
+                                @if(item.typeName != "Gross") {
+                                <div class="col-span-12 sm:col-span-6 md:col-span-4 mb-2">
+                                    <div
+                                        class="bg-white dark:bg-slate-900 p-2.5 rounded-lg border border-slate-200 dark:border-slate-700 hover:shadow-md transition-all duration-300">
+                                        <div class="flex items-center">
+                                            <div class="shrink-0">
+                                                <p-avatar size="large" shape="circle"
+                                                    styleClass="text-base font-bold border-2 border-orange-200"
+                                                    [style]="{'background-color':'rgba(250, 219, 95, 0.15)', 'color': '#DE911D'}">
+                                                    <i class="pi pi-wallet" style="font-size: 1.2rem;"></i>
+                                                </p-avatar>
+                                            </div>
+                                            <div class="ml-2.5 flex-1 min-w-0">
+                                                <div
+                                                    class="text-slate-800 dark:text-slate-200 font-medium text-xs truncate mb-0.5">
+                                                    {{item.typeName}}
+                                                </div>
+                                                <div class="flex items-center gap-1">
+                                                    <i class="fas fa-indian-rupee-sign text-emerald-600"
+                                                        style="font-size: 11px;"></i>
+                                                    <span class="text-emerald-600 font-bold text-sm truncate">
+                                                        {{collectioninShortHand(item.amount || 0)}}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                }
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            }
+        </div>
+    </div>
+
+    <!-- Recent Transactions Table -->
+    <div class="col-span-12">
+        @if (loadingCollectionTable) {
+        <div class="card p-4">
+            <app-bar-graph-skeleton [data]="'finpro'"></app-bar-graph-skeleton>
+        </div>
+        } @else {
+        <div class="card h-full p-0 rounded-lg shadow-md">
+            <!-- Header Section -->
+            <div class="p-4 border-b border-slate-200 dark:border-slate-700">
+                <div class="flex justify-between items-center flex-wrap gap-3">
+                    <div class="flex items-center gap-2">
+                        <i class="pi pi-list text-blue-500 text-xl" style="font-size: 2rem;"></i>
+                        <h5 class="m-0 text-slate-800 dark:text-slate-200 font-semibold">Recent Transactions</h5>
+                        <p-tag [value]="(collectionReportTableData.length)+'' || '0'" severity="info"
+                            class="text-xs"></p-tag>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <p-button icon="pi pi-file-excel" severity="secondary" text size="large" label="Excel"
+                            class="text-xs" (click)="exportExcel()"></p-button>
+                        <p-button icon="pi pi-external-link" severity="secondary" text size="large" label="View All"
+                            class="text-xs"></p-button>
+                    </div>
+                </div>
+
+                <!-- Search and Filter Row -->
+                <div class="flex items-center gap-3 mt-3">
+                    <span class="p-input-icon-left flex-1">
+                        <p-iconfield>
+                            <p-inputicon>
+                                <i class="pi pi-search"></i>
+                            </p-inputicon>
+                            <input type="text" pInputText class="w-full" #searchInput
+                                (input)="dt.filterGlobal((searchInput.value || ''), 'contains')"
+                                placeholder="Search transactions..." />
+                        </p-iconfield>
+                    </span>
+                    <button pButton class="p-button-outlined" (click)="clear(dt)" style="width: 84px;">
+                        <i class="pi pi-refresh"></i>
+                        Reset
+                    </button>
+                    <p-datepicker placeholder="Select month and year" view="month" dateFormat="MM/yy" [showIcon]="true"
+                        [showClear]="true" (onSelect)="onChangeMonthYear($event)" (onClear)="onChangeMonthYear($event)">
+                    </p-datepicker>
+                </div>
+            </div>
+
+            <!-- Table Section -->
+            <div class="p-3">
+                <p-table #dt [value]="collectionReportTableData" [rows]="5" [paginator]="true" [resizableColumns]="true"
+                    [rowsPerPageOptions]="[5,10, 20, 30, 50, 100]" [loading]="isLoading"
+                    [globalFilterFields]="['academicSessionName','studentName','studentId','receiptNumber','status']"
+                    styleClass="p-datatable-sm p-datatable-striped"
+                    currentPageReportTemplate="Showing {first} to {last} of {totalRecords} transactions"
+                    [showCurrentPageReport]="true" responsiveLayout="scroll">
+
+                    <!-- MIGRATED TO PRIME 22 HASHTAG SYNTAX -->
+                    <ng-template #loading>
+                        <div class="flex items-center justify-center p-4">
+                            <p-progress-spinner strokeWidth="3" animationDuration="1s"></p-progress-spinner>
+                            <span class="ml-2 text-slate-500 dark:text-slate-400">Loading transactions...</span>
+                        </div>
+                    </ng-template>
+
+                    <ng-template #emptymessage>
+                        <div class="text-center p-5">
+                            <i class="pi pi-info-circle text-4xl text-slate-400 dark:text-slate-500 mb-3"></i>
+                            <p class="text-slate-600 dark:text-slate-400 m-0">No transactions found</p>
+                            <small class="text-slate-400 dark:text-slate-500">Try adjusting your search criteria</small>
+                        </div>
+                    </ng-template>
+
+                    <ng-template #header>
+                        <tr>
+                            <th pSortableColumn="studentId" class="text-left">
+                                <div class="flex items-center gap-2">
+                                    <i class="pi pi-user text-blue-500 text-sm"></i>
+                                    Student Details
+                                    <p-sort-icon field="studentId"></p-sort-icon>
+                                    <p-column-filter type="text" field="studentId" display="menu"></p-column-filter>
+                                </div>
+                            </th>
+                            <th pSortableColumn="academicSessionName" class="text-left">
+                                <div class="flex items-center gap-2">
+                                    <i class="pi pi-calendar text-blue-500 text-sm"></i>
+                                    Session & Program
+                                    <p-sort-icon field="academicSessionName"></p-sort-icon>
+                                    <p-column-filter type="text" field="academicSessionName"
+                                        display="menu"></p-column-filter>
+                                </div>
+                            </th>
+                            <th pSortableColumn="paidAmount" class="text-right">
+                                <div class="flex items-center justify-end gap-2">
+                                    <i class="pi pi-dollar text-blue-500 text-sm"></i>
+                                    Amount
+                                    <p-sort-icon field="paidAmount"></p-sort-icon>
+                                    <p-column-filter type="text" field="paidAmount" display="menu"></p-column-filter>
+                                </div>
+                            </th>
+                            <th pSortableColumn="paymentDate" class="text-left">
+                                <div class="flex items-center gap-2">
+                                    <i class="pi pi-credit-card text-blue-500 text-sm"></i>
+                                    Payment Info
+                                    <p-sort-icon field="paymentDate"></p-sort-icon>
+                                    <p-column-filter type="text" field="paymentDate" display="menu"></p-column-filter>
+                                </div>
+                            </th>
+                            <th pSortableColumn="status" class="text-center">
+                                <div class="flex items-center justify-center gap-2">
+                                    <i class="pi pi-check-circle text-blue-500 text-sm"></i>
+                                    Status
+                                    <p-sort-icon field="status"></p-sort-icon>
+                                    <p-column-filter type="text" field="status" display="menu"></p-column-filter>
+                                </div>
+                            </th>
+                            <th class="text-center">Actions</th>
+                        </tr>
+                    </ng-template>
+
+                    <ng-template #body let-transaction let-rowIndex="rowIndex">
+                        <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-all duration-200">
+                            <!-- Student Details -->
+                            <td>
+                                <div class="flex flex-col gap-1">
+                                    <div class="flex items-center gap-2">
+                                        <p-avatar [label]="getStudentInitials(transaction.studentName)" size="normal"
+                                            shape="circle" styleClass="text-xs font-bold"
+                                            [style]="{'background-color': getAvatarColor(rowIndex), 'color': '#fff'}">
+                                        </p-avatar>
+                                        <div>
+                                            <div class="font-semibold text-sm text-slate-800 dark:text-slate-200">
+                                                {{transaction.studentName}}
+                                            </div>
+                                            <div class="text-xs text-slate-500 dark:text-slate-400">
+                                                ID: {{transaction.studentId}}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+
+                            <!-- Session & Program -->
+                            <td>
+                                <div class="flex flex-col gap-1">
+                                    <div class="flex gap-2">
+                                        <p-tag [value]="transaction.academicSessionName" severity="info"
+                                            class="text-xs w-fit"></p-tag>
+                                        <div class="text-xs text-slate-500 dark:text-slate-400 mt-1"
+                                            [title]="transaction.programName">
+                                            {{transaction.programName}}
+                                        </div>
+                                    </div>
+                                    @if(transaction.operationalVerticalName) {
+                                    <div class="text-xs text-slate-400 dark:text-slate-500">
+                                        {{transaction.operationalVerticalName}}
+                                    </div>
+                                    }
+                                </div>
+                            </td>
+
+                            <!-- Amount -->
+                            <td class="text-right">
+                                <div class="flex flex-col items-end gap-1">
+                                    <div class="flex items-center gap-2">
+                                        <i [class]="getPaymentModeIcon(transaction.paymentMode)"
+                                            class="text-blue-500 text-xs"></i>
+                                        <span class="text-xs text-slate-500 dark:text-slate-400">
+                                            {{getPaymentModeName(transaction.paymentModeName)}}
+                                        </span>
+                                    </div>
+                                    <div class="font-bold text-lg text-emerald-600">
+                                        <i class="fas fa-indian-rupee-sign text-xs mr-1"></i>
+                                        {{transaction.paidAmount}}
+                                    </div>
+                                </div>
+                            </td>
+
+                            <!-- Payment Info -->
+                            <td>
+                                <div class="flex flex-col gap-1">
+                                    <div class="text-xs text-slate-500 dark:text-slate-400">
+                                        <i class="pi pi-calendar"></i>
+                                        <span
+                                            class="text-sm font-medium text-blue-500 ml-1">{{formatDate(transaction.paymentDate)}}</span>
+                                    </div>
+                                    <div class="text-xs text-slate-500 dark:text-slate-400">
+                                        Receipt: {{transaction.receiptNumber}}
+                                    </div>
+                                    @if(transaction.referenceNumber) {
+                                    <div class="text-xs text-slate-400 dark:text-slate-500">
+                                        Ref: {{transaction.referenceNumber}}
+                                    </div>
+                                    }
+                                </div>
+                            </td>
+
+                            <!-- Status -->
+                            <td class="text-center">
+                                <p-tag [value]="transaction.status" [severity]="getStatusSeverity(transaction.status)"
+                                    class="text-xs"></p-tag>
+                            </td>
+
+                            <!-- Actions -->
+                            <td class="text-center">
+                                <div class="flex items-center justify-center gap-1">
+                                    <p-button icon="pi pi-download" severity="info" text size="small"
+                                        [pTooltip]="'Download Receipt'" tooltipPosition="top"
+                                        (onClick)="downloadReceipt(transaction, transaction.receiptNumber)">
+                                    </p-button>
+                                </div>
+                            </td>
+                        </tr>
+                    </ng-template>
+
+                    <ng-template #paginatorleft>
+                        <div class="flex items-center gap-2 text-sm text-slate-500 dark:text-slate-400">
+                            <i class="pi pi-info-circle"></i>
+                            <span>Total: {{collectionReportTableData.length || 0}} transactions</span>
+                        </div>
+                    </ng-template>
+                </p-table>
+            </div>
+        </div>
+        }
+    </div>
+
+    <!-- Monthly Revenue Overview -->
+    <div class="col-span-12 lg:col-span-8">
+        <div class="card h-full p-0 rounded-lg shadow-md">
+            <div class="p-4 border-b border-slate-200 dark:border-slate-700">
+                <div class="flex justify-between items-center">
+                    <div class="flex items-center gap-2">
+                        <i class="pi pi-chart-bar text-blue-500 text-xl" style="font-size: 2rem;"></i>
+                        <h5 class="m-0 text-slate-800 dark:text-slate-200 font-semibold">Monthly Revenue Overview</h5>
+                    </div>
+                    <p-tag severity="info" value="Current Month" class="text-xs"></p-tag>
+                </div>
+            </div>
+
+            @if (loading) {
+            <div class="p-4">
+                <app-bar-graph-skeleton [data]="'finpro'"></app-bar-graph-skeleton>
+            </div>
+            } @else {
+            <div class="p-3">
+                <!-- MIGRATED TO ECHARTS -->
+                <div echarts [options]="overviewChartOptions" [theme]="colorScheme === 'dark' ? 'dark' : ''"
+                    class="w-full" style="height: 380px;">
+                </div>
+            </div>
+            }
+        </div>
+    </div>
+
+    <!-- Quick Links -->
+    <div class="col-span-12 lg:col-span-4">
+        <div class="card h-full p-0 overflow-hidden rounded-lg shadow-md">
+            <div class="p-4 border-b border-slate-200 dark:border-slate-700">
+                <div class="flex items-center gap-2">
+                    <i class="pi pi-bookmark text-blue-500 text-xl" style="font-size: 2rem;"></i>
+                    <div>
+                        <h5 class="m-0 font-semibold text-slate-800 dark:text-slate-200">Quick Links</h5>
+                        <p class="m-0 text-slate-500 dark:text-slate-400 text-xs mt-0.5">Access frequently used features
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="p-0">
+                <ul class="list-none p-0 m-0">
+                    <li class="border-b border-slate-200 dark:border-slate-700 quick-link-glow-item">
+                        <div class="flex items-center p-4 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-all duration-200 cursor-pointer"
+                            routerLink="/home/executiveedge/transactions/faculty-feedback">
+                            <div class="flex items-center justify-center w-12 h-12 rounded-lg mr-3"
+                                style="background: rgba(245, 158, 11, 0.15);">
+                                <i class="pi pi-star-fill text-xl" style="color: #f59e0b;font-size: 1.2rem;"></i>
+                            </div>
+                            <div class="flex-1">
+                                <div class="flex items-center gap-2">
+                                    <h6 class="m-0 text-slate-800 dark:text-slate-200 font-medium">Faculty Feedback</h6>
+                                    <p-tag value="HOT" severity="warn" styleClass="text-xs px-1 py-0"></p-tag>
+                                </div>
+                                <p class="m-0 text-slate-500 dark:text-slate-400 text-sm mt-1">Submit faculty feedback
+                                </p>
+                            </div>
+                            <i class="pi pi-chevron-right" style="color: #f59e0b;"></i>
+                        </div>
+                    </li>
+                    <li class="border-b border-slate-200 dark:border-slate-700">
+                        <div class="flex items-center p-4 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-all duration-200 cursor-pointer"
+                            routerLink="/home/finpro/transactions/fee-generation/fee-generation-program-wise">
+                            <div
+                                class="flex items-center justify-center w-12 h-12 bg-blue-100 dark:bg-blue-900/40 rounded-lg mr-3">
+                                <i class="pi pi-users text-blue-600 dark:text-blue-400 text-xl"
+                                    style="font-size: 1.2rem;"></i>
+                            </div>
+                            <div class="flex-1">
+                                <h6 class="m-0 text-slate-800 dark:text-slate-200 font-medium">Fee Generation</h6>
+                                <p class="m-0 text-slate-500 dark:text-slate-400 text-sm mt-1">Program Wise</p>
+                            </div>
+                            <i class="pi pi-chevron-right text-slate-400"></i>
+                        </div>
+                    </li>
+                    <li class="border-b border-slate-200 dark:border-slate-700">
+                        <div class="flex items-center p-4 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-all duration-200 cursor-pointer"
+                            routerLink="/home/finpro/transactions/fee-generation/fee-generation-student-wise">
+                            <div
+                                class="flex items-center justify-center w-12 h-12 bg-emerald-100 dark:bg-emerald-900/40 rounded-lg mr-3">
+                                <i class="pi pi-money-bill text-emerald-600 dark:text-emerald-400 text-xl"
+                                    style="font-size: 1.2rem;"></i>
+                            </div>
+                            <div class="flex-1">
+                                <h6 class="m-0 text-slate-800 dark:text-slate-200 font-medium">Fee Generation</h6>
+                                <p class="m-0 text-slate-500 dark:text-slate-400 text-sm mt-1">Student Wise</p>
+                            </div>
+                            <i class="pi pi-chevron-right text-slate-400"></i>
+                        </div>
+                    </li>
+                    <li class="border-b border-slate-200 dark:border-slate-700">
+                        <div class="flex items-center p-4 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-all duration-200 cursor-pointer"
+                            routerLink="/home/finpro/transactions/student/student-status-list">
+                            <div
+                                class="flex items-center justify-center w-12 h-12 bg-orange-100 dark:bg-orange-900/40 rounded-lg mr-3">
+                                <i class="pi pi-question-circle text-orange-600 dark:text-orange-400 text-xl"
+                                    style="font-size: 1.2rem;"></i>
+                            </div>
+                            <div class="flex-1">
+                                <h6 class="m-0 text-slate-800 dark:text-slate-200 font-medium">Student Status</h6>
+                                <p class="m-0 text-slate-500 dark:text-slate-400 text-sm mt-1">Student Status List</p>
+                            </div>
+                            <i class="pi pi-chevron-right text-slate-400"></i>
+                        </div>
+                    </li>
+                    <li class="last:border-none">
+                        <div class="flex items-center p-4 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-all duration-200 cursor-pointer"
+                            routerLink="/home/finpro/transactions/fee-collection/generate-challan">
+                            <div
+                                class="flex items-center justify-center w-12 h-12 bg-purple-100 dark:bg-purple-900/40 rounded-lg mr-3">
+                                <i class="pi pi-info-circle text-purple-600 dark:text-purple-400 text-xl"
+                                    style="font-size: 1.2rem;"></i>
+                            </div>
+                            <div class="flex-1">
+                                <h6 class="m-0 text-slate-800 dark:text-slate-200 font-medium">Generate Challan</h6>
+                                <p class="m-0 text-slate-500 dark:text-slate-400 text-sm mt-1">Generate challan for a
+                                    specific student</p>
+                            </div>
+                            <i class="pi pi-chevron-right text-slate-400"></i>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div class="p-3 text-right">
+                <a class="text-xs text-blue-500 hover:underline cursor-pointer font-medium">CS View All Links</a>
+            </div>
+        </div>
+    </div>
+</div>

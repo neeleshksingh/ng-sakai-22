@@ -1,0 +1,26 @@
+import { NgModule } from '@angular/core';
+import { NavigationCancel, NavigationEnd, NavigationError, NavigationStart, Router, RouterModule, Routes } from '@angular/router';
+import { AccessDeniedComponent } from '../global/components/exception-pages/access-denied/access-denied.component';
+import { ForbiddenAccessComponent } from '../global/components/exception-pages/forbidden-access/forbidden-access.component';
+import { InternalServerErrorComponent } from '../global/components/exception-pages/internal-server-error/internal-server-error.component';
+import { LoginTokenExpiredComponent } from '../global/components/exception-pages/login-token-expired/login-token-expired.component';
+import { LoadingService } from '../shared/services/loading.service';
+
+const routes: Routes = [
+    { path: '', data: { breadcrumb: 'Dashboard' }, loadChildren: () => import('../finance-Pro/components/dashboard/dashboard.module').then(m => m.DashboardModule) },
+    // { path: 'masters', data: { breadcrumb: 'Masters' }, loadChildren: () => import('../finance-Pro/components/masters/masters.module').then(m => m.MastersModule) },
+    // { path: 'transactions', data: { breadcrumb: 'Transactions' }, loadChildren: () => import('../finance-Pro/components/transactions/transactions.module').then(m => m.TransactionsModule) },
+    // { path: 'reports', data: { breadcrumb: 'Reports' }, loadChildren: () => import('../finance-Pro/components/reports/reports.module').then(m => m.ReportsModule) },
+
+    { path: 'forbidden-access', component: ForbiddenAccessComponent, data: { breadcrumb: 'Forbidden Access' } },
+    { path: 'login-token-expired', component: LoginTokenExpiredComponent, data: { breadcrumb: 'Login Token Expired' } },
+    { path: 'access-denied', component: AccessDeniedComponent, data: { breadcrumb: 'Access Denied' } },
+    { path: 'internal-server-error', component: InternalServerErrorComponent, data: { breadcrumb: 'Internal Server Error' } },
+];
+
+@NgModule({
+    imports: [RouterModule.forChild(routes)],
+    exports: [RouterModule]
+})
+export class FinanceProRoutingModule { }
+

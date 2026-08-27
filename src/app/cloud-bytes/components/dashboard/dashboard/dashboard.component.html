@@ -95,9 +95,9 @@
             <div class="graph flex-1">
                 @if (loadingAcademicSession) {
                 <app-bar-graph-skeleton></app-bar-graph-skeleton>
-                } @else if (overviewChartData) {
-                <p-chart #overviewchart type="bar" [data]="overviewChartData" [options]="overviewChartOptions"
-                    height="400px"></p-chart>
+                } @else if (hasOverviewData) {
+                <div echarts [options]="overviewChartOptions" [theme]="colorScheme === 'dark' ? 'dark' : ''"
+                    class="w-full" style="height: 400px;"></div>
                 } @else {
                 <div class="flex flex-col items-center justify-center h-[300px] text-slate-500 dark:text-slate-400">
                     <i class="pi pi-info-circle text-3xl mb-2"></i>
@@ -177,12 +177,9 @@
             <div class="graph flex-1">
                 @if (loadingDegrees) {
                 <app-bar-graph-skeleton></app-bar-graph-skeleton>
-                } @else if (degrees) {
-                <p-chart type="bar" [data]="degrees" [options]="degreeOptions"></p-chart>
-                <div class="flex justify-end mt-4">
-                    <button pButton pRipple (click)="toggleLegend()" class="p-button-raised p-button-sm"
-                        label="Toggle Legend"></button>
-                </div>
+                } @else if (hasDegreeData) {
+                <div echarts [options]="degreeChartOptions" [theme]="colorScheme === 'dark' ? 'dark' : ''"
+                    class="w-full" style="height: 350px;"></div>
                 } @else {
                 <div class="flex flex-col items-center justify-center h-[300px] text-slate-500 dark:text-slate-400">
                     <i class="pi pi-info-circle text-3xl mb-2"></i>

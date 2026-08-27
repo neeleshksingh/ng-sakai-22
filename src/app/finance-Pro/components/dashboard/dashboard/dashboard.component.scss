@@ -1,3 +1,42 @@
-:host {
-    display: block;
+/* Define your light color classes */
+.color-light-blue {
+    background-color: #e0f7fa;
+} /* Light blue */
+.color-light-green {
+    background-color: #e8f5e9;
+} /* Light green */
+.color-light-yellow {
+    background-color: #fffde7;
+} /* Light yellow */
+.color-light-pink {
+    background-color: #fce4ec;
+} /* Light pink */
+.color-light-orange {
+    background-color: #fff3e0;
+} /* Light orange */
+
+.dashboard-cards {
+    transition: transform 0.2s;
+}
+
+@keyframes quick-link-item-glow {
+    0%,
+    100% {
+        box-shadow: inset 0 0 4px 1px rgba(245, 158, 11, 0.25);
+    }
+    50% {
+        box-shadow: inset 0 0 10px 3px rgba(245, 158, 11, 0.5);
+    }
+}
+
+.quick-link-glow-item {
+    animation: quick-link-item-glow 2.2s ease-in-out infinite;
+}
+.dashboard-cards:hover {
+    transform: scale(1.01);
+}
+
+h5,
+h6 {
+    margin: 0 !important;
 }

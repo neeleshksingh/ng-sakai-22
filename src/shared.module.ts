@@ -40,6 +40,8 @@ import { InputGroupModule } from 'primeng/inputgroup';
 import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
 import { InputMaskModule } from 'primeng/inputmask';
 import { InputNumberModule } from 'primeng/inputnumber';
+import { IconFieldModule } from 'primeng/iconfield';
+import { InputIconModule } from 'primeng/inputicon';
 // import { InputSwitchModule } from 'primeng/inputswitch';
 import { InputTextModule } from 'primeng/inputtext';
 // import { InputTextareaModule } from 'primeng/inputtextarea';
@@ -153,6 +155,8 @@ import { NgxEchartsModule } from 'ngx-echarts';
         // InputSwitchModule,
         InputTextModule,
         // InputTextareaModule,
+        IconFieldModule,
+        InputIconModule,
         KnobModule,
         ListboxModule,
         MegaMenuModule,
@@ -278,6 +282,8 @@ import { NgxEchartsModule } from 'ngx-echarts';
         // InputSwitchModule,
         InputTextModule,
         // InputTextareaModule,
+        IconFieldModule,
+        InputIconModule,
         KnobModule,
         ListboxModule,
         MegaMenuModule,
