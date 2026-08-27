@@ -1,0 +1,35 @@
+<div class="p-0 overflow-hidden flex flex-col">
+    <div class="flex items-center flex-wrap p-4">
+        <div class="flex flex-row items-center w-full sm:w-auto mb-3 sm:mb-0">
+            <div class="relative mr-3">
+                <p-avatar [image]="displayImage" size="xlarge" shape="circle" styleClass="employee-avatar" [style]="{
+                        border: '2px solid #60A5FA',
+                        backgroundColor: 'rgba(96, 165, 250, 0.1)',
+                        cursor: 'pointer'
+                    }" (click)="triggerFileInput()" pTooltip="Click to change photo"
+                    tooltipPosition="bottom"></p-avatar>
+            </div>
+            <div class="min-w-0">
+                <span class="text-blue-500 dark:text-blue-400 block text-2xl font-bold whitespace-nowrap truncate">
+                    {{ userbasicInfo?.employeeCode }} -
+                    {{ userbasicInfo?.title }} {{ userbasicInfo?.firstName }} {{ userbasicInfo?.lastName }}
+                </span>
+                <span class="text-slate-500 dark:text-slate-400 block mt-1 truncate">{{ userbasicInfo?.email }}</span>
+
+                <!-- Roles with p-tag -->
+                <div class="flex flex-wrap gap-2 mt-2">
+                    @for (role of userbasicInfo?.roles?.split(','); track $index) {
+                    <p-tag [value]="role.trim()" [severity]="getSeverity(role.trim())" [rounded]="true"></p-tag>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="hidden">
+        <input type="file" id="fileInput" style="display: none" accept=".jpg" (change)="onImageSelect($event)"
+            #fileUpload />
+        <p-button label="Change Photo" icon="pi pi-upload" styleClass="p-button-sm p-button-outlined"
+            (onClick)="triggerFileInput()"></p-button>
+    </div>
+</div>

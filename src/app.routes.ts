@@ -44,14 +44,14 @@ export const appsRoutes: Routes = [
                     userRoles: [Roles.ACCOUNTS, Roles.ACCOUNTSADMIN, Roles.ACCOUNTSSUPERADMIN, Roles.ITSUPPORTS, Roles.ITSUPPORTSSUPERADMIN, Roles.SUPERADMIN, Roles.ADMINISTRATION],
                 }
             },
-            // {
-            //     path: 'smallbizgurus',
-            //     loadChildren: () => import('./smallbiz-gurus/smallbiz-gurus/smallbiz-gurus.module').then(m => m.SmallbizGurusModule),
-            //     data: {
-            //         breadcrumb: 'SmallBizGurus',
-            //         userRoles: [Roles.HR, Roles.HRAdmin, Roles.HRReadWriteAccess, Roles.ITSUPPORTS, Roles.HRSuperAdmin, Roles.SUPERADMIN, Roles.ADMINISTRATION],
-            //     }
-            // },
+            {
+                path: 'smallbizgurus',
+                loadChildren: () => import('./app/smallbiz-gurus/smallbiz-gurus.module').then(m => m.SmallbizGurusModule),
+                data: {
+                    breadcrumb: 'SmallBizGurus',
+                    userRoles: [Roles.HR, Roles.HRAdmin, Roles.HRReadWriteAccess, Roles.ITSUPPORTS, Roles.HRSuperAdmin, Roles.SUPERADMIN, Roles.ADMINISTRATION],
+                }
+            },
             {
                 path: 'bigleads',
                 loadChildren: () => import('./app/big-leads/big-leads.module').then(m => m.BigLeadsModule),

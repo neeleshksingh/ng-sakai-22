@@ -1,1 +1,185 @@
-<app-module-dashboard title="SmallBiz Gurus" subtitle="Human resources, recruitment, and payroll overview" [kpis]="kpis" />
+<div class="grid grid-cols-12 gap-4 pb-6">
+    <!-- Optional App Employee Information Wrapper -->
+    <div class="col-span-12 xl:col-span-6 flex">
+        <div class="card w-full flex flex-col">
+            <app-employee-basic-information class="h-full w-full"></app-employee-basic-information>
+        </div>
+    </div>
+
+    <!-- KPI 1: Total Headcount -->
+    <div class="col-span-12 lg:col-span-6 xl:col-span-3 cursor-pointer scalein animation-duration-300 dashboard-cards">
+        <div class="card h-full p-0 overflow-hidden flex flex-col" style="padding: 0!important;">
+            <div class="flex items-center p-3 flex-1">
+                <i class="pi pi-users text-green-500 shrink-0" style="font-size: 3rem;"></i>
+                <div class="ml-3 flex-1 min-w-0">
+                    <span
+                        class="text-green-500 dark:text-green-400 block whitespace-nowrap truncate font-semibold">TOTAL
+                        HEADCOUNT</span>
+                    <span class="text-green-500 dark:text-green-400 block text-4xl font-bold truncate mt-1">
+                        @if (loading) {
+                        <p-skeleton shape="rectangle" width="4rem" height="2.5rem"></p-skeleton>
+                        } @else if (!error) {
+                        <span>{{ totalHeadcount || 'N/A' }}</span>
+                        }
+                    </span>
+                </div>
+            </div>
+            <img [src]="'assets/demo/images/dashboard/rate' + (colorScheme === 'light' ? '' : '-dark') + '.svg'"
+                class="w-full mt-auto" alt="conversion">
+        </div>
+    </div>
+
+    <!-- KPI 2: Open Positions -->
+    <div class="col-span-12 lg:col-span-6 xl:col-span-3 cursor-pointer scalein animation-duration-400 dashboard-cards">
+        <div class="card h-full p-0 overflow-hidden flex flex-col" style="padding: 0!important;">
+            <div class="flex items-center p-3 flex-1">
+                <i class="pi pi-briefcase text-purple-500 shrink-0" style="font-size: 3rem;"></i>
+                <div class="ml-3 flex-1 min-w-0">
+                    <span
+                        class="text-purple-500 dark:text-purple-400 block whitespace-nowrap truncate font-semibold">OPEN
+                        POSITIONS</span>
+                    <span class="text-purple-500 dark:text-purple-400 block text-4xl font-bold truncate mt-1">
+                        @if (loading) {
+                        <p-skeleton shape="rectangle" width="4rem" height="2.5rem"></p-skeleton>
+                        } @else if (!error) {
+                        <span>{{ openPositions }}</span>
+                        }
+                    </span>
+                </div>
+            </div>
+            <img [src]="'assets/demo/images/dashboard/interactions' + (colorScheme === 'light' ? '' : '-dark') + '.svg'"
+                class="w-full mt-auto" alt="interactions">
+        </div>
+    </div>
+
+    <!-- Chart 1: Headcount by Department -->
+    <div class="col-span-12 lg:col-span-6 xl:col-span-9">
+        <div class="card h-full p-4 relative overflow-hidden rounded-lg shadow-md">
+            <h5 class="m-0 font-bold text-xl text-slate-800 dark:text-slate-200 mb-4">Headcount by Department</h5>
+            <div class="graph">
+                @if (loading) {
+                <p-skeleton shape="rectangle" width="100%" height="400px"></p-skeleton>
+                } @else if (error) {
+                <p-message severity="error">{{ error }}</p-message>
+                } @else {
+                <div echarts [options]="overviewChartOptions" [theme]="colorScheme === 'dark' ? 'dark' : ''"
+                    class="w-full mx-auto" style="height: 400px;">
+                </div>
+                }
+            </div>
+        </div>
+    </div>
+
+    <!-- Employee Calendar Widget -->
+    <div class="card col-span-12 lg:col-span-6 xl:col-span-3 ml-auto w-full">
+        <app-employee-calender></app-employee-calender>
+    </div>
+
+    <!-- Upcoming Birthdays List -->
+    <div class="col-span-12 lg:col-span-6 xl:col-span-4" style="max-height: 500px;">
+        <div class="card h-full p-4 overflow-y-auto rounded-lg shadow-md">
+            <h5 class="m-0 font-bold text-xl text-slate-800 dark:text-slate-200 mb-4">Upcoming Birthdays</h5>
+
+            @if (loading) {
+            <p-skeleton shape="rectangle" width="100%" height="3rem" styleClass="mb-2" animation="wave"></p-skeleton>
+            <p-skeleton shape="rectangle" width="100%" height="3rem" styleClass="mb-2" animation="wave"></p-skeleton>
+            } @else if (error) {
+            <p-message severity="error">{{ error }}</p-message>
+            } @else {
+            <ul class="enhanced-birthday-list list-none p-0 m-0">
+                @for (birthday of upcomingBirthdays; track $index) {
+                <li class="birthday-item" [ngClass]="{'current-birthday': birthday.isBirthdayToday}">
+                    <div class="birthday-content">
+                        <div class="avatar-wrapper">
+                            <p-avatar [label]="birthday.name[0]" size="large" shape="circle"
+                                styleClass="enhanced-avatar"
+                                [style]="{'background': 'linear-gradient(135deg, rgba(101, 214, 173, 0.15), rgba(39, 171, 131, 0.1))', 'color': '#27AB83', 'border': '2px solid rgba(101, 214, 173, 0.3)', 'border-radius': '16px', 'transition': 'all 0.3s ease'}">
+                            </p-avatar>
+                        </div>
+                        <div class="birthday-details">
+                            <p class="birthday-name">{{ birthday.name }}</p>
+                            <p class="birthday-date">{{ birthday.date }}</p>
+                        </div>
+                    </div>
+
+                    @if (birthday.isBirthdayToday) {
+                    <div class="birthday-icon">🎂</div>
+                    <!-- Note: Kept these spans as they hook into your component's CSS for the confetti animation -->
+                    <span class="confetti-particle"></span><span class="confetti-particle"></span>
+                    <span class="confetti-particle"></span><span class="confetti-particle"></span>
+                    <span class="confetti-particle"></span><span class="confetti-particle"></span>
+                    <span class="confetti-particle"></span><span class="confetti-particle"></span>
+                    <span class="confetti-particle"></span><span class="confetti-particle"></span>
+                    <span class="confetti-particle"></span><span class="confetti-particle"></span>
+                    <span class="confetti-particle"></span><span class="confetti-particle"></span>
+                    <span class="confetti-particle"></span><span class="confetti-particle"></span>
+                    <span class="confetti-particle"></span><span class="confetti-particle"></span>
+                    <span class="confetti-particle"></span><span class="confetti-particle"></span>
+                    }
+                </li>
+                }
+
+                @if (!upcomingBirthdays.length) {
+                <li class="no-birthdays text-slate-500 dark:text-slate-400 p-3 text-center">
+                    No upcoming birthdays in the next 30 days.
+                </li>
+                }
+            </ul>
+            }
+        </div>
+    </div>
+
+    <!-- Chart 2: Gender Distribution -->
+    <div class="col-span-12 lg:col-span-6 xl:col-span-4" style="max-height: 500px;">
+        <div class="card h-full p-4 relative overflow-hidden rounded-lg shadow-md flex flex-col">
+            <h5 class="m-0 font-bold text-xl text-slate-800 dark:text-slate-200 mb-4">Gender Distribution</h5>
+            <div class="flex-1 flex items-center justify-center">
+                @if (loading) {
+                <p-skeleton shape="circle" width="300px" height="300px"></p-skeleton>
+                } @else if (error) {
+                <p-message severity="error" class="w-full">{{ error }}</p-message>
+                } @else {
+                <div echarts [options]="diversityChartOptions" [theme]="colorScheme === 'dark' ? 'dark' : ''"
+                    class="w-full mx-auto" style="height: 320px;">
+                </div>
+                }
+            </div>
+        </div>
+    </div>
+
+    <!-- Chart 3: Department Group Distribution -->
+    <div class="col-span-12 lg:col-span-6 xl:col-span-4" style="max-height: 500px;">
+        <div class="card h-full p-4 relative overflow-hidden rounded-lg shadow-md flex flex-col">
+            <h5 class="m-0 font-bold text-xl text-slate-800 dark:text-slate-200 mb-4">Department Group Distribution</h5>
+            <div class="flex-1 flex items-center justify-center">
+                @if (loading) {
+                <p-skeleton shape="circle" width="300px" height="300px"></p-skeleton>
+                } @else if (error) {
+                <p-message severity="error" class="w-full">{{ error }}</p-message>
+                } @else {
+                <div echarts [options]="departmentGroupChartOptions" [theme]="colorScheme === 'dark' ? 'dark' : ''"
+                    class="w-full mx-auto" style="height: 320px;">
+                </div>
+                }
+            </div>
+        </div>
+    </div>
+
+    <!-- Chart 4: Hires by Year and Month -->
+    <div class="col-span-12">
+        <div class="card h-full p-4 relative overflow-hidden rounded-lg shadow-md">
+            <h5 class="m-0 font-bold text-xl text-slate-800 dark:text-slate-200 mb-4">Hires by Year and Month</h5>
+            <div class="graph">
+                @if (loading) {
+                <p-skeleton shape="rectangle" width="100%" height="400px"></p-skeleton>
+                } @else if (error) {
+                <p-message severity="error">{{ error }}</p-message>
+                } @else {
+                <div echarts [options]="hiresChartOptions" [theme]="colorScheme === 'dark' ? 'dark' : ''"
+                    class="w-full mx-auto" style="height: 400px;">
+                </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
